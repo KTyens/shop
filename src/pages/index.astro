@@ -1,0 +1,326 @@
+---
+import { loadCatalog } from '../lib/catalog-data';
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import CartDrawer from '../components/CartDrawer.astro';
+import '../styles/global.css';
+
+const series = loadCatalog();
+
+interface Variant {
+  id: string;
+  label: string;
+  sku: string;
+  price_cents: number;
+  compare_at_cents?: number;
+}
+
+interface SeriesItem {
+  id: string;
+  name: string;
+  brand: string;
+  category: string;
+  description: string;
+  image: string;
+  variants: Variant[];
+  detail_url?: string;
+}
+
+const items = series as SeriesItem[];
+
+function minPrice(item: SeriesItem) {
+  return Math.min(...item.variants.map(v => v.price_cents));
+}
+
+// Featured: pick 6 representative products (matching original index.html)
+const featuredIds = ['h96max-h618-plus', 'h96max-m1-plus', 'h96max-h313-1024', 'hy320-mini-projector', 'hy300-pro-projector', 'a10-projector'];
+const featured = items.filter(i => featuredIds.includes(i.id));
+
+const FILTERS = [['all', 'All'], ['tv-box', 'TV Boxes'], ['projector', 'Projectors'], ['premium', 'Premium']];
+
+// Serialize for injection
+const catalogJSON = JSON.stringify(featured);
+---
+
+<Layout title="CRTLU Digital | Premium TV Boxes & Projectors" description="Premium Android TV boxes, Google TV streamers, and compact projectors for cinematic home entertainment.">
+  <Navigation currentPage="home" />
+  <CartDrawer />
+
+  <main>
+    <!-- Hero -->
+    <section class="hero" style="min-height:80vh;display:grid;align-items:center;padding:132px 22px 70px;">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="beam" aria-hidden="true"></div>
+      <div class="hero-inner" style="width:min(var(--max),100%);margin:0 auto;">
+        <div style="width:min(620px,calc(100vw-44px));max-width:620px;">
+          <div class="eyebrow"><span>Premium home cinema gear</span></div>
+          <h1 style="margin:22px 0 18px;font-size:clamp(44px,8vw,92px);line-height:.92;max-width:680px;">
+            Premium TV Boxes<br />
+            & Compact<br />
+            Projectors.
+          </h1>
+          <p style="width:min(540px,calc(100vw-44px));max-width:540px;color:#c6d3da;font-size:clamp(17px,2vw,20px);line-height:1.65;">
+            Curated Android TV boxes and compact projectors for home cinema buyers who want clear specs, real product photos, secure payment, and legal streaming with their own subscriptions.
+          </p>
+          <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:32px;">
+            <a class="primary-button" href="#products">Shop TV Boxes</a>
+            <a class="secondary-button" href="#products" data-filter="projector">Shop Projectors</a>
+            <a class="secondary-button" href="/products/">All Models</a>
+          </div>
+          <div style="margin-top:16px;display:flex;flex-wrap:wrap;gap:8px;color:#c6d3da;font-size:12px;line-height:1.5;">
+            <span style="padding:7px 10px;border:1px solid rgba(139,255,133,.24);background:rgba(139,255,133,.06);">Stripe secure checkout</span>
+            <span style="padding:7px 10px;border:1px solid rgba(139,255,133,.24);background:rgba(139,255,133,.06);">Yanwen tracked shipping</span>
+            <span style="padding:7px 10px;border:1px solid rgba(139,255,133,.24);background:rgba(139,255,133,.06);">No unofficial streaming bundles</span>
+          </div>
+          <div style="margin-top:44px;width:min(600px,calc(100vw-44px));display:grid;grid-template-columns:repeat(3,1fr);max-width:600px;border:1px solid var(--line);background:rgba(8,14,19,.58);backdrop-filter:blur(18px);">
+            <div style="padding:18px;border-right:1px solid var(--line);">
+              <strong style="display:block;font-size:24px;">4K</strong>
+              <span style="display:block;margin-top:4px;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.06em;">Streaming ready</span>
+            </div>
+            <div style="padding:18px;border-right:1px solid var(--line);">
+              <strong style="display:block;font-size:24px;">24h</strong>
+              <span style="display:block;margin-top:4px;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.06em;">Order handling target</span>
+            </div>
+            <div style="padding:18px;">
+              <strong style="display:block;font-size:24px;">Stripe</strong>
+              <span style="display:block;margin-top:4px;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.06em;">Secure payment</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Products -->
+    <section id="products">
+      <div style="width:min(var(--max),100%);margin:0 auto;">
+        <div class="section-head">
+          <h2>Curated devices, not random listings.</h2>
+          <p>Homepage shows only the main picks. Use the full catalog for every published configuration and price tier.</p>
+          <a class="secondary-button" href="/products/" style="font-size:12px;padding:0 14px;">View all products</a>
+        </div>
+        <div class="filters" id="filters"></div>
+        <div class="product-grid" id="productGrid"></div>
+      </div>
+    </section>
+
+    <!-- Experience -->
+    <section class="experience" style="background:linear-gradient(180deg,rgba(93,231,255,.04),transparent),#04070a;">
+      <div style="width:min(var(--max),100%);margin:0 auto;">
+        <div class="section-head">
+          <h2>Designed around the room.</h2>
+          <p>The site sells the feeling: faster navigation, cleaner playback, big-screen nights, and simple setup from TV shelf to projector wall.</p>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:stretch;">
+          <div class="scene-panel" style="min-height:480px;position:relative;overflow:hidden;border:1px solid var(--line);background:radial-gradient(circle at 65% 36%,rgba(93,231,255,.22),transparent 22%),linear-gradient(145deg,#070d12,#0d151c);">
+            <div class="scene-screen" style="position:absolute;right:42px;top:52px;width:56%;aspect-ratio:16/9;border:1px solid rgba(93,231,255,.28);background:radial-gradient(circle at 24% 40%,rgba(139,255,133,.78),transparent 18%),radial-gradient(circle at 70% 30%,rgba(93,231,255,.9),transparent 24%),linear-gradient(135deg,#03121b,#102934);box-shadow:0 0 70px rgba(93,231,255,.22);"></div>
+            <div class="scene-console" style="position:absolute;left:8%;right:7%;bottom:52px;height:88px;background:linear-gradient(180deg,#151b20,#07090b);box-shadow:0 24px 60px rgba(0,0,0,.5);"></div>
+            <div class="scene-projector" style="position:absolute;left:16%;bottom:98px;width:150px;height:78px;border-radius:12px;background:linear-gradient(135deg,#1a2229,#05070a);"></div>
+          </div>
+          <div style="display:grid;gap:12px;">
+            <div class="feature" style="display:grid;grid-template-columns:46px 1fr;gap:14px;padding:18px;border:1px solid var(--line);background:rgba(255,255,255,.045);">
+              <div class="feature-icon" style="width:46px;height:46px;display:grid;place-items:center;border:1px solid rgba(139,255,133,.26);background:rgba(139,255,133,.06);color:var(--green);font-weight:900;">4K</div>
+              <div><h3 style="margin:0 0 5px;font-size:17px;">Legal streaming ecosystem</h3><p style="margin:0;color:var(--muted);line-height:1.55;font-size:14px;">Positioned for official app stores and user-owned subscriptions, avoiding risky IPTV or preloaded-content claims.</p></div>
+            </div>
+            <div class="feature" style="display:grid;grid-template-columns:46px 1fr;gap:14px;padding:18px;border:1px solid var(--line);background:rgba(255,255,255,.045);">
+              <div class="feature-icon" style="width:46px;height:46px;display:grid;place-items:center;border:1px solid rgba(139,255,133,.26);background:rgba(139,255,133,.06);color:var(--green);font-weight:900;">Wi</div>
+              <div><h3 style="margin:0 0 5px;font-size:17px;">Connectivity-first comparison</h3><p style="margin:0;color:var(--muted);line-height:1.55;font-size:14px;">Wi-Fi, Ethernet, Bluetooth, HDMI, USB, storage, and OS details are surfaced before the customer checks out.</p></div>
+            </div>
+            <div class="feature" style="display:grid;grid-template-columns:46px 1fr;gap:14px;padding:18px;border:1px solid var(--line);background:rgba(255,255,255,.045);">
+              <div class="feature-icon" style="width:46px;height:46px;display:grid;place-items:center;border:1px solid rgba(139,255,133,.26);background:rgba(139,255,133,.06);color:var(--green);font-weight:900;">Pj</div>
+              <div><h3 style="margin:0 0 5px;font-size:17px;">Projection scenarios</h3><p style="margin:0;color:var(--muted);line-height:1.55;font-size:14px;">Projector pages can show bedroom cinema, outdoor movie night, and compact travel setups with separate recommendations.</p></div>
+            </div>
+            <div class="feature" style="display:grid;grid-template-columns:46px 1fr;gap:14px;padding:18px;border:1px solid var(--line);background:rgba(255,255,255,.045);">
+              <div class="feature-icon" style="width:46px;height:46px;display:grid;place-items:center;border:1px solid rgba(139,255,133,.26);background:rgba(139,255,133,.06);color:var(--green);font-weight:900;">Yn</div>
+              <div><h3 style="margin:0 0 5px;font-size:17px;">Yanwen-ready fulfillment</h3><p style="margin:0;color:var(--muted);line-height:1.55;font-size:14px;">Orders can be exported for Yanwen handling first, then upgraded to an API integration when shipment volume justifies it.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Compare -->
+    <section>
+      <div style="width:min(var(--max),100%);margin:0 auto;">
+        <div class="section-head">
+          <h2>Fast buyer guidance.</h2>
+          <p>A decision table keeps customers from bouncing back to Amazon just to understand the lineup.</p>
+        </div>
+        <div class="compare-table" style="overflow:hidden;border:1px solid var(--line);background:rgba(255,255,255,.04);">
+          <div class="compare-row" style="display:grid;grid-template-columns:1.1fr repeat(4,1fr);border-bottom:1px solid var(--line);">
+            <div class="compare-cell" style="padding:16px;color:var(--text);font-weight:800;min-width:0;">Use case</div>
+            <div class="compare-cell" style="padding:16px;color:var(--text);font-weight:800;background:rgba(93,231,255,.06);">Budget</div>
+            <div class="compare-cell" style="padding:16px;color:var(--text);font-weight:800;background:rgba(93,231,255,.06);">Mainstream</div>
+            <div class="compare-cell" style="padding:16px;color:var(--text);font-weight:800;background:rgba(93,231,255,.06);">Performance</div>
+            <div class="compare-cell" style="padding:16px;color:var(--text);font-weight:800;background:rgba(93,231,255,.06);">Flagship</div>
+          </div>
+          <div class="compare-row" style="display:grid;grid-template-columns:1.1fr repeat(4,1fr);border-bottom:1px solid var(--line);">
+            <div class="compare-cell" style="padding:16px;color:var(--muted);min-width:0;">Daily streaming</div>
+            <div class="compare-cell" style="padding:16px;">H96Max H313 / X5</div>
+            <div class="compare-cell" style="padding:16px;">H96Max M1 Plus</div>
+            <div class="compare-cell" style="padding:16px;">HK1 RBOX X4S</div>
+            <div class="compare-cell" style="padding:16px;">H96 MAX V58</div>
+          </div>
+          <div class="compare-row" style="display:grid;grid-template-columns:1.1fr repeat(4,1fr);border-bottom:1px solid var(--line);">
+            <div class="compare-cell" style="padding:16px;color:var(--muted);min-width:0;">Key reason</div>
+            <div class="compare-cell" style="padding:16px;">Lowest entry price</div>
+            <div class="compare-cell" style="padding:16px;">Best launch balance</div>
+            <div class="compare-cell" style="padding:16px;">More storage options</div>
+            <div class="compare-cell" style="padding:16px;">RK3588 / Wi-Fi 6</div>
+          </div>
+          <div class="compare-row" style="display:grid;grid-template-columns:1.1fr repeat(4,1fr);">
+            <div class="compare-cell" style="padding:16px;color:var(--muted);min-width:0;">Ideal buyer</div>
+            <div class="compare-cell" style="padding:16px;">Price-sensitive buyer</div>
+            <div class="compare-cell" style="padding:16px;">Family TV room</div>
+            <div class="compare-cell" style="padding:16px;">Spec comparison buyer</div>
+            <div class="compare-cell" style="padding:16px;">High-performance user</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Shipping / Trust -->
+    <section>
+      <div style="width:min(var(--max),100%);margin:0 auto;">
+        <div class="section-head">
+          <h2>Trust before checkout.</h2>
+          <p>Independent stores need clear payment, shipping, and support signals.</p>
+        </div>
+        <div class="trust-strip" style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;border:1px solid var(--line);background:var(--line);">
+          <div class="trust-item" style="padding:22px;background:#070b0f;"><strong style="display:block;margin-bottom:6px;font-size:16px;">Stripe Checkout</strong><span style="color:var(--muted);line-height:1.55;font-size:14px;">Card details are handled by Stripe, not stored on this site.</span></div>
+          <div class="trust-item" style="padding:22px;background:#070b0f;"><strong style="display:block;margin-bottom:6px;font-size:16px;">Yanwen Shipping</strong><span style="color:var(--muted);line-height:1.55;font-size:14px;">Tracking numbers can be added after fulfillment and shown in order status.</span></div>
+          <div class="trust-item" style="padding:22px;background:#070b0f;"><strong style="display:block;margin-bottom:6px;font-size:16px;">Official Apps Only</strong><span style="color:var(--muted);line-height:1.55;font-size:14px;">Bring your own subscriptions. No piracy, no fully-loaded claims.</span></div>
+          <div class="trust-item" style="padding:22px;background:#070b0f;"><strong style="display:block;margin-bottom:6px;font-size:16px;">Support Window</strong><span style="color:var(--muted);line-height:1.55;font-size:14px;">Use email or WhatsApp support once your service policy is final.</span></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer style="padding:44px 22px;border-top:1px solid var(--line);background:#020405;">
+    <div style="width:min(var(--max),100%);margin:0 auto;display:flex;justify-content:space-between;gap:24px;color:var(--muted);font-size:13px;">
+      <div><strong style="color:var(--text);">CRTLU Digital</strong><br />TV boxes, projectors, and home cinema gear.</div>
+      <div>Recommended domain: shop.crtlu.me<br />Payment: Stripe. Fulfillment: Yanwen.</div>
+    </div>
+  </footer>
+
+  <style>
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      background: url("/assets/hero-cinema.png") center right / cover no-repeat;
+      transform: scale(1.02);
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background:
+        linear-gradient(90deg, rgba(3,5,7,.95) 0%, rgba(3,5,7,.78) 32%, rgba(3,5,7,.24) 70%, rgba(3,5,7,.58) 100%),
+        linear-gradient(180deg, rgba(3,5,7,.1) 0%, rgba(3,5,7,.22) 58%, #030507 100%);
+    }
+    .beam {
+      pointer-events: none;
+      position: absolute;
+      width: 58vw;
+      height: 18vh;
+      right: 18vw;
+      top: 42vh;
+      transform: rotate(-8deg);
+      background: linear-gradient(90deg, transparent, rgba(93,231,255,.16), transparent);
+      filter: blur(16px);
+      animation: beamPulse 4s ease-in-out infinite;
+    }
+    @keyframes beamPulse {
+      0%, 100% { opacity: .42; transform: rotate(-8deg) translateX(0); }
+      50% { opacity: .76; transform: rotate(-8deg) translateX(22px); }
+    }
+  </style>
+</Layout>
+
+<script define:vars={{ catalogJSON }}>
+  const featured = JSON.parse(catalogJSON);
+
+  const SHIPPING_CENTS = 1200;
+  const cartKey = 'crtlu-cart-v1';
+  let activeFilter = 'all';
+  let cart = (() => {
+    try { return JSON.parse(localStorage.getItem(cartKey) || '[]'); } catch { return []; }
+  })();
+
+  function saveCart() { localStorage.setItem(cartKey, JSON.stringify(cart)); }
+  function minPrice(item) { return Math.min(...item.variants.map((v) => v.price_cents)); }
+
+  function renderProducts() {
+    const grid = document.getElementById('productGrid');
+    const products = activeFilter === 'all' ? featured : featured.filter((p) => p.category === activeFilter);
+    grid.innerHTML = products.map((product) => `
+      <article class="product-card reveal visible">
+        <div class="product-visual">
+          ${product.image ? `<img class="product-image" src="${product.image}" alt="${product.name}">` : ''}
+        </div>
+        <div class="product-body">
+          <div class="product-meta"><span>${product.brand}</span><span>${product.category}</span></div>
+          <h3>${product.name}</h3>
+          <p>${product.description}</p>
+          <div class="product-footer">
+            <div class="price">$${(minPrice(product) / 100).toFixed(2)} <small>USD</small></div>
+            <a class="secondary-button" href="/products/${product.id}/" style="padding:0 12px;font-size:12px;">Details</a>
+            <button class="primary-button" type="button" data-add="${product.variants[0].id}">Add to Cart</button>
+          </div>
+        </div>
+      </article>
+    `).join('');
+  }
+
+  function renderFilters() {
+    const wrap = document.getElementById('filters');
+    wrap.innerHTML = FILTERS.map(([id, label]) => `<button class="filter ${id === activeFilter ? 'active' : ''}" type="button" data-filter="${id}">${label}</button>`).join('');
+  }
+
+  function renderCart() {
+    const count = cart.reduce((sum, item) => sum + item.qty, 0);
+    document.getElementById('cartCount')!.textContent = String(count);
+  }
+
+  function addToCart(id: string) {
+    const existing = cart.find(item => item.id === id);
+    if (existing) existing.qty += 1;
+    else cart.push({ id, qty: 1 });
+    saveCart();
+    renderCart();
+    openCart();
+  }
+
+  function openCart() {
+    document.body.style.overflow = 'hidden';
+    document.getElementById('cartDrawer')!.classList.add('open');
+    document.getElementById('cartDrawer').setAttribute('aria-hidden', 'false');
+    document.getElementById('cartBackdrop')!.classList.add('open');
+  }
+
+  function closeCart() {
+    document.body.style.overflow = '';
+    document.getElementById('cartDrawer')!.classList.remove('open');
+    document.getElementById('cartDrawer').setAttribute('aria-hidden', 'true');
+    document.getElementById('cartBackdrop')!.classList.remove('open');
+  }
+
+  document.addEventListener('click', event => {
+    const filter = (event.target as HTMLElement).closest('[data-filter]');
+    if (filter) { activeFilter = (filter as HTMLElement).dataset.filter!; renderFilters(); renderProducts(); }
+
+    const add = (event.target as HTMLElement).closest('[data-add]');
+    if (add) addToCart(add.dataset.add!);
+  });
+
+  document.getElementById('openCart')!.addEventListener('click', openCart);
+  document.getElementById('closeCart')!.addEventListener('click', closeCart);
+  document.getElementById('cartBackdrop')!.addEventListener('click', closeCart);
+  const mobileCartBtn = document.getElementById('mobileOpenCart');
+  if (mobileCartBtn) mobileCartBtn.addEventListener('click', openCart);
+
+  renderFilters();
+  renderProducts();
+  renderCart();
+</script>

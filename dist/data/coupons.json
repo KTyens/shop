@@ -1,0 +1,22 @@
+{
+  "coupons": [
+    {
+      "code": "WELCOME5",
+      "label": "Welcome 5% off",
+      "type": "percent",
+      "percent_off": 5,
+      "min_subtotal_cents": 5000,
+      "max_discount_cents": 2000,
+      "active": true
+    },
+    {
+      "code": "VIP8",
+      "label": "VIP member 8% off",
+      "type": "percent",
+      "percent_off": 8,
+      "min_subtotal_cents": 10000,
+      "max_discount_cents": 3500,
+      "active": true
+    }
+  ]
+}

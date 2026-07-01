@@ -1,0 +1,323 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import CartDrawer from '../components/CartDrawer.astro';
+import '../styles/global.css';
+
+const currencies = ['USD', 'JPY', 'CNY', 'EUR'];
+const locales = [
+  { code: 'en', label: 'English' },
+  { code: 'ja', label: '日本語' },
+  { code: 'zh-CN', label: '简体中文' },
+  { code: 'zh-TW', label: '繁體中文' },
+  { code: 'es', label: 'Español' },
+  { code: 'pt', label: 'Português' },
+  { code: 'id', label: 'Bahasa Indonesia' },
+  { code: 'th', label: 'ภาษาไทย' },
+  { code: 'vi', label: 'Tiếng Việt' },
+  { code: 'ms', label: 'Bahasa Melayu' },
+];
+---
+
+<Layout title="Account | CRTLU Digital" description="Sign in to view orders, manage addresses, and keep checkout preferences.">
+  <Navigation />
+  <CartDrawer />
+
+  <main style="padding:44px 0;">
+    <div style="width:min(var(--max),calc(100% - 44px));margin:0 auto;">
+      <h1 style="font-size:clamp(36px,7vw,72px);line-height:.92;margin:0 0 10px;letter-spacing:0;">Account</h1>
+      <p style="color:var(--muted);line-height:1.65;margin:0 0 22px;max-width:680px;">Sign in with your email to view orders, save delivery addresses, and keep checkout preferences ready for repeat purchases.</p>
+
+      <!-- Status card -->
+      <div style="display:inline-flex;align-items:center;gap:18px;padding:18px 22px;border:1px solid var(--line);background:rgba(255,255,255,.045);margin-bottom:28px;">
+        <span style="color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.06em;">Signed in as</span>
+        <strong id="signedInAs" style="font-size:18px;">Guest</strong>
+        <button class="secondary-button" type="button" id="logoutButton" style="color:var(--danger);display:none;">Sign out</button>
+      </div>
+
+      <!-- Login panel -->
+      <div class="panel" id="loginPanel" style="border:1px solid var(--line);background:rgba(255,255,255,.045);padding:28px;margin-bottom:22px;">
+        <h2 style="margin:0 0 8px;font-size:22px;">Email sign-in</h2>
+        <p style="color:var(--muted);line-height:1.65;margin:0 0 18px;font-size:14px;">Use the same email you enter at Stripe Checkout. We will send a one-time 6-digit code.</p>
+
+        <div style="display:grid;grid-template-columns:1fr 160px;gap:10px;">
+          <label>
+            <span style="color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;">Email</span>
+            <input id="loginEmail" type="email" autocomplete="email" placeholder="you@example.com" style="width:100%;min-height:42px;border:1px solid var(--line);background:rgba(0,0,0,.24);color:var(--text);padding:0 12px;font:inherit;" />
+          </label>
+          <button class="primary-button" type="button" id="sendCode">Send code</button>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 160px;gap:10px;margin-top:12px;">
+          <label>
+            <span style="color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;">6-digit code</span>
+            <input id="loginCode" inputmode="numeric" maxlength="6" placeholder="123456" style="width:100%;min-height:42px;border:1px solid var(--line);background:rgba(0,0,0,.24);color:var(--text);padding:0 12px;font:inherit;" />
+          </label>
+          <button type="button" id="verifyCode">Sign in</button>
+        </div>
+
+        <div class="message" id="loginMessage" style="min-height:22px;margin-top:10px;color:var(--green);font-size:14px;"></div>
+      </div>
+
+      <!-- Account panel (hidden until logged in) -->
+      <div id="accountPanel" style="display:grid;grid-template-columns:1fr 1fr;gap:18px;" class="hidden">
+        <!-- Profile -->
+        <div class="panel" style="border:1px solid var(--line);background:rgba(255,255,255,.045);padding:28px;">
+          <h2 style="margin:0 0 18px;font-size:22px;">Profile</h2>
+          <div style="display:grid;grid-template-columns:1fr;gap:12px;">
+            <label>
+              <span style="color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;">Name</span>
+              <input id="profileName" autocomplete="name" placeholder="Your name" style="width:100%;min-height:42px;border:1px solid var(--line);background:rgba(0,0,0,.24);color:var(--text);padding:0 12px;font:inherit;" />
+            </label>
+            <label>
+              <span style="color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;">Language</span>
+              <select id="profileLocale" style="width:100%;min-height:42px;border:1px solid var(--line);background:rgba(0,0,0,.24);color:var(--text);padding:0 12px;font:inherit;"></select>
+            </label>
+            <label>
+              <span style="color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;">Preferred currency</span>
+              <select id="profileCurrency" style="width:100%;min-height:42px;border:1px solid var(--line);background:rgba(0,0,0,.24);color:var(--text);padding:0 12px;font:inherit;">
+                {currencies.map(c => `<option value="${c}">${c}</option>`).join('')}
+              </select>
+            </label>
+          </div>
+          <button class="primary-button" type="button" id="saveProfile" style="margin-top:16px;">Save profile</button>
+          <div class="message" id="profileMessage" style="min-height:22px;margin-top:10px;color:var(--green);font-size:14px;"></div>
+        </div>
+
+        <!-- Saved address form -->
+        <div class="panel" style="border:1px solid var(--line);background:rgba(255,255,255,.045);padding:28px;">
+          <h2 style="margin:0 0 18px;font-size:22px;">Saved address</h2>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <label><span style="color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;">Label</span><input id="addrLabel" placeholder="Home" style="width:100%;min-height:42px;border:1px solid var(--line);background:rgba(0,0,0,.24);color:var(--text);padding:0 12px;font:inherit;" /></label>
+            <label><span style="color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;">Recipient</span><input id="addrName" autocomplete="name" style="width:100%;min-height:42px;border:1px solid var(--line);background:rgba(0,0,0,.24);color:var(--text);padding:0 12px;font:inherit;" /></label>
+            <label><span style="color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;">Phone</span><input id="addrPhone" autocomplete="tel" style="width:100%;min-height:42px;border:1px solid var(--line);background:rgba(0,0,0,.24);color:var(--text);padding:0 12px;font:inherit;" /></label>
+            <label><span style="color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;">Country</span><input id="addrCountry" placeholder="Japan" style="width:100%;min-height:42px;border:1px solid var(--line);background:rgba(0,0,0,.24);color:var(--text);padding:0 12px;font:inherit;" /></label>
+            <label><span style="color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;">Postal code</span><input id="addrPostal" style="width:100%;min-height:42px;border:1px solid var(--line);background:rgba(0,0,0,.24);color:var(--text);padding:0 12px;font:inherit;" /></label>
+            <label><span style="color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;">State</span><input id="addrState" style="width:100%;min-height:42px;border:1px solid var(--line);background:rgba(0,0,0,.24);color:var(--text);padding:0 12px;font:inherit;" /></label>
+            <label><span style="color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;">City</span><input id="addrCity" style="width:100%;min-height:42px;border:1px solid var(--line);background:rgba(0,0,0,.24);color:var(--text);padding:0 12px;font:inherit;" /></label>
+            <label class="wide" style="grid-column:1/-1;"><span style="color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;">Address line 1</span><input id="addrLine1" style="width:100%;min-height:42px;border:1px solid var(--line);background:rgba(0,0,0,.24);color:var(--text);padding:0 12px;font:inherit;" /></label>
+            <label class="wide" style="grid-column:1/-1;"><span style="color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;">Address line 2</span><input id="addrLine2" style="width:100%;min-height:42px;border:1px solid var(--line);background:rgba(0,0,0,.24);color:var(--text);padding:0 12px;font:inherit;" /></label>
+          </div>
+          <button class="primary-button" type="button" id="saveAddress" style="margin-top:16px;">Save address</button>
+          <div class="message" id="addressMessage" style="min-height:22px;margin-top:10px;color:var(--green);font-size:14px;"></div>
+        </div>
+
+        <!-- Addresses list -->
+        <div class="panel full" style="grid-column:1/-1;border:1px solid var(--line);background:rgba(255,255,255,.045);padding:28px;">
+          <h2 style="margin:0 0 18px;font-size:22px;">Addresses</h2>
+          <div id="addressesList"></div>
+        </div>
+
+        <!-- Orders list -->
+        <div class="panel full" style="grid-column:1/-1;border:1px solid var(--line);background:rgba(255,255,255,.045);padding:28px;">
+          <h2 style="margin:0 0 18px;font-size:22px;">Orders</h2>
+          <div id="ordersList"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <style>
+    .panel { display: none; }
+    .panel:not(.hidden) { display: block; }
+    .wide { grid-column: 1 / -1; }
+    @media (max-width: 860px) {
+      #accountPanel { grid-template-columns: 1fr !important; }
+    }
+  </style>
+
+  <script>
+    const api = {
+      requestCode: '/api/account-request-code.php',
+      login: '/api/account-login.php',
+      account: '/api/account.php',
+      logout: '/api/account-logout.php',
+    };
+
+    let state = { authenticated: false, member: null, orders: [], addresses: [] };
+    const $ = id => document.getElementById(id);
+
+    function esc(value) {
+      return String(value ?? '').replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[ch]));
+    }
+
+    function setMessage(id, text, error = false) {
+      const el = $(id);
+      el.textContent = text || '';
+      el.className = error ? 'message error' : 'message';
+      el.style.color = error ? 'var(--danger)' : 'var(--green)';
+    }
+
+    async function post(url, payload) {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload || {}),
+      });
+      const data = await response.json();
+      if (!response.ok || data.ok === false) throw new Error(data.message || 'Request failed.');
+      return data;
+    }
+
+    async function loadAccount() {
+      try {
+        const response = await fetch(api.account);
+        state = await response.json();
+        render();
+        if (state.message) setMessage('loginMessage', state.message, true);
+      } catch {
+        state = { authenticated: false, member: null, orders: [], addresses: [] };
+        render();
+      }
+    }
+
+    function render() {
+      $('loginPanel').style.display = state.authenticated ? 'none' : 'block';
+      $('accountPanel').style.display = state.authenticated ? 'grid' : 'none';
+      $('logoutButton').style.display = state.authenticated ? 'inline-flex' : 'none';
+      $('signedInAs').textContent = state.member?.email || 'Guest';
+
+      if (!state.authenticated) return;
+
+      $('profileName').value = state.member.name || '';
+      renderLanguageOptions();
+      $('profileLocale').value = state.member.locale || 'en';
+      $('profileCurrency').value = state.member.currency || 'USD';
+
+      renderAddresses();
+      renderOrders();
+    }
+
+    function renderLanguageOptions() {
+      const select = $('profileLocale');
+      select.innerHTML = locales.map(l => `<option value="${l.code}">${l.label}</option>`).join('');
+    }
+
+    function renderAddresses() {
+      const list = state.addresses || [];
+      $('addressesList').innerHTML = list.length
+        ? list.map(addr => `
+            <article style="border:1px solid var(--line);background:rgba(0,0,0,.18);padding:16px;margin-bottom:12px;">
+              <div style="display:flex;justify-content:space-between;gap:12px;align-items:start;margin-bottom:10px;">
+                <div>
+                  <strong>${esc(addr.label || 'Address')}</strong>
+                  ${addr.is_default ? '<span style="display:inline-flex;padding:4px 8px;color:var(--green);border:1px solid rgba(130,255,143,.36);background:rgba(130,255,143,.08);font-size:12px;text-transform:uppercase;font-weight:900;margin-left:8px;">Default</span>' : ''}
+                </div>
+                <button type="button" data-delete-address="${esc(addr.id)}" style="color:var(--danger);background:none;padding:0;border:none;cursor:pointer;font:inherit;font-size:12px;">Delete</button>
+              </div>
+              <div style="color:var(--muted);font-size:14px;">${esc(addr.recipient_name)} ${esc(addr.phone)}</div>
+              <div style="font-size:14px;">${esc(addr.line1)} ${esc(addr.line2)}</div>
+              <div style="color:var(--muted);font-size:14px;">${esc(addr.city)} ${esc(addr.state)} ${esc(addr.postal_code)} ${esc(addr.country)}</div>
+            </article>`).join('')
+        : '<div style="color:var(--muted);border:1px dashed var(--line);padding:16px;">No saved addresses.</div>';
+
+      $('addressesList').querySelectorAll('[data-delete-address]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          setMessage('addressMessage', 'Deleting...');
+          try {
+            await post(api.account, { action: 'delete_address', id: btn.dataset.deleteAddress });
+            await loadAccount();
+            setMessage('addressMessage', 'Address deleted.');
+          } catch (error) {
+            setMessage('addressMessage', error.message, true);
+          }
+        });
+      });
+    }
+
+    function renderOrders() {
+      const orders = state.orders || [];
+      const money = (cents, currency) => `${(currency || 'USD').toUpperCase()} ${(Number(cents || 0) / 100).toFixed(2)}`;
+
+      $('ordersList').innerHTML = orders.length
+        ? orders.map(order => `
+            <article style="border:1px solid var(--line);background:rgba(0,0,0,.18);padding:16px;margin-bottom:12px;">
+              <div style="display:flex;justify-content:space-between;gap:12px;align-items:start;margin-bottom:10px;">
+                <div>
+                  <strong>Order #${esc(order.id)}</strong>
+                  <div style="color:var(--muted);font-size:13px;margin-top:2px;">${esc(order.created_at || '')}</div>
+                </div>
+                <span style="display:inline-flex;padding:4px 8px;color:var(--green);border:1px solid rgba(130,255,143,.36);background:rgba(130,255,143,.08);font-size:12px;text-transform:uppercase;font-weight:900;">${esc(order.status || 'paid')}</span>
+              </div>
+              <div style="font-size:14px;">Total: <strong>${esc(money(order.amount_total, order.currency))}</strong></div>
+              ${order.coupon_code ? `<div style="color:var(--muted);font-size:14px;">Coupon ${esc(order.coupon_code)} saved ${esc(money(order.discount_total, order.currency))}</div>` : ''}
+              ${order.yanwen_tracking ? `<div style="font-size:14px;">Yanwen: <strong>${esc(order.yanwen_tracking)}</strong></div>` : `<div style="color:var(--muted);font-size:14px;">Tracking will be added after shipment</div>`}
+              ${(order.items && order.items.length) ? `<ul style="margin:10px 0 0;padding-left:18px;color:#cbd8df;font-size:14px;">${order.items.map(item => `<li>${item.quantity} x ${esc(item.product_name)}</li>`).join('')}</ul>` : ''}
+            </article>`).join('')
+        : '<div style="color:var(--muted);border:1px dashed var(--line);padding:16px;">No orders yet.</div>';
+    }
+
+    // ---- Event handlers ----
+    $('sendCode').addEventListener('click', async () => {
+      setMessage('loginMessage', 'Sending...');
+      try {
+        const data = await post(api.requestCode, { email: $('loginEmail').value });
+        setMessage('loginMessage', data.debug_code ? `Code sent. Debug code: ${data.debug_code}` : data.message);
+      } catch (error) {
+        setMessage('loginMessage', error.message, true);
+      }
+    });
+
+    $('verifyCode').addEventListener('click', async () => {
+      setMessage('loginMessage', 'Signing in...');
+      try {
+        await post(api.login, { email: $('loginEmail').value, code: $('loginCode').value });
+        await loadAccount();
+        setMessage('loginMessage', '');
+      } catch (error) {
+        setMessage('loginMessage', error.message, true);
+      }
+    });
+
+    $('logoutButton').addEventListener('click', async () => {
+      await post(api.logout, {});
+      state = { authenticated: false, member: null, orders: [], addresses: [] };
+      render();
+    });
+
+    $('saveProfile').addEventListener('click', async () => {
+      setMessage('profileMessage', 'Saving...');
+      try {
+        await post(api.account, {
+          action: 'profile',
+          name: $('profileName').value,
+          locale: $('profileLocale').value,
+          currency: $('profileCurrency').value,
+        });
+        await loadAccount();
+        setMessage('profileMessage', 'Profile saved.');
+      } catch (error) {
+        setMessage('profileMessage', error.message, true);
+      }
+    });
+
+    $('saveAddress').addEventListener('click', async () => {
+      setMessage('addressMessage', 'Saving...');
+      try {
+        await post(api.account, {
+          action: 'save_address',
+          address: {
+            label: $('addrLabel').value,
+            recipient_name: $('addrName').value,
+            phone: $('addrPhone').value,
+            country: $('addrCountry').value,
+            postal_code: $('addrPostal').value,
+            state: $('addrState').value,
+            city: $('addrCity').value,
+            line1: $('addrLine1').value,
+            line2: $('addrLine2').value,
+            is_default: true,
+          },
+        });
+        await loadAccount();
+        setMessage('addressMessage', 'Address saved.');
+      } catch (error) {
+        setMessage('addressMessage', error.message, true);
+      }
+    });
+
+    // Init
+    renderLanguageOptions();
+    loadAccount();
+  </script>
+</Layout>

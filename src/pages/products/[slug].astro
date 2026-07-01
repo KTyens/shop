@@ -1,0 +1,282 @@
+---
+import { loadCatalog } from '../../lib/catalog-data';
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import CartDrawer from '../../components/CartDrawer.astro';
+import '../../styles/global.css';
+
+const allSeries = loadCatalog();
+
+export async function getStaticPaths() {
+  const catalog = loadCatalog();
+  return catalog.map((product) => ({
+    params: { slug: product.id },
+    props: { product },
+  }));
+}
+
+const productSlug = Astro.params.slug;
+const product = (Astro.props.product) || allSeries[0];
+
+function flattenVariants(items: any[]) {
+  return items.flatMap(item =>
+    item.variants.map(v => ({
+      ...v,
+      seriesId: item.id,
+      seriesName: item.name,
+      brand: item.brand,
+      tier: item.tier,
+      category: item.category,
+      image: item.image,
+    }))
+  );
+}
+
+const variants = flattenVariants(allSeries);
+const catalogJSON = JSON.stringify(allSeries);
+---
+
+<Layout title={product.name + ' | CRTLU Digital'} description={product.description}>
+  <Navigation />
+  <CartDrawer />
+
+  <main>
+    <section class="hero" style="grid-template-columns:1fr 1fr;gap:34px;padding:42px 0 48px;">
+      <div>
+        <div class="gallery-main" id="galleryMain" style="min-height:520px;display:grid;place-items-center;padding:24px;border:1px solid var(--line);background:radial-gradient(circle at 50% 38%,rgba(93,231,255,.12),transparent 48%),linear-gradient(180deg,rgba(247,250,252,.96),rgba(217,228,234,.9));overflow:hidden;"></div>
+        <div class="thumbs" id="thumbs" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:12px;"></div>
+      </div>
+      <div>
+        <div class="eyebrow" id="eyebrow">{product.brand} / {product.tier.replace('-', ' ')}</div>
+        <h1 id="title">{product.name}</h1>
+        <p class="lead" id="description" style="color:#c6d3da;line-height:1.7;font-size:17px;margin:14px 0;">{product.description}</p>
+        <div class="price-line" style="margin:22px 0;display:flex;align-items:end;gap:10px;">
+          <span class="price" id="price" style="font-size:38px;font-weight:950;">$0.00</span>
+          <span class="compare" id="compare" style="color:var(--muted);text-decoration:line-through;"></span>
+        </div>
+        <div class="variants" id="variants" style="display:grid;gap:10px;margin:22px 0;"></div>
+        <div class="actions" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;">
+          <button class="primary-button" type="button" id="addSelected">Add to Cart</button>
+          <a class="secondary-button" href="/products/">All Products</a>
+        </div>
+        <div class="buy-trust" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:16px;">
+          <span style="padding:10px;border:1px solid rgba(139,255,133,.22);background:rgba(139,255,133,.06);color:#c6d3da;font-size:12px;line-height:1.35;">Stripe secure checkout</span>
+          <span style="padding:10px;border:1px solid rgba(139,255,133,.22);background:rgba(139,255,133,.06);color:#c6d3da;font-size:12px;line-height:1.35;">Yanwen tracked shipping</span>
+          <span style="padding:10px;border:1px solid rgba(139,255,133,.22);background:rgba(139,255,133,.06);color:#c6d3da;font-size:12px;line-height:1.35;">7-18 business day delivery</span>
+          <span style="padding:10px;border:1px solid rgba(139,255,133,.22);background:rgba(139,255,133,.06);color:#c6d3da;font-size:12px;line-height:1.35;">No preloaded paid content</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="padding:34px 0;border-top:1px solid var(--line);">
+      <h2 style="margin:0 0 18px;font-size:28px;">Specifications</h2>
+      <div class="spec-grid" id="specGrid" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;"></div>
+    </section>
+
+    <section class="section" style="padding:34px 0;border-top:1px solid var(--line);">
+      <h2 style="margin:0 0 18px;font-size:28px;">Product Images</h2>
+      <div class="detail-gallery" id="detailGallery" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;"></div>
+    </section>
+  </main>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="imageLightbox" aria-hidden="true" role="dialog" aria-label="Product image preview" style="position:fixed;inset:0;z-index:120;display:none;place-items:center;padding:22px;background:rgba(0,0,0,.82);backdrop-filter:blur(14px);">
+    <div class="lightbox-inner" style="width:min(1120px,100%);max-height:92vh;display:grid;gap:12px;">
+      <div class="lightbox-head" style="display:flex;align-items:center;justify-content:space-between;gap:12px;color:var(--muted);font-size:13px;">
+        <span id="lightboxCaption">{product.name}</span>
+        <button class="icon-button" type="button" id="closeLightbox" aria-label="Close image preview"><span class="close-icon" aria-hidden="true"></span></button>
+      </div>
+      <div class="lightbox-frame" id="lightboxFrame" style="min-height:0;display:grid;place-items:center;border:1px solid var(--line);background:linear-gradient(180deg,rgba(247,250,252,.98),rgba(220,230,236,.94));"></div>
+    </div>
+  </div>
+
+  <script define:vars={{ catalogData: catalogJSON, productSlug: product.id }}>
+    const catalog = JSON.parse(catalogData);
+    const product = catalog.find((p: any) => p.id === productSlug) || catalog[0];
+  </script>
+
+  <script>
+    // ---- Product detail page logic ----
+    const SHIPPING_CENTS = 1200;
+    const cartKey = 'crtlu-cart-v1';
+
+    let selectedId = null;
+    let currentImage = '';
+    let cart = (() => {
+      try { return JSON.parse(localStorage.getItem(cartKey) || '[]'); } catch { return []; }
+    })();
+
+    function variantById(id) { return variants.find(v => v.id === id); }
+    function saveCart() { localStorage.setItem(cartKey, JSON.stringify(cart)); }
+    function money(cents) { return '$' + (cents / 100).toFixed(2); }
+
+    function renderProduct() {
+      const selected = product.variants.find((v) => v.id === selectedId) || product.variants[0];
+      selectedId = selected.id;
+      const gallery = product.gallery && product.gallery.length ? product.gallery : [product.image].filter(Boolean);
+      currentImage = currentImage || gallery[0] || '';
+
+      document.getElementById('price').textContent = money(selected.price_cents);
+      document.getElementById('compare').textContent = (selected.compare_at_cents && selected.compare_at_cents !== selected.price_cents) ? money(selected.compare_at_cents) : '';
+
+      // Gallery
+      document.getElementById('galleryMain').innerHTML = currentImage
+        ? `<button type="button" data-lightbox-image="${currentImage}" aria-label="Open image"><img src="${currentImage}" alt="${product.name}"></button>`
+        : '';
+
+      document.getElementById('thumbs').innerHTML = gallery.map((img) =>
+        `<button class="thumb ${img === currentImage ? 'active' : ''}" type="button" data-image="${img}" aria-label="Show image" aria-current="${img === currentImage ? 'true' : 'false'}"><img src="${img}" alt="${product.name}"></button>`
+      ).join('');
+
+      // Variants
+      document.getElementById('variants').innerHTML = product.variants.map((v) =>
+        `<button class="variant-row ${v.id === selected.id ? 'active' : ''}" type="button" data-variant="${v.id}"><span><strong>${v.label}</strong><span>${v.sku}</span></span><strong>${money(v.price_cents)}</strong></button>`
+      ).join('');
+
+      // Specs
+      const specs = {
+        Brand: product.brand,
+        Category: product.category.replace('-', ' '),
+        Tier: product.tier.replace('-', ' '),
+        Configurations: product.variants.map((v) => v.label).join(' / '),
+        SKU: selected.sku,
+        'Launch Price': money(selected.price_cents),
+        'Standard Price': money(selected.compare_at_cents || selected.price_cents),
+      };
+      Object.assign(specs, product.specs || {});
+      document.getElementById('specGrid').innerHTML = Object.entries(specs).filter(([, val]) => val).map(([key, val]) =>
+        `<div class="spec" style="padding:16px;border:1px solid var(--line);background:rgba(255,255,255,.04);"><span style="display:block;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.08em;">${key}</span><strong style="display:block;margin-top:8px;line-height:1.4;">${val}</strong></div>`
+      ).join('');
+
+      // Detail gallery
+      document.getElementById('detailGallery').innerHTML = gallery.map((img, i) =>
+        `<button type="button" data-lightbox-image="${img}" aria-label="Detail image ${i + 1}"><img src="${img}" alt="${product.name} detail ${i + 1}" style="width:100%;height:360px;object-fit:contain;padding:14px;display:block;"></button>`
+      ).join('');
+    }
+
+    function openLightbox(image) {
+      if (!image) return;
+      document.body.style.overflow = 'hidden';
+      document.getElementById('lightboxCaption').textContent = product.name;
+      document.getElementById('lightboxFrame').innerHTML = `<img src="${image}" alt="${product.name} enlarged" style="max-width:100%;max-height:82vh;object-fit:contain;padding:18px;filter:drop-shadow(0 24px 36px rgba(0,0,0,.32));">`;
+      document.getElementById('imageLightbox').style.display = 'grid';
+      document.getElementById('imageLightbox').setAttribute('aria-hidden', 'false');
+    }
+
+    function closeLightbox() {
+      document.getElementById('imageLightbox').style.display = 'none';
+      document.getElementById('imageLightbox').setAttribute('aria-hidden', 'true');
+      document.getElementById('lightboxFrame').innerHTML = '';
+      if (!document.getElementById('cartDrawer').classList.contains('open')) document.body.style.overflow = '';
+    }
+
+    function renderCart() {
+      cart = cart.filter(item => variantById(item.id));
+      saveCart();
+      const count = cart.reduce((s, i) => s + i.qty, 0);
+      const subtotal = cart.reduce((s, i) => s + variantById(i.id).price_cents * i.qty, 0);
+      const shipping = subtotal > 0 ? SHIPPING_CENTS : 0;
+
+      document.getElementById('cartCount').textContent = String(count);
+      document.getElementById('cartSubtotal').textContent = money(subtotal);
+      document.getElementById('cartShipping').textContent = subtotal > 0 ? '$12.00' : '$0.00';
+      document.getElementById('cartTotal').textContent = money(subtotal + shipping);
+      document.getElementById('checkoutButton').disabled = count === 0;
+
+      document.getElementById('cartItems').innerHTML = cart.length
+        ? cart.map(item => {
+            const v = variantById(item.id);
+            if (!v) return '';
+            return `<div class="cart-item"><img class="cart-thumb" src="${v.image || product.image}" alt="${v.seriesName}" style="width:62px;height:62px;object-fit:contain;padding:6px;border:1px solid var(--line);background:rgba(255,255,255,.06);"><div><h3 style="margin:0 0 4px;font-size:15px;">${v.seriesName}</h3><p style="margin:0;color:var(--muted);font-size:13px;">${v.label} / ${v.sku}</p><div class="quantity" style="display:flex;align-items:center;gap:8px;margin-top:10px;"><button class="qty-btn" type="button" data-qty="${v.id}" data-change="-1" style="width:28px;height:28px;color:var(--text);background:rgba(255,255,255,.06);border:1px solid var(--line);">-</button><span>${item.qty}</span><button class="qty-btn" type="button" data-qty="${v.id}" data-change="1" style="width:28px;height:28px;color:var(--text);background:rgba(255,255,255,.06);border:1px solid var(--line);">+</button></div><button class="remove" type="button" data-remove="${v.id}" style="color:var(--danger);background:none;padding:0;margin-top:10px;font-size:12px;">Remove</button></div><strong style="color:var(--text);font-weight:900;">${money(v.price_cents * item.qty)}</strong></div>`;
+          }).join('')
+        : '<div class="empty" style="color:var(--muted);padding:30px 0;line-height:1.6;">Your cart is empty.</div>';
+
+      document.querySelectorAll('[data-qty]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.qty;
+          const change = parseInt(btn.dataset.change);
+          const item = cart.find(e => e.id === id);
+          if (item) { item.qty = Math.max(1, item.qty + change); saveCart(); renderCart(); }
+        });
+      });
+      document.querySelectorAll('[data-remove]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          cart = cart.filter(i => i.id !== btn.dataset.remove);
+          saveCart(); renderCart();
+        });
+      });
+    }
+
+    function openCart() {
+      document.body.style.overflow = 'hidden';
+      document.getElementById('cartDrawer').classList.add('open');
+      document.getElementById('cartDrawer').setAttribute('aria-hidden', 'false');
+      document.getElementById('cartBackdrop').classList.add('open');
+    }
+    function closeCart() {
+      document.body.style.overflow = '';
+      document.getElementById('cartDrawer').classList.remove('open');
+      document.getElementById('cartDrawer').setAttribute('aria-hidden', 'true');
+      document.getElementById('cartBackdrop').classList.remove('open');
+    }
+
+    function addToCart(id) {
+      const existing = cart.find(i => i.id === id);
+      if (existing) existing.qty += 1;
+      else cart.push({ id, qty: 1 });
+      saveCart(); renderCart(); openCart();
+    }
+
+    async function checkout() {
+      const status = document.getElementById('checkoutStatus');
+      status.className = 'status';
+      status.textContent = 'Creating checkout session...';
+      try {
+        const response = await fetch('/api/create-checkout-session.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items: cart }),
+        });
+        const payload = await response.json();
+        if (!response.ok || !payload.url) throw new Error(payload.error || 'Checkout not configured');
+        window.location.href = payload.url;
+      } catch (error) {
+        status.className = 'status error';
+        status.textContent = error instanceof Error ? error.message : 'Something went wrong';
+      }
+    }
+
+    // ---- Init ----
+    function init() {
+      selectedId = product.variants[0].id;
+      currentImage = '';
+
+      renderProduct();
+      renderCart();
+
+      // Event delegation
+      document.addEventListener('click', event => {
+        const lb = event.target as HTMLElement;
+        if (lb.dataset.lightboxImage) openLightbox(lb.dataset.lightboxImage);
+        if (event.target === document.getElementById('imageLightbox')) closeLightbox();
+
+        const thumb = lb.closest('[data-image]');
+        if (thumb) { currentImage = thumb.dataset.image; renderProduct(); }
+
+        const variant = lb.closest('[data-variant]');
+        if (variant) { selectedId = variant.dataset.variant; renderProduct(); }
+      });
+
+      document.getElementById('addSelected').addEventListener('click', () => addToCart(selectedId));
+      document.getElementById('openCart').addEventListener('click', openCart);
+      document.getElementById('mobileOpenCart')?.addEventListener('click', openCart);
+      document.getElementById('closeCart').addEventListener('click', closeCart);
+      document.getElementById('cartBackdrop').addEventListener('click', closeCart);
+      document.getElementById('checkoutButton').addEventListener('click', checkout);
+      document.getElementById('closeLightbox').addEventListener('click', closeLightbox);
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && document.getElementById('imageLightbox').style.display === 'grid') closeLightbox(); });
+    }
+
+    init();
+  </script>
+</Layout>

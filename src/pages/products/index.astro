@@ -1,0 +1,433 @@
+---
+import { loadCatalog } from '../../lib/catalog-data';
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import CartDrawer from '../../components/CartDrawer.astro';
+import '../../styles/global.css';
+
+const series = loadCatalog();
+
+// Serialize to JSON-safe string for injection
+const catalogJSON = JSON.stringify(series);
+---
+
+<Layout title="All Products | CRTLU Digital" description="Shop all CRTL U Digital TV boxes and projectors by brand, tier, configuration, and price.">
+  <Navigation />
+  <CartDrawer />
+
+  <main>
+    <section class="hero wrap">
+      <div class="eyebrow">Complete Catalog</div>
+      <h1>All active home cinema gear.</h1>
+      <p class="lead">Browse the models currently published for independent-store sales. The homepage stays focused on a few hero products; this page keeps the full TV box and projector catalog searchable and ready for checkout.</p>
+
+      <div class="catalog-console" aria-label="Catalog controls">
+        <div class="catalog-controls">
+          <label class="search-field">
+            <span class="sr-only">Search catalog</span>
+            <input type="search" id="catalogSearch" placeholder="Search model, brand, SKU, chipset..." />
+            <button class="clear-search" type="button" id="clearSearch" aria-label="Clear search">×</button>
+          </label>
+          <label class="sort-field">
+            <span class="sr-only">Sort catalog</span>
+            <select id="catalogSort" aria-label="Sort catalog">
+              <option value="featured">Featured order</option>
+              <option value="price-asc">Price: low to high</option>
+              <option value="price-desc">Price: high to low</option>
+              <option value="name-asc">Name: A to Z</option>
+            </select>
+          </label>
+        </div>
+        <div class="toolbar" id="filters"></div>
+        <div class="summary" id="summary">Loading catalog...</div>
+      </div>
+    </section>
+
+    <section class="wrap">
+      <div class="product-grid" id="productGrid"></div>
+    </section>
+  </main>
+
+  <!-- Inject catalog data as a global variable -->
+  <script define:vars={{ catalogData: catalogJSON }}>
+    const catalogData = JSON.parse(catalogData);
+  </script>
+
+  <script>
+    // ---- Client-side interactivity ----
+
+    const SHIPPING_CENTS = 1200;
+    const cartKey = 'crtlu-cart-v1';
+
+    interface Variant {
+      id: string;
+      label: string;
+      sku: string;
+      price_cents: number;
+      compare_at_cents?: number;
+      seriesId?: string;
+      seriesName?: string;
+      brand?: string;
+      tier?: string;
+      category?: string;
+      description?: string;
+    }
+
+    interface SeriesItem {
+      id: string;
+      name: string;
+      brand: string;
+      tier: string;
+      category: string;
+      description: string;
+      image: string;
+      variants: Variant[];
+      specs?: Record<string, string>;
+      detail_url?: string;
+    }
+
+    let variants: Variant[] = [];
+    let activeFilter = 'all';
+    let searchQuery = '';
+    let sortMode = 'featured';
+    let selected: Record<string, string> = {};
+    let cart: Array<{ id: string; qty: number }> = loadCart();
+
+    function flattenVariants(series: SeriesItem[]) {
+      return series.flatMap(item =>
+        item.variants.map(variant => ({
+          ...variant,
+          seriesId: item.id,
+          seriesName: item.name,
+          brand: item.brand,
+          tier: item.tier,
+          category: item.category,
+          description: item.description,
+        }))
+      );
+    }
+
+    function variantById(id: string) {
+      return variants.find(v => v.id === id);
+    }
+
+    function loadCart() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(cartKey) || '[]');
+        return Array.isArray(parsed) ? parsed : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function saveCart() {
+      localStorage.setItem(cartKey, JSON.stringify(cart));
+    }
+
+    function minPrice(item: SeriesItem) {
+      return Math.min(...item.variants.map(v => v.price_cents));
+    }
+
+    function filterLabel(filterId: string): string {
+      if (filterId === 'all') return 'All';
+      if (filterId.startsWith('category:')) {
+        const cat = filterId.slice(9);
+        return cat === 'tv-box' ? 'TV Boxes' : cat === 'premium' ? 'Premium' : cat === 'projector' ? 'Projectors' : cat;
+      }
+      if (filterId.startsWith('brand:')) return filterId.slice(6);
+      if (filterId.startsWith('tier:')) {
+        const tierMap: Record<string, string> = {
+          budget: 'Budget', 'best-value': 'Best Value', main: 'Main',
+          performance: 'Performance', flagship: 'Flagship'
+        };
+        return tierMap[filterId.slice(5)] || filterId.slice(5);
+      }
+      return filterId;
+    }
+
+    function searchableText(item: SeriesItem) {
+      return [
+        item.id, item.name, item.brand, item.category, item.tier, item.description,
+        ...(item.specs ? Object.values(item.specs) : []),
+        ...item.variants.flatMap(v => [v.id, v.label, v.sku, String(v.price_cents)]),
+      ].join(' ').toLowerCase();
+    }
+
+    function filteredCatalog() {
+      const query = searchQuery.trim().toLowerCase();
+      const queryTokens = query.split(/\s+/).filter(Boolean);
+      let items = catalogData;
+
+      if (activeFilter.startsWith('category:'))
+        items = items.filter(item => item.category === activeFilter.slice(9));
+      else if (activeFilter.startsWith('brand:'))
+        items = items.filter(item => item.brand === activeFilter.slice(6));
+      else if (activeFilter.startsWith('tier:'))
+        items = items.filter(item => item.tier === activeFilter.slice(5));
+
+      if (queryTokens.length)
+        items = items.filter(item => queryTokens.every(token => searchableText(item).includes(token)));
+
+      const sorted = [...items];
+      if (sortMode === 'price-asc') sorted.sort((a, b) => minPrice(a) - minPrice(b) || a.name.localeCompare(b.name));
+      if (sortMode === 'price-desc') sorted.sort((a, b) => minPrice(b) - minPrice(a) || a.name.localeCompare(b.name));
+      if (sortMode === 'name-asc') sorted.sort((a, b) => a.name.localeCompare(b.name));
+
+      return sorted;
+    }
+
+    function renderProducts() {
+      const items = filteredCatalog();
+      const variantCount = items.reduce((sum, item) => sum + item.variants.length, 0);
+
+      document.getElementById('summary')!.innerHTML =
+        `<strong>${items.length}</strong> models / <strong>${variantCount}</strong> configs / Filter: <strong>${filterLabel(activeFilter)}</strong>` +
+        (searchQuery.trim() ? ` / Search: "${searchQuery.trim()}"` : '');
+
+      if (!items.length) {
+        document.getElementById('productGrid')!.innerHTML = `
+          <div class="empty-state">
+            <div>
+              <strong>No matches found</strong><br />
+              Try adjusting your search or filters.
+            </div>
+          </div>`;
+        return;
+      }
+
+      document.getElementById('productGrid')!.innerHTML = items.map(item => {
+        const selectedId = selected[item.id] || item.variants[0].id;
+        const current = item.variants.find(v => v.id === selectedId) || item.variants[0];
+
+        return `
+          <article class="product-card reveal" id="${item.id}">
+            ${item.image ? `<div class="product-media"><img src="${item.image}" alt="${item.name}"></div>` : ''}
+            <div class="card-head">
+              <div class="meta"><span>${item.brand}</span><span>${item.tier.replace('-', ' ')}</span></div>
+              <h2>${item.name}</h2>
+              <p>${item.description}</p>
+            </div>
+            <div class="card-body">
+              ${item.variants.map(variant => `
+                <div class="variant-row ${variant.id === current.id ? 'active' : ''}">
+                  <button type="button" data-select="${item.id}" data-variant="${variant.id}">
+                    <strong>${variant.label}</strong>
+                    <span>${variant.sku}</span>
+                  </button>
+                  <div class="price">$${(variant.price_cents / 100).toFixed(2)}${variant.compare_at_cents && variant.compare_at_cents !== variant.price_cents ? `<span class="compare">$${(variant.compare_at_cents / 100).toFixed(2)}</span>` : ''}</div>
+                </div>
+              `).join('')}
+              <div class="card-foot">
+                <span class="sku">Selected: ${current.sku}</span>
+                <span class="card-actions">
+                  <a class="secondary-button" href="${item.detail_url || `/products/${item.id}/`}" style="padding:0 12px;font-size:12px;">Details</a>
+                  <button class="primary-button" type="button" data-add="${current.id}" style="padding:0 12px;font-size:12px;">Add to Cart</button>
+                </span>
+              </div>
+            </div>
+          </article>`;
+      }).join('');
+
+      initReveal();
+    }
+
+    function initReveal() {
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+      }, { threshold: 0.12 });
+
+      document.querySelectorAll('.reveal:not(.visible)').forEach(el => observer.observe(el));
+    }
+
+    function renderFilters() {
+      const brands = [...new Set(catalogData.map(item => item.brand))].sort();
+      const categoryLabels: Record<string, string> = {
+        'tv-box': 'TV Boxes', premium: 'Premium', projector: 'Projectors'
+      };
+      const categories = ['tv-box', 'premium', 'projector']
+        .filter(cat => catalogData.some(item => item.category === cat))
+        .map(cat => [`category:${cat}`, categoryLabels[cat] || cat]);
+      const tiers = [
+        ['budget', 'Budget'], ['best-value', 'Best Value'], ['main', 'Main'],
+        ['performance', 'Performance'], ['flagship', 'Flagship']
+      ].filter(([tier]) => catalogData.some(item => item.tier === tier));
+      const filters = [['all', 'All'], ...categories, ...brands.map(b => [`brand:${b}`, b]), ...tiers.map(([id, label]) => [`tier:${id}`, label])];
+
+      document.getElementById('filters')!.innerHTML = filters.map(([id, label]) =>
+        `<button class="filter ${id === activeFilter ? 'active' : ''}" type="button" data-filter="${id}">${label}</button>`
+      ).join('');
+    }
+
+    function renderCart() {
+      cart = cart.filter(item => variantById(item.id));
+      saveCart();
+
+      const count = cart.reduce((sum, item) => sum + item.qty, 0);
+      const subtotal = cart.reduce((sum, item) => sum + variantById(item.id)!.price_cents * item.qty, 0);
+      const shipping = subtotal > 0 ? SHIPPING_CENTS : 0;
+
+      document.getElementById('cartCount')!.textContent = String(count);
+      document.getElementById('cartSubtotal')!.textContent = '$' + (subtotal / 100).toFixed(2);
+      document.getElementById('cartShipping')!.textContent = subtotal > 0 ? '$12.00' : '$0.00';
+      document.getElementById('cartTotal')!.textContent = '$' + (((subtotal + shipping) / 100).toFixed(2));
+      document.getElementById('checkoutButton').disabled = count === 0;
+
+      document.getElementById('cartItems')!.innerHTML = cart.length
+        ? cart.map(item => {
+            const variant = variantById(item.id);
+            if (!variant) return '';
+            return `
+              <div class="cart-item">
+                <div>
+                  <h3>${variant.seriesName}</h3>
+                  <p>${variant.label} / ${variant.sku}</p>
+                  <div class="quantity">
+                    <button class="qty-btn" type="button" data-qty="${variant.id}" data-change="-1">-</button>
+                    <span>${item.qty}</span>
+                    <button class="qty-btn" type="button" data-qty="${variant.id}" data-change="1">+</button>
+                  </div>
+                  <button class="remove" type="button" data-remove="${variant.id}">Remove</button>
+                </div>
+                <strong class="cart-price">$${(variant.price_cents * item.qty / 100).toFixed(2)}</strong>
+              </div>`;
+        }).join('')
+        : '<div class="empty">Your cart is empty.</div>';
+
+      // Cart item actions
+      document.querySelectorAll('[data-qty]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-qty')!;
+          const change = parseInt(btn.getAttribute('data-change')!);
+          const item = cart.find(e => e.id === id);
+          if (item) {
+            item.qty = Math.max(1, item.qty + change);
+            saveCart();
+            renderCart();
+          }
+        });
+      });
+
+      document.querySelectorAll('[data-remove]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-remove')!;
+          cart = cart.filter(item => item.id !== id);
+          saveCart();
+          renderCart();
+        });
+      });
+    }
+
+    function openCart() {
+      document.body.style.overflow = 'hidden';
+      document.getElementById('cartDrawer')!.classList.add('open');
+      document.getElementById('cartDrawer').setAttribute('aria-hidden', 'false');
+      document.getElementById('cartBackdrop')!.classList.add('open');
+    }
+
+    function closeCart() {
+      document.body.style.overflow = '';
+      document.getElementById('cartDrawer')!.classList.remove('open');
+      document.getElementById('cartDrawer').setAttribute('aria-hidden', 'true');
+      document.getElementById('cartBackdrop')!.classList.remove('open');
+    }
+
+    function addToCart(id: string) {
+      const existing = cart.find(item => item.id === id);
+      if (existing) existing.qty += 1;
+      else cart.push({ id, qty: 1 });
+      saveCart();
+      renderCart();
+      openCart();
+    }
+
+    // Checkout
+    async function checkout() {
+      const status = document.getElementById('checkoutStatus');
+      status.className = 'status';
+      status.textContent = 'Creating checkout session...';
+
+      try {
+        const response = await fetch('/api/create-checkout-session.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items: cart }),
+        });
+        const payload = await response.json();
+        if (!response.ok || !payload.url) throw new Error(payload.error || 'Checkout not configured');
+        window.location.href = payload.url;
+      } catch (error) {
+        status.className = 'status error';
+        status.textContent = error instanceof Error ? error.message : 'Something went wrong';
+      }
+    }
+
+    // ---- Init ----
+    function init() {
+      variants = flattenVariants(catalogData);
+      renderFilters();
+      renderProducts();
+      renderCart();
+      initReveal();
+
+      // Event delegation: filters
+      document.getElementById('filters')!.addEventListener('click', event => {
+        const filter = (event.target as HTMLElement).closest('[data-filter]');
+        if (filter) {
+          activeFilter = filter.dataset.filter!;
+          renderFilters();
+          renderProducts();
+        }
+      });
+
+      // Search
+      const searchInput = document.getElementById('catalogSearch') as HTMLInputElement;
+      searchInput.addEventListener('input', event => {
+        searchQuery = event.target.value;
+        renderProducts();
+      });
+
+      document.getElementById('clearSearch')!.addEventListener('click', () => {
+        searchQuery = '';
+        searchInput.value = '';
+        searchInput.focus();
+        renderProducts();
+      });
+
+      // Sort
+      document.getElementById('catalogSort')!.addEventListener('change', event => {
+        sortMode = (event.target as HTMLSelectElement).value;
+        renderProducts();
+      });
+
+      // Product grid actions (select variant / add to cart)
+      document.getElementById('productGrid')!.addEventListener('click', event => {
+        const select = (event.target as HTMLElement).closest('[data-select]');
+        if (select) {
+          selected[select.dataset.select!] = select.dataset.variant!;
+          renderProducts();
+        }
+
+        const add = (event.target as HTMLElement).closest('[data-add]');
+        if (add) {
+          addToCart(add.dataset.add!);
+        }
+      });
+
+      // Cart drawer
+      document.getElementById('openCart')!.addEventListener('click', openCart);
+      document.getElementById('closeCart')!.addEventListener('click', closeCart);
+      document.getElementById('cartBackdrop')!.addEventListener('click', closeCart);
+
+      // Checkout
+      document.getElementById('checkoutButton')!.addEventListener('click', checkout);
+
+      // Mobile nav
+      const mobileCartBtn = document.getElementById('mobileOpenCart');
+      if (mobileCartBtn) mobileCartBtn.addEventListener('click', openCart);
+    }
+
+    init();
+  </script>
+</Layout>

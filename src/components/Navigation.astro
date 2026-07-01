@@ -1,0 +1,32 @@
+---
+import '../styles/global.css';
+---
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">C</span>
+      <span>CRTLU Digital</span>
+    </a>
+    <nav class="nav-links">
+      <a href="/">Home</a>
+      <a href="#products">Products</a>
+      <a href="/products/">All Products</a>
+      <a href="/account/">Account</a>
+    </nav>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <a class="secondary-button" href="/products/" style="font-size:12px;padding:0 14px;">Shop All</a>
+      <button class="icon-button" type="button" id="openCart" aria-label="Open cart">
+        <span class="bag-icon" aria-hidden="true"></span>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<nav class="mobile-shop-nav" aria-label="Mobile shop navigation">
+  <a href="/">Home</a>
+  <button type="button" data-mobile-filter="category:tv-box">TV Box</button>
+  <button type="button" data-mobile-filter="category:projector">Projector</button>
+  <button type="button" id="mobileOpenCart">Cart</button>
+</nav>

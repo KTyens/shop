@@ -1,0 +1,119 @@
+---
+interface Props {
+  products: Array<{
+    id: string;
+    name: string;
+    image?: string;
+    brand: string;
+    scenario?: string;
+    description?: string;
+    price: number;
+    compareAt?: number;
+    chips?: string[];
+    detailUrl?: string;
+    category?: string;
+    tier?: string;
+    variants?: Array<{ id: string; label: string; sku: string; price_cents: number }>;
+  }>;
+  filters?: Array<[string, string]>;
+  activeFilter?: string;
+  onFilterChange?: (filter: string) => void;
+  searchPlaceholder?: string;
+  sortable?: boolean;
+  emptyMessage?: string;
+}
+
+const {
+  products = [],
+  filters = [],
+  activeFilter = '',
+  onFilterChange,
+  searchPlaceholder = 'Search model, brand, SKU...',
+  sortable = false,
+  emptyMessage = 'No products found.',
+} = Astro.props;
+---
+
+<section class="hero wrap">
+  <div class="eyebrow">Complete Catalog</div>
+  <h1>All active home cinema gear.</h1>
+  <p class="lead">Browse the models currently published for independent-store sales. The homepage stays focused on a few hero products; this page keeps the full TV box and projector catalog searchable and ready for checkout.</p>
+</section>
+
+<section class="wrap">
+  <div class="catalog-console" aria-label="Catalog controls">
+    <div class="catalog-controls">
+      <label class="search-field">
+        <input type="search" id="catalogSearch" placeholder={searchPlaceholder} />
+        <button class="clear-search" type="button" id="clearSearch" aria-label="Clear search">×</button>
+      </label>
+      {#if sortable}
+      <label class="sort-field">
+        <select id="catalogSort" aria-label="Sort catalog">
+          <option value="featured">Featured</option>
+          <option value="price-asc">Price: low to high</option>
+          <option value="price-desc">Price: high to low</option>
+          <option value="name-asc">Name: A to Z</option>
+        </select>
+      </label>
+      {/if}
+    </div>
+    {#if filters.length}
+    <div class="toolbar" id="filters">
+      {#each filters as [id, label]}
+        <button class="filter {@if id === activeFilter}active{/if}" type="button" data-filter={id}>{label}</button>
+      {/each}
+    </div>
+    {/if}
+    <div class="summary" id="summary">Loading catalog...</div>
+  </div>
+
+  <div class="product-grid" id="productGrid">
+    {#each products as product}
+      <article class="product-card reveal" id={product.id}>
+        <div class="product-visual">
+          {#if product.image}
+            <img class="product-image" src={product.image} alt={product.name} loading="lazy" />
+          {/if}
+        </div>
+        <div class="product-body">
+          <div class="product-meta">
+            <span>{product.brand}</span>
+            <span>{product.tier ?? product.category ?? ''}</span>
+          </div>
+          <h3>{product.name}</h3>
+          <p>{product.description ?? ''}</p>
+          {#if product.chips?.length}
+            <div class="chips">
+              {#each product.chips as chip}
+                <span class="chip">{chip}</span>
+              {/each}
+            </div>
+          {/if}
+          <div class="product-footer">
+            <div>
+              <div class="price">${(product.price / 100).toFixed(2)} <small>USD</small></div>
+              {#if product.compareAt}
+                <span class="compare-price">${(product.compareAt / 100).toFixed(2)} USD</span>
+              {/if}
+            </div>
+            {#if product.detailUrl}
+              <a class="primary-button" href={product.detailUrl}>Details</a>
+            {:else}
+              <button class="primary-button" type="button" data-add={product.id}>Add to Cart</button>
+            {/if}
+          </div>
+        </div>
+      </article>
+    {/each}
+  </div>
+</section>
+
+<style>
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    padding: 24px 0 70px;
+  }
+</style>
