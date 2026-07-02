@@ -66,6 +66,7 @@ Read these before changing the project:
 
 - `docs/agent-handoff.md`
 - `docs/DEPLOYMENT.md`
+- `docs/deployment-guide-zh.md` for a step-by-step Chinese deployment guide
 - `docs/pricing-system.md`
 - `docs/product-media-guidelines.md`
 - `docs/published-products.md`

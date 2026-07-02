@@ -5,6 +5,8 @@ This project uses a split deployment:
 - Cloudflare Pages serves the Astro static storefront from `dist/`.
 - Serv00 serves the PHP API, admin pages, MySQL-backed order system, and Stripe webhook.
 
+For a non-developer step-by-step Chinese guide, use `docs/deployment-guide-zh.md`.
+
 Do not put Stripe secret keys or database credentials in Cloudflare Pages. Those values stay only in `api/config.local.php` on Serv00.
 
 ## Cloudflare Pages Frontend
@@ -61,7 +63,11 @@ define('CRTLU_ADMIN_USER', 'admin');
 define('CRTLU_ADMIN_PASS', 'change_this_password');
 ```
 
-`CRTLU_ALLOWED_ORIGINS` must include the Cloudflare Pages production domain. Add preview domains only when you need to test account login or checkout from those domains.
+`CRTLU_ALLOWED_ORIGINS` must include the Cloudflare Pages production domain. Add preview or temporary domains only when you need to test account login or checkout from those domains. For example, if you are testing on `https://shop-crtlu.pages.dev` before `shop.crtlu.me` is ready, include it temporarily:
+
+```php
+define('CRTLU_ALLOWED_ORIGINS', 'https://shop-crtlu.pages.dev,https://shop.crtlu.me,http://localhost:4321,http://127.0.0.1:4321');
+```
 
 ## Database
 
