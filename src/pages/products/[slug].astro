@@ -18,6 +18,8 @@ export async function getStaticPaths() {
 const productSlug = Astro.params.slug;
 const product = (Astro.props.product) || allSeries[0];
 
+const productJSON = JSON.stringify(product);
+
 function flattenVariants(items: any[]) {
   return items.flatMap(item =>
     item.variants.map(v => ({
@@ -90,9 +92,9 @@ const catalogJSON = JSON.stringify(allSeries);
     </div>
   </div>
 
-  <script define:vars={{ catalogData: catalogJSON, productSlug: product.id }}>
-    const catalog = JSON.parse(catalogData);
-    const product = catalog.find((p: any) => p.id === productSlug) || catalog[0];
+  <script>
+    // Server-side product data injected as JSON
+    const PRODUCT_DATA = {PRODUCT_JSON};
   </script>
 
   <script>

@@ -49,12 +49,14 @@ const catalogJSON = JSON.stringify(series);
   </main>
 
   <!-- Inject catalog data as a global variable -->
-  <script define:vars={{ catalogData: catalogJSON }}>
-    const catalogData = JSON.parse(catalogData);
+  <script>
+    window.__CATALOG__ = JSON.parse({JSON.stringify(catalogJSON)});
   </script>
 
   <script>
     // ---- Client-side interactivity ----
+
+    const catalogData = window.__CATALOG__;
 
     const SHIPPING_CENTS = 1200;
     const cartKey = 'crtlu-cart-v1';
