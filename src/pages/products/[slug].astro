@@ -18,8 +18,6 @@ export async function getStaticPaths() {
 const productSlug = Astro.params.slug;
 const product = (Astro.props.product) || allSeries[0];
 
-const productJSON = JSON.stringify(product);
-
 function flattenVariants(items: any[]) {
   return items.flatMap(item =>
     item.variants.map(v => ({
@@ -35,7 +33,8 @@ function flattenVariants(items: any[]) {
 }
 
 const variants = flattenVariants(allSeries);
-const catalogJSON = JSON.stringify(allSeries);
+const productPayload = product;
+const variantsPayload = variants;
 ---
 
 <Layout title={product.name + ' | CRTLU Digital'} description={product.description}>
@@ -92,17 +91,15 @@ const catalogJSON = JSON.stringify(allSeries);
     </div>
   </div>
 
-  <script define:vars={{ productJSON }}>
-    window.__PRODUCT__ = {productJSON};
-  </script>
-
-  <script>
-    // Server-side product data injected as JSON
-    const PRODUCT_DATA = window.__PRODUCT__;
+  <script define:vars={{ productPayload, variantsPayload }}>
+    window.__PRODUCT__ = productPayload;
+    window.__VARIANTS__ = variantsPayload;
   </script>
 
   <script>
     // ---- Product detail page logic ----
+    const product = window.__PRODUCT__;
+    const variants = Array.isArray(window.__VARIANTS__) ? window.__VARIANTS__ : [];
     const SHIPPING_CENTS = 1200;
     const cartKey = 'crtlu-cart-v1';
 
@@ -237,9 +234,11 @@ const catalogJSON = JSON.stringify(allSeries);
       const status = document.getElementById('checkoutStatus');
       status.className = 'status';
       status.textContent = 'Creating checkout session...';
+      const apiUrl = (path) => window.crtluApiUrl ? window.crtluApiUrl(path) : path;
       try {
-        const response = await fetch('/api/create-checkout-session.php', {
+        const response = await fetch(apiUrl('/api/create-checkout-session.php'), {
           method: 'POST',
+          credentials: 'include',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ items: cart }),
         });

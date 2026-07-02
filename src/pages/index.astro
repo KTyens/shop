@@ -38,8 +38,8 @@ const featured = items.filter(i => featuredIds.includes(i.id));
 
 const FILTERS = [['all', 'All'], ['tv-box', 'TV Boxes'], ['projector', 'Projectors'], ['premium', 'Premium']];
 
-// Serialize for injection
-const catalogJSON = JSON.stringify(featured);
+const featuredPayload = featured;
+const filterPayload = FILTERS;
 ---
 
 <Layout title="CRTLU Digital | Premium TV Boxes & Projectors" description="Premium Android TV boxes, Google TV streamers, and compact projectors for cinematic home entertainment.">
@@ -236,14 +236,14 @@ const catalogJSON = JSON.stringify(featured);
       50% { opacity: .76; transform: rotate(-8deg) translateX(22px); }
     }
   </style>
-</Layout>
-
-<script define:vars={{ catalogJSON }}>
-  window.__FEATURED__ = {catalogJSON};
+<script define:vars={{ featuredPayload, filterPayload }}>
+  window.__FEATURED__ = featuredPayload;
+  window.__FILTERS__ = filterPayload;
 </script>
 
-<script>
-  const featured = window.__FEATURED__;
+<script is:inline>
+  const featured = Array.isArray(window.__FEATURED__) ? window.__FEATURED__ : [];
+  const FILTERS = Array.isArray(window.__FILTERS__) ? window.__FILTERS__ : [['all', 'All']];
 
   const SHIPPING_CENTS = 1200;
   const cartKey = 'crtlu-cart-v1';
@@ -284,10 +284,10 @@ const catalogJSON = JSON.stringify(featured);
 
   function renderCart() {
     const count = cart.reduce((sum, item) => sum + item.qty, 0);
-    document.getElementById('cartCount')!.textContent = String(count);
+    document.getElementById('cartCount').textContent = String(count);
   }
 
-  function addToCart(id: string) {
+  function addToCart(id) {
     const existing = cart.find(item => item.id === id);
     if (existing) existing.qty += 1;
     else cart.push({ id, qty: 1 });
@@ -298,29 +298,29 @@ const catalogJSON = JSON.stringify(featured);
 
   function openCart() {
     document.body.style.overflow = 'hidden';
-    document.getElementById('cartDrawer')!.classList.add('open');
+    document.getElementById('cartDrawer').classList.add('open');
     document.getElementById('cartDrawer').setAttribute('aria-hidden', 'false');
-    document.getElementById('cartBackdrop')!.classList.add('open');
+    document.getElementById('cartBackdrop').classList.add('open');
   }
 
   function closeCart() {
     document.body.style.overflow = '';
-    document.getElementById('cartDrawer')!.classList.remove('open');
+    document.getElementById('cartDrawer').classList.remove('open');
     document.getElementById('cartDrawer').setAttribute('aria-hidden', 'true');
-    document.getElementById('cartBackdrop')!.classList.remove('open');
+    document.getElementById('cartBackdrop').classList.remove('open');
   }
 
   document.addEventListener('click', event => {
-    const filter = (event.target as HTMLElement).closest('[data-filter]');
-    if (filter) { activeFilter = (filter as HTMLElement).dataset.filter!; renderFilters(); renderProducts(); }
+    const filter = event.target.closest('[data-filter]');
+    if (filter) { activeFilter = filter.dataset.filter; renderFilters(); renderProducts(); }
 
-    const add = (event.target as HTMLElement).closest('[data-add]');
-    if (add) addToCart(add.dataset.add!);
+    const add = event.target.closest('[data-add]');
+    if (add) addToCart(add.dataset.add);
   });
 
-  document.getElementById('openCart')!.addEventListener('click', openCart);
-  document.getElementById('closeCart')!.addEventListener('click', closeCart);
-  document.getElementById('cartBackdrop')!.addEventListener('click', closeCart);
+  document.getElementById('openCart').addEventListener('click', openCart);
+  document.getElementById('closeCart').addEventListener('click', closeCart);
+  document.getElementById('cartBackdrop').addEventListener('click', closeCart);
   const mobileCartBtn = document.getElementById('mobileOpenCart');
   if (mobileCartBtn) mobileCartBtn.addEventListener('click', openCart);
 
@@ -328,3 +328,4 @@ const catalogJSON = JSON.stringify(featured);
   renderProducts();
   renderCart();
 </script>
+</Layout>

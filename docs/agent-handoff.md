@@ -1,12 +1,12 @@
 # Agent Handoff And Maintenance Guide
 
-Last updated: 2026-07-01
+Last updated: 2026-07-02
 
 This document is the working handoff for agents maintaining the CRTL U Digital independent store at `shop.crtlu.me`.
 
 ## Project Summary
 
-The project is a lightweight ecommerce site for TV boxes and compact projectors. It is designed for simple Serv00 PHP hosting, with Cloudflare DNS in front and Stripe Checkout for payment.
+The project is a lightweight ecommerce site for TV boxes and compact projectors. The current deployment model is Cloudflare Pages for the Astro static frontend, plus Serv00 for the PHP API, admin tools, MySQL-backed orders, and Stripe webhook.
 
 Current live domain:
 
@@ -14,27 +14,41 @@ Current live domain:
 https://shop.crtlu.me
 ```
 
-Primary hosting target:
+Primary hosting targets:
 
 ```text
-Serv00 website root for shop.crtlu.me
+Cloudflare Pages: Astro frontend from shop/dist
+Serv00: PHP API/admin/data/database backend
 ```
 
-The current implementation is mostly static HTML/CSS/JavaScript plus a small PHP API layer. There is no Node build step.
+The current implementation has a Node/Astro build step for the storefront. PHP remains only on the Serv00 backend.
 
 ## Directory Map
 
 ```text
 shop/
-  index.html                         Homepage and featured product cards
-  success.html                       Stripe success/order status page
-  .htaccess                          HTTPS redirect and sensitive file protection
+  astro.config.mjs                   Astro site config
+  package.json                       Frontend scripts and Astro dependency
+  .env.example                       Public frontend API base URL example
   README.md                          Setup overview
 
-  products/
-    index.html                       All-products listing page
-    detail.html                      Generic product detail page driven by catalog.json
-    h96max-plus.html                 Special detail page for H96Max H618 Plus and M1 Plus
+  src/
+    layouts/Layout.astro             Shared HTML shell and API base injection
+    components/Navigation.astro      Header and cart entry points
+    components/CartDrawer.astro      Cart drawer markup
+    pages/index.astro                Homepage and featured product cards
+    pages/success.astro              Stripe success/order status page
+    pages/account.astro              Member login, profile, addresses, orders
+    pages/products/index.astro       All-products listing page
+    pages/products/[slug].astro      Generic product detail page
+    styles/global.css                Main storefront styles
+
+  public/
+    assets/                          Static assets copied into dist
+    data/                            Public static data copy for deployed frontend
+
+  dist/                              Generated Cloudflare Pages output
+  .htaccess                          HTTPS redirect and sensitive file protection
 
   data/
     catalog.json                     Main product catalog and variant source
@@ -129,7 +143,7 @@ Each `series` entry should include:
   "category": "tv-box",
   "tier": "main",
   "status": "published",
-  "detail_url": "products/detail.html?id=hk1-rbox-k8s",
+  "detail_url": "/products/hk1-rbox-k8s/",
   "description": "Short customer-facing description.",
   "image": "assets/products/hk1-rbox-k8s/main.jpg",
   "gallery": [
@@ -161,114 +175,80 @@ Rules:
 - `compare_at_cents` is the normal crossed-out price; `price_cents` is the active selling price.
 - `image` is used by product cards.
 - `gallery` is used by detail pages. Keep 5 or more images if source material exists.
-- `detail_url` should usually be `products/detail.html?id=<series-id>`.
-- `products/h96max-plus.html` is a custom page for H96Max H618 Plus and H96Max M1 Plus.
+- `detail_url` is legacy-compatible only. Astro pages use `/products/<series-id>/`.
 
 `api/catalog.php` loads variants from `catalog.json` and exposes them to checkout. It also contains older hardcoded fallback products. The JSON catalog currently overrides/adds the real published variants, so update `catalog.json` first.
 
 ## Frontend Pages
 
-### Language Switching
+The storefront is now Astro-based. Source pages live under `shop/src/pages/`, and Cloudflare Pages serves the generated `shop/dist/` output.
 
-File:
+Current primary pages:
+
+| Route | Source | Purpose |
+|---|---|---|
+| `/` | `src/pages/index.astro` | Curated homepage and featured products |
+| `/products/` | `src/pages/products/index.astro` | Full catalog, filters, variants, cart |
+| `/products/<slug>/` | `src/pages/products/[slug].astro` | Generic product detail page |
+| `/account/` | `src/pages/account.astro` | Member login, profile, addresses, orders |
+| `/success/` | `src/pages/success.astro` | Stripe success and order lookup |
+
+### API Base URL
+
+`src/layouts/Layout.astro` injects `window.crtluApiUrl(path)` into every page. It uses this build-time public variable:
 
 ```text
-shop/assets/i18n.js
+PUBLIC_CRTLU_API_BASE_URL=https://api.crtlu.me/api
 ```
 
-The storefront now has a shared language switcher injected into the top nav/action area. It supports:
+If the variable is missing, the frontend falls back to same-origin `/api`. For Cloudflare Pages + Serv00 API, set the variable in Cloudflare Pages. If `shop.crtlu.me` is assigned to Cloudflare Pages, the Serv00 API should use a separate backend subdomain such as `api.crtlu.me`, unless an explicit Cloudflare Worker proxy is added.
+
+All frontend API calls should use `window.crtluApiUrl('/api/<endpoint>.php')` or equivalent. Account and checkout calls should include `credentials: 'include'` so member sessions can be sent to the Serv00 API.
+
+### Language Switching
+
+The previous static `assets/i18n.js` system is not the current Astro source of truth. New language work should be implemented in Astro components/pages and catalog fields, then built into `dist/`. Supported locale intent remains:
 
 ```text
 en, ja, zh-CN, zh-TW, es, pt, id, th, vi, ms
 ```
 
-Rules:
-
-- Static text uses `data-i18n="<key>"`.
-- Input placeholders use `data-i18n-placeholder="<key>"`.
-- Dynamic JavaScript text should call `window.CRTLU_I18N.t(key, vars)`.
-- Product names/descriptions can use optional localized catalog fields such as `name_i18n` and `description_i18n`.
-- If a translation is missing, the system falls back to English.
-- Locale is stored in localStorage key `crtlu-locale-v1`.
-- `shop/assets/shop-phase4.js` reads the same locale for checkout metadata and the cart language selector.
-
-Pages currently wired to the shared language system:
-
-- `index.html`
-- `products/index.html`
-- `products/detail.html`
-- `products/h96max-plus.html`
-- `account.html`
-- `success.html`
-
-When adding a new storefront page, include `assets/i18n.js` before page scripts and add a `.nav-actions`, `#openCart`, or `.nav-links` target so the language switcher has a predictable insertion point.
-
-### Account Page
-
-File:
-
-```text
-shop/account.html
-```
-
-This page provides email one-time-code login, profile preferences, saved address, and order history. It calls:
-
-```text
-api/account-request-code.php
-api/account-login.php
-api/account.php
-api/account-logout.php
-```
-
-The account page expects the Phase 4 and Phase 5 database migrations to be imported on existing deployments. If the database is not configured yet, the API returns a readable setup message instead of a blank failure.
+Product names/descriptions can use optional localized catalog fields such as `name_i18n` and `description_i18n`. Missing translations should fall back to English.
 
 ### Homepage
 
 File:
 
 ```text
-shop/index.html
+src/pages/index.astro
 ```
 
-The homepage has a local JavaScript `PRODUCTS` array for featured cards. It is not automatically synced from `catalog.json`.
+The homepage uses `loadCatalog()` and a curated featured ID list. When featuring or replacing homepage products:
 
-When featuring or replacing homepage products:
-
-1. Update the `PRODUCTS` array in `shop/index.html`.
-2. Use real product images from `assets/products/<id>/main.jpg`.
+1. Update the featured ID list in `src/pages/index.astro`.
+2. Use real product images from `public/assets/products/<id>/main.jpg`.
 3. Keep the first viewport and product grid visually balanced.
-4. Use `detailUrl` pointing to either the custom page or generic detail page.
-
-Current homepage intent:
-
-- First row: key TV box products.
-- Second row: projector products so the row does not look empty.
+4. Run `npm run build`.
 
 ### All Products Page
 
 File:
 
 ```text
-shop/products/index.html
+src/pages/products/index.astro
 ```
 
-This page fetches and renders `../data/catalog.json`. Product card images use `object-fit: contain`, so product photos should not be cropped.
+This page receives catalog data at build time from `data/catalog.json`, renders filters client-side, and uses the shared cart checkout flow. Product card images use `object-fit: contain`, so product photos should not be cropped.
 
 ### Generic Detail Page
 
 File:
 
 ```text
-shop/products/detail.html
+src/pages/products/[slug].astro
 ```
 
-This page reads `id` from the query string:
-
-```text
-products/detail.html?id=hk1-rbox-k8s
-```
-
-It renders:
+This page generates one static route per published catalog series. It renders:
 
 - Main gallery.
 - Thumbnail gallery.
@@ -312,11 +292,13 @@ Keep `api/config.local.php` server-only. The package should include `api/config.
 Optional production config:
 
 ```php
+define('CRTLU_ALLOWED_ORIGINS', 'https://shop.crtlu.me,http://localhost:4321,http://127.0.0.1:4321');
 define('CRTLU_MAIL_FROM', 'support@crtlu.me');
 define('CRTLU_LOGIN_CODE_DEBUG', '0');
 ```
 
 Do not enable `CRTLU_LOGIN_CODE_DEBUG` in production. It is only for local testing because it returns the one-time login code in the API response.
+`CRTLU_ALLOWED_ORIGINS` must include the Cloudflare Pages production domain so the frontend can call Serv00 API endpoints with credentials.
 
 ## Admin URLs
 
@@ -360,14 +342,14 @@ shop/assets/products/<product-id>/
 5. Add one `series` entry to `shop/data/catalog.json`.
 6. Add all sellable configurations to `series.variants`.
 7. Add specs to `series.specs`.
-8. Set `detail_url` to:
+8. Set `detail_url` to the Astro route if keeping the field:
 
    ```text
-   products/detail.html?id=<product-id>
+   /products/<product-id>/
    ```
 
 9. Update `shop/docs/published-products.md`.
-10. If it should appear on the homepage, update the `PRODUCTS` array in `shop/index.html`.
+10. If it should appear on the homepage, update the featured ID list in `src/pages/index.astro`.
 11. Run validation commands from this document.
 
 Do not publish out-of-stock products unless the user explicitly asks.
@@ -389,7 +371,7 @@ When updating prices:
 
 - Update `shop/data/catalog.json`.
 - Update `shop/docs/published-products.md`.
-- Update `shop/index.html` if the product is featured on homepage.
+- Update `src/pages/index.astro` if the product is featured on homepage.
 - Keep active price in `price_cents`.
 - Keep normal price in `compare_at_cents`.
 
@@ -412,14 +394,14 @@ Checkout flow:
 1. Frontend sends cart item ids and quantities.
 2. `api/create-checkout-session.php` validates items against `crtlu_products()`.
 3. It creates a Stripe Checkout session.
-4. Stripe redirects to `success.html?session_id=...`.
+4. Stripe redirects to `/success/?session_id=...`.
 5. Stripe webhook writes the order to MySQL after `checkout.session.completed`.
-6. `success.html` can call `api/order-status.php` to look up order state.
+6. `/success/` can call `api/order-status.php` to look up order state.
 
 Current Stripe webhook endpoint:
 
 ```text
-https://shop.crtlu.me/api/stripe-webhook.php
+https://api.crtlu.me/api/stripe-webhook.php
 ```
 
 Stripe event to listen for:
@@ -457,6 +439,7 @@ Required config keys:
 
 ```php
 CRTLU_BASE_URL
+CRTLU_ALLOWED_ORIGINS
 STRIPE_SECRET_KEY
 STRIPE_WEBHOOK_SECRET
 CRTLU_DB_DSN
@@ -484,7 +467,7 @@ The schema uses `LONGTEXT` for `shipping_address_json` instead of a native JSON 
 Admin order dashboard:
 
 ```text
-https://shop.crtlu.me/admin/orders.php
+https://api.crtlu.me/admin/orders.php
 ```
 
 Authentication:
@@ -505,44 +488,68 @@ refunded
 Yanwen export:
 
 ```text
-https://shop.crtlu.me/admin/export-yanwen.php
+https://api.crtlu.me/admin/export-yanwen.php
 ```
 
 This exports pending paid/processing shipments for manual fulfillment. Direct Yanwen API integration has not been implemented.
 
 ## Deployment
 
-The deployment target is the web root for `shop.crtlu.me`, for example:
+Frontend deployment target:
 
 ```text
-/usr/home/CRTLU/domains/shop.crtlu.me/public_html
+Cloudflare Pages -> shop/dist
 ```
 
-Upload the contents of `shop/`, not the parent workspace.
+Backend deployment target:
+
+```text
+Serv00 website root or API subdomain for PHP files
+```
+
+Cloudflare Pages settings:
+
+```text
+Framework preset: Astro
+Build command: npm run build
+Build output directory: dist
+Public environment variable: PUBLIC_CRTLU_API_BASE_URL=https://api.crtlu.me/api
+```
+
+Serv00 should keep:
+
+```text
+api/
+admin/
+data/
+database/
+.htaccess
+```
 
 Do not upload or package:
 
 ```text
 shop/api/config.local.php
+.env
 .DS_Store
 ```
 
-The repository `.htaccess` already:
+The repository `.htaccess` is for the Serv00 PHP/backend host and already:
 
 - Disables directory indexes.
 - Redirects HTTP to HTTPS.
 - Blocks direct access to `.sql`, example PHP config, README, and `.DS_Store`.
 
-Package command from inside `shop/`:
+If making a Serv00 backend package from inside `shop/`, exclude frontend dependency/cache files and live config:
 
 ```bash
-zip -r ../crtlu-shop-h96-update-20260630.zip . -x '*.DS_Store' 'api/config.local.php'
+zip -r ../crtlu-shop-backend.zip api admin data database .htaccess README.md docs -x '*.DS_Store' 'api/config.local.php'
 ```
 
 After packaging, verify the live config is excluded:
 
 ```bash
-unzip -l ../crtlu-shop-h96-update-20260630.zip | rg 'api/config\.local\.php$'
+unzip -l ../crtlu-shop-backend.zip | rg 'api/config\.local\.php$'
 ```
 
 Expected result: no output.
@@ -561,32 +568,36 @@ Expected current result:
 series 29 variants 77 short 0 missing 0
 ```
 
-Run after editing inline scripts in HTML:
+Run after frontend edits from inside `shop/`:
 
 ```bash
-node -e 'const fs=require("fs"); for (const f of ["shop/index.html","shop/products/index.html","shop/products/detail.html","shop/products/h96max-plus.html","shop/success.html"]) { const html=fs.readFileSync(f,"utf8"); const scripts=[...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m=>m[1]); scripts.forEach((s,i)=>{ try { new Function(s); } catch(e) { throw new Error(f+" script "+i+": "+e.message); } }); console.log("script ok", f, scripts.length); }'
+npm run build
+find dist/_astro -name '*.js' -print -exec node --check {} \;
+rg -n 'catalogJSON|productJSON|PRODUCT_DATA|\{catalogJSON\}|\{productJSON\}|&lt;option' src/pages dist
 ```
 
-Optional local static server check from inside `shop/`:
+Expected result for the `rg` command: no output.
+
+Optional local preview from inside `shop/`:
 
 ```bash
-python3 -m http.server 8766
+npm run preview
 ```
 
 Then check:
 
 ```text
-http://127.0.0.1:8766/
-http://127.0.0.1:8766/products/
-http://127.0.0.1:8766/products/detail.html?id=hk1-rbox-k8s
+http://127.0.0.1:4321/
+http://127.0.0.1:4321/products/
+http://127.0.0.1:4321/products/hk1-rbox-k8s/
 ```
 
 Run after upload:
 
 ```text
-https://shop.crtlu.me/api/products.php
-https://shop.crtlu.me/api/health.php
-https://shop.crtlu.me/admin/orders.php
+https://api.crtlu.me/api/products.php
+https://api.crtlu.me/api/health.php
+https://api.crtlu.me/admin/orders.php
 ```
 
 `api/health.php` should return `"ok": true`.

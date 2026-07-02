@@ -101,7 +101,7 @@ if ($index === 0) {
 
 $params = array_merge($lineItems, [
     'mode' => 'payment',
-    'success_url' => crtlu_base_url() . '/success.html?session_id={CHECKOUT_SESSION_ID}',
+    'success_url' => crtlu_base_url() . '/success/?session_id={CHECKOUT_SESSION_ID}',
     'cancel_url' => crtlu_base_url() . '/?checkout=cancelled',
     'billing_address_collection' => 'required',
     'phone_number_collection[enabled]' => 'true',

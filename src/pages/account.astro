@@ -76,7 +76,7 @@ const locales = [
             <label>
               <span style="color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;">Preferred currency</span>
               <select id="profileCurrency" style="width:100%;min-height:42px;border:1px solid var(--line);background:rgba(0,0,0,.24);color:var(--text);padding:0 12px;font:inherit;">
-                {currencies.map(c => `<option value="${c}">${c}</option>`).join('')}
+                {currencies.map((currency) => <option value={currency}>{currency}</option>)}
               </select>
             </label>
           </div>
@@ -127,11 +127,12 @@ const locales = [
   </style>
 
   <script>
+    const apiUrl = path => window.crtluApiUrl ? window.crtluApiUrl(path) : path;
     const api = {
-      requestCode: '/api/account-request-code.php',
-      login: '/api/account-login.php',
-      account: '/api/account.php',
-      logout: '/api/account-logout.php',
+      requestCode: apiUrl('/api/account-request-code.php'),
+      login: apiUrl('/api/account-login.php'),
+      account: apiUrl('/api/account.php'),
+      logout: apiUrl('/api/account-logout.php'),
     };
 
     let state = { authenticated: false, member: null, orders: [], addresses: [] };
@@ -151,6 +152,7 @@ const locales = [
     async function post(url, payload) {
       const response = await fetch(url, {
         method: 'POST',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload || {}),
       });
@@ -161,7 +163,7 @@ const locales = [
 
     async function loadAccount() {
       try {
-        const response = await fetch(api.account);
+        const response = await fetch(api.account, { credentials: 'include' });
         state = await response.json();
         render();
         if (state.message) setMessage('loginMessage', state.message, true);

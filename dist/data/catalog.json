@@ -9,7 +9,7 @@
       "category": "tv-box",
       "tier": "main",
       "status": "published",
-      "detail_url": "products/h96max-plus.html?model=h618",
+      "detail_url": "/products/h96max-h618-plus/",
       "description": "Allwinner H618 Android 14 TV box with Wi-Fi 6, Bluetooth 5.4, 4K output, and three memory options.",
       "variants": [
         {
@@ -61,7 +61,7 @@
       "category": "tv-box",
       "tier": "main",
       "status": "published",
-      "detail_url": "products/h96max-plus.html?model=m1",
+      "detail_url": "/products/h96max-m1-plus/",
       "description": "Rockchip RK3528 Android 14 TV box with 4K HDR output, Wi-Fi 6, Bluetooth 5.4, and high-storage options.",
       "variants": [
         {
@@ -151,7 +151,7 @@
         "assets/products/h96max-h313-1024/detail-6.jpg",
         "assets/products/h96max-h313-1024/detail-7.jpg"
       ],
-      "detail_url": "products/detail.html?id=h96max-h313-1024",
+      "detail_url": "/products/h96max-h313-1024/",
       "specs": {
         "configurations": "2GB RAM + 8GB ROM / 2GB RAM + 16GB ROM / 2GB RAM + 16GB ROM + Keyboard",
         "starting_price": "$33.99",
@@ -195,7 +195,7 @@
         "assets/products/x5-yb962/detail-6.jpg",
         "assets/products/x5-yb962/detail-7.jpg"
       ],
-      "detail_url": "products/detail.html?id=x5-yb962",
+      "detail_url": "/products/x5-yb962/",
       "specs": {
         "configurations": "2GB RAM + 8GB ROM / 2GB RAM + 16GB ROM",
         "starting_price": "$33.99",
@@ -239,7 +239,7 @@
         "assets/products/h96-max-v58/detail-6.jpg",
         "assets/products/h96-max-v58/detail-7.jpg"
       ],
-      "detail_url": "products/detail.html?id=h96-max-v58",
+      "detail_url": "/products/h96-max-v58/",
       "specs": {
         "configurations": "4GB RAM + 32GB ROM / 8GB RAM + 64GB ROM",
         "starting_price": "$238.99",
@@ -283,7 +283,7 @@
         "assets/products/h96-max-m7/detail-6.jpg",
         "assets/products/h96-max-m7/detail-7.jpg"
       ],
-      "detail_url": "products/detail.html?id=h96-max-m7",
+      "detail_url": "/products/h96-max-m7/",
       "specs": {
         "configurations": "2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM",
         "starting_price": "$53.99",
@@ -335,7 +335,7 @@
         "assets/products/h96-max-v11/detail-6.jpg",
         "assets/products/h96-max-v11/detail-7.jpg"
       ],
-      "detail_url": "products/detail.html?id=h96-max-v11",
+      "detail_url": "/products/h96-max-v11/",
       "specs": {
         "configurations": "2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM",
         "starting_price": "$33.99",
@@ -387,7 +387,7 @@
         "assets/products/h96max-m12/detail-6.jpg",
         "assets/products/h96max-m12/detail-7.jpg"
       ],
-      "detail_url": "products/detail.html?id=h96max-m12",
+      "detail_url": "/products/h96max-m12/",
       "specs": {
         "configurations": "4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM / 8GB RAM + 128GB ROM",
         "starting_price": "$113.99",
@@ -439,7 +439,7 @@
         "assets/products/t95/detail-6.jpg",
         "assets/products/t95/detail-7.jpg"
       ],
-      "detail_url": "products/detail.html?id=t95",
+      "detail_url": "/products/t95/",
       "specs": {
         "configurations": "2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM",
         "starting_price": "$43.99",
@@ -491,7 +491,7 @@
         "assets/products/t95z-plus/detail-6.jpg",
         "assets/products/t95z-plus/detail-7.jpg"
       ],
-      "detail_url": "products/detail.html?id=t95z-plus",
+      "detail_url": "/products/t95z-plus/",
       "specs": {
         "configurations": "2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM",
         "starting_price": "$48.99",
@@ -543,7 +543,7 @@
         "assets/products/t95-x4/detail-6.jpg",
         "assets/products/t95-x4/detail-7.jpg"
       ],
-      "detail_url": "products/detail.html?id=t95-x4",
+      "detail_url": "/products/t95-x4/",
       "specs": {
         "configurations": "2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM",
         "starting_price": "$43.99",
@@ -595,7 +595,7 @@
         "assets/products/tanix-w2/detail-6.jpg",
         "assets/products/tanix-w2/detail-7.jpg"
       ],
-      "detail_url": "products/detail.html?id=tanix-w2",
+      "detail_url": "/products/tanix-w2/",
       "specs": {
         "configurations": "2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM",
         "starting_price": "$33.99",
@@ -647,7 +647,7 @@
         "assets/products/tanix-tx5/detail-6.jpg",
         "assets/products/tanix-tx5/detail-7.jpg"
       ],
-      "detail_url": "products/detail.html?id=tanix-tx5",
+      "detail_url": "/products/tanix-tx5/",
       "specs": {
         "configurations": "2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM",
         "starting_price": "$43.99",
@@ -683,7 +683,7 @@
         "assets/products/tx3-mini/detail-6.jpg",
         "assets/products/tx3-mini/detail-7.jpg"
       ],
-      "detail_url": "products/detail.html?id=tx3-mini",
+      "detail_url": "/products/tx3-mini/",
       "specs": {
         "configurations": "Standard",
         "starting_price": "$28.99",
@@ -735,7 +735,7 @@
         "assets/products/tx98-pro-plus/detail-6.jpg",
         "assets/products/tx98-pro-plus/detail-7.jpg"
       ],
-      "detail_url": "products/detail.html?id=tx98-pro-plus",
+      "detail_url": "/products/tx98-pro-plus/",
       "specs": {
         "configurations": "2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM",
         "starting_price": "$38.99",
@@ -787,7 +787,7 @@
         "assets/products/hk1-rbox-k8s/detail-6.jpg",
         "assets/products/hk1-rbox-k8s/detail-7.jpg"
       ],
-      "detail_url": "products/detail.html?id=hk1-rbox-k8s",
+      "detail_url": "/products/hk1-rbox-k8s/",
       "specs": {
         "configurations": "2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM",
         "starting_price": "$38.99",
@@ -847,7 +847,7 @@
         "assets/products/hk1-rbox-x4s/detail-6.jpg",
         "assets/products/hk1-rbox-x4s/detail-7.jpg"
       ],
-      "detail_url": "products/detail.html?id=hk1-rbox-x4s",
+      "detail_url": "/products/hk1-rbox-x4s/",
       "specs": {
         "configurations": "2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM / 4GB RAM + 128GB ROM",
         "starting_price": "$58.99",
@@ -899,7 +899,7 @@
         "assets/products/hk1-rbox-x4/detail-6.jpg",
         "assets/products/hk1-rbox-x4/detail-7.jpg"
       ],
-      "detail_url": "products/detail.html?id=hk1-rbox-x4",
+      "detail_url": "/products/hk1-rbox-x4/",
       "specs": {
         "configurations": "4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM / 4GB RAM + 128GB ROM",
         "starting_price": "$73.99",
@@ -959,7 +959,7 @@
         "assets/products/hk1-k8/detail-6.jpg",
         "assets/products/hk1-k8/detail-7.jpg"
       ],
-      "detail_url": "products/detail.html?id=hk1-k8",
+      "detail_url": "/products/hk1-k8/",
       "specs": {
         "configurations": "2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM / 4GB RAM + 128GB ROM",
         "starting_price": "$43.99",
@@ -1011,7 +1011,7 @@
         "assets/products/hk1-w2t/detail-6.jpg",
         "assets/products/hk1-w2t/detail-7.jpg"
       ],
-      "detail_url": "products/detail.html?id=hk1-w2t",
+      "detail_url": "/products/hk1-w2t/",
       "specs": {
         "configurations": "2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM",
         "starting_price": "$48.99",
@@ -1063,7 +1063,7 @@
         "assets/products/hk1-rbox-w2/detail-6.jpg",
         "assets/products/hk1-rbox-w2/detail-7.jpg"
       ],
-      "detail_url": "products/detail.html?id=hk1-rbox-w2",
+      "detail_url": "/products/hk1-rbox-w2/",
       "specs": {
         "configurations": "2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM",
         "starting_price": "$43.99",
@@ -1115,7 +1115,7 @@
         "assets/products/hk1-s905x3/detail-6.jpg",
         "assets/products/hk1-s905x3/detail-7.jpg"
       ],
-      "detail_url": "products/detail.html?id=hk1-s905x3",
+      "detail_url": "/products/hk1-s905x3/",
       "specs": {
         "configurations": "4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM / 4GB RAM + 128GB ROM",
         "starting_price": "$68.99",
@@ -1159,7 +1159,7 @@
         "assets/products/hk1-h8x/detail-6.jpg",
         "assets/products/hk1-h8x/detail-7.jpg"
       ],
-      "detail_url": "products/detail.html?id=hk1-h8x",
+      "detail_url": "/products/hk1-h8x/",
       "specs": {
         "configurations": "4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM",
         "starting_price": "$68.99",
@@ -1219,7 +1219,7 @@
         "assets/products/hk1-rbox-h8/detail-6.jpg",
         "assets/products/hk1-rbox-h8/detail-7.jpg"
       ],
-      "detail_url": "products/detail.html?id=hk1-rbox-h8",
+      "detail_url": "/products/hk1-rbox-h8/",
       "specs": {
         "configurations": "2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM / 4GB RAM + 128GB ROM",
         "starting_price": "$43.99",
@@ -1271,7 +1271,7 @@
         "assets/products/hk1-rbox-h8s/detail-6.jpg",
         "assets/products/hk1-rbox-h8s/detail-7.jpg"
       ],
-      "detail_url": "products/detail.html?id=hk1-rbox-h8s",
+      "detail_url": "/products/hk1-rbox-h8s/",
       "specs": {
         "configurations": "2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM",
         "starting_price": "$38.99",
@@ -1315,7 +1315,7 @@
         "assets/products/hk1-rbox-d8/detail-6.jpg",
         "assets/products/hk1-rbox-d8/detail-7.jpg"
       ],
-      "detail_url": "products/detail.html?id=hk1-rbox-d8",
+      "detail_url": "/products/hk1-rbox-d8/",
       "specs": {
         "configurations": "2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM",
         "starting_price": "$38.99",
@@ -1352,7 +1352,7 @@
           "compare_at_cents": 3999
         }
       ],
-      "detail_url": "products/detail.html?id=hy300-pro-projector",
+      "detail_url": "/products/hy300-pro-projector/",
       "specs": {
         "configurations": "Standard",
         "starting_price": "$34.99",
@@ -1390,7 +1390,7 @@
           "compare_at_cents": 5499
         }
       ],
-      "detail_url": "products/detail.html?id=hy320-mini-projector",
+      "detail_url": "/products/hy320-mini-projector/",
       "specs": {
         "configurations": "Standard",
         "starting_price": "$49.99",
@@ -1428,7 +1428,7 @@
           "compare_at_cents": 7499
         }
       ],
-      "detail_url": "products/detail.html?id=a10-projector",
+      "detail_url": "/products/a10-projector/",
       "specs": {
         "configurations": "Standard",
         "starting_price": "$69.99",

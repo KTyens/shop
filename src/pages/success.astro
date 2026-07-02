@@ -23,6 +23,7 @@ import '../styles/global.css';
     const params = new URLSearchParams(window.location.search);
     const sessionId = params.get('session_id');
     const money = (cents, currency) => `${(currency || 'USD').toUpperCase()} ${(Number(cents || 0) / 100).toFixed(2)}`;
+    const apiUrl = path => window.crtluApiUrl ? window.crtluApiUrl(path) : path;
 
     let attempts = 0;
 
@@ -34,7 +35,9 @@ import '../styles/global.css';
 
       attempts += 1;
       try {
-        const response = await fetch(`/api/order-status.php?session_id=${encodeURIComponent(sessionId)}`);
+        const response = await fetch(apiUrl(`/api/order-status.php?session_id=${encodeURIComponent(sessionId)}`), {
+          credentials: 'include',
+        });
         const payload = await response.json();
         if (payload.found) {
           const items = (payload.items || []).map(item => `<li style="font-size:14px;">${item.quantity} x ${item.product_name}</li>`).join('');

@@ -7,8 +7,7 @@ import '../../styles/global.css';
 
 const series = loadCatalog();
 
-// Serialize to JSON-safe string for injection
-const catalogJSON = JSON.stringify(series);
+const catalogPayload = series;
 ---
 
 <Layout title="All Products | CRTLU Digital" description="Shop all CRTL U Digital TV boxes and projectors by brand, tier, configuration, and price.">
@@ -49,14 +48,14 @@ const catalogJSON = JSON.stringify(series);
   </main>
 
   <!-- Inject catalog data as a global variable -->
-  <script define:vars={{ catalogJSON }}>
-    window.__CATALOG__ = {catalogJSON};
+  <script define:vars={{ catalogPayload }}>
+    window.__CATALOG__ = catalogPayload;
   </script>
 
   <script>
     // ---- Client-side interactivity ----
 
-    const catalogData = window.__CATALOG__;
+    const catalogData = Array.isArray(window.__CATALOG__) ? window.__CATALOG__ : [];
 
     const SHIPPING_CENTS = 1200;
     const cartKey = 'crtlu-cart-v1';
@@ -222,7 +221,7 @@ const catalogJSON = JSON.stringify(series);
               <div class="card-foot">
                 <span class="sku">Selected: ${current.sku}</span>
                 <span class="card-actions">
-                  <a class="secondary-button" href="${item.detail_url || `/products/${item.id}/`}" style="padding:0 12px;font-size:12px;">Details</a>
+                  <a class="secondary-button" href="/products/${item.id}/" style="padding:0 12px;font-size:12px;">Details</a>
                   <button class="primary-button" type="button" data-add="${current.id}" style="padding:0 12px;font-size:12px;">Add to Cart</button>
                 </span>
               </div>
@@ -349,10 +348,12 @@ const catalogJSON = JSON.stringify(series);
       const status = document.getElementById('checkoutStatus');
       status.className = 'status';
       status.textContent = 'Creating checkout session...';
+      const apiUrl = (path: string) => (window as any).crtluApiUrl ? (window as any).crtluApiUrl(path) : path;
 
       try {
-        const response = await fetch('/api/create-checkout-session.php', {
+        const response = await fetch(apiUrl('/api/create-checkout-session.php'), {
           method: 'POST',
+          credentials: 'include',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ items: cart }),
         });
@@ -431,5 +432,88 @@ const catalogJSON = JSON.stringify(series);
     }
 
     init();
+  </script>
+
+  <script is:inline>
+    window.setTimeout(() => {
+      const summary = document.getElementById('summary');
+      const grid = document.getElementById('productGrid');
+      const filters = document.getElementById('filters');
+      const catalog = Array.isArray(window.__CATALOG__) ? window.__CATALOG__ : [];
+
+      if (!summary || !grid || !summary.textContent.includes('Loading catalog')) return;
+
+      const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;',
+      })[char]);
+      const minPrice = (item) => Math.min(...(item.variants || []).map((variant) => Number(variant.price_cents) || 0));
+      const variantCount = catalog.reduce((sum, item) => sum + ((item.variants || []).length), 0);
+
+      summary.innerHTML = `<strong>${catalog.length}</strong> models / <strong>${variantCount}</strong> configs`;
+
+      if (filters) {
+        filters.innerHTML = [
+          ['all', 'All'],
+          ['category:tv-box', 'TV Boxes'],
+          ['category:projector', 'Projectors'],
+        ].map(([id, label]) => `<button class="filter ${id === 'all' ? 'active' : ''}" type="button" data-fallback-filter="${id}">${label}</button>`).join('');
+      }
+
+      const renderFallbackProducts = (items) => {
+        grid.innerHTML = items.map((item) => {
+          const firstVariant = (item.variants || [])[0];
+          const price = minPrice(item);
+          const compare = firstVariant && firstVariant.compare_at_cents && firstVariant.compare_at_cents !== firstVariant.price_cents
+            ? `<span class="compare">$${(firstVariant.compare_at_cents / 100).toFixed(2)}</span>`
+            : '';
+
+          return `
+            <article class="product-card reveal visible" id="${escapeHtml(item.id)}">
+              ${item.image ? `<div class="product-media"><img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name)}"></div>` : ''}
+              <div class="card-head">
+                <div class="meta"><span>${escapeHtml(item.brand)}</span><span>${escapeHtml(item.tier || item.category)}</span></div>
+                <h2>${escapeHtml(item.name)}</h2>
+                <p>${escapeHtml(item.description)}</p>
+              </div>
+              <div class="card-body">
+                ${(item.variants || []).slice(0, 4).map((variant, index) => `
+                  <div class="variant-row ${index === 0 ? 'active' : ''}">
+                    <button type="button">
+                      <strong>${escapeHtml(variant.label)}</strong>
+                      <span>${escapeHtml(variant.sku)}</span>
+                    </button>
+                    <div class="price">$${((variant.price_cents || 0) / 100).toFixed(2)}${variant.compare_at_cents && variant.compare_at_cents !== variant.price_cents ? `<span class="compare">$${(variant.compare_at_cents / 100).toFixed(2)}</span>` : ''}</div>
+                  </div>
+                `).join('')}
+                <div class="card-foot">
+                  <span class="sku">${firstVariant ? `From ${escapeHtml(firstVariant.sku)}` : 'View model details'}</span>
+                  <span class="card-actions">
+                    <span class="price">$${(price / 100).toFixed(2)}${compare}</span>
+                    <a class="secondary-button" href="/products/${encodeURIComponent(item.id)}/" style="padding:0 12px;font-size:12px;">Details</a>
+                  </span>
+                </div>
+              </div>
+            </article>`;
+        }).join('');
+      };
+
+      renderFallbackProducts(catalog);
+
+      if (filters) {
+        filters.addEventListener('click', (event) => {
+          const button = event.target.closest('[data-fallback-filter]');
+          if (!button) return;
+          const filter = button.dataset.fallbackFilter;
+          const filtered = filter === 'all' ? catalog : catalog.filter((item) => `category:${item.category}` === filter);
+          filters.querySelectorAll('[data-fallback-filter]').forEach((item) => item.classList.toggle('active', item === button));
+          summary.innerHTML = `<strong>${filtered.length}</strong> models / fallback catalog render`;
+          renderFallbackProducts(filtered);
+        });
+      }
+    }, 1000);
   </script>
 </Layout>

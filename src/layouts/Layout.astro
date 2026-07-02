@@ -1,5 +1,13 @@
 ---
 import '../styles/global.css';
+
+const {
+  title = 'CRTLU Digital | Premium TV Boxes & Projectors',
+  description = 'Premium Android TV boxes, Google TV streamers, and compact projectors for cinematic home entertainment.',
+} = Astro.props;
+
+const configuredApiBase = (import.meta.env.PUBLIC_CRTLU_API_BASE_URL || '/api').trim();
+const apiBaseUrl = (configuredApiBase || '/api').replace(/\/+$/, '');
 ---
 
 <!doctype html>
@@ -8,8 +16,27 @@ import '../styles/global.css';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="description" content="Premium TV Boxes & Projectors" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
     <slot name="head" />
+    <script define:vars={{ apiBaseUrl }}>
+      (() => {
+        const base = apiBaseUrl || '/api';
+        const normalizedBase = base.replace(/\/+$/, '') || '/api';
+
+        window.CRTLU_CONFIG = Object.freeze({
+          apiBaseUrl: normalizedBase,
+        });
+
+        window.crtluApiUrl = (path) => {
+          let value = String(path || '').trim();
+          if (/^https?:\/\//i.test(value)) return value;
+          value = value.replace(/^\/+/, '');
+          if (value.startsWith('api/')) value = value.slice(4);
+          return `${normalizedBase}/${value}`;
+        };
+      })();
+    </script>
   </head>
   <body>
     <slot />

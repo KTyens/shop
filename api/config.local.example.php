@@ -4,6 +4,7 @@
 // Never commit live Stripe keys or database passwords.
 
 define('CRTLU_BASE_URL', 'https://shop.crtlu.me');
+define('CRTLU_ALLOWED_ORIGINS', 'https://shop.crtlu.me,http://localhost:4321,http://127.0.0.1:4321');
 define('STRIPE_SECRET_KEY', 'sk_live_replace_me');
 define('STRIPE_WEBHOOK_SECRET', 'whsec_replace_me');
 

@@ -1,176 +1,145 @@
-# Cloudflare Pages 部署指南
+# Cloudflare Pages Frontend + Serv00 API Deployment
 
-## 前提条件
+This project uses a split deployment:
 
-- 已注册 [Cloudflare 账号](https://dash.cloudflare.com/sign-up)
-- 已注册 [Stripe 账号](https://dashboard.stripe.com)（用于收款）
-- 本地项目已构建成功：`npx astro build`
+- Cloudflare Pages serves the Astro static storefront from `dist/`.
+- Serv00 serves the PHP API, admin pages, MySQL-backed order system, and Stripe webhook.
 
-## 方式一：通过 Git 自动部署（推荐）
+Do not put Stripe secret keys or database credentials in Cloudflare Pages. Those values stay only in `api/config.local.php` on Serv00.
 
-### 1. 推送代码到 GitHub
+## Cloudflare Pages Frontend
 
-```bash
-cd "/Users/apple/Desktop/Codex Projects/独立站/shop"
-git init
-git add -A
-git commit -m "Initial Astro build"
-git branch -M main
-git remote add origin git@github.com:YOUR_USERNAME/shop.git
-git push -u origin main
+Recommended build settings:
+
+| Field | Value |
+|---|---|
+| Framework preset | `Astro` |
+| Build command | `npm run build` |
+| Build output directory | `dist` |
+| Root directory | `shop` if deploying from the parent workspace, otherwise blank |
+| Node version | Node 20 or newer |
+
+Set this public environment variable in Cloudflare Pages:
+
+| Variable | Value |
+|---|---|
+| `PUBLIC_CRTLU_API_BASE_URL` | Your Serv00 API base, for example `https://api.crtlu.me/api` |
+
+If the variable is missing, the frontend falls back to same-origin `/api`, which only works when the PHP API is hosted under the same domain.
+
+If `shop.crtlu.me` is assigned to Cloudflare Pages, put the Serv00 PHP backend on a separate subdomain such as `api.crtlu.me`, or add an explicit Cloudflare Worker proxy for `/api/*`.
+
+## Serv00 Backend
+
+Upload or keep these folders/files on Serv00:
+
+```text
+api/
+admin/
+data/
+database/
+.htaccess
 ```
 
-### 2. 在 Cloudflare 创建 Pages 项目
+Server-only config:
 
-1. 登录 [Cloudflare Dashboard](https://dash.cloudflare.com)
-2. 左侧菜单 → **Workers & Pages** → **Create application** → **Pages** → **Connect to Git**
-3. 选择你的 GitHub 账号和 `shop` 仓库
-4. 配置构建设置：
-
-| 字段 | 值 |
-|------|------|
-| **Project name** | `shop-crtlu` |
-| **Production branch** | `main` |
-| **Framework preset** | `Astro` |
-| **Build command** | `npx astro build` |
-| **Build output directory** | `dist` |
-| **Root directory** | 留空 |
-
-5. 点击 **Save and Deploy**
-
-### 3. 自定义域名
-
-1. 部署完成后，进入项目设置 → **Custom Domains**
-2. 添加 `shop.crtlu.me`（或你的域名）
-3. 按照提示在 DNS 管理中添加 CNAME 记录
-
-## 方式二：手动上传构建产物
-
-### 1. 本地构建
-
-```bash
-cd "/Users/apple/Desktop/Codex Projects/独立站/shop"
-npx astro build
+```text
+api/config.local.php
 ```
 
-### 2. 上传到 Cloudflare
-
-1. 进入 [Cloudflare Dashboard](https://dash.cloudflare.com) → Workers & Pages
-2. 创建 Pages 项目
-3. 选择 **Upload assets manually**
-4. 上传 `dist/` 目录下的所有内容
-
-## PHP API 配置（Serv00）
-
-由于前端部署在 Cloudflare Pages，后端 API 仍留在 Serv00，需要配置 CORS：
-
-### 在 Serv00 的 PHP API 文件中添加 CORS 头
-
-编辑 `api/create-checkout-session.php` 等 API 文件，在文件开头添加：
+Start from `api/config.local.example.php` and fill the real values on Serv00:
 
 ```php
-<?php
-header("Access-Control-Allow-Origin: https://shop.crtlu.me");
-header("Access-Control-Allow-Methods: POST, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
-header("Access-Control-Allow-Credentials: true");
-
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit;
-}
-?>
+define('CRTLU_BASE_URL', 'https://shop.crtlu.me');
+define('CRTLU_ALLOWED_ORIGINS', 'https://shop.crtlu.me,http://localhost:4321,http://127.0.0.1:4321');
+define('STRIPE_SECRET_KEY', 'sk_live_replace_me');
+define('STRIPE_WEBHOOK_SECRET', 'whsec_replace_me');
+define('CRTLU_DB_DSN', 'mysql:host=mysql.example.serv00.com;dbname=your_db;charset=utf8mb4');
+define('CRTLU_DB_USER', 'your_db_user');
+define('CRTLU_DB_PASS', 'your_db_password');
+define('CRTLU_ADMIN_USER', 'admin');
+define('CRTLU_ADMIN_PASS', 'change_this_password');
 ```
 
-### 如果使用多个域名
+`CRTLU_ALLOWED_ORIGINS` must include the Cloudflare Pages production domain. Add preview domains only when you need to test account login or checkout from those domains.
 
-```php
-header("Access-Control-Allow-Origin: *");  // 开发环境
-// 生产环境建议指定具体域名
+## Database
+
+Fresh install:
+
+```text
+database/schema.sql
 ```
 
-## Stripe 配置
+Existing install upgrade order:
 
-### 1. 获取 API 密钥
-
-1. 登录 [Stripe Dashboard](https://dashboard.stripe.com)
-2. 开发模式下使用测试密钥（pk_test_...）
-3. 上线前切换到生产密钥（pk_live_...）
-
-### 2. 配置环境变量
-
-在 Cloudflare Pages 项目中：
-
-1. 进入项目设置 → **Environment variables**
-2. 添加以下变量：
-
-| 变量名 | 值 |
-|--------|-----|
-| `STRIPE_SECRET_KEY` | `sk_test_...` |
-| `STRIPE_WEBHOOK_SECRET` | webhook 密钥 |
-| `API_BASE_URL` | `https://your-serv00-domain.com/api` |
-
-## 部署后验证
-
-### 1. 检查页面
-
-访问 `https://shop-crtlu.pages.dev`（或你的自定义域名），验证：
-
-- [ ] 首页正常加载
-- [ ] 产品列表页可搜索、筛选、排序
-- [ ] 产品详情页图片画廊正常
-- [ ] 购物车抽屉可打开/关闭
-- [ ] 账户页面正常
-
-### 2. 检查资源
-
-- [ ] 产品图片加载正常
-- [ ] CSS 样式正确
-- [ ] JavaScript 无控制台错误
-
-### 3. 测试结账流程
-
-- [ ] 添加商品到购物车
-- [ ] 点击 Checkout 跳转到 Stripe
-- [ ] 支付成功后返回 success 页面
-- [ ] order 确认信息正常显示
-
-## 常见问题
-
-### Q: 构建失败
-
-检查 Node 版本：Cloudflare Pages 默认使用最新 LTS。如需指定版本，在项目根目录创建 `.node-version` 文件：
-
-```
-20.11.0
+```text
+database/phase4-migration.sql
+database/phase5-migration.sql
 ```
 
-### Q: API 请求被 CORS 拦截
+## Stripe
 
-确保 Serv00 上的 PHP API 文件已添加 CORS 头，并且允许的域名与 Cloudflare Pages 域名匹配。
+Checkout is created by Serv00:
 
-### Q: 图片不显示
-
-确保 `public/assets/products/` 下的图片已正确复制到 `public/` 目录，或者在构建后将它们复制到 `dist/assets/products/`。
-
-### Q: 环境变量未生效
-
-Cloudflare Pages 的环境变量需要重新部署才能生效。修改后触发一次新的部署即可。
-
-## 性能优化建议
-
-1. **启用 CDN**：Cloudflare Pages 自动全局 CDN 加速
-2. **图片优化**：考虑使用 Cloudflare Images 或 Imgix
-3. **缓存策略**：在 `wrangler.json` 中配置缓存头：
-
-```json
-{
-  "name": "shop-crtlu",
-  "compatibility_date": "2024-01-01",
-  "assets": {
-    "directory": "dist"
-  }
-}
+```text
+https://api.crtlu.me/api/create-checkout-session.php
 ```
 
-4. **监控**：在 Cloudflare Dashboard 查看访问量和性能指标
+Webhook endpoint:
+
+```text
+https://api.crtlu.me/api/stripe-webhook.php
+```
+
+Listen for:
+
+```text
+checkout.session.completed
+```
+
+The checkout success URL is generated from `CRTLU_BASE_URL`, so set it to the public storefront domain.
+
+## Smoke Tests
+
+After deployment, verify:
+
+```text
+https://api.crtlu.me/api/health.php
+https://api.crtlu.me/api/products.php
+https://api.crtlu.me/admin/orders.php
+```
+
+Then test from the Cloudflare Pages storefront:
+
+- Product listing and detail pages render.
+- Add to cart works.
+- Checkout request reaches Serv00 and redirects to Stripe.
+- Success page can query `order-status.php`.
+- Account login code request reaches Serv00.
+
+## Local Build Check
+
+From `shop/`:
+
+```bash
+npm run build
+```
+
+Optional local API override:
+
+```bash
+PUBLIC_CRTLU_API_BASE_URL=https://api.crtlu.me/api npm run build
+```
+
+## Packaging Rules
+
+Never package or commit:
+
+```text
+api/config.local.php
+.env
+.DS_Store
+```
+
+Cloudflare Pages needs only the static build output. Serv00 needs the PHP/backend files and data files.
