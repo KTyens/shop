@@ -6,7 +6,7 @@ var e=Array.isArray(window.__CATALOG__)?window.__CATALOG__:[],t=1200,n=`crtlu-ca
             </div>
           </div>`;return}document.getElementById(`productGrid`).innerHTML=e.map(e=>{let t=s[e.id]||e.variants[0].id,n=e.variants.find(e=>e.id===t)||e.variants[0];return`
           <article class="product-card reveal" id="${e.id}">
-            ${e.image?`<div class="product-media"><img src="${e.image}" alt="${e.name}"></div>`:``}
+            ${e.image?`<div class="product-media"><img src="${e.image}" alt="${e.name}" loading="lazy" decoding="async"></div>`:``}
             <div class="card-head">
               <div class="meta"><span>${e.brand}</span><span>${e.tier.replace(`-`,` `)}</span></div>
               <h2>${e.name}</h2>

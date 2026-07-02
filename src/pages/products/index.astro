@@ -202,7 +202,7 @@ const catalogPayload = series;
 
         return `
           <article class="product-card reveal" id="${item.id}">
-            ${item.image ? `<div class="product-media"><img src="${item.image}" alt="${item.name}"></div>` : ''}
+            ${item.image ? `<div class="product-media"><img src="${item.image}" alt="${item.name}" loading="lazy" decoding="async"></div>` : ''}
             <div class="card-head">
               <div class="meta"><span>${item.brand}</span><span>${item.tier.replace('-', ' ')}</span></div>
               <h2>${item.name}</h2>
@@ -473,7 +473,7 @@ const catalogPayload = series;
 
           return `
             <article class="product-card reveal visible" id="${escapeHtml(item.id)}">
-              ${item.image ? `<div class="product-media"><img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name)}"></div>` : ''}
+              ${item.image ? `<div class="product-media"><img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name)}" loading="lazy" decoding="async"></div>` : ''}
               <div class="card-head">
                 <div class="meta"><span>${escapeHtml(item.brand)}</span><span>${escapeHtml(item.tier || item.category)}</span></div>
                 <h2>${escapeHtml(item.name)}</h2>

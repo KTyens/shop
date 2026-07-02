@@ -116,7 +116,11 @@ const variantsPayload = variants;
     function renderProduct() {
       const selected = product.variants.find((v) => v.id === selectedId) || product.variants[0];
       selectedId = selected.id;
-      const gallery = product.gallery && product.gallery.length ? product.gallery : [product.image].filter(Boolean);
+      const gallerySource = [
+        product.image,
+        ...(Array.isArray(product.gallery) ? product.gallery : []),
+      ].filter(Boolean);
+      const gallery = [...new Set(gallerySource)];
       currentImage = currentImage || gallery[0] || '';
 
       document.getElementById('price').textContent = money(selected.price_cents);
@@ -124,11 +128,11 @@ const variantsPayload = variants;
 
       // Gallery
       document.getElementById('galleryMain').innerHTML = currentImage
-        ? `<button type="button" data-lightbox-image="${currentImage}" aria-label="Open image"><img src="${currentImage}" alt="${product.name}"></button>`
+        ? `<button type="button" data-lightbox-image="${currentImage}" aria-label="Open image"><img src="${currentImage}" alt="${product.name}" fetchpriority="high" decoding="async"></button>`
         : '';
 
-      document.getElementById('thumbs').innerHTML = gallery.map((img) =>
-        `<button class="thumb ${img === currentImage ? 'active' : ''}" type="button" data-image="${img}" aria-label="Show image" aria-current="${img === currentImage ? 'true' : 'false'}"><img src="${img}" alt="${product.name}"></button>`
+      document.getElementById('thumbs').innerHTML = gallery.map((img, i) =>
+        `<button class="thumb ${img === currentImage ? 'active' : ''}" type="button" data-image="${img}" aria-label="Show image" aria-current="${img === currentImage ? 'true' : 'false'}"><img src="${img}" alt="${product.name}" loading="${i === 0 ? 'eager' : 'lazy'}" decoding="async"></button>`
       ).join('');
 
       // Variants
@@ -153,7 +157,7 @@ const variantsPayload = variants;
 
       // Detail gallery
       document.getElementById('detailGallery').innerHTML = gallery.map((img, i) =>
-        `<button type="button" data-lightbox-image="${img}" aria-label="Detail image ${i + 1}"><img src="${img}" alt="${product.name} detail ${i + 1}" style="width:100%;height:360px;object-fit:contain;padding:14px;display:block;"></button>`
+        `<button type="button" data-lightbox-image="${img}" aria-label="Detail image ${i + 1}"><img src="${img}" alt="${product.name} detail ${i + 1}" loading="lazy" decoding="async" style="width:100%;height:360px;object-fit:contain;padding:14px;display:block;"></button>`
       ).join('');
     }
 
@@ -190,7 +194,7 @@ const variantsPayload = variants;
         ? cart.map(item => {
             const v = variantById(item.id);
             if (!v) return '';
-            return `<div class="cart-item"><img class="cart-thumb" src="${v.image || product.image}" alt="${v.seriesName}" style="width:62px;height:62px;object-fit:contain;padding:6px;border:1px solid var(--line);background:rgba(255,255,255,.06);"><div><h3 style="margin:0 0 4px;font-size:15px;">${v.seriesName}</h3><p style="margin:0;color:var(--muted);font-size:13px;">${v.label} / ${v.sku}</p><div class="quantity" style="display:flex;align-items:center;gap:8px;margin-top:10px;"><button class="qty-btn" type="button" data-qty="${v.id}" data-change="-1" style="width:28px;height:28px;color:var(--text);background:rgba(255,255,255,.06);border:1px solid var(--line);">-</button><span>${item.qty}</span><button class="qty-btn" type="button" data-qty="${v.id}" data-change="1" style="width:28px;height:28px;color:var(--text);background:rgba(255,255,255,.06);border:1px solid var(--line);">+</button></div><button class="remove" type="button" data-remove="${v.id}" style="color:var(--danger);background:none;padding:0;margin-top:10px;font-size:12px;">Remove</button></div><strong style="color:var(--text);font-weight:900;">${money(v.price_cents * item.qty)}</strong></div>`;
+            return `<div class="cart-item"><img class="cart-thumb" src="${v.image || product.image}" alt="${v.seriesName}" loading="lazy" decoding="async" style="width:62px;height:62px;object-fit:contain;padding:6px;border:1px solid var(--line);background:rgba(255,255,255,.06);"><div><h3 style="margin:0 0 4px;font-size:15px;">${v.seriesName}</h3><p style="margin:0;color:var(--muted);font-size:13px;">${v.label} / ${v.sku}</p><div class="quantity" style="display:flex;align-items:center;gap:8px;margin-top:10px;"><button class="qty-btn" type="button" data-qty="${v.id}" data-change="-1" style="width:28px;height:28px;color:var(--text);background:rgba(255,255,255,.06);border:1px solid var(--line);">-</button><span>${item.qty}</span><button class="qty-btn" type="button" data-qty="${v.id}" data-change="1" style="width:28px;height:28px;color:var(--text);background:rgba(255,255,255,.06);border:1px solid var(--line);">+</button></div><button class="remove" type="button" data-remove="${v.id}" style="color:var(--danger);background:none;padding:0;margin-top:10px;font-size:12px;">Remove</button></div><strong style="color:var(--text);font-weight:900;">${money(v.price_cents * item.qty)}</strong></div>`;
           }).join('')
         : '<div class="empty" style="color:var(--muted);padding:30px 0;line-height:1.6;">Your cart is empty.</div>';
 

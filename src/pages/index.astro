@@ -261,7 +261,7 @@ const filterPayload = FILTERS;
     grid.innerHTML = products.map((product) => `
       <article class="product-card reveal visible">
         <div class="product-visual">
-          ${product.image ? `<img class="product-image" src="${product.image}" alt="${product.name}">` : ''}
+          ${product.image ? `<img class="product-image" src="${product.image}" alt="${product.name}" loading="lazy" decoding="async">` : ''}
         </div>
         <div class="product-body">
           <div class="product-meta"><span>${product.brand}</span><span>${product.category}</span></div>

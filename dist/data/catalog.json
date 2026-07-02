@@ -45,8 +45,7 @@
         "assets/products/h96-h618-plus/bluetooth.jpg",
         "assets/products/h96-h618-plus/cast.jpg",
         "assets/products/h96-h618-plus/chipset.jpg",
-        "assets/products/h96-h618-plus/packing.jpg",
-        "assets/products/h96-h618-plus/ports.jpg"
+        "assets/products/h96-h618-plus/packing.jpg"
       ],
       "specs": {
         "configurations": "2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM",
@@ -278,10 +277,7 @@
         "assets/products/h96-max-m7/detail-1.jpg",
         "assets/products/h96-max-m7/detail-2.jpg",
         "assets/products/h96-max-m7/detail-3.jpg",
-        "assets/products/h96-max-m7/detail-4.jpg",
-        "assets/products/h96-max-m7/detail-5.jpg",
-        "assets/products/h96-max-m7/detail-6.jpg",
-        "assets/products/h96-max-m7/detail-7.jpg"
+        "assets/products/h96-max-m7/detail-4.jpg"
       ],
       "detail_url": "/products/h96-max-m7/",
       "specs": {
@@ -432,7 +428,6 @@
       "gallery": [
         "assets/products/t95/main.jpg",
         "assets/products/t95/detail-1.jpg",
-        "assets/products/t95/detail-2.jpg",
         "assets/products/t95/detail-3.jpg",
         "assets/products/t95/detail-4.jpg",
         "assets/products/t95/detail-5.jpg",
