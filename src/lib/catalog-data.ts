@@ -29,9 +29,25 @@ export interface SeriesItem {
   gallery?: string[];
 }
 
+function publicAssetPath(value: string | undefined): string {
+  if (!value) return '';
+  if (/^(https?:)?\/\//i.test(value) || value.startsWith('/')) return value;
+  return `/${value.replace(/^\/+/, '')}`;
+}
+
+function normalizeSeriesItem(item: SeriesItem): SeriesItem {
+  return {
+    ...item,
+    image: publicAssetPath(item.image),
+    gallery: Array.isArray(item.gallery) ? item.gallery.map(publicAssetPath) : item.gallery,
+  };
+}
+
 export function loadCatalog(): SeriesItem[] {
   const projectRoot = process.cwd();
   const catalogPath = path.join(projectRoot, 'data', 'catalog.json');
   const catalogData = JSON.parse(fs.readFileSync(catalogPath, 'utf-8'));
-  return (catalogData.series || []).filter((item) => item.status === 'published');
+  return (catalogData.series || [])
+    .filter((item) => item.status === 'published')
+    .map(normalizeSeriesItem);
 }
