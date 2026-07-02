@@ -100,6 +100,28 @@
     };
   }
 
+  async function readJsonResponse(response, fallbackMessage) {
+    const fallback = fallbackMessage || `Request failed (${response.status})`;
+    const text = await response.text();
+
+    if (!text.trim()) {
+      throw new Error(response.ok ? fallback : `${fallback} (${response.status})`);
+    }
+
+    try {
+      return JSON.parse(text);
+    } catch {
+      const plainText = text
+        .replace(/<script[\s\S]*?<\/script>/gi, " ")
+        .replace(/<style[\s\S]*?<\/style>/gi, " ")
+        .replace(/<[^>]*>/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+      const detail = plainText ? `: ${plainText.slice(0, 180)}` : "";
+      throw new Error(`${fallback}${detail}`);
+    }
+  }
+
   function initControls(options) {
     const currencySelect = document.getElementById("currencySelect");
     const localeSelect = document.getElementById("localeSelect");
@@ -150,11 +172,12 @@
         try {
           const response = await fetch(options.validateUrl, {
             method: "POST",
+            credentials: "include",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ coupon_code: code, items: options.getItems ? options.getItems() : [] })
           });
-          const payload = await response.json();
-          if (!response.ok || !payload.valid) throw new Error(payload.message || "Coupon is not valid.");
+          const payload = await readJsonResponse(response, "Coupon API returned an empty response.");
+          if (!response.ok || !payload.valid) throw new Error(payload.message || payload.error || "Coupon is not valid.");
           setCoupon({
             ...payload.coupon,
             discount_cents: payload.discount_cents,
@@ -200,7 +223,10 @@
     getCurrency,
     getLocale,
     initControls,
+    readJsonResponse,
     renderAdjustments,
     setCoupon
   };
+
+  window.dispatchEvent(new Event("crtlu:phase4-ready"));
 })();

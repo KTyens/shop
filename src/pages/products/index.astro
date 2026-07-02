@@ -93,6 +93,7 @@ const catalogPayload = series;
     let sortMode = 'featured';
     let selected: Record<string, string> = {};
     let cart: Array<{ id: string; qty: number }> = loadCart();
+    let phase4ControlsReady = false;
 
     function flattenVariants(series: SeriesItem[]) {
       return series.flatMap(item =>
@@ -123,6 +124,10 @@ const catalogPayload = series;
 
     function saveCart() {
       localStorage.setItem(cartKey, JSON.stringify(cart));
+    }
+
+    function apiUrl(path: string) {
+      return (window as any).crtluApiUrl ? (window as any).crtluApiUrl(path) : path;
     }
 
     function minPrice(item: SeriesItem) {
@@ -268,11 +273,14 @@ const catalogPayload = series;
       const count = cart.reduce((sum, item) => sum + item.qty, 0);
       const subtotal = cart.reduce((sum, item) => sum + variantById(item.id)!.price_cents * item.qty, 0);
       const shipping = subtotal > 0 ? SHIPPING_CENTS : 0;
+      const phase4 = (window as any).CRTLU_PHASE4;
+      const formatMoney = phase4?.formatMoney || ((cents: number) => '$' + (cents / 100).toFixed(2));
 
       document.getElementById('cartCount')!.textContent = String(count);
-      document.getElementById('cartSubtotal')!.textContent = '$' + (subtotal / 100).toFixed(2);
-      document.getElementById('cartShipping')!.textContent = subtotal > 0 ? '$12.00' : '$0.00';
-      document.getElementById('cartTotal')!.textContent = '$' + (((subtotal + shipping) / 100).toFixed(2));
+      document.getElementById('cartSubtotal')!.textContent = formatMoney(subtotal);
+      document.getElementById('cartShipping')!.textContent = subtotal > 0 ? formatMoney(shipping) : formatMoney(0);
+      document.getElementById('cartTotal')!.textContent = formatMoney(subtotal + shipping);
+      if (phase4?.renderAdjustments) phase4.renderAdjustments(subtotal, shipping);
       document.getElementById('checkoutButton').disabled = count === 0;
 
       document.getElementById('cartItems')!.innerHTML = cart.length
@@ -343,21 +351,36 @@ const catalogPayload = series;
       openCart();
     }
 
+    function initPhase4Controls() {
+      const phase4 = (window as any).CRTLU_PHASE4;
+      if (phase4ControlsReady || !phase4?.initControls) return;
+      phase4ControlsReady = true;
+      phase4.initControls({
+        validateUrl: apiUrl('/api/validate-coupon.php'),
+        getItems: () => cart,
+        onChange: renderCart,
+      });
+      renderCart();
+    }
+
     // Checkout
     async function checkout() {
       const status = document.getElementById('checkoutStatus');
       status.className = 'status';
       status.textContent = 'Creating checkout session...';
-      const apiUrl = (path: string) => (window as any).crtluApiUrl ? (window as any).crtluApiUrl(path) : path;
+      const phase4 = (window as any).CRTLU_PHASE4;
+      const checkoutMeta = phase4?.checkoutMeta ? phase4.checkoutMeta() : {};
 
       try {
         const response = await fetch(apiUrl('/api/create-checkout-session.php'), {
           method: 'POST',
           credentials: 'include',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ items: cart }),
+          body: JSON.stringify({ items: cart, ...checkoutMeta }),
         });
-        const payload = await response.json();
+        const payload = phase4?.readJsonResponse
+          ? await phase4.readJsonResponse(response, 'Checkout API returned an empty response.')
+          : await response.json();
         if (!response.ok || !payload.url) throw new Error(payload.error || 'Checkout not configured');
         window.location.href = payload.url;
       } catch (error) {
@@ -425,6 +448,9 @@ const catalogPayload = series;
 
       // Checkout
       document.getElementById('checkoutButton')!.addEventListener('click', checkout);
+
+      initPhase4Controls();
+      window.addEventListener('crtlu:phase4-ready', initPhase4Controls);
 
       // Mobile nav
       const mobileCartBtn = document.getElementById('mobileOpenCart');
