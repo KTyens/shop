@@ -50,7 +50,7 @@ const catalogJSON = JSON.stringify(series);
 
   <!-- Inject catalog data as a global variable -->
   <script>
-    window.__CATALOG__ = JSON.parse(`{JSON.stringify(catalogJSON)}`);
+    window.__CATALOG__ = {catalogJSON};
   </script>
 
   <script>
