@@ -92,9 +92,13 @@ const catalogJSON = JSON.stringify(allSeries);
     </div>
   </div>
 
+  <script define:vars={{ productJSON }}>
+    window.__PRODUCT__ = {productJSON};
+  </script>
+
   <script>
     // Server-side product data injected as JSON
-    const PRODUCT_DATA = {productJSON};
+    const PRODUCT_DATA = window.__PRODUCT__;
   </script>
 
   <script>

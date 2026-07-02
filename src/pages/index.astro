@@ -239,11 +239,11 @@ const catalogJSON = JSON.stringify(featured);
 </Layout>
 
 <script define:vars={{ catalogJSON }}>
-  // Server-side: serialize catalog data for injection
+  window.__FEATURED__ = {catalogJSON};
 </script>
 
 <script>
-  const featured = {catalogJSON};
+  const featured = window.__FEATURED__;
 
   const SHIPPING_CENTS = 1200;
   const cartKey = 'crtlu-cart-v1';
