@@ -243,7 +243,7 @@ const catalogJSON = JSON.stringify(featured);
 </script>
 
 <script>
-  const featured = JSON.parse({JSON.stringify(catalogJSON)});
+  const featured = JSON.parse(`{JSON.stringify(catalogJSON)}`);
 
   const SHIPPING_CENTS = 1200;
   const cartKey = 'crtlu-cart-v1';
