@@ -183,16 +183,16 @@
           "compare_at_cents": 3899
         }
       ],
-      "image": "assets/products/x5-yb962/main.jpg",
+      "image": "assets/products/x5-yb962/perf-main.jpg",
       "gallery": [
-        "assets/products/x5-yb962/main.jpg",
-        "assets/products/x5-yb962/detail-1.jpg",
-        "assets/products/x5-yb962/detail-2.jpg",
-        "assets/products/x5-yb962/detail-3.jpg",
-        "assets/products/x5-yb962/detail-4.jpg",
-        "assets/products/x5-yb962/detail-5.jpg",
-        "assets/products/x5-yb962/detail-6.jpg",
-        "assets/products/x5-yb962/detail-7.jpg"
+        "assets/products/x5-yb962/perf-main.jpg",
+        "assets/products/x5-yb962/perf-gpu.jpg",
+        "assets/products/x5-yb962/perf-hdr.jpg",
+        "assets/products/x5-yb962/perf-wifi.jpg",
+        "assets/products/x5-yb962/perf-voice.jpg",
+        "assets/products/x5-yb962/perf-features.jpg",
+        "assets/products/x5-yb962/perf-ports.jpg",
+        "assets/products/x5-yb962/perf-package.jpg"
       ],
       "detail_url": "/products/x5-yb962/",
       "specs": {
@@ -1099,16 +1099,16 @@
           "compare_at_cents": 9399
         }
       ],
-      "image": "assets/products/hk1-s905x3/main.jpg",
+      "image": "assets/products/hk1-s905x3/perf-main.jpg",
       "gallery": [
-        "assets/products/hk1-s905x3/main.jpg",
-        "assets/products/hk1-s905x3/detail-1.jpg",
-        "assets/products/hk1-s905x3/detail-2.jpg",
-        "assets/products/hk1-s905x3/detail-3.jpg",
-        "assets/products/hk1-s905x3/detail-4.jpg",
-        "assets/products/hk1-s905x3/detail-5.jpg",
-        "assets/products/hk1-s905x3/detail-6.jpg",
-        "assets/products/hk1-s905x3/detail-7.jpg"
+        "assets/products/hk1-s905x3/perf-main.jpg",
+        "assets/products/hk1-s905x3/perf-network.jpg",
+        "assets/products/hk1-s905x3/perf-storage.jpg",
+        "assets/products/hk1-s905x3/perf-package.jpg",
+        "assets/products/hk1-s905x3/perf-apps.jpg",
+        "assets/products/hk1-s905x3/perf-ports.jpg",
+        "assets/products/hk1-s905x3/perf-wifi.jpg",
+        "assets/products/hk1-s905x3/perf-package-list.jpg"
       ],
       "detail_url": "/products/hk1-s905x3/",
       "specs": {
