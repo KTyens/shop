@@ -24,7 +24,7 @@ Cloudflare Pages environment variable should point to the Serv00-backed API doma
 PUBLIC_CRTLU_API_BASE_URL=https://api.crtlu.me/api
 ```
 
-If this variable is not set, the frontend uses same-origin `/api`, which only works when the PHP API is hosted under the same domain or proxied.
+If this variable is not set, the frontend uses same-origin `/api`. On Cloudflare Pages, `functions/api/[[path]].js` proxies those requests to the Serv00 backend.
 
 ## Backend
 

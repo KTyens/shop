@@ -201,7 +201,7 @@ Current primary pages:
 PUBLIC_CRTLU_API_BASE_URL=https://api.crtlu.me/api
 ```
 
-If the variable is missing, the frontend falls back to same-origin `/api`. For Cloudflare Pages + Serv00 API, set the variable in Cloudflare Pages. If `shop.crtlu.me` is assigned to Cloudflare Pages, the Serv00 API should use a separate backend subdomain such as `api.crtlu.me`, unless an explicit Cloudflare Worker proxy is added.
+If the variable is missing, the frontend falls back to same-origin `/api`. On Cloudflare Pages, `functions/api/[[path]].js` proxies `/api/*` requests to the Serv00 backend, so preview builds do not POST to the static Pages `/api` path. For Cloudflare Pages + Serv00 API, still prefer setting the variable in Cloudflare Pages once the final API subdomain is stable. If `shop.crtlu.me` is assigned to Cloudflare Pages, the Serv00 API should use a separate backend subdomain such as `api.crtlu.me`, or `CRTLU_API_PROXY_BASE_URL` must be set on Cloudflare Pages to a non-recursive Serv00 API origin.
 
 All frontend API calls should use `window.crtluApiUrl('/api/<endpoint>.php')` or equivalent. Account and checkout calls should include `credentials: 'include'` so member sessions can be sent to the Serv00 API.
 
@@ -292,7 +292,7 @@ Keep `api/config.local.php` server-only. The package should include `api/config.
 Optional production config:
 
 ```php
-define('CRTLU_ALLOWED_ORIGINS', 'https://shop.crtlu.me,http://localhost:4321,http://127.0.0.1:4321');
+define('CRTLU_ALLOWED_ORIGINS', 'https://shop.crtlu.me,https://shop-crtlu.pages.dev,http://localhost:4321,http://127.0.0.1:4321');
 define('CRTLU_MAIL_FROM', 'support@crtlu.me');
 define('CRTLU_LOGIN_CODE_DEBUG', '0');
 ```

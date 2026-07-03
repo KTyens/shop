@@ -19,7 +19,7 @@ function crtlu_allowed_origins(): array
 {
     $raw = crtlu_config(
         'CRTLU_ALLOWED_ORIGINS',
-        'https://shop.crtlu.me,http://localhost:4321,http://127.0.0.1:4321'
+        'https://shop.crtlu.me,https://shop-crtlu.pages.dev,http://localhost:4321,http://127.0.0.1:4321'
     ) ?: '';
 
     return array_values(array_filter(array_map(static function (string $origin): string {
