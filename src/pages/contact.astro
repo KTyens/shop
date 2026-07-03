@@ -1,0 +1,148 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import CartDrawer from '../components/CartDrawer.astro';
+import '../styles/global.css';
+
+const supportEmail = 'support@crtlu.me';
+---
+
+<Layout title="Contact CRTL U Digital | Support" description="Contact CRTL U Digital for product questions, order status, shipping updates, and after-sales support.">
+  <Navigation />
+  <CartDrawer />
+
+  <main>
+    <section class="hero wrap contact-hero">
+      <div class="eyebrow">Contact support</div>
+      <h1>We are here to help.</h1>
+      <p class="lead">Ask about product compatibility, order status, shipping updates, or after-sales support. For faster help, include your order email, product model, and a short description of the issue.</p>
+      <div class="contact-cta-row">
+        <a class="primary-button" href={`mailto:${supportEmail}`}>Email support</a>
+        <a class="secondary-button" href="/products/">Browse products</a>
+      </div>
+    </section>
+
+    <section class="wrap contact-layout">
+      <div class="contact-panel contact-main">
+        <h2>Support email</h2>
+        <p class="contact-email"><a href={`mailto:${supportEmail}`}>{supportEmail}</a></p>
+        <p>Typical reply time is within 24 business hours. If you already placed an order, please send the same email address used at checkout so we can find the order quickly.</p>
+        <div class="contact-note">
+          <strong>For order support, include:</strong>
+          <ul>
+            <li>Checkout email or order email</li>
+            <li>Product model and configuration</li>
+            <li>Question type: order status, shipping, return, or setup</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="contact-panel">
+        <h2>Order & shipping</h2>
+        <p>Orders are processed through Stripe Checkout. Fulfillment uses Yanwen tracked shipping for standard delivery.</p>
+        <a class="secondary-button compact" href="/success/">Check order status</a>
+      </div>
+
+      <div class="contact-panel">
+        <h2>Product questions</h2>
+        <p>Need help choosing a TV box or projector? Tell us your TV model, apps you plan to use, storage needs, and country.</p>
+        <a class="secondary-button compact" href="/products/">View catalog</a>
+      </div>
+
+      <div class="contact-panel">
+        <h2>After-sales support</h2>
+        <p>For setup questions, connection issues, or damaged shipments, send photos or screenshots when helpful.</p>
+        <a class="secondary-button compact" href={`mailto:${supportEmail}?subject=After-sales support`}>Request support</a>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .contact-hero {
+    padding-top: 68px;
+  }
+
+  .contact-cta-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 28px;
+  }
+
+  .contact-layout {
+    display: grid;
+    grid-template-columns: 1.25fr 1fr;
+    gap: 16px;
+    padding-bottom: 70px;
+  }
+
+  .contact-panel {
+    min-height: 230px;
+    padding: 22px;
+    border: 1px solid var(--line);
+    background:
+      radial-gradient(circle at 80% 6%, rgba(93, 231, 255, 0.08), transparent 26%),
+      rgba(255, 255, 255, 0.04);
+  }
+
+  .contact-main {
+    grid-row: span 3;
+  }
+
+  .contact-panel h2 {
+    margin: 0 0 12px;
+    font-size: clamp(24px, 2.6vw, 34px);
+  }
+
+  .contact-panel p {
+    margin-bottom: 14px;
+    color: #c6d3da;
+    line-height: 1.7;
+  }
+
+  .contact-email {
+    font-size: clamp(22px, 3vw, 34px);
+    font-weight: 900;
+  }
+
+  .contact-email a {
+    color: var(--cyan);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .contact-note {
+    margin-top: 22px;
+    padding: 16px;
+    border: 1px solid rgba(139, 255, 133, 0.22);
+    background: rgba(139, 255, 133, 0.06);
+  }
+
+  .contact-note strong {
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .contact-note ul {
+    padding-left: 18px;
+    color: #c6d3da;
+    line-height: 1.8;
+  }
+
+  .secondary-button.compact {
+    min-height: 38px;
+    padding: 0 14px;
+    font-size: 12px;
+  }
+
+  @media (max-width: 920px) {
+    .contact-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .contact-main {
+      grid-row: auto;
+    }
+  }
+</style>

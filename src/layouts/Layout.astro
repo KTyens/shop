@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import i18nScriptUrl from '../../assets/i18n.js?url';
 import phase4ScriptUrl from '../../assets/shop-phase4.js?url';
+import Footer from '../components/Footer.astro';
 
 const {
   title = 'CRTLU Digital | Premium TV Boxes & Projectors',
@@ -44,5 +45,6 @@ const apiBaseUrl = (configuredApiBase || '/api').replace(/\/+$/, '');
   </head>
   <body>
     <slot />
+    <Footer />
   </body>
 </html>
