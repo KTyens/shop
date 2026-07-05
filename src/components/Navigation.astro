@@ -33,3 +33,25 @@ import '../styles/global.css';
   <a href="/contact/">Contact</a>
   <button type="button" id="mobileOpenCart">Cart</button>
 </nav>
+
+<style>
+  @media (max-width: 920px) {
+    .mobile-shop-nav {
+      display: grid !important;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      max-width: 100vw;
+      overflow: hidden;
+    }
+
+    .mobile-shop-nav a,
+    .mobile-shop-nav button {
+      min-width: 0;
+      padding: 0 4px;
+      overflow: hidden;
+      font-size: 10px;
+      letter-spacing: .02em;
+      text-overflow: clip;
+      white-space: nowrap;
+    }
+  }
+</style>

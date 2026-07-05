@@ -40,6 +40,15 @@ const FILTERS = [['all', 'All'], ['tv-box', 'TV Boxes'], ['projector', 'Projecto
 
 const featuredPayload = featured;
 const filterPayload = FILTERS;
+const heroTvBox = items.find(i => i.id === 'h96max-m1-plus') ?? featured[0];
+const heroProjector = items.find(i => i.id === 'hy320-mini-projector') ?? featured.find(i => i.category === 'projector') ?? featured[0];
+const heroAltBox = items.find(i => i.id === 'h96max-h618-plus') ?? featured[1] ?? heroTvBox;
+
+function assetUrl(path?: string) {
+  if (!path) return '';
+  if (path.startsWith('http') || path.startsWith('/')) return path;
+  return `/${path}`;
+}
 ---
 
 <Layout title="CRTLU Digital | Premium TV Boxes & Projectors" description="Premium Android TV boxes, Google TV streamers, and compact projectors for cinematic home entertainment.">
@@ -48,54 +57,79 @@ const filterPayload = FILTERS;
 
   <main>
     <!-- Hero -->
-    <section class="hero" style="min-height:80vh;display:grid;align-items:center;padding:132px 22px 70px;">
+    <section class="cinema-hero" data-kinetic-root>
       <div class="hero-bg" aria-hidden="true"></div>
-      <div class="beam" aria-hidden="true"></div>
-      <div class="hero-inner" style="width:min(var(--max),100%);margin:0 auto;">
-        <div style="width:min(620px,calc(100vw-44px));max-width:620px;">
-          <div class="eyebrow"><span>Premium home cinema gear</span></div>
-          <h1 style="margin:22px 0 18px;font-size:clamp(44px,8vw,92px);line-height:.92;max-width:680px;">
-            Premium TV Boxes<br />
-            & Compact<br />
-            Projectors.
-          </h1>
-          <p style="width:min(540px,calc(100vw-44px));max-width:540px;color:#c6d3da;font-size:clamp(17px,2vw,20px);line-height:1.65;">
-            Curated Android TV boxes and compact projectors for home cinema buyers who want clear specs, real product photos, secure payment, and legal streaming with their own subscriptions.
-          </p>
-          <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:32px;">
-            <a class="primary-button" href="#products">Shop TV Boxes</a>
-            <a class="secondary-button" href="#products" data-filter="projector">Shop Projectors</a>
-            <a class="secondary-button" href="/products/">All Models</a>
-          </div>
-          <div style="margin-top:16px;display:flex;flex-wrap:wrap;gap:8px;color:#c6d3da;font-size:12px;line-height:1.5;">
-            <span style="padding:7px 10px;border:1px solid rgba(139,255,133,.24);background:rgba(139,255,133,.06);">Stripe secure checkout</span>
-            <span style="padding:7px 10px;border:1px solid rgba(139,255,133,.24);background:rgba(139,255,133,.06);">Yanwen tracked shipping</span>
-            <span style="padding:7px 10px;border:1px solid rgba(139,255,133,.24);background:rgba(139,255,133,.06);">No unofficial streaming bundles</span>
-          </div>
-          <div style="margin-top:44px;width:min(600px,calc(100vw-44px));display:grid;grid-template-columns:repeat(3,1fr);max-width:600px;border:1px solid var(--line);background:rgba(8,14,19,.58);backdrop-filter:blur(18px);">
-            <div style="padding:18px;border-right:1px solid var(--line);">
-              <strong style="display:block;font-size:24px;">4K</strong>
-              <span style="display:block;margin-top:4px;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.06em;">Streaming ready</span>
-            </div>
-            <div style="padding:18px;border-right:1px solid var(--line);">
-              <strong style="display:block;font-size:24px;">24h</strong>
-              <span style="display:block;margin-top:4px;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.06em;">Order handling target</span>
-            </div>
-            <div style="padding:18px;">
-              <strong style="display:block;font-size:24px;">Stripe</strong>
-              <span style="display:block;margin-top:4px;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.06em;">Secure payment</span>
-            </div>
-          </div>
+      <div class="hero-grid" aria-hidden="true"></div>
+      <div class="hero-beam beam-one" aria-hidden="true"></div>
+      <div class="hero-beam beam-two" aria-hidden="true"></div>
+
+      <div class="hero-copy" data-reveal>
+        <div class="eyebrow"><span>Dark cinematic tech commerce</span></div>
+        <h1>
+          Cinema hardware.
+          <span>Made premium.</span>
+        </h1>
+        <p>
+          Curated Android TV boxes and compact projectors for buyers who want clear specs,
+          legal streaming with their own subscriptions, secure checkout, and devices that look
+          as sharp as the screen they power.
+        </p>
+        <div class="hero-actions">
+          <a class="primary-button" href="#products">Shop TV Boxes</a>
+          <a class="secondary-button" href="#products" data-filter="projector">Shop Projectors</a>
+          <a class="secondary-button" href="/products/">All Models</a>
+        </div>
+      </div>
+
+      <div class="hero-stage" aria-label="Featured home cinema hardware">
+        <div class="stage-screen" data-depth="0.4">
+          <span>4K HDR</span>
+          <strong>streaming ready</strong>
+        </div>
+        <figure class="device-card tv-device" data-depth="0.9">
+          <img src={assetUrl(heroTvBox?.image)} alt={heroTvBox?.name ?? 'Featured TV box'} loading="eager" decoding="async" />
+          <figcaption>
+            <span>{heroTvBox?.brand ?? 'TV Box'}</span>
+            <strong>{heroTvBox?.name ?? 'Featured TV box'}</strong>
+          </figcaption>
+        </figure>
+        <figure class="device-card projector-device" data-depth="0.55">
+          <img src={assetUrl(heroProjector?.image)} alt={heroProjector?.name ?? 'Featured projector'} loading="eager" decoding="async" />
+          <figcaption>
+            <span>{heroProjector?.brand ?? 'Projector'}</span>
+            <strong>{heroProjector?.name ?? 'Compact projector'}</strong>
+          </figcaption>
+        </figure>
+        <figure class="device-card mini-device" data-depth="1.1">
+          <img src={assetUrl(heroAltBox?.image)} alt={heroAltBox?.name ?? 'Featured Android TV box'} loading="eager" decoding="async" />
+        </figure>
+      </div>
+
+      <div class="hero-metrics" data-reveal>
+        <div>
+          <strong>4K</strong>
+          <span>Official app ready</span>
+        </div>
+        <div>
+          <strong>24h</strong>
+          <span>Order handling target</span>
+        </div>
+        <div>
+          <strong>Stripe</strong>
+          <span>Secure checkout</span>
         </div>
       </div>
     </section>
 
     <!-- Products -->
-    <section id="products">
-      <div style="width:min(var(--max),100%);margin:0 auto;">
-        <div class="section-head">
-          <h2>Curated devices, not random listings.</h2>
-          <p>Homepage shows only the main picks. Use the full catalog for every published configuration and price tier.</p>
+    <section id="products" class="curated-section">
+      <div class="home-wrap">
+        <div class="section-head cinematic-head" data-reveal>
+          <div>
+            <span class="section-kicker">Selected launch lineup</span>
+            <h2>Curated devices, not random listings.</h2>
+          </div>
+          <p>Homepage stays focused on a few hero products. The full catalog keeps every published configuration searchable and ready for checkout.</p>
           <a class="secondary-button" href="/products/" style="font-size:12px;padding:0 14px;">View all products</a>
         </div>
         <div class="filters" id="filters"></div>
@@ -104,34 +138,41 @@ const filterPayload = FILTERS;
     </section>
 
     <!-- Experience -->
-    <section class="experience" style="background:linear-gradient(180deg,rgba(93,231,255,.04),transparent),#04070a;">
-      <div style="width:min(var(--max),100%);margin:0 auto;">
-        <div class="section-head">
-          <h2>Designed around the room.</h2>
-          <p>The site sells the feeling: faster navigation, cleaner playback, big-screen nights, and simple setup from TV shelf to projector wall.</p>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:stretch;">
-          <div class="scene-panel" style="min-height:480px;position:relative;overflow:hidden;border:1px solid var(--line);background:radial-gradient(circle at 65% 36%,rgba(93,231,255,.22),transparent 22%),linear-gradient(145deg,#070d12,#0d151c);">
-            <div class="scene-screen" style="position:absolute;right:42px;top:52px;width:56%;aspect-ratio:16/9;border:1px solid rgba(93,231,255,.28);background:radial-gradient(circle at 24% 40%,rgba(139,255,133,.78),transparent 18%),radial-gradient(circle at 70% 30%,rgba(93,231,255,.9),transparent 24%),linear-gradient(135deg,#03121b,#102934);box-shadow:0 0 70px rgba(93,231,255,.22);"></div>
-            <div class="scene-console" style="position:absolute;left:8%;right:7%;bottom:52px;height:88px;background:linear-gradient(180deg,#151b20,#07090b);box-shadow:0 24px 60px rgba(0,0,0,.5);"></div>
-            <div class="scene-projector" style="position:absolute;left:16%;bottom:98px;width:150px;height:78px;border-radius:12px;background:linear-gradient(135deg,#1a2229,#05070a);"></div>
+    <section class="experience cinematic-experience">
+      <div class="home-wrap">
+        <div class="section-head cinematic-head" data-reveal>
+          <div>
+            <span class="section-kicker">Experience layer</span>
+            <h2>The store should feel like a room turning on.</h2>
           </div>
-          <div style="display:grid;gap:12px;">
-            <div class="feature" style="display:grid;grid-template-columns:46px 1fr;gap:14px;padding:18px;border:1px solid var(--line);background:rgba(255,255,255,.045);">
-              <div class="feature-icon" style="width:46px;height:46px;display:grid;place-items:center;border:1px solid rgba(139,255,133,.26);background:rgba(139,255,133,.06);color:var(--green);font-weight:900;">4K</div>
-              <div><h3 style="margin:0 0 5px;font-size:17px;">Legal streaming ecosystem</h3><p style="margin:0;color:var(--muted);line-height:1.55;font-size:14px;">Positioned for official app stores and user-owned subscriptions, avoiding risky IPTV or preloaded-content claims.</p></div>
+          <p>Brand motion supports the buying task: show the product, explain the spec, then make the next action obvious.</p>
+        </div>
+        <div class="experience-grid">
+          <div class="room-scene" data-reveal>
+            <div class="projection-wall">
+              <span>Wi-Fi 6</span>
+              <span>Bluetooth 5.4</span>
+              <span>4K HDR</span>
             </div>
-            <div class="feature" style="display:grid;grid-template-columns:46px 1fr;gap:14px;padding:18px;border:1px solid var(--line);background:rgba(255,255,255,.045);">
-              <div class="feature-icon" style="width:46px;height:46px;display:grid;place-items:center;border:1px solid rgba(139,255,133,.26);background:rgba(139,255,133,.06);color:var(--green);font-weight:900;">Wi</div>
-              <div><h3 style="margin:0 0 5px;font-size:17px;">Connectivity-first comparison</h3><p style="margin:0;color:var(--muted);line-height:1.55;font-size:14px;">Wi-Fi, Ethernet, Bluetooth, HDMI, USB, storage, and OS details are surfaced before the customer checks out.</p></div>
+            <img class="room-projector" src={assetUrl(heroProjector?.image)} alt={heroProjector?.name ?? 'Compact projector'} loading="lazy" decoding="async" />
+            <img class="room-tvbox" src={assetUrl(heroTvBox?.image)} alt={heroTvBox?.name ?? 'Android TV box'} loading="lazy" decoding="async" />
+            <div class="room-light" aria-hidden="true"></div>
+          </div>
+          <div class="feature-stack">
+            <div class="feature-panel" data-reveal>
+              <span>01</span>
+              <h3>Product-first motion</h3>
+              <p>Subtle floating, light sweeps, and reveal timing make hardware feel premium without hiding product photos.</p>
             </div>
-            <div class="feature" style="display:grid;grid-template-columns:46px 1fr;gap:14px;padding:18px;border:1px solid var(--line);background:rgba(255,255,255,.045);">
-              <div class="feature-icon" style="width:46px;height:46px;display:grid;place-items:center;border:1px solid rgba(139,255,133,.26);background:rgba(139,255,133,.06);color:var(--green);font-weight:900;">Pj</div>
-              <div><h3 style="margin:0 0 5px;font-size:17px;">Projection scenarios</h3><p style="margin:0;color:var(--muted);line-height:1.55;font-size:14px;">Projector pages can show bedroom cinema, outdoor movie night, and compact travel setups with separate recommendations.</p></div>
+            <div class="feature-panel" data-reveal>
+              <span>02</span>
+              <h3>Specs stay readable</h3>
+              <p>Chipset, memory, Wi-Fi, system version, shipping, and payment reassurance remain close to the purchase path.</p>
             </div>
-            <div class="feature" style="display:grid;grid-template-columns:46px 1fr;gap:14px;padding:18px;border:1px solid var(--line);background:rgba(255,255,255,.045);">
-              <div class="feature-icon" style="width:46px;height:46px;display:grid;place-items:center;border:1px solid rgba(139,255,133,.26);background:rgba(139,255,133,.06);color:var(--green);font-weight:900;">Yn</div>
-              <div><h3 style="margin:0 0 5px;font-size:17px;">Yanwen-ready fulfillment</h3><p style="margin:0;color:var(--muted);line-height:1.55;font-size:14px;">Orders can be exported for Yanwen handling first, then upgraded to an API integration when shipment volume justifies it.</p></div>
+            <div class="feature-panel" data-reveal>
+              <span>03</span>
+              <h3>Commerce remains fast</h3>
+              <p>The full catalog keeps search, filters, variants, and cart actions clean instead of turning every page into a showpiece.</p>
             </div>
           </div>
         </div>
@@ -196,37 +237,551 @@ const filterPayload = FILTERS;
   </main>
 
   <style>
+    .home-wrap {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .cinema-hero {
+      position: relative;
+      min-height: calc(100vh - 68px);
+      display: grid;
+      grid-template-columns: minmax(0, 0.86fr) minmax(420px, 1.14fr);
+      gap: 42px;
+      align-items: center;
+      overflow: hidden;
+      padding: 64px max(22px, calc((100vw - var(--max)) / 2)) 64px;
+      isolation: isolate;
+      background:
+        radial-gradient(circle at 72% 30%, rgba(93, 231, 255, 0.14), transparent 34%),
+        radial-gradient(circle at 86% 72%, rgba(139, 255, 133, 0.1), transparent 25%),
+        #020406;
+    }
+
     .hero-bg {
       position: absolute;
       inset: 0;
-      z-index: -2;
+      z-index: -4;
       background: url("/assets/hero-cinema.png") center right / cover no-repeat;
-      transform: scale(1.02);
+      opacity: 0.42;
+      transform: scale(1.04);
     }
-    .hero::before {
+
+    .cinema-hero::before {
       content: "";
       position: absolute;
       inset: 0;
-      z-index: -1;
+      z-index: -3;
       background:
-        linear-gradient(90deg, rgba(3,5,7,.95) 0%, rgba(3,5,7,.78) 32%, rgba(3,5,7,.24) 70%, rgba(3,5,7,.58) 100%),
-        linear-gradient(180deg, rgba(3,5,7,.1) 0%, rgba(3,5,7,.22) 58%, #030507 100%);
+        linear-gradient(90deg, rgba(2, 4, 6, 0.98) 0%, rgba(2, 4, 6, 0.82) 42%, rgba(2, 4, 6, 0.2) 72%, rgba(2, 4, 6, 0.78) 100%),
+        linear-gradient(180deg, rgba(2, 4, 6, 0.12) 0%, #030507 100%);
     }
-    .beam {
+
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      opacity: 0.22;
+      background-image:
+        linear-gradient(rgba(93, 231, 255, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(93, 231, 255, 0.08) 1px, transparent 1px);
+      background-size: 88px 88px;
+      mask-image: linear-gradient(90deg, transparent, #000 30%, #000 72%, transparent);
+    }
+
+    .hero-beam {
       pointer-events: none;
       position: absolute;
+      z-index: -1;
       width: 58vw;
-      height: 18vh;
-      right: 18vw;
-      top: 42vh;
-      transform: rotate(-8deg);
-      background: linear-gradient(90deg, transparent, rgba(93,231,255,.16), transparent);
-      filter: blur(16px);
+      height: 20vh;
+      background: linear-gradient(90deg, transparent, rgba(93, 231, 255, 0.18), rgba(139, 255, 133, 0.1), transparent);
+      filter: blur(18px);
       animation: beamPulse 4s ease-in-out infinite;
     }
+
+    .beam-one {
+      right: 13vw;
+      top: 30vh;
+      transform: rotate(-11deg);
+    }
+
+    .beam-two {
+      right: 0;
+      bottom: 18vh;
+      opacity: 0.45;
+      transform: rotate(8deg);
+      animation-delay: -1.8s;
+    }
+
+    .hero-copy {
+      position: relative;
+      z-index: 2;
+      max-width: 660px;
+    }
+
+    .hero-copy h1 {
+      margin: 22px 0 20px;
+      max-width: 720px;
+      font-size: clamp(48px, 5.9vw, 86px);
+      line-height: 0.9;
+      letter-spacing: 0;
+    }
+
+    .hero-copy h1 span {
+      display: block;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(244, 248, 251, 0.58);
+      text-shadow: 0 0 42px rgba(93, 231, 255, 0.12);
+    }
+
+    .hero-copy p {
+      width: min(600px, 100%);
+      color: #c6d3da;
+      font-size: clamp(17px, 2vw, 20px);
+      line-height: 1.68;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .hero-stage {
+      position: relative;
+      min-height: 560px;
+      transform-style: preserve-3d;
+    }
+
+    .stage-screen {
+      position: absolute;
+      top: 3%;
+      right: 0;
+      width: min(620px, 92%);
+      aspect-ratio: 16 / 9;
+      padding: 28px;
+      border: 1px solid rgba(93, 231, 255, 0.2);
+      background:
+        radial-gradient(circle at 32% 30%, rgba(139, 255, 133, 0.78), transparent 18%),
+        radial-gradient(circle at 68% 28%, rgba(93, 231, 255, 0.85), transparent 24%),
+        linear-gradient(135deg, rgba(4, 20, 28, 0.92), rgba(12, 42, 48, 0.72));
+      box-shadow: 0 0 80px rgba(93, 231, 255, 0.2), inset 0 0 80px rgba(255, 255, 255, 0.04);
+      overflow: hidden;
+      transform: translate3d(var(--mx, 0), var(--my, 0), 0);
+      transition: transform 180ms ease-out;
+    }
+
+    .stage-screen::after {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: conic-gradient(from 140deg, transparent, rgba(255, 255, 255, 0.16), transparent 24%);
+      animation: screenSweep 8s linear infinite;
+    }
+
+    .stage-screen span,
+    .stage-screen strong {
+      position: relative;
+      z-index: 1;
+      display: block;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .stage-screen span {
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .stage-screen strong {
+      margin-top: 6px;
+      color: rgba(244, 248, 251, 0.92);
+      font-size: clamp(24px, 4vw, 52px);
+      line-height: 0.95;
+    }
+
+    .device-card {
+      position: absolute;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      border: 1px solid rgba(164, 222, 255, 0.14);
+      background:
+        radial-gradient(circle at 50% 20%, rgba(255, 255, 255, 0.92), rgba(223, 231, 236, 0.92) 46%, rgba(180, 196, 205, 0.82));
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.5);
+      animation: deviceFloat 5.5s ease-in-out infinite;
+    }
+
+    .device-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 22px 34px rgba(0, 0, 0, 0.24));
+    }
+
+    .device-card figcaption {
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: #071015;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .device-card figcaption strong {
+      max-width: 68%;
+      text-align: right;
+    }
+
+    .tv-device {
+      right: 14%;
+      bottom: 10%;
+      width: min(390px, 56%);
+      height: 224px;
+      animation-delay: -0.7s;
+    }
+
+    .projector-device {
+      left: 4%;
+      bottom: 3%;
+      width: min(300px, 42%);
+      height: 196px;
+      animation-delay: -2s;
+    }
+
+    .mini-device {
+      right: 1%;
+      top: 50%;
+      width: 164px;
+      height: 112px;
+      padding: 12px;
+      opacity: 0.92;
+      animation-delay: -3.2s;
+    }
+
+    .hero-metrics {
+      position: absolute;
+      left: max(22px, calc((100vw - var(--max)) / 2));
+      right: max(22px, calc((100vw - var(--max)) / 2));
+      bottom: 24px;
+      z-index: 3;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      max-width: 650px;
+      border: 1px solid var(--line);
+      background: rgba(8, 14, 19, 0.62);
+      backdrop-filter: blur(18px);
+    }
+
+    .hero-metrics div {
+      padding: 18px;
+      border-right: 1px solid var(--line);
+    }
+
+    .hero-metrics div:last-child {
+      border-right: 0;
+    }
+
+    .hero-metrics strong {
+      display: block;
+      font-size: 24px;
+    }
+
+    .hero-metrics span,
+    .section-kicker {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .curated-section {
+      position: relative;
+      background: linear-gradient(180deg, #030507, #05090d 48%, #030507);
+    }
+
+    .cinematic-head {
+      align-items: end;
+      gap: 18px;
+    }
+
+    .cinematic-head h2 {
+      margin-top: 10px;
+    }
+
+    .cinematic-experience {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 18% 20%, rgba(93, 231, 255, 0.08), transparent 28%),
+        radial-gradient(circle at 78% 38%, rgba(139, 255, 133, 0.07), transparent 24%),
+        #030608;
+    }
+
+    .experience-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.75fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .room-scene {
+      position: relative;
+      min-height: 540px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent),
+        radial-gradient(circle at 72% 28%, rgba(93, 231, 255, 0.2), transparent 24%),
+        linear-gradient(145deg, #070d12, #020405 58%, #0a1013);
+    }
+
+    .projection-wall {
+      position: absolute;
+      top: 42px;
+      right: 42px;
+      width: min(560px, 62%);
+      aspect-ratio: 16 / 9;
+      padding: 22px;
+      border: 1px solid rgba(93, 231, 255, 0.24);
+      background:
+        radial-gradient(circle at 28% 32%, rgba(139, 255, 133, 0.45), transparent 22%),
+        linear-gradient(135deg, rgba(5, 24, 33, 0.94), rgba(16, 39, 43, 0.58));
+      box-shadow: 0 0 80px rgba(93, 231, 255, 0.18);
+    }
+
+    .projection-wall span {
+      display: inline-flex;
+      margin: 0 8px 8px 0;
+      padding: 7px 10px;
+      border: 1px solid rgba(139, 255, 133, 0.24);
+      color: #dcffe0;
+      background: rgba(139, 255, 133, 0.08);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .room-projector,
+    .room-tvbox {
+      position: absolute;
+      object-fit: contain;
+      background: rgba(238, 244, 247, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: 0 26px 70px rgba(0, 0, 0, 0.46);
+    }
+
+    .room-projector {
+      left: 48px;
+      bottom: 42px;
+      width: 280px;
+      height: 180px;
+      padding: 18px;
+    }
+
+    .room-tvbox {
+      right: 110px;
+      bottom: 54px;
+      width: 260px;
+      height: 160px;
+      padding: 16px;
+    }
+
+    .room-light {
+      position: absolute;
+      left: 220px;
+      bottom: 170px;
+      width: 58%;
+      height: 160px;
+      transform: rotate(-7deg);
+      background: linear-gradient(90deg, rgba(93, 231, 255, 0.22), rgba(139, 255, 133, 0.08), transparent);
+      filter: blur(18px);
+      mix-blend-mode: screen;
+      animation: beamPulse 5s ease-in-out infinite;
+    }
+
+    .feature-stack {
+      display: grid;
+      gap: 12px;
+    }
+
+    .feature-panel {
+      min-height: 166px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02)),
+        rgba(8, 14, 19, 0.62);
+    }
+
+    .feature-panel span {
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+    }
+
+    .feature-panel h3 {
+      margin: 16px 0 8px;
+      font-size: clamp(22px, 2.5vw, 32px);
+      line-height: 1;
+    }
+
+    .feature-panel p {
+      color: #c6d3da;
+      line-height: 1.62;
+    }
+
+    [data-reveal] {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 700ms ease, transform 700ms ease;
+    }
+
+    [data-reveal].is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     @keyframes beamPulse {
       0%, 100% { opacity: .42; transform: rotate(-8deg) translateX(0); }
       50% { opacity: .76; transform: rotate(-8deg) translateX(22px); }
+    }
+
+    @keyframes screenSweep {
+      to { transform: rotate(1turn); }
+    }
+
+    @keyframes deviceFloat {
+      0%, 100% { transform: translate3d(var(--mx, 0), var(--my, 0), 0) rotate(-1deg); }
+      50% { transform: translate3d(var(--mx, 0), calc(var(--my, 0) - 14px), 0) rotate(1deg); }
+    }
+
+    @media (max-width: 980px) {
+      .cinema-hero,
+      .experience-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cinema-hero {
+        min-height: auto;
+        padding-top: 92px;
+      }
+
+      .hero-stage {
+        min-height: 480px;
+      }
+
+      .hero-metrics {
+        position: relative;
+        left: auto;
+        right: auto;
+        bottom: auto;
+        margin-top: 22px;
+        grid-column: 1;
+      }
+
+      .room-tvbox {
+        right: 32px;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .cinema-hero {
+        padding: 70px 16px 42px;
+      }
+
+      .hero-copy h1 {
+        font-size: clamp(48px, 17vw, 76px);
+      }
+
+      .hero-stage {
+        min-height: 390px;
+      }
+
+      .stage-screen {
+        width: 100%;
+      }
+
+      .tv-device {
+        right: 4%;
+        bottom: 18%;
+        width: 72%;
+        height: 210px;
+      }
+
+      .projector-device {
+        left: 0;
+        bottom: 2%;
+        width: 52%;
+        height: 160px;
+      }
+
+      .mini-device {
+        display: none;
+      }
+
+      .hero-metrics {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-metrics div {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .hero-metrics div:last-child {
+        border-bottom: 0;
+      }
+
+      .projection-wall {
+        top: 22px;
+        right: 16px;
+        left: 16px;
+        width: auto;
+      }
+
+      .room-projector {
+        left: 18px;
+        bottom: 34px;
+        width: 190px;
+        height: 134px;
+      }
+
+      .room-tvbox {
+        right: 18px;
+        bottom: 52px;
+        width: 180px;
+        height: 120px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-beam,
+      .stage-screen::after,
+      .device-card,
+      .room-light {
+        animation: none;
+      }
+
+      [data-reveal] {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
     }
   </style>
 <script define:vars={{ featuredPayload, filterPayload }}>
@@ -316,6 +871,36 @@ const filterPayload = FILTERS;
   document.getElementById('cartBackdrop').addEventListener('click', closeCart);
   const mobileCartBtn = document.getElementById('mobileOpenCart');
   if (mobileCartBtn) mobileCartBtn.addEventListener('click', openCart);
+
+  const revealObserver = 'IntersectionObserver' in window
+    ? new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.18 })
+    : null;
+
+  document.querySelectorAll('[data-reveal]').forEach((element) => {
+    if (revealObserver) revealObserver.observe(element);
+    else element.classList.add('is-visible');
+  });
+
+  const kineticRoot = document.querySelector('[data-kinetic-root]');
+  if (kineticRoot && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    kineticRoot.addEventListener('pointermove', (event) => {
+      const rect = kineticRoot.getBoundingClientRect();
+      const x = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+      const y = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+      kineticRoot.querySelectorAll('[data-depth]').forEach((element) => {
+        const depth = Number(element.getAttribute('data-depth') || '0');
+        element.style.setProperty('--mx', `${x * depth * 14}px`);
+        element.style.setProperty('--my', `${y * depth * 12}px`);
+      });
+    });
+  }
 
   renderFilters();
   renderProducts();
