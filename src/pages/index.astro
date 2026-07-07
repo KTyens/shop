@@ -79,6 +79,20 @@ function assetUrl(path?: string) {
           <a class="secondary-button" href="#products" data-filter="projector">Shop Projectors</a>
           <a class="secondary-button" href="/products/">All Models</a>
         </div>
+        <div class="hero-metrics" data-reveal>
+          <div>
+            <strong>4K</strong>
+            <span>Official app ready</span>
+          </div>
+          <div>
+            <strong>24h</strong>
+            <span>Order handling target</span>
+          </div>
+          <div>
+            <strong>Stripe</strong>
+            <span>Secure checkout</span>
+          </div>
+        </div>
       </div>
 
       <div class="hero-stage" aria-label="Featured home cinema hardware">
@@ -105,20 +119,6 @@ function assetUrl(path?: string) {
         </figure>
       </div>
 
-      <div class="hero-metrics" data-reveal>
-        <div>
-          <strong>4K</strong>
-          <span>Official app ready</span>
-        </div>
-        <div>
-          <strong>24h</strong>
-          <span>Order handling target</span>
-        </div>
-        <div>
-          <strong>Stripe</strong>
-          <span>Secure checkout</span>
-        </div>
-      </div>
     </section>
 
     <!-- Products -->
@@ -469,14 +469,11 @@ function assetUrl(path?: string) {
     }
 
     .hero-metrics {
-      position: absolute;
-      left: max(22px, calc((100vw - var(--max)) / 2));
-      right: max(22px, calc((100vw - var(--max)) / 2));
-      bottom: 24px;
-      z-index: 3;
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
+      width: min(650px, 100%);
       max-width: 650px;
+      margin-top: 26px;
       border: 1px solid var(--line);
       background: rgba(8, 14, 19, 0.62);
       backdrop-filter: blur(18px);
@@ -686,12 +683,7 @@ function assetUrl(path?: string) {
       }
 
       .hero-metrics {
-        position: relative;
-        left: auto;
-        right: auto;
-        bottom: auto;
         margin-top: 22px;
-        grid-column: 1;
       }
 
       .room-tvbox {

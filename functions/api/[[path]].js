@@ -1,4 +1,4 @@
-const DEFAULT_API_PROXY_BASE_URL = 'https://shop.crtlu.me/api';
+const DEFAULT_API_PROXY_BASE_URL = 'https://api.crtlu.me/api';
 
 function buildTargetUrl(request, params, env) {
   const requestUrl = new URL(request.url);

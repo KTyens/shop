@@ -9,7 +9,7 @@ const {
   description = 'Premium Android TV boxes, Google TV streamers, and compact projectors for cinematic home entertainment.',
 } = Astro.props;
 
-const configuredApiBase = (import.meta.env.PUBLIC_CRTLU_API_BASE_URL || '/api').trim();
+const configuredApiBase = (import.meta.env.PUBLIC_CRTLU_API_BASE_URL || 'https://api.crtlu.me/api').trim();
 const apiBaseUrl = (configuredApiBase || '/api').replace(/\/+$/, '');
 ---
 
