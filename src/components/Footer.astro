@@ -1,5 +1,8 @@
 ---
-const supportEmail = 'support@crtlu.me';
+import { SUPPORT_EMAIL, WHATSAPP_NUMBER, whatsappUrl } from '../lib/contact';
+
+const supportEmail = SUPPORT_EMAIL;
+const whatsappHref = whatsappUrl('Hi CRTL U Digital, I have a question about your TV boxes or projectors.');
 ---
 
 <footer class="site-footer" id="contact">
@@ -15,6 +18,7 @@ const supportEmail = 'support@crtlu.me';
       </div>
       <div class="contact-actions">
         <a class="primary-button" href={`mailto:${supportEmail}`}>Email support</a>
+        {WHATSAPP_NUMBER && whatsappHref && <a class="secondary-button" href={whatsappHref} target="_blank" rel="noopener noreferrer">WhatsApp</a>}
         <a class="secondary-button" href="/contact/">Contact page</a>
       </div>
     </section>
@@ -27,6 +31,7 @@ const supportEmail = 'support@crtlu.me';
       <div>
         <strong>Contact</strong>
         <p><a href={`mailto:${supportEmail}`}>{supportEmail}</a></p>
+        {WHATSAPP_NUMBER && whatsappHref && <p><a href={whatsappHref} target="_blank" rel="noopener noreferrer">WhatsApp chat</a></p>}
         <p>Typical reply: within 24 business hours.</p>
       </div>
       <div>

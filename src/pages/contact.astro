@@ -3,8 +3,10 @@ import Layout from '../layouts/Layout.astro';
 import Navigation from '../components/Navigation.astro';
 import CartDrawer from '../components/CartDrawer.astro';
 import '../styles/global.css';
+import { SUPPORT_EMAIL, WHATSAPP_NUMBER, whatsappUrl } from '../lib/contact';
 
-const supportEmail = 'support@crtlu.me';
+const supportEmail = SUPPORT_EMAIL;
+const whatsappHref = whatsappUrl('Hi CRTL U Digital, I need help choosing a TV box or projector.');
 const contactKeywords = [
   'CRTLU Digital support',
   'Android TV Box support',
@@ -31,6 +33,7 @@ const contactKeywords = [
       <h1>We are here to help.</h1>
       <p class="lead">Ask about product compatibility, order status, shipping updates, or after-sales support. For faster help, include your order email, product model, and a short description of the issue.</p>
       <div class="contact-cta-row">
+        {WHATSAPP_NUMBER && whatsappHref && <a class="primary-button" href={whatsappHref} target="_blank" rel="noopener noreferrer">WhatsApp chat</a>}
         <a class="primary-button" href={`mailto:${supportEmail}`}>Email support</a>
         <a class="secondary-button" href="/products/">Browse products</a>
       </div>
@@ -40,6 +43,7 @@ const contactKeywords = [
       <div class="contact-panel contact-main">
         <h2>Support email</h2>
         <p class="contact-email"><a href={`mailto:${supportEmail}`}>{supportEmail}</a></p>
+        {WHATSAPP_NUMBER && whatsappHref && <p class="contact-whatsapp"><a href={whatsappHref} target="_blank" rel="noopener noreferrer">Chat on WhatsApp</a></p>}
         <p>Typical reply time is within 24 business hours. If you already placed an order, please send the same email address used at checkout so we can find the order quickly.</p>
         <div class="contact-note">
           <strong>For order support, include:</strong>
@@ -120,8 +124,19 @@ const contactKeywords = [
     font-weight: 900;
   }
 
+  .contact-whatsapp {
+    font-size: clamp(18px, 2.3vw, 26px);
+    font-weight: 900;
+  }
+
   .contact-email a {
     color: var(--cyan);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .contact-whatsapp a {
+    color: #7cff87;
     text-decoration: underline;
     text-underline-offset: 3px;
   }

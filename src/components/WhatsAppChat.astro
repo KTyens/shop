@@ -1,0 +1,117 @@
+---
+import { WHATSAPP_NUMBER, whatsappUrl } from '../lib/contact';
+import { absoluteUrl } from '../lib/seo';
+
+const currentUrl = absoluteUrl(Astro.url.pathname);
+const defaultMessage = `Hi CRTL U Digital, I have a question about your TV boxes or projectors. Page: ${currentUrl}`;
+const chatUrl = whatsappUrl(defaultMessage);
+---
+
+{WHATSAPP_NUMBER && chatUrl && (
+  <aside class="whatsapp-chat" aria-label="WhatsApp customer chat">
+    <a class="whatsapp-bubble" href={chatUrl} target="_blank" rel="noopener noreferrer" aria-label="Message CRTL U Digital on WhatsApp">
+      <span class="whatsapp-label">Message us</span>
+      <span class="whatsapp-icon" aria-hidden="true">
+        <svg viewBox="0 0 32 32" role="img" focusable="false">
+          <path d="M16 3.2A12.7 12.7 0 0 0 5.2 22.5L3.7 28l5.7-1.5A12.7 12.7 0 1 0 16 3.2Zm0 2.4a10.3 10.3 0 0 1 8.7 15.8 10.2 10.2 0 0 1-12.2 4l-.4-.2-3.4.9.9-3.3-.2-.4A10.3 10.3 0 0 1 16 5.6Zm-4.4 5.1c-.2 0-.6.1-.9.5-.3.4-1.2 1.2-1.2 2.9s1.2 3.3 1.4 3.5c.2.2 2.4 3.8 5.9 5.1 2.9 1.2 3.5 1 4.1.9.6-.1 2-.8 2.3-1.6.3-.8.3-1.5.2-1.6-.1-.2-.3-.2-.7-.4l-2.3-1.1c-.3-.1-.6-.2-.8.2-.2.3-.9 1.1-1.1 1.4-.2.2-.4.3-.8.1-.4-.2-1.5-.6-2.8-1.7-1-1-1.8-2.1-2-2.5-.2-.3 0-.5.1-.7l.5-.6c.2-.2.2-.4.3-.6.1-.2 0-.5 0-.6l-1-2.4c-.3-.6-.5-.6-.8-.6h-.4Z" />
+        </svg>
+      </span>
+      <span class="whatsapp-badge" aria-hidden="true">1</span>
+    </a>
+  </aside>
+)}
+
+<style>
+  .whatsapp-chat {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 70;
+    pointer-events: none;
+  }
+
+  .whatsapp-bubble {
+    pointer-events: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 58px;
+    padding: 8px 8px 8px 16px;
+    color: #101719;
+    text-decoration: none;
+    border: 1px solid rgba(37, 211, 102, 0.42);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
+    transition: transform 180ms ease, box-shadow 180ms ease;
+  }
+
+  .whatsapp-bubble:hover,
+  .whatsapp-bubble:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 22px 58px rgba(0, 0, 0, 0.34);
+  }
+
+  .whatsapp-label {
+    font-size: 14px;
+    font-weight: 850;
+    white-space: nowrap;
+  }
+
+  .whatsapp-icon {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    color: #fff;
+    background: #25d366;
+    box-shadow: 0 0 0 7px rgba(37, 211, 102, 0.12);
+  }
+
+  .whatsapp-icon svg {
+    width: 31px;
+    height: 31px;
+    fill: currentColor;
+  }
+
+  .whatsapp-badge {
+    position: absolute;
+    right: -4px;
+    top: -6px;
+    display: grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    color: #fff;
+    border-radius: 999px;
+    background: #ff123d;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.96);
+    font-size: 12px;
+    font-weight: 950;
+  }
+
+  @media (max-width: 680px) {
+    .whatsapp-chat {
+      right: 12px;
+      bottom: 74px;
+    }
+
+    .whatsapp-bubble {
+      min-height: 54px;
+      padding-left: 12px;
+    }
+
+    .whatsapp-label {
+      max-width: 104px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .whatsapp-icon {
+      width: 44px;
+      height: 44px;
+    }
+  }
+</style>

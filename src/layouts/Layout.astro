@@ -3,6 +3,7 @@ import '../styles/global.css';
 import i18nScriptUrl from '../../assets/i18n.js?url';
 import phase4ScriptUrl from '../../assets/shop-phase4.js?url';
 import Footer from '../components/Footer.astro';
+import WhatsAppChat from '../components/WhatsAppChat.astro';
 import { absoluteUrl, DEFAULT_OG_IMAGE, SITE_NAME } from '../lib/seo';
 
 const {
@@ -75,5 +76,6 @@ const jsonLdItems = Array.isArray(jsonLd) ? jsonLd : [jsonLd];
   <body>
     <slot />
     <Footer />
+    <WhatsAppChat />
   </body>
 </html>
