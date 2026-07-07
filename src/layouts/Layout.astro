@@ -3,14 +3,27 @@ import '../styles/global.css';
 import i18nScriptUrl from '../../assets/i18n.js?url';
 import phase4ScriptUrl from '../../assets/shop-phase4.js?url';
 import Footer from '../components/Footer.astro';
+import { absoluteUrl, DEFAULT_OG_IMAGE, SITE_NAME } from '../lib/seo';
 
 const {
   title = 'CRTLU Digital | Premium TV Boxes & Projectors',
   description = 'Premium Android TV boxes, Google TV streamers, and compact projectors for cinematic home entertainment.',
+  keywords = [],
+  canonicalPath = Astro.url.pathname,
+  image = DEFAULT_OG_IMAGE,
+  type = 'website',
+  robots = 'index, follow',
+  jsonLd = [],
 } = Astro.props;
 
 const configuredApiBase = (import.meta.env.PUBLIC_CRTLU_API_BASE_URL || 'https://api.crtlu.me/api').trim();
 const apiBaseUrl = (configuredApiBase || '/api').replace(/\/+$/, '');
+const canonicalUrl = absoluteUrl(canonicalPath);
+const imageUrl = absoluteUrl(image);
+const keywordContent = Array.isArray(keywords)
+  ? [...new Set(keywords.map((keyword) => String(keyword).trim()).filter(Boolean))].join(', ')
+  : String(keywords || '');
+const jsonLdItems = Array.isArray(jsonLd) ? jsonLd : [jsonLd];
 ---
 
 <!doctype html>
@@ -21,6 +34,22 @@ const apiBaseUrl = (configuredApiBase || '/api').replace(/\/+$/, '');
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {keywordContent && <meta name="keywords" content={keywordContent} />}
+    <meta name="robots" content={robots} />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={imageUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+    {jsonLdItems.filter(Boolean).map((item) => (
+      <script type="application/ld+json" set:html={JSON.stringify(item)} />
+    ))}
     <slot name="head" />
     <script define:vars={{ apiBaseUrl }}>
       (() => {

@@ -4,6 +4,7 @@ import Layout from '../../layouts/Layout.astro';
 import Navigation from '../../components/Navigation.astro';
 import CartDrawer from '../../components/CartDrawer.astro';
 import '../../styles/global.css';
+import { productJsonLd, productKeywords } from '../../lib/seo';
 
 const allSeries = loadCatalog();
 
@@ -35,9 +36,21 @@ function flattenVariants(items: any[]) {
 const variants = flattenVariants(allSeries);
 const productPayload = product;
 const variantsPayload = variants;
+const productSeoKeywords = productKeywords(product);
+const productTitle = `${product.name} ${product.category === 'projector' ? 'Home Cinema Projector' : 'Android TV Box'} | CRTL U Digital`;
+const productDescription = `${product.description} Shop ${product.name} configurations with secure Stripe checkout, Yanwen tracked shipping, and no preloaded paid content.`;
+const productSchema = productJsonLd(product);
 ---
 
-<Layout title={product.name + ' | CRTLU Digital'} description={product.description}>
+<Layout
+  title={productTitle}
+  description={productDescription}
+  keywords={productSeoKeywords}
+  canonicalPath={`/products/${product.id}/`}
+  image={product.image}
+  type="product"
+  jsonLd={productSchema}
+>
   <Navigation />
   <CartDrawer />
 
@@ -130,11 +143,11 @@ const variantsPayload = variants;
 
       // Gallery
       document.getElementById('galleryMain').innerHTML = currentImage
-        ? `<button type="button" data-lightbox-image="${currentImage}" aria-label="Open image"><img src="${currentImage}" alt="${product.name}" fetchpriority="high" decoding="async"></button>`
+        ? `<button class="gallery-main-button" type="button" data-lightbox-image="${currentImage}" aria-label="Open image"><img class="gallery-main-image" src="${currentImage}" alt="${product.name}" fetchpriority="high" decoding="async"></button>`
         : '';
 
       document.getElementById('thumbs').innerHTML = gallery.map((img, i) =>
-        `<button class="thumb ${img === currentImage ? 'active' : ''}" type="button" data-image="${img}" aria-label="Show image" aria-current="${img === currentImage ? 'true' : 'false'}"><img src="${img}" alt="${product.name}" loading="${i === 0 ? 'eager' : 'lazy'}" decoding="async"></button>`
+        `<button class="thumb ${img === currentImage ? 'active' : ''}" type="button" data-image="${img}" aria-label="Show image" aria-current="${img === currentImage ? 'true' : 'false'}"><img class="thumb-image" src="${img}" alt="${product.name}" loading="${i === 0 ? 'eager' : 'lazy'}" decoding="async"></button>`
       ).join('');
 
       // Variants
@@ -159,7 +172,7 @@ const variantsPayload = variants;
 
       // Detail gallery
       document.getElementById('detailGallery').innerHTML = gallery.map((img, i) =>
-        `<button type="button" data-lightbox-image="${img}" aria-label="Detail image ${i + 1}"><img src="${img}" alt="${product.name} detail ${i + 1}" loading="lazy" decoding="async" style="width:100%;height:360px;object-fit:contain;padding:14px;display:block;"></button>`
+        `<button class="detail-gallery-button" type="button" data-lightbox-image="${img}" aria-label="Detail image ${i + 1}"><img class="detail-gallery-image" src="${img}" alt="${product.name} detail ${i + 1}" loading="lazy" decoding="async"></button>`
       ).join('');
     }
 

@@ -4,21 +4,51 @@ import Layout from '../../layouts/Layout.astro';
 import Navigation from '../../components/Navigation.astro';
 import CartDrawer from '../../components/CartDrawer.astro';
 import '../../styles/global.css';
+import { absoluteUrl, BRAND_DISCOVERY_KEYWORDS, CORE_SEO_KEYWORDS, SAFE_COMMERCE_KEYWORDS } from '../../lib/seo';
 
 const series = loadCatalog();
 
 const catalogPayload = series;
+const catalogKeywords = [
+  ...CORE_SEO_KEYWORDS,
+  ...BRAND_DISCOVERY_KEYWORDS,
+  ...SAFE_COMMERCE_KEYWORDS,
+  ...series.map((item) => item.name),
+  ...series.map((item) => item.brand),
+  'compare Android TV boxes',
+  'Android TV box catalog',
+  '4K set-top box',
+  'streaming box for home cinema',
+];
+const itemListJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'CRTLU Digital Android TV Box and Projector Catalog',
+  itemListElement: series.map((item, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    url: absoluteUrl(`/products/${item.id}/`),
+    name: item.name,
+  })),
+};
 ---
 
-<Layout title="All Products | CRTLU Digital" description="Shop all CRTL U Digital TV boxes and projectors by brand, tier, configuration, and price.">
+<Layout
+  title="All Android TV Boxes, TV Set-Top Boxes & Projectors | CRTL U Digital"
+  description="Browse Android TV boxes, Google TV streamers, 4K set-top boxes, HK1, H96Max, Tanix, T95, X5, and compact projectors by brand, tier, configuration, and price."
+  keywords={catalogKeywords}
+  canonicalPath="/products/"
+  image="/assets/hero-cinema.png"
+  jsonLd={itemListJsonLd}
+>
   <Navigation />
   <CartDrawer />
 
   <main>
     <section class="hero wrap">
       <div class="eyebrow">Complete Catalog</div>
-      <h1>All active home cinema gear.</h1>
-      <p class="lead">Browse the models currently published for independent-store sales. The homepage stays focused on a few hero products; this page keeps the full TV box and projector catalog searchable and ready for checkout.</p>
+      <h1>All active Android TV box and projector gear.</h1>
+      <p class="lead">Browse the models currently published for independent-store sales, including Android TV boxes, TV set-top boxes, 4K streaming devices, compact projectors, and home cinema gear. The homepage stays focused on a few hero products; this page keeps the full catalog searchable and ready for checkout.</p>
 
       <div class="catalog-console" aria-label="Catalog controls">
         <div class="catalog-controls">

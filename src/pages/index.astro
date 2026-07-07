@@ -4,6 +4,7 @@ import Layout from '../layouts/Layout.astro';
 import Navigation from '../components/Navigation.astro';
 import CartDrawer from '../components/CartDrawer.astro';
 import '../styles/global.css';
+import { BRAND_DISCOVERY_KEYWORDS, CORE_SEO_KEYWORDS, SAFE_COMMERCE_KEYWORDS, organizationJsonLd, websiteJsonLd } from '../lib/seo';
 
 const series = loadCatalog();
 
@@ -49,9 +50,27 @@ function assetUrl(path?: string) {
   if (path.startsWith('http') || path.startsWith('/')) return path;
   return `/${path}`;
 }
+
+const homeKeywords = [
+  ...CORE_SEO_KEYWORDS,
+  ...BRAND_DISCOVERY_KEYWORDS,
+  ...SAFE_COMMERCE_KEYWORDS,
+  'best Android TV box',
+  'buy Android TV box online',
+  'Android TV box for Japan',
+  'premium TV boxes',
+  'compact home projector',
+];
 ---
 
-<Layout title="CRTLU Digital | Premium TV Boxes & Projectors" description="Premium Android TV boxes, Google TV streamers, and compact projectors for cinematic home entertainment.">
+<Layout
+  title="Premium Android TV Boxes, Google TV Streamers & Compact Projectors | CRTL U Digital"
+  description="Shop curated Android TV boxes, Google TV streamers, 4K TV boxes, set-top boxes, and compact projectors with secure Stripe checkout and Yanwen tracked shipping."
+  keywords={homeKeywords}
+  canonicalPath="/"
+  image="/assets/hero-cinema.png"
+  jsonLd={[websiteJsonLd(), organizationJsonLd()]}
+>
   <Navigation currentPage="home" />
   <CartDrawer />
 
@@ -70,9 +89,9 @@ function assetUrl(path?: string) {
           <span>Made premium.</span>
         </h1>
         <p>
-          Curated Android TV boxes and compact projectors for buyers who want clear specs,
-          legal streaming with their own subscriptions, secure checkout, and devices that look
-          as sharp as the screen they power.
+          Curated Android TV boxes, Google TV streamers, TV set-top boxes, and compact
+          projectors for buyers who want clear specs, legal streaming with their own
+          subscriptions, secure checkout, and devices that look as sharp as the screen they power.
         </p>
         <div class="hero-actions">
           <a class="primary-button" href="#products">Shop TV Boxes</a>

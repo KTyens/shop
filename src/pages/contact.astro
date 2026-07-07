@@ -5,9 +5,23 @@ import CartDrawer from '../components/CartDrawer.astro';
 import '../styles/global.css';
 
 const supportEmail = 'support@crtlu.me';
+const contactKeywords = [
+  'CRTLU Digital support',
+  'Android TV Box support',
+  'TV set-top box support',
+  'projector support',
+  'Yanwen tracking',
+  'order support',
+  'after-sales support',
+];
 ---
 
-<Layout title="Contact CRTL U Digital | Support" description="Contact CRTL U Digital for product questions, order status, shipping updates, and after-sales support.">
+<Layout
+  title="Contact CRTL U Digital | TV Box & Projector Support"
+  description="Contact CRTL U Digital for Android TV box questions, projector support, order status, Yanwen shipping updates, and after-sales service."
+  keywords={contactKeywords}
+  canonicalPath="/contact/"
+>
   <Navigation />
   <CartDrawer />
 
