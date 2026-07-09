@@ -1,0 +1,230 @@
+<style is:global>
+  @keyframes plugPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .42; }
+  }
+
+  .plug-section {
+    margin: 22px 0;
+  }
+
+  .plug-section-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+    color: var(--muted);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+  }
+
+  .plug-helper {
+    margin: 0 0 10px;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  .plug-helper.error {
+    color: var(--danger);
+    animation: plugPulse 1s ease 3;
+  }
+
+  .plug-required {
+    color: var(--danger);
+    font-weight: 800;
+  }
+
+  .plug-selector {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .plug-option {
+    min-width: 0;
+    display: grid;
+    justify-items: center;
+    gap: 7px;
+    padding: 14px 9px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background:
+      radial-gradient(circle at 50% 10%, rgba(93, 231, 255, .08), transparent 50%),
+      rgba(255, 255, 255, .045);
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 800;
+    transition: border-color 180ms ease, background 180ms ease, color 180ms ease, transform 180ms ease;
+  }
+
+  .plug-option:hover {
+    color: var(--text);
+    border-color: rgba(93, 231, 255, .42);
+    background: rgba(255, 255, 255, .07);
+    transform: translateY(-1px);
+  }
+
+  .plug-option.active {
+    color: var(--text);
+    border-color: var(--green);
+    background: rgba(139, 255, 133, .09);
+    box-shadow: inset 0 0 0 1px rgba(139, 255, 133, .32);
+  }
+
+  .plug-icon {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+  }
+
+  .plug-uk-body,
+  .plug-eu-body,
+  .plug-us-body {
+    position: relative;
+    display: block;
+    background: linear-gradient(180deg, #f4f7f8, #aeb9be);
+    border: 1px solid rgba(255, 255, 255, .5);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, .22);
+  }
+
+  .plug-uk-body {
+    width: 28px;
+    height: 22px;
+    border-radius: 4px;
+  }
+
+  .uk-pin,
+  .uk-pin-l,
+  .uk-pin-r,
+  .eu-pin,
+  .us-pin,
+  .us-ground {
+    position: absolute;
+    display: block;
+    background: #d7b15d;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .25);
+  }
+
+  .uk-pin {
+    width: 6px;
+    height: 11px;
+    top: -11px;
+    left: 50%;
+    border-radius: 1px;
+    transform: translateX(-50%);
+  }
+
+  .uk-pin-l,
+  .uk-pin-r {
+    width: 6px;
+    height: 10px;
+    bottom: -10px;
+    border-radius: 1px;
+  }
+
+  .uk-pin-l { left: 3px; }
+  .uk-pin-r { right: 3px; }
+
+  .plug-eu-body {
+    width: 26px;
+    height: 18px;
+    border-radius: 999px;
+  }
+
+  .eu-pin {
+    width: 5px;
+    height: 14px;
+    top: -13px;
+    border-radius: 999px;
+  }
+
+  .eu-pin:first-child { left: 6px; }
+  .eu-pin:last-child { right: 6px; }
+
+  .plug-us-body {
+    width: 26px;
+    height: 18px;
+    border-radius: 4px;
+  }
+
+  .us-pin {
+    width: 4px;
+    height: 13px;
+    top: -13px;
+    border-radius: 1px;
+  }
+
+  .us-pin:first-child { left: 6px; }
+  .us-pin:last-child { right: 6px; }
+
+  .us-ground {
+    width: 6px;
+    height: 6px;
+    bottom: -7px;
+    left: 50%;
+    border-radius: 50%;
+    transform: translateX(-50%);
+  }
+
+  .plug-option-label {
+    text-align: center;
+    line-height: 1.25;
+  }
+
+  .plug-option-sublabel {
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 1.25;
+    text-align: center;
+  }
+
+  .plug-option.active .plug-option-sublabel,
+  .cart-plug {
+    color: var(--green);
+  }
+
+  .plug-selector-inline {
+    gap: 6px;
+  }
+
+  .plug-selector-inline .plug-option {
+    padding: 8px 4px;
+    gap: 4px;
+  }
+
+  .plug-selector-inline .plug-icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .plug-selector-inline .plug-option-label {
+    font-size: 10px;
+  }
+
+  .plug-selector-inline .plug-option-sublabel {
+    display: none;
+  }
+
+  @media (max-width: 560px) {
+    .plug-selector {
+      gap: 6px;
+    }
+
+    .plug-option {
+      padding: 10px 5px;
+    }
+
+    .plug-icon {
+      width: 32px;
+      height: 34px;
+    }
+
+    .plug-option-label {
+      font-size: 11px;
+    }
+  }
+</style>

@@ -1,14 +1,17 @@
 ---
-import { loadCatalog } from '../../lib/catalog-data';
+import { loadCatalog, loadPlugTypes } from '../../lib/catalog-data';
 import Layout from '../../layouts/Layout.astro';
 import Navigation from '../../components/Navigation.astro';
 import CartDrawer from '../../components/CartDrawer.astro';
+import PlugSelectorStyles from '../../components/PlugSelectorStyles.astro';
 import '../../styles/global.css';
 import { absoluteUrl, BRAND_DISCOVERY_KEYWORDS, CORE_SEO_KEYWORDS, SAFE_COMMERCE_KEYWORDS } from '../../lib/seo';
 
 const series = loadCatalog();
+const plugTypes = loadPlugTypes();
 
 const catalogPayload = series;
+const plugTypesPayload = plugTypes;
 const catalogKeywords = [
   ...CORE_SEO_KEYWORDS,
   ...BRAND_DISCOVERY_KEYWORDS,
@@ -43,6 +46,7 @@ const itemListJsonLd = {
 >
   <Navigation />
   <CartDrawer />
+  <PlugSelectorStyles />
 
   <main>
     <section class="hero wrap">
@@ -78,14 +82,20 @@ const itemListJsonLd = {
   </main>
 
   <!-- Inject catalog data as a global variable -->
-  <script define:vars={{ catalogPayload }}>
+  <script define:vars={{ catalogPayload, plugTypesPayload }}>
     window.__CATALOG__ = catalogPayload;
+    window.__PLUG_TYPES__ = plugTypesPayload;
   </script>
 
   <script>
     // ---- Client-side interactivity ----
 
     const catalogData = Array.isArray(window.__CATALOG__) ? window.__CATALOG__ : [];
+    const PLUG_TYPES = (Array.isArray(window.__PLUG_TYPES__) && window.__PLUG_TYPES__.length ? window.__PLUG_TYPES__ : [
+      { id: 'uk', label: 'UK Plug', code: 'BS 1363' },
+      { id: 'eu', label: 'EU Plug', code: 'Europlug' },
+      { id: 'us', label: 'US Plug', code: 'NEMA 1-15' },
+    ]);
 
     const SHIPPING_CENTS = 1200;
     const cartKey = 'crtlu-cart-v1';
@@ -102,6 +112,12 @@ const itemListJsonLd = {
       tier?: string;
       category?: string;
       description?: string;
+    }
+
+    interface PlugType {
+      id: string;
+      label: string;
+      code?: string;
     }
 
     interface SeriesItem {
@@ -122,7 +138,9 @@ const itemListJsonLd = {
     let searchQuery = '';
     let sortMode = 'featured';
     let selected: Record<string, string> = {};
-    let cart: Array<{ id: string; qty: number }> = loadCart();
+    let selectedPlugs: Record<string, string> = {};
+    let plugWarnings: Record<string, boolean> = {};
+    let cart: Array<{ id: string; qty: number; plug?: string }> = loadCart();
     let phase4ControlsReady = false;
 
     function flattenVariants(series: SeriesItem[]) {
@@ -141,6 +159,19 @@ const itemListJsonLd = {
 
     function variantById(id: string) {
       return variants.find(v => v.id === id);
+    }
+
+    function plugById(id?: string): PlugType | undefined {
+      return PLUG_TYPES.find((plug: PlugType) => plug.id === id);
+    }
+
+    function plugLabel(id?: string): string {
+      const plug = plugById(id);
+      return plug ? `${plug.label}${plug.code ? ` (${plug.code})` : ''}` : '';
+    }
+
+    function isValidPlug(id?: string): boolean {
+      return Boolean(plugById(id));
     }
 
     function loadCart() {
@@ -233,7 +264,23 @@ const itemListJsonLd = {
 
       document.getElementById('productGrid')!.innerHTML = items.map(item => {
         const selectedId = selected[item.id] || item.variants[0].id;
+        const selectedPlug = selectedPlugs[item.id] || '';
+        const needsPlug = Boolean(plugWarnings[item.id]);
         const current = item.variants.find(v => v.id === selectedId) || item.variants[0];
+
+        const plugHtml = PLUG_TYPES.map((p: PlugType) =>
+          `<button class="plug-option ${p.id === selectedPlug ? 'active' : ''}" type="button" data-plug="${item.id}:${p.id}">
+            <span class="plug-icon">
+              <span class="plug-${p.id}-body">
+                ${p.id === 'uk' ? '<span class="uk-pin"></span><span class="uk-pin-l"></span><span class="uk-pin-r"></span>' : ''}
+                ${p.id === 'eu' ? '<span class="eu-pin"></span><span class="eu-pin"></span>' : ''}
+                ${p.id === 'us' ? '<span class="us-pin"></span><span class="us-pin"></span><span class="us-ground"></span>' : ''}
+              </span>
+            </span>
+            <span class="plug-option-label">${p.label}</span>
+            <span class="plug-option-sublabel">${p.code || ''}</span>
+          </button>`
+        ).join('');
 
         return `
           <article class="product-card reveal" id="${item.id}">
@@ -253,6 +300,11 @@ const itemListJsonLd = {
                   <div class="price">$${(variant.price_cents / 100).toFixed(2)}${variant.compare_at_cents && variant.compare_at_cents !== variant.price_cents ? `<span class="compare">$${(variant.compare_at_cents / 100).toFixed(2)}</span>` : ''}</div>
                 </div>
               `).join('')}
+              <div class="plug-section" style="margin-top:12px;">
+                <div class="plug-section-title">Plug Type <span class="plug-required">*</span></div>
+                <p class="plug-helper ${needsPlug ? 'error' : ''}">${needsPlug ? 'Choose a plug type before adding to cart.' : 'Choose the wall plug for the destination country.'}</p>
+                <div class="plug-selector plug-selector-inline">${plugHtml}</div>
+              </div>
               <div class="card-foot">
                 <span class="sku">Selected: ${current.sku}</span>
                 <span class="card-actions">
@@ -297,7 +349,7 @@ const itemListJsonLd = {
     }
 
     function renderCart() {
-      cart = cart.filter(item => variantById(item.id));
+      cart = cart.filter(item => variantById(item.id) && isValidPlug(item.plug));
       saveCart();
 
       const count = cart.reduce((sum, item) => sum + item.qty, 0);
@@ -314,20 +366,20 @@ const itemListJsonLd = {
       document.getElementById('checkoutButton').disabled = count === 0;
 
       document.getElementById('cartItems')!.innerHTML = cart.length
-        ? cart.map(item => {
+        ? cart.map((item, index) => {
             const variant = variantById(item.id);
             if (!variant) return '';
             return `
               <div class="cart-item">
                 <div>
                   <h3>${variant.seriesName}</h3>
-                  <p>${variant.label} / ${variant.sku}</p>
+                  <p>${variant.label} / ${variant.sku}<br><strong class="cart-plug">${plugLabel(item.plug)}</strong></p>
                   <div class="quantity">
-                    <button class="qty-btn" type="button" data-qty="${variant.id}" data-change="-1">-</button>
+                    <button class="qty-btn" type="button" data-cart-index="${index}" data-change="-1">-</button>
                     <span>${item.qty}</span>
-                    <button class="qty-btn" type="button" data-qty="${variant.id}" data-change="1">+</button>
+                    <button class="qty-btn" type="button" data-cart-index="${index}" data-change="1">+</button>
                   </div>
-                  <button class="remove" type="button" data-remove="${variant.id}">Remove</button>
+                  <button class="remove" type="button" data-remove-index="${index}">Remove</button>
                 </div>
                 <strong class="cart-price">$${(variant.price_cents * item.qty / 100).toFixed(2)}</strong>
               </div>`;
@@ -335,11 +387,11 @@ const itemListJsonLd = {
         : '<div class="empty">Your cart is empty.</div>';
 
       // Cart item actions
-      document.querySelectorAll('[data-qty]').forEach(btn => {
+      document.querySelectorAll('[data-cart-index]').forEach(btn => {
         btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-qty')!;
+          const index = parseInt(btn.getAttribute('data-cart-index')!, 10);
           const change = parseInt(btn.getAttribute('data-change')!);
-          const item = cart.find(e => e.id === id);
+          const item = cart[index];
           if (item) {
             item.qty = Math.max(1, item.qty + change);
             saveCart();
@@ -348,10 +400,10 @@ const itemListJsonLd = {
         });
       });
 
-      document.querySelectorAll('[data-remove]').forEach(btn => {
+      document.querySelectorAll('[data-remove-index]').forEach(btn => {
         btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-remove')!;
-          cart = cart.filter(item => item.id !== id);
+          const index = parseInt(btn.getAttribute('data-remove-index')!, 10);
+          cart = cart.filter((_, itemIndex) => itemIndex !== index);
           saveCart();
           renderCart();
         });
@@ -372,10 +424,19 @@ const itemListJsonLd = {
       document.getElementById('cartBackdrop')!.classList.remove('open');
     }
 
-    function addToCart(id: string) {
-      const existing = cart.find(item => item.id === id);
+    function addToCart(id: string, seriesId?: string) {
+      const plug = seriesId && selectedPlugs[seriesId] ? selectedPlugs[seriesId] : '';
+      if (!plug) {
+        if (seriesId) {
+          plugWarnings[seriesId] = true;
+          renderProducts();
+          document.getElementById(seriesId)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        return;
+      }
+      const existing = cart.find(item => item.id === id && item.plug === plug);
       if (existing) existing.qty += 1;
-      else cart.push({ id, qty: 1 });
+      else cart.push({ id, qty: 1, plug });
       saveCart();
       renderCart();
       openCart();
@@ -400,6 +461,11 @@ const itemListJsonLd = {
       status.textContent = 'Creating checkout session...';
       const phase4 = (window as any).CRTLU_PHASE4;
       const checkoutMeta = phase4?.checkoutMeta ? phase4.checkoutMeta() : {};
+      if (!cart.every(item => isValidPlug(item.plug))) {
+        status.className = 'status error';
+        status.textContent = 'Please choose a power adapter plug type for every item.';
+        return;
+      }
 
       try {
         const response = await fetch(apiUrl('/api/create-checkout-session.php'), {
@@ -457,7 +523,7 @@ const itemListJsonLd = {
         renderProducts();
       });
 
-      // Product grid actions (select variant / add to cart)
+      // Product grid actions (select variant / plug type / add to cart)
       document.getElementById('productGrid')!.addEventListener('click', event => {
         const select = (event.target as HTMLElement).closest('[data-select]');
         if (select) {
@@ -465,9 +531,19 @@ const itemListJsonLd = {
           renderProducts();
         }
 
+        const plug = (event.target as HTMLElement).closest('[data-plug]');
+        if (plug) {
+          const [seriesId, plugId] = plug.dataset.plug!.split(':');
+          selectedPlugs[seriesId] = plugId;
+          plugWarnings[seriesId] = false;
+          renderProducts();
+        }
+
         const add = (event.target as HTMLElement).closest('[data-add]');
         if (add) {
-          addToCart(add.dataset.add!);
+          const article = (add as HTMLElement).closest('article');
+          const seriesId = article?.id;
+          addToCart(add.dataset.add!, seriesId || undefined);
         }
       });
 

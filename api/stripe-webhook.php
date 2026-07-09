@@ -52,6 +52,25 @@ function stripe_get(string $path): array
     return $decoded;
 }
 
+function crtlu_session_plug_labels(array $metadata): array
+{
+    $raw = (string)($metadata['plug_types'] ?? '');
+    if ($raw === '') {
+        return [];
+    }
+
+    $labels = [];
+    foreach (explode('|', $raw) as $entry) {
+        $entry = trim($entry);
+        if ($entry === '') {
+            continue;
+        }
+        $parts = explode(':', $entry, 2);
+        $labels[] = trim($parts[1] ?? $parts[0]);
+    }
+    return $labels;
+}
+
 $payload = file_get_contents('php://input');
 $signature = $_SERVER['HTTP_STRIPE_SIGNATURE'] ?? '';
 $webhookSecret = crtlu_config('STRIPE_WEBHOOK_SECRET');
@@ -81,6 +100,7 @@ $lineItems = stripe_get('checkout/sessions/' . rawurlencode($sessionId) . '/line
 $customer = $session['customer_details'] ?? [];
 $shipping = $session['shipping_details'] ?? [];
 $metadata = $session['metadata'] ?? [];
+$plugLabels = crtlu_session_plug_labels($metadata);
 
 $pdo = crtlu_pdo();
 $pdo->beginTransaction();
@@ -131,9 +151,13 @@ try {
             'INSERT INTO order_items (order_id, product_name, quantity, unit_amount, currency)
             VALUES (:order_id, :product_name, :quantity, :unit_amount, :currency)'
         );
-        foreach (($lineItems['data'] ?? []) as $item) {
+        foreach (($lineItems['data'] ?? []) as $itemIndex => $item) {
             $price = $item['price'] ?? [];
             $product = $item['description'] ?? ($price['nickname'] ?? 'Product');
+            $plugLabel = $plugLabels[$itemIndex] ?? '';
+            if ($plugLabel !== '') {
+                $product .= ' / Plug: ' . $plugLabel;
+            }
             $emailItems[] = [
                 'product_name' => $product,
                 'quantity' => (int)($item['quantity'] ?? 1),
@@ -162,6 +186,7 @@ try {
             ]);
         }
         crtlu_send_order_email($pdo, $orderId, $orderData, $emailItems);
+        crtlu_send_admin_order_notifications($pdo, $orderId, $orderData, $emailItems);
     }
 
     $pdo->commit();

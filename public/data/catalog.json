@@ -1,6 +1,11 @@
 {
   "updated": "2026-06-30",
   "currency": "usd",
+  "plug_types": [
+    { "id": "uk", "label": "UK Plug", "code": "BS 1363" },
+    { "id": "eu", "label": "EU Plug", "code": "Europlug" },
+    { "id": "us", "label": "US Plug", "code": "NEMA 1-15" }
+  ],
   "series": [
     {
       "id": "h96max-h618-plus",

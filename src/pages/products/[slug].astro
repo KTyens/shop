@@ -1,12 +1,14 @@
 ---
-import { loadCatalog } from '../../lib/catalog-data';
+import { loadCatalog, loadPlugTypes } from '../../lib/catalog-data';
 import Layout from '../../layouts/Layout.astro';
 import Navigation from '../../components/Navigation.astro';
 import CartDrawer from '../../components/CartDrawer.astro';
+import PlugSelectorStyles from '../../components/PlugSelectorStyles.astro';
 import '../../styles/global.css';
 import { productJsonLd, productKeywords } from '../../lib/seo';
 
 const allSeries = loadCatalog();
+const plugTypes = loadPlugTypes();
 
 export async function getStaticPaths() {
   const catalog = loadCatalog();
@@ -36,6 +38,7 @@ function flattenVariants(items: any[]) {
 const variants = flattenVariants(allSeries);
 const productPayload = product;
 const variantsPayload = variants;
+const plugTypesPayload = plugTypes;
 const productSeoKeywords = productKeywords(product);
 const productTitle = `${product.name} ${product.category === 'projector' ? 'Home Cinema Projector' : 'Android TV Box'} | CRTL U Digital`;
 const productDescription = `${product.description} Shop ${product.name} configurations with secure Stripe checkout, Yanwen tracked shipping, and no preloaded paid content.`;
@@ -53,6 +56,7 @@ const productSchema = productJsonLd(product);
 >
   <Navigation />
   <CartDrawer />
+  <PlugSelectorStyles />
 
   <main>
     <section class="hero detail-hero" style="width:min(var(--max),calc(100% - 32px));margin:0 auto;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr);align-items:start;gap:34px;padding:42px 0 48px;">
@@ -69,6 +73,7 @@ const productSchema = productJsonLd(product);
           <span class="compare" id="compare" style="color:var(--muted);text-decoration:line-through;"></span>
         </div>
         <div class="variants" id="variants" style="display:grid;gap:10px;margin:22px 0;"></div>
+        <div class="plug-section" id="plugSection" style="display:grid;gap:10px;margin:22px 0;"></div>
         <div class="actions" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;">
           <button class="primary-button" type="button" id="addSelected">Add to Cart</button>
           <a class="secondary-button" href="/products/">All Products</a>
@@ -199,9 +204,10 @@ const productSchema = productJsonLd(product);
     }
   </style>
 
-  <script define:vars={{ productPayload, variantsPayload }}>
+  <script define:vars={{ productPayload, variantsPayload, plugTypesPayload }}>
     window.__PRODUCT__ = productPayload;
     window.__VARIANTS__ = variantsPayload;
+    window.__PLUG_TYPES__ = plugTypesPayload;
   </script>
 
   <script>
@@ -210,8 +216,14 @@ const productSchema = productJsonLd(product);
     const variants = Array.isArray(window.__VARIANTS__) ? window.__VARIANTS__ : [];
     const SHIPPING_CENTS = 1200;
     const cartKey = 'crtlu-cart-v1';
+    const PLUG_TYPES = (Array.isArray(window.__PLUG_TYPES__) && window.__PLUG_TYPES__.length ? window.__PLUG_TYPES__ : [
+      { id: 'uk', label: 'UK Plug', code: 'BS 1363' },
+      { id: 'eu', label: 'EU Plug', code: 'Europlug' },
+      { id: 'us', label: 'US Plug', code: 'NEMA 1-15' },
+    ]);
 
     let selectedId = null;
+    let selectedPlug = '';
     let currentImage = '';
     let phase4ControlsReady = false;
     let cart = (() => {
@@ -219,6 +231,12 @@ const productSchema = productJsonLd(product);
     })();
 
     function variantById(id) { return variants.find(v => v.id === id); }
+    function plugById(id) { return PLUG_TYPES.find(p => p.id === id); }
+    function plugLabel(id) {
+      const plug = plugById(id);
+      return plug ? `${plug.label}${plug.code ? ` (${plug.code})` : ''}` : '';
+    }
+    function isValidPlug(id) { return Boolean(plugById(id)); }
     function saveCart() { localStorage.setItem(cartKey, JSON.stringify(cart)); }
     function money(cents) { return '$' + (cents / 100).toFixed(2); }
     function apiUrl(path) { return window.crtluApiUrl ? window.crtluApiUrl(path) : path; }
@@ -249,6 +267,26 @@ const productSchema = productJsonLd(product);
       document.getElementById('variants').innerHTML = product.variants.map((v) =>
         `<button class="variant-row ${v.id === selected.id ? 'active' : ''}" type="button" data-variant="${v.id}"><span><strong>${v.label}</strong><span>${v.sku}</span></span><strong>${money(v.price_cents)}</strong></button>`
       ).join('');
+
+      // Plug type selector
+      const plugHtml = PLUG_TYPES.map(p =>
+        `<button class="plug-option ${p.id === selectedPlug ? 'active' : ''}" type="button" data-plug="${p.id}">
+          <span class="plug-icon">
+            <span class="plug-${p.id}-body">
+              ${p.id === 'uk' ? '<span class="uk-pin"></span><span class="uk-pin-l"></span><span class="uk-pin-r"></span>' : ''}
+              ${p.id === 'eu' ? '<span class="eu-pin"></span><span class="eu-pin"></span>' : ''}
+              ${p.id === 'us' ? '<span class="us-pin"></span><span class="us-pin"></span><span class="us-ground"></span>' : ''}
+            </span>
+          </span>
+          <span class="plug-option-label">${p.label}</span>
+          <span class="plug-option-sublabel">${p.code || ''}</span>
+        </button>`
+      ).join('');
+      document.getElementById('plugSection').innerHTML = `
+        <div class="plug-section-title">Power Adapter Plug Type <span class="plug-required">*</span></div>
+        <p class="plug-helper">Choose the wall plug that matches the destination country before checkout.</p>
+        <div class="plug-selector">${plugHtml}</div>
+      `;
 
       // Specs
       const specs = {
@@ -288,7 +326,7 @@ const productSchema = productJsonLd(product);
     }
 
     function renderCart() {
-      cart = cart.filter(item => variantById(item.id));
+      cart = cart.filter(item => variantById(item.id) && isValidPlug(item.plug));
       saveCart();
       const count = cart.reduce((s, i) => s + i.qty, 0);
       const subtotal = cart.reduce((s, i) => s + variantById(i.id).price_cents * i.qty, 0);
@@ -304,24 +342,25 @@ const productSchema = productJsonLd(product);
       document.getElementById('checkoutButton').disabled = count === 0;
 
       document.getElementById('cartItems').innerHTML = cart.length
-        ? cart.map(item => {
+        ? cart.map((item, index) => {
             const v = variantById(item.id);
             if (!v) return '';
-            return `<div class="cart-item"><img class="cart-thumb" src="${v.image || product.image}" alt="${v.seriesName}" loading="lazy" decoding="async" style="width:62px;height:62px;object-fit:contain;padding:6px;border:1px solid var(--line);background:rgba(255,255,255,.06);"><div><h3 style="margin:0 0 4px;font-size:15px;">${v.seriesName}</h3><p style="margin:0;color:var(--muted);font-size:13px;">${v.label} / ${v.sku}</p><div class="quantity" style="display:flex;align-items:center;gap:8px;margin-top:10px;"><button class="qty-btn" type="button" data-qty="${v.id}" data-change="-1" style="width:28px;height:28px;color:var(--text);background:rgba(255,255,255,.06);border:1px solid var(--line);">-</button><span>${item.qty}</span><button class="qty-btn" type="button" data-qty="${v.id}" data-change="1" style="width:28px;height:28px;color:var(--text);background:rgba(255,255,255,.06);border:1px solid var(--line);">+</button></div><button class="remove" type="button" data-remove="${v.id}" style="color:var(--danger);background:none;padding:0;margin-top:10px;font-size:12px;">Remove</button></div><strong style="color:var(--text);font-weight:900;">${money(v.price_cents * item.qty)}</strong></div>`;
+            return `<div class="cart-item"><img class="cart-thumb" src="${v.image || product.image}" alt="${v.seriesName}" loading="lazy" decoding="async" style="width:62px;height:62px;object-fit:contain;padding:6px;border:1px solid var(--line);background:rgba(255,255,255,.06);"><div><h3 style="margin:0 0 4px;font-size:15px;">${v.seriesName}</h3><p style="margin:0;color:var(--muted);font-size:13px;">${v.label} / ${v.sku}<br><strong class="cart-plug">${plugLabel(item.plug)}</strong></p><div class="quantity" style="display:flex;align-items:center;gap:8px;margin-top:10px;"><button class="qty-btn" type="button" data-cart-index="${index}" data-change="-1" style="width:28px;height:28px;color:var(--text);background:rgba(255,255,255,.06);border:1px solid var(--line);">-</button><span>${item.qty}</span><button class="qty-btn" type="button" data-cart-index="${index}" data-change="1" style="width:28px;height:28px;color:var(--text);background:rgba(255,255,255,.06);border:1px solid var(--line);">+</button></div><button class="remove" type="button" data-remove-index="${index}" style="color:var(--danger);background:none;padding:0;margin-top:10px;font-size:12px;">Remove</button></div><strong style="color:var(--text);font-weight:900;">${money(v.price_cents * item.qty)}</strong></div>`;
           }).join('')
         : '<div class="empty" style="color:var(--muted);padding:30px 0;line-height:1.6;">Your cart is empty.</div>';
 
-      document.querySelectorAll('[data-qty]').forEach(btn => {
+      document.querySelectorAll('[data-cart-index]').forEach(btn => {
         btn.addEventListener('click', () => {
-          const id = btn.dataset.qty;
+          const index = parseInt(btn.dataset.cartIndex, 10);
           const change = parseInt(btn.dataset.change);
-          const item = cart.find(e => e.id === id);
+          const item = cart[index];
           if (item) { item.qty = Math.max(1, item.qty + change); saveCart(); renderCart(); }
         });
       });
-      document.querySelectorAll('[data-remove]').forEach(btn => {
+      document.querySelectorAll('[data-remove-index]').forEach(btn => {
         btn.addEventListener('click', () => {
-          cart = cart.filter(i => i.id !== btn.dataset.remove);
+          const index = parseInt(btn.dataset.removeIndex, 10);
+          cart = cart.filter((_, itemIndex) => itemIndex !== index);
           saveCart(); renderCart();
         });
       });
@@ -341,9 +380,17 @@ const productSchema = productJsonLd(product);
     }
 
     function addToCart(id) {
-      const existing = cart.find(i => i.id === id);
+      if (!selectedPlug) {
+        const section = document.getElementById('plugSection');
+        if (section) {
+          section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          section.querySelector('.plug-required')?.setAttribute('style', 'animation:pulse 1s ease 3;');
+        }
+        return;
+      }
+      const existing = cart.find(i => i.id === id && i.plug === selectedPlug);
       if (existing) existing.qty += 1;
-      else cart.push({ id, qty: 1 });
+      else cart.push({ id, qty: 1, plug: selectedPlug });
       saveCart(); renderCart(); openCart();
     }
 
@@ -365,6 +412,11 @@ const productSchema = productJsonLd(product);
       status.textContent = 'Creating checkout session...';
       const phase4 = window.CRTLU_PHASE4;
       const checkoutMeta = phase4?.checkoutMeta ? phase4.checkoutMeta() : {};
+      if (!cart.every(item => isValidPlug(item.plug))) {
+        status.className = 'status error';
+        status.textContent = 'Please choose a power adapter plug type for every item.';
+        return;
+      }
       try {
         const response = await fetch(apiUrl('/api/create-checkout-session.php'), {
           method: 'POST',
@@ -386,6 +438,7 @@ const productSchema = productJsonLd(product);
     // ---- Init ----
     function init() {
       selectedId = product.variants[0].id;
+      selectedPlug = '';
       currentImage = '';
 
       renderProduct();
@@ -403,6 +456,9 @@ const productSchema = productJsonLd(product);
 
         const variant = lb.closest('[data-variant]');
         if (variant) { selectedId = variant.dataset.variant; renderProduct(); }
+
+        const plug = lb.closest('[data-plug]');
+        if (plug) { selectedPlug = plug.dataset.plug; renderProduct(); }
       });
 
       document.getElementById('addSelected').addEventListener('click', () => addToCart(selectedId));

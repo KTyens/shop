@@ -48,6 +48,42 @@ function post_stripe(string $path, array $params): array
     return $decoded;
 }
 
+function crtlu_checkout_plug_types(): array
+{
+    $path = dirname(__DIR__) . '/data/catalog.json';
+    $fallback = [
+        'uk' => 'UK Plug (BS 1363)',
+        'eu' => 'EU Plug (Europlug)',
+        'us' => 'US Plug (NEMA 1-15)',
+    ];
+    if (!is_readable($path)) {
+        return $fallback;
+    }
+
+    $decoded = json_decode((string)file_get_contents($path), true);
+    if (!is_array($decoded) || empty($decoded['plug_types']) || !is_array($decoded['plug_types'])) {
+        return $fallback;
+    }
+
+    $types = [];
+    foreach ($decoded['plug_types'] as $plug) {
+        $id = strtolower(trim((string)($plug['id'] ?? '')));
+        $label = trim((string)($plug['label'] ?? ''));
+        $code = trim((string)($plug['code'] ?? ''));
+        if ($id === '' || $label === '') {
+            continue;
+        }
+        $types[$id] = $code !== '' ? $label . ' (' . $code . ')' : $label;
+    }
+
+    return $types ?: $fallback;
+}
+
+function crtlu_checkout_plug_id(array $item): string
+{
+    return strtolower(trim((string)($item['plug'] ?? '')));
+}
+
 $payload = json_decode(file_get_contents('php://input'), true);
 if (!is_array($payload) || !isset($payload['items']) || !is_array($payload['items'])) {
     fail_checkout('Invalid cart payload.');
@@ -55,6 +91,9 @@ if (!is_array($payload) || !isset($payload['items']) || !is_array($payload['item
 
 $lineItems = [];
 $metadataItems = [];
+$plugTypes = [];
+$rawItems = array_values($payload['items']);
+$allowedPlugTypes = crtlu_checkout_plug_types();
 $index = 0;
 $memberId = 0;
 $couponCode = crtlu_coupon_code((string)($payload['coupon_code'] ?? ''));
@@ -63,6 +102,13 @@ $locale = substr((string)($payload['locale'] ?? 'en'), 0, 12);
 $discountResult = ['valid' => false, 'discount_cents' => 0];
 
 try {
+    foreach ($rawItems as $item) {
+        $plugId = crtlu_checkout_plug_id($item);
+        if ($plugId === '' || !isset($allowedPlugTypes[$plugId])) {
+            fail_checkout('Please choose a valid power adapter plug type for every item.');
+        }
+    }
+
     try {
         $pdo = crtlu_pdo();
         $member = crtlu_current_member($pdo);
@@ -86,12 +132,18 @@ foreach ($cart['lines'] as $line) {
     $id = $line['id'];
     $qty = $line['qty'];
     $product = $line['product'];
+    $rawItem = $rawItems[$index] ?? [];
+    $plugId = crtlu_checkout_plug_id(is_array($rawItem) ? $rawItem : []);
+    $plugLabel = $allowedPlugTypes[$plugId] ?? '';
     $lineItems["line_items[$index][quantity]"] = $qty;
     $lineItems["line_items[$index][price_data][currency]"] = $product['currency'];
     $lineItems["line_items[$index][price_data][unit_amount]"] = $line['adjusted_unit_amount'];
     $lineItems["line_items[$index][price_data][product_data][name]"] = $product['name'];
-    $lineItems["line_items[$index][price_data][product_data][description]"] = $product['description'];
+    $lineItems["line_items[$index][price_data][product_data][description]"] = trim($product['description'] . ' Plug: ' . $plugLabel);
+    $lineItems["line_items[$index][price_data][product_data][metadata][plug_type]"] = $plugLabel;
+    $lineItems["line_items[$index][price_data][product_data][metadata][sku]"] = $product['sku'] ?? $id;
     $metadataItems[] = $id . ':' . $qty;
+    $plugTypes[] = ($product['sku'] ?? $id) . ':' . $plugLabel;
     $index++;
 }
 
@@ -124,6 +176,7 @@ $params = array_merge($lineItems, [
     'shipping_options[0][shipping_rate_data][delivery_estimate][maximum][unit]' => 'business_day',
     'shipping_options[0][shipping_rate_data][delivery_estimate][maximum][value]' => 18,
     'metadata[cart]' => implode(',', $metadataItems),
+    'metadata[plug_types]' => substr(implode(' | ', $plugTypes), 0, 500),
     'metadata[source]' => 'crtlu-shop',
     'metadata[coupon_code]' => $couponCode,
     'metadata[discount_cents]' => (string)(int)($discountResult['discount_cents'] ?? 0),
