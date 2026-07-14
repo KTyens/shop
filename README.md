@@ -65,6 +65,7 @@ checkout.session.completed
 Read these before changing the project:
 
 - `docs/agent-handoff.md`
+- `docs/记录文档.md` for change history, git milestones, and continue-task notes
 - `docs/DEPLOYMENT.md`
 - `docs/deployment-guide-zh.md` for a step-by-step Chinese deployment guide
 - `docs/pricing-system.md`

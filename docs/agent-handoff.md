@@ -1,8 +1,14 @@
 # Agent Handoff And Maintenance Guide
 
-Last updated: 2026-07-02
+Last updated: 2026-07-14
 
 This document is the working handoff for agents maintaining the CRTL U Digital independent store at `shop.crtlu.me`.
+
+For chronological change history, git milestones, product-spec work logs, and continue-task notes, also read:
+
+```text
+shop/docs/记录文档.md
+```
 
 ## Project Summary
 
