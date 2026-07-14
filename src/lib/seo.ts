@@ -2,7 +2,7 @@ import type { SeriesItem } from './catalog-data';
 
 export const SITE_URL = 'https://shop.crtlu.me';
 export const SITE_NAME = 'CRTLU Digital';
-export const DEFAULT_OG_IMAGE = '/assets/hero-cinema.png';
+export const DEFAULT_OG_IMAGE = '/assets/hero-cinema.jpg';
 
 export const CORE_SEO_KEYWORDS = [
   'Android TV Box',

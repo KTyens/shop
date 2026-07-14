@@ -98,7 +98,7 @@ th { color: #8bff85; }
 <main>
   <div class="topbar">
     <div><h1>Coupons</h1><p class="muted">Create and edit storefront coupon codes stored in data/coupons.json.</p></div>
-    <nav class="links"><a href="orders.php">Orders</a><a href="members.php">Members</a><a href="emails.php">Emails</a></nav>
+    <nav class="links"><a href="index.php">Dashboard</a><a href="orders.php">Orders</a><a href="members.php">Members</a><a href="emails.php">Emails</a></nav>
   </div>
   <?php if ($message): ?><div class="message"><?= h($message) ?></div><?php endif; ?>
   <section class="panel">

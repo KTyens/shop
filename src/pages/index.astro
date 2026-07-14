@@ -2,7 +2,6 @@
 import { loadCatalog } from '../lib/catalog-data';
 import Layout from '../layouts/Layout.astro';
 import Navigation from '../components/Navigation.astro';
-import CartDrawer from '../components/CartDrawer.astro';
 import '../styles/global.css';
 import { BRAND_DISCOVERY_KEYWORDS, CORE_SEO_KEYWORDS, SAFE_COMMERCE_KEYWORDS, organizationJsonLd, websiteJsonLd } from '../lib/seo';
 
@@ -68,13 +67,16 @@ const homeKeywords = [
   description="Shop curated Android TV boxes, Google TV streamers, 4K TV boxes, set-top boxes, and compact projectors with secure Stripe checkout and Yanwen tracked shipping."
   keywords={homeKeywords}
   canonicalPath="/"
-  image="/assets/hero-cinema.png"
+  image="/assets/hero-cinema.jpg"
   jsonLd={[websiteJsonLd(), organizationJsonLd()]}
 >
   <Navigation currentPage="home" />
-  <CartDrawer />
 
-  <main>
+  <main id="main-content">
+    <div class="checkout-cancelled" id="checkoutCancelled" role="status" hidden>
+      Checkout was cancelled. Your cart is still available when you return to the catalog.
+      <a href="/products/?cart=open">Review cart</a>
+    </div>
     <!-- Hero -->
     <section class="cinema-hero" data-kinetic-root>
       <div class="hero-bg" aria-hidden="true"></div>
@@ -120,21 +122,21 @@ const homeKeywords = [
           <strong>streaming ready</strong>
         </div>
         <figure class="device-card tv-device" data-depth="0.9">
-          <img src={assetUrl(heroTvBox?.image)} alt={heroTvBox?.name ?? 'Featured TV box'} loading="eager" decoding="async" />
+          <img src={assetUrl(heroTvBox?.image)} alt={heroTvBox?.name ?? 'Featured TV box'} loading="eager" fetchpriority="high" decoding="async" />
           <figcaption>
             <span>{heroTvBox?.brand ?? 'TV Box'}</span>
             <strong>{heroTvBox?.name ?? 'Featured TV box'}</strong>
           </figcaption>
         </figure>
         <figure class="device-card projector-device" data-depth="0.55">
-          <img src={assetUrl(heroProjector?.image)} alt={heroProjector?.name ?? 'Featured projector'} loading="eager" decoding="async" />
+          <img src={assetUrl(heroProjector?.image)} alt={heroProjector?.name ?? 'Featured projector'} loading="eager" fetchpriority="low" decoding="async" />
           <figcaption>
             <span>{heroProjector?.brand ?? 'Projector'}</span>
             <strong>{heroProjector?.name ?? 'Compact projector'}</strong>
           </figcaption>
         </figure>
         <figure class="device-card mini-device" data-depth="1.1">
-          <img src={assetUrl(heroAltBox?.image)} alt={heroAltBox?.name ?? 'Featured Android TV box'} loading="eager" decoding="async" />
+          <img src={assetUrl(heroAltBox?.image)} alt={heroAltBox?.name ?? 'Featured Android TV box'} loading="eager" fetchpriority="low" decoding="async" />
         </figure>
       </div>
 
@@ -247,9 +249,9 @@ const homeKeywords = [
         </div>
         <div class="trust-strip" style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;border:1px solid var(--line);background:var(--line);">
           <div class="trust-item" style="padding:22px;background:#070b0f;"><strong style="display:block;margin-bottom:6px;font-size:16px;">Stripe Checkout</strong><span style="color:var(--muted);line-height:1.55;font-size:14px;">Card details are handled by Stripe, not stored on this site.</span></div>
-          <div class="trust-item" style="padding:22px;background:#070b0f;"><strong style="display:block;margin-bottom:6px;font-size:16px;">Yanwen Shipping</strong><span style="color:var(--muted);line-height:1.55;font-size:14px;">Tracking numbers can be added after fulfillment and shown in order status.</span></div>
+          <div class="trust-item" style="padding:22px;background:#070b0f;"><strong style="display:block;margin-bottom:6px;font-size:16px;">Tracked Delivery</strong><span style="color:var(--muted);line-height:1.55;font-size:14px;">Yanwen tracking with a 7–18 business day checkout estimate.</span></div>
           <div class="trust-item" style="padding:22px;background:#070b0f;"><strong style="display:block;margin-bottom:6px;font-size:16px;">Official Apps Only</strong><span style="color:var(--muted);line-height:1.55;font-size:14px;">Bring your own subscriptions. No piracy, no fully-loaded claims.</span></div>
-          <div class="trust-item" style="padding:22px;background:#070b0f;"><strong style="display:block;margin-bottom:6px;font-size:16px;">Support Window</strong><span style="color:var(--muted);line-height:1.55;font-size:14px;">Use email or WhatsApp support once your service policy is final.</span></div>
+          <div class="trust-item" style="padding:22px;background:#070b0f;"><strong style="display:block;margin-bottom:6px;font-size:16px;">Returns & Warranty</strong><span style="color:var(--muted);line-height:1.55;font-size:14px;">14-day return request window and 12-month limited hardware warranty.</span></div>
         </div>
       </div>
     </section>
@@ -281,7 +283,7 @@ const homeKeywords = [
       position: absolute;
       inset: 0;
       z-index: -4;
-      background: url("/assets/hero-cinema.png") center right / cover no-repeat;
+      background: url("/assets/hero-cinema.jpg") center right / cover no-repeat;
       opacity: 0.42;
       transform: scale(1.04);
     }
@@ -715,6 +717,21 @@ const homeKeywords = [
         padding: 70px 16px 42px;
       }
 
+      .compare-table {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto !important;
+        overscroll-behavior-inline: contain;
+      }
+
+      .compare-row {
+        min-width: 680px;
+      }
+
+      .trust-strip {
+        grid-template-columns: 1fr !important;
+      }
+
       .hero-copy h1 {
         font-size: clamp(48px, 17vw, 76px);
       }
@@ -828,8 +845,7 @@ const homeKeywords = [
           <p>${product.description}</p>
           <div class="product-footer">
             <div class="price">$${(minPrice(product) / 100).toFixed(2)} <small>USD</small></div>
-            <a class="secondary-button" href="/products/${product.id}/" style="padding:0 12px;font-size:12px;">Details</a>
-            <button class="primary-button" type="button" data-add="${product.variants[0].id}">Add to Cart</button>
+            <a class="primary-button" href="/products/${product.id}/" style="padding:0 12px;font-size:12px;">Choose options</a>
           </div>
         </div>
       </article>
@@ -846,42 +862,24 @@ const homeKeywords = [
     document.getElementById('cartCount').textContent = String(count);
   }
 
-  function addToCart(id) {
-    const existing = cart.find(item => item.id === id);
-    if (existing) existing.qty += 1;
-    else cart.push({ id, qty: 1 });
-    saveCart();
-    renderCart();
-    openCart();
-  }
-
   function openCart() {
-    document.body.style.overflow = 'hidden';
-    document.getElementById('cartDrawer').classList.add('open');
-    document.getElementById('cartDrawer').setAttribute('aria-hidden', 'false');
-    document.getElementById('cartBackdrop').classList.add('open');
-  }
-
-  function closeCart() {
-    document.body.style.overflow = '';
-    document.getElementById('cartDrawer').classList.remove('open');
-    document.getElementById('cartDrawer').setAttribute('aria-hidden', 'true');
-    document.getElementById('cartBackdrop').classList.remove('open');
+    window.location.href = '/products/?cart=open';
   }
 
   document.addEventListener('click', event => {
     const filter = event.target.closest('[data-filter]');
     if (filter) { activeFilter = filter.dataset.filter; renderFilters(); renderProducts(); }
 
-    const add = event.target.closest('[data-add]');
-    if (add) addToCart(add.dataset.add);
   });
 
   document.getElementById('openCart').addEventListener('click', openCart);
-  document.getElementById('closeCart').addEventListener('click', closeCart);
-  document.getElementById('cartBackdrop').addEventListener('click', closeCart);
   const mobileCartBtn = document.getElementById('mobileOpenCart');
   if (mobileCartBtn) mobileCartBtn.addEventListener('click', openCart);
+
+  const checkoutCancelled = document.getElementById('checkoutCancelled');
+  if (new URLSearchParams(window.location.search).get('checkout') === 'cancelled') {
+    checkoutCancelled.hidden = false;
+  }
 
   const revealObserver = 'IntersectionObserver' in window
     ? new IntersectionObserver((entries) => {

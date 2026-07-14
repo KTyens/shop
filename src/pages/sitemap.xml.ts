@@ -5,6 +5,11 @@ const STATIC_ROUTES = [
   { path: '/', priority: '1.0', changefreq: 'weekly' },
   { path: '/products/', priority: '0.9', changefreq: 'weekly' },
   { path: '/contact/', priority: '0.4', changefreq: 'monthly' },
+  { path: '/shipping/', priority: '0.4', changefreq: 'monthly' },
+  { path: '/returns/', priority: '0.4', changefreq: 'monthly' },
+  { path: '/warranty/', priority: '0.4', changefreq: 'monthly' },
+  { path: '/privacy/', priority: '0.3', changefreq: 'yearly' },
+  { path: '/terms/', priority: '0.3', changefreq: 'yearly' },
 ];
 
 function xmlEscape(value: string) {

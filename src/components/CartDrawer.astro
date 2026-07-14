@@ -3,9 +3,9 @@ import '../styles/global.css';
 ---
 
 <div class="drawer-backdrop" id="cartBackdrop"></div>
-<aside class="cart-drawer" id="cartDrawer" aria-label="Shopping cart" aria-hidden="true">
+<aside class="cart-drawer" id="cartDrawer" role="dialog" aria-modal="true" aria-labelledby="cartTitle" aria-hidden="true">
   <div class="cart-head">
-    <h2>Your cart</h2>
+    <h2 id="cartTitle">Your cart</h2>
     <button class="icon-button" type="button" id="closeCart" aria-label="Close cart">
       <span class="close-icon" aria-hidden="true"></span>
     </button>
@@ -19,7 +19,7 @@ import '../styles/global.css';
       <span id="cartSubtotal">$0.00</span>
     </div>
     <div class="summary-line">
-      <span>Estimated shipping</span>
+      <span>Tracked shipping</span>
       <span id="cartShipping">$12.00</span>
     </div>
     <div class="summary-line discount" id="discountLine" hidden>
@@ -29,6 +29,10 @@ import '../styles/global.css';
     <div class="summary-line total">
       <span>Total</span>
       <span id="cartTotal">$0.00</span>
+    </div>
+    <div class="cart-delivery-context">
+      <strong>Yanwen tracked delivery</strong>
+      <span>Estimated 7–18 business days after dispatch. Stripe confirms the final charge before payment.</span>
     </div>
     <div class="phase4-controls">
       <label>
@@ -64,8 +68,47 @@ import '../styles/global.css';
       <button type="button" id="applyCoupon">Apply</button>
       <button type="button" id="clearCoupon">Clear</button>
     </div>
-    <div class="status" id="couponStatus"></div>
+    <div class="status" id="couponStatus" aria-live="polite"></div>
     <button class="primary-button" type="button" id="checkoutButton" style="width:100%">Checkout with Stripe</button>
-    <div class="status" id="checkoutStatus"></div>
+    <div class="status" id="checkoutStatus" aria-live="polite"></div>
+    <p class="cart-policy-note">
+      By continuing, you agree to our <a href="/terms/">Terms</a> and <a href="/privacy/">Privacy Policy</a>.
+      Review <a href="/shipping/">shipping</a>, <a href="/returns/">returns</a>, and <a href="/warranty/">warranty</a> before payment.
+    </p>
   </div>
 </aside>
+
+<style>
+  .cart-policy-note {
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.55;
+  }
+
+  .cart-delivery-context {
+    display: grid;
+    gap: 4px;
+    margin: -2px 0 14px;
+    padding: 11px 12px;
+    border: 1px solid rgba(139, 255, 133, .22);
+    background: rgba(139, 255, 133, .055);
+  }
+
+  .cart-delivery-context strong {
+    color: var(--text);
+    font-size: 12px;
+  }
+
+  .cart-delivery-context span {
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.45;
+  }
+
+  .cart-policy-note a {
+    color: var(--cyan);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+</style>

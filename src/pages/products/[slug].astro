@@ -43,6 +43,55 @@ const productSeoKeywords = productKeywords(product);
 const productTitle = `${product.name} ${product.category === 'projector' ? 'Home Cinema Projector' : 'Android TV Box'} | CRTL U Digital`;
 const productDescription = `${product.description} Shop ${product.name} configurations with secure Stripe checkout, Yanwen tracked shipping, and no preloaded paid content.`;
 const productSchema = productJsonLd(product);
+const isProjector = product.category === 'projector';
+const buyerFit = isProjector
+  ? 'Home movie nights, bedroom viewing, casual gaming, and portable big-screen setups.'
+  : product.tier === 'budget'
+    ? 'Essential streaming, local media playback, and a lower-cost secondary TV setup.'
+    : product.tier === 'flagship' || product.tier === 'performance'
+      ? 'Buyers comparing stronger chipsets, larger memory options, faster networking, and demanding media playback.'
+      : 'Everyday family streaming, official apps, local media, and a balanced living-room setup.';
+const packageContents = isProjector
+  ? 'Projector, remote control, selected power adapter, and the documentation or accessories shown for this model.'
+  : 'TV box, remote control, HDMI cable, selected power adapter, and the documentation or accessories shown for this model.';
+const faqItems = [
+  {
+    question: 'Does this product include paid channels or streaming subscriptions?',
+    answer: 'No. CRTL U Digital sells the hardware only. Use official apps and your own valid subscriptions. No IPTV access, paid channel bundle, or unofficial streaming account is included.',
+  },
+  {
+    question: 'Which power adapter plug should I choose?',
+    answer: 'Choose the wall-plug type used at the delivery destination: UK Plug (BS 1363), EU Plug (Europlug), or US Plug (NEMA 1-15). The selected type is stored with the order and shown to our fulfillment team.',
+  },
+  {
+    question: 'How much is shipping and how long does delivery take?',
+    answer: 'Yanwen tracked shipping is USD 12 per order. Orders normally take 1–3 business days to process, followed by an estimated 7–18 business days in transit. Customs or local-carrier delays can extend this estimate.',
+  },
+  {
+    question: 'What happens if the parcel arrives damaged or the wrong item is sent?',
+    answer: 'Contact support within 7 calendar days after delivery with the order email, shipping-label and packaging photos, and clear photos or video of the issue. We will review the evidence and provide an appropriate solution.',
+  },
+  {
+    question: 'Can I return the product and is there a warranty?',
+    answer: 'Return requests should be made within 14 calendar days after delivery. Unless a product page states otherwise, physical devices include a 12-month limited hardware warranty for verified manufacturing defects. Policy exclusions apply.',
+  },
+  {
+    question: 'Are Netflix, YouTube, Google TV, or other third-party apps guaranteed?',
+    answer: 'App availability, certification, playback resolution, subscriptions, and regional restrictions are controlled by each third-party provider and can change. Check the required app and region before purchase if it is essential to your setup.',
+  },
+];
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+};
 ---
 
 <Layout
@@ -52,13 +101,13 @@ const productSchema = productJsonLd(product);
   canonicalPath={`/products/${product.id}/`}
   image={product.image}
   type="product"
-  jsonLd={productSchema}
+  jsonLd={[productSchema, faqSchema]}
 >
   <Navigation />
   <CartDrawer />
   <PlugSelectorStyles />
 
-  <main>
+  <main class="product-detail-page" id="main-content">
     <section class="hero detail-hero" style="width:min(var(--max),calc(100% - 32px));margin:0 auto;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr);align-items:start;gap:34px;padding:42px 0 48px;">
       <div>
         <div class="gallery-main" id="galleryMain" style="min-height:520px;display:grid;place-items-center;padding:24px;border:1px solid var(--line);background:radial-gradient(circle at 50% 38%,rgba(93,231,255,.12),transparent 48%),linear-gradient(180deg,rgba(247,250,252,.96),rgba(217,228,234,.9));overflow:hidden;"></div>
@@ -78,12 +127,39 @@ const productSchema = productJsonLd(product);
           <button class="primary-button" type="button" id="addSelected">Add to Cart</button>
           <a class="secondary-button" href="/products/">All Products</a>
         </div>
-        <div class="buy-trust" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:16px;">
-          <span style="padding:10px;border:1px solid rgba(139,255,133,.22);background:rgba(139,255,133,.06);color:#c6d3da;font-size:12px;line-height:1.35;">Stripe secure checkout</span>
-          <span style="padding:10px;border:1px solid rgba(139,255,133,.22);background:rgba(139,255,133,.06);color:#c6d3da;font-size:12px;line-height:1.35;">Yanwen tracked shipping</span>
-          <span style="padding:10px;border:1px solid rgba(139,255,133,.22);background:rgba(139,255,133,.06);color:#c6d3da;font-size:12px;line-height:1.35;">7-18 business day delivery</span>
-          <span style="padding:10px;border:1px solid rgba(139,255,133,.22);background:rgba(139,255,133,.06);color:#c6d3da;font-size:12px;line-height:1.35;">No preloaded paid content</span>
+        <div class="buy-trust">
+          <span>Stripe secure checkout</span>
+          <a href="/shipping/">Tracked delivery: 7–18 business days</a>
+          <a href="/returns/">14-day return request window</a>
+          <a href="/warranty/">12-month limited hardware warranty</a>
         </div>
+      </div>
+    </section>
+
+    <section class="purchase-guide section" aria-labelledby="purchase-guide-title">
+      <div class="section-heading-row">
+        <div>
+          <div class="eyebrow">Buy with the right expectations</div>
+          <h2 id="purchase-guide-title">Before you order</h2>
+        </div>
+        <a class="secondary-button" href="/contact/">Ask a compatibility question</a>
+      </div>
+      <div class="purchase-guide-grid">
+        <article class="purchase-guide-item">
+          <span>01 / Best for</span>
+          <h3>{buyerFit}</h3>
+          <p>Compare the chipset, memory, connectivity, and operating system below against the apps and display you plan to use.</p>
+        </article>
+        <article class="purchase-guide-item">
+          <span>02 / In the box</span>
+          <h3>{packageContents}</h3>
+          <p>The product gallery and packing-list image take priority if a production batch contains different accessories.</p>
+        </article>
+        <article class="purchase-guide-item">
+          <span>03 / Delivery & support</span>
+          <h3>Tracked shipping, clear policies, human support.</h3>
+          <p>Standard shipping is USD 12 per order. Contact support with your order email for delivery, setup, return, or warranty help.</p>
+        </article>
       </div>
     </section>
 
@@ -95,6 +171,30 @@ const productSchema = productJsonLd(product);
     <section class="section" style="padding:34px 0;border-top:1px solid var(--line);">
       <h2 style="margin:0 0 18px;font-size:28px;">Product Images</h2>
       <div class="detail-gallery" id="detailGallery" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;"></div>
+    </section>
+
+    <section class="product-faq section" aria-labelledby="product-faq-title">
+      <div class="section-heading-row">
+        <div>
+          <div class="eyebrow">Purchase questions</div>
+          <h2 id="product-faq-title">Good to know before checkout</h2>
+        </div>
+        <a class="secondary-button" href="/contact/">Contact support</a>
+      </div>
+      <div class="faq-list">
+        {faqItems.map((item, index) => (
+          <details class="faq-item" open={index === 0}>
+            <summary>{item.question}</summary>
+            <p>{item.answer}</p>
+          </details>
+        ))}
+      </div>
+      <div class="policy-link-row" aria-label="Store policies">
+        <a href="/shipping/">Shipping policy</a>
+        <a href="/returns/">Returns & refunds</a>
+        <a href="/warranty/">Limited warranty</a>
+        <a href="/terms/">Terms of service</a>
+      </div>
     </section>
   </main>
 
@@ -110,6 +210,152 @@ const productSchema = productJsonLd(product);
   </div>
 
   <style is:global>
+    .product-detail-page > .section {
+      width: min(var(--max), calc(100% - 32px));
+      margin-right: auto;
+      margin-left: auto;
+    }
+
+    .buy-trust {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .buy-trust span,
+    .buy-trust a {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      border: 1px solid rgba(139, 255, 133, .22);
+      background: rgba(139, 255, 133, .06);
+      color: #c6d3da;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .buy-trust a:hover {
+      border-color: rgba(93, 231, 255, .48);
+      color: var(--cyan);
+    }
+
+    .purchase-guide,
+    .product-faq {
+      padding: 50px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .section-heading-row {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+
+    .section-heading-row h2 {
+      margin-top: 10px;
+      font-size: clamp(28px, 4vw, 46px);
+    }
+
+    .purchase-guide-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .purchase-guide-item {
+      min-width: 0;
+      padding: 24px 24px 28px 0;
+    }
+
+    .purchase-guide-item + .purchase-guide-item {
+      padding-left: 24px;
+      border-left: 1px solid var(--line);
+    }
+
+    .purchase-guide-item > span {
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .purchase-guide-item h3 {
+      margin: 14px 0 12px;
+      font-size: 19px;
+      line-height: 1.35;
+    }
+
+    .purchase-guide-item p {
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .faq-list {
+      border-top: 1px solid var(--line);
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .faq-item summary {
+      position: relative;
+      padding: 21px 48px 21px 0;
+      color: var(--text);
+      font-size: 16px;
+      font-weight: 800;
+      line-height: 1.45;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .faq-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq-item summary::after {
+      content: '+';
+      position: absolute;
+      top: 50%;
+      right: 8px;
+      transform: translateY(-50%);
+      color: var(--cyan);
+      font-size: 24px;
+      font-weight: 400;
+    }
+
+    .faq-item[open] summary::after {
+      content: '−';
+    }
+
+    .faq-item p {
+      max-width: 850px;
+      padding: 0 48px 22px 0;
+      color: #c6d3da;
+      font-size: 14px;
+      line-height: 1.75;
+    }
+
+    .policy-link-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 20px;
+      margin-top: 22px;
+    }
+
+    .policy-link-row a {
+      color: var(--cyan);
+      font-size: 13px;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
     .lightbox {
       position: fixed;
       inset: 0;
@@ -154,6 +400,41 @@ const productSchema = productJsonLd(product);
     }
 
     @media (max-width: 560px) {
+      .product-detail-page > .section {
+        width: calc(100% - 24px);
+      }
+
+      .buy-trust,
+      .purchase-guide-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .spec-grid {
+        grid-template-columns: 1fr !important;
+      }
+
+      .spec,
+      .spec span,
+      .spec strong {
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
+
+      .section-heading-row {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .purchase-guide-item,
+      .purchase-guide-item + .purchase-guide-item {
+        padding: 22px 0;
+        border-left: 0;
+      }
+
+      .purchase-guide-item + .purchase-guide-item {
+        border-top: 1px solid var(--line);
+      }
+
       .lightbox {
         align-items: stretch;
         justify-items: stretch;
@@ -289,7 +570,7 @@ const productSchema = productJsonLd(product);
       `;
 
       // Specs
-      const specs = {
+      const baseSpecs = {
         Brand: product.brand,
         Category: product.category.replace('-', ' '),
         Tier: product.tier.replace('-', ' '),
@@ -298,8 +579,22 @@ const productSchema = productJsonLd(product);
         'Launch Price': money(selected.price_cents),
         'Standard Price': money(selected.compare_at_cents || selected.price_cents),
       };
-      Object.assign(specs, product.specs || {});
-      document.getElementById('specGrid').innerHTML = Object.entries(specs).filter(([, val]) => val).map(([key, val]) =>
+      const hiddenCatalogKeys = new Set([
+        'brand',
+        'category',
+        'tier',
+        'configurations',
+        'sku',
+        'starting_price',
+        'shipping_baseline',
+        'product',
+        'model',
+      ]);
+      const specEntries = Object.entries(baseSpecs);
+      Object.entries(product.specs || {}).forEach(([key, val]) => {
+        if (!hiddenCatalogKeys.has(key.toLowerCase()) && val) specEntries.push([key, val]);
+      });
+      document.getElementById('specGrid').innerHTML = specEntries.filter(([, val]) => val).map(([key, val]) =>
         `<div class="spec" style="padding:16px;border:1px solid var(--line);background:rgba(255,255,255,.04);"><span style="display:block;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.08em;">${key}</span><strong style="display:block;margin-top:8px;line-height:1.4;">${val}</strong></div>`
       ).join('');
 
@@ -345,7 +640,7 @@ const productSchema = productJsonLd(product);
         ? cart.map((item, index) => {
             const v = variantById(item.id);
             if (!v) return '';
-            return `<div class="cart-item"><img class="cart-thumb" src="${v.image || product.image}" alt="${v.seriesName}" loading="lazy" decoding="async" style="width:62px;height:62px;object-fit:contain;padding:6px;border:1px solid var(--line);background:rgba(255,255,255,.06);"><div><h3 style="margin:0 0 4px;font-size:15px;">${v.seriesName}</h3><p style="margin:0;color:var(--muted);font-size:13px;">${v.label} / ${v.sku}<br><strong class="cart-plug">${plugLabel(item.plug)}</strong></p><div class="quantity" style="display:flex;align-items:center;gap:8px;margin-top:10px;"><button class="qty-btn" type="button" data-cart-index="${index}" data-change="-1" style="width:28px;height:28px;color:var(--text);background:rgba(255,255,255,.06);border:1px solid var(--line);">-</button><span>${item.qty}</span><button class="qty-btn" type="button" data-cart-index="${index}" data-change="1" style="width:28px;height:28px;color:var(--text);background:rgba(255,255,255,.06);border:1px solid var(--line);">+</button></div><button class="remove" type="button" data-remove-index="${index}" style="color:var(--danger);background:none;padding:0;margin-top:10px;font-size:12px;">Remove</button></div><strong style="color:var(--text);font-weight:900;">${money(v.price_cents * item.qty)}</strong></div>`;
+            return `<div class="cart-item"><img class="cart-thumb" src="${v.image || product.image}" alt="${v.seriesName}" loading="lazy" decoding="async"><div><h3>${v.seriesName}</h3><p>${v.label} / ${v.sku}<br><strong class="cart-plug">${plugLabel(item.plug)}</strong></p><div class="quantity"><button class="qty-btn" type="button" data-cart-index="${index}" data-change="-1">-</button><span>${item.qty}</span><button class="qty-btn" type="button" data-cart-index="${index}" data-change="1">+</button></div><button class="remove" type="button" data-remove-index="${index}">Remove</button></div><strong class="cart-price">${money(v.price_cents * item.qty)}</strong></div>`;
           }).join('')
         : '<div class="empty" style="color:var(--muted);padding:30px 0;line-height:1.6;">Your cart is empty.</div>';
 

@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /account/
+Disallow: /success/
+Sitemap: https://shop.crtlu.me/sitemap.xml

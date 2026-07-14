@@ -1,0 +1,64 @@
+---
+import PolicyPage from '../components/PolicyPage.astro';
+
+const sections = [
+  {
+    id: 'information',
+    title: 'Information we collect',
+    paragraphs: [
+      'We collect information you provide when placing an order, contacting support, using a member account, or requesting a login code. This may include your name, email address, phone number, shipping and billing address, order details, support messages, language, and display-currency preferences.',
+      'Payment card details are entered into Stripe Checkout and are not stored by this storefront.',
+    ],
+  },
+  {
+    id: 'use',
+    title: 'How information is used',
+    bullets: [
+      'Process payment, confirm orders, arrange delivery, and provide tracking.',
+      'Provide customer support, returns, refunds, warranty service, and fraud prevention.',
+      'Maintain member accounts, saved addresses, order history, coupons, and email notifications.',
+      'Operate, secure, troubleshoot, and improve the storefront and checkout experience.',
+    ],
+  },
+  {
+    id: 'sharing',
+    title: 'Service providers & disclosure',
+    paragraphs: [
+      'Information is shared only as needed with providers that help operate the store, including Stripe for payment, Yanwen and destination carriers for delivery, email providers for messages, hosting providers, and internal Telegram order alerts used to process new orders.',
+      'We do not sell customer personal information. We may disclose information when required by law, to protect customers or the store, or in connection with a legitimate business transfer.',
+    ],
+  },
+  {
+    id: 'storage',
+    title: 'Cookies, local storage & retention',
+    paragraphs: [
+      'The storefront uses browser storage for shopping-cart contents, language, currency, and coupon preferences. Member sessions may use necessary cookies. These functions support the service rather than third-party advertising.',
+      'Order and transaction records are kept for fulfillment, support, accounting, fraud prevention, and legal obligations. Other information is retained only as long as reasonably needed for the purpose collected.',
+    ],
+  },
+  {
+    id: 'rights',
+    title: 'Your choices & rights',
+    paragraphs: [
+      'You may ask to access, correct, or delete personal information that we control, subject to transaction-record and legal retention requirements. You can clear storefront local storage through your browser settings.',
+      'To make a privacy request, contact support from the email address associated with the relevant order or member account so ownership can be verified.',
+    ],
+  },
+  {
+    id: 'children',
+    title: 'Children & policy changes',
+    paragraphs: [
+      'This store is not directed to children. We may update this policy when the storefront, service providers, or legal requirements change. The current version and update date will remain available on this page.',
+    ],
+  },
+];
+---
+
+<PolicyPage
+  eyebrow="Data policy"
+  title="Privacy Policy"
+  description="How customer, order, account, and support information is collected, used, shared, and protected."
+  canonicalPath="/privacy/"
+  keywords={['CRTLU privacy policy', 'ecommerce customer privacy', 'Stripe checkout privacy']}
+  sections={sections}
+/>

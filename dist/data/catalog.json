@@ -1,6 +1,11 @@
 {
   "updated": "2026-06-30",
   "currency": "usd",
+  "plug_types": [
+    { "id": "uk", "label": "UK Plug", "code": "BS 1363" },
+    { "id": "eu", "label": "EU Plug", "code": "Europlug" },
+    { "id": "us", "label": "US Plug", "code": "NEMA 1-15" }
+  ],
   "series": [
     {
       "id": "h96max-h618-plus",
@@ -183,16 +188,16 @@
           "compare_at_cents": 3899
         }
       ],
-      "image": "assets/products/x5-yb962/main.jpg",
+      "image": "assets/products/x5-yb962/perf-main.jpg",
       "gallery": [
-        "assets/products/x5-yb962/main.jpg",
-        "assets/products/x5-yb962/detail-1.jpg",
-        "assets/products/x5-yb962/detail-2.jpg",
-        "assets/products/x5-yb962/detail-3.jpg",
-        "assets/products/x5-yb962/detail-4.jpg",
-        "assets/products/x5-yb962/detail-5.jpg",
-        "assets/products/x5-yb962/detail-6.jpg",
-        "assets/products/x5-yb962/detail-7.jpg"
+        "assets/products/x5-yb962/perf-main.jpg",
+        "assets/products/x5-yb962/perf-gpu.jpg",
+        "assets/products/x5-yb962/perf-hdr.jpg",
+        "assets/products/x5-yb962/perf-wifi.jpg",
+        "assets/products/x5-yb962/perf-voice.jpg",
+        "assets/products/x5-yb962/perf-features.jpg",
+        "assets/products/x5-yb962/perf-ports.jpg",
+        "assets/products/x5-yb962/perf-package.jpg"
       ],
       "detail_url": "/products/x5-yb962/",
       "specs": {
@@ -208,7 +213,7 @@
       "category": "premium",
       "tier": "flagship",
       "status": "published",
-      "description": "RK3588 flagship Android TV box with Wi-Fi 6, Gigabit Ethernet, and high-performance positioning.",
+      "description": "RK3588 flagship Android 12 TV box with 8K@60Hz output, Wi-Fi 6, Gigabit Ethernet, LPDDR4 memory, and high-performance media decoding.",
       "variants": [
         {
           "id": "h96-max-v58-4-32",
@@ -242,7 +247,22 @@
       "specs": {
         "configurations": "4GB RAM + 32GB ROM / 8GB RAM + 64GB ROM",
         "starting_price": "$238.99",
-        "brand": "H96"
+        "brand": "H96",
+        "Product": "Android TV BOX",
+        "Model": "H96 Max V58",
+        "Chipset": "RK3588: quad-core Cortex-A76 + quad-core Cortex-A55",
+        "GPU": "ARM Mali-G610 MP4",
+        "OS": "Android 12.0",
+        "Memory": "4GB/8GB LPDDR4/LPDDR4X",
+        "Storage": "EMMC 32GB/64GB/128GB",
+        "Video Output": "8K @60Hz, HDR10 and HLG",
+        "Wi-Fi": "WiFi 6 2.4G/5G (ax)",
+        "Ethernet": "10/100/1000M RJ-45",
+        "Bluetooth": "Bluetooth 5.0",
+        "USB": "1 USB 3.0 + 1 USB 2.0",
+        "HDMI": "HDMI 2.0a for 8K@60Hz",
+        "Power": "DC 12V/1.5A",
+        "Accessories": "Power adapter, HDMI cable, user manual, remote, package box"
       }
     },
     {
@@ -252,7 +272,7 @@
       "category": "tv-box",
       "tier": "best-value",
       "status": "published",
-      "description": "H96 value TV box line with two mainstream memory configurations.",
+      "description": "H96 MAX M7 Android 13 TV box with RK3528-class Cortex-A53 performance, 4K UHD output, dual-band Wi-Fi, Bluetooth 5.1, and built-in speaker positioning.",
       "variants": [
         {
           "id": "h96-max-m7-2-16",
@@ -277,13 +297,26 @@
         "assets/products/h96-max-m7/detail-1.jpg",
         "assets/products/h96-max-m7/detail-2.jpg",
         "assets/products/h96-max-m7/detail-3.jpg",
-        "assets/products/h96-max-m7/detail-4.jpg"
+        "assets/products/h96-max-m7/detail-4.jpg",
+        "assets/products/h96-max-m7/detail-5.jpg",
+        "assets/products/h96-max-m7/detail-6.jpg",
+        "assets/products/h96-max-m7/detail-7.jpg"
       ],
       "detail_url": "/products/h96-max-m7/",
       "specs": {
         "configurations": "2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM",
         "starting_price": "$53.99",
-        "brand": "H96"
+        "brand": "H96",
+        "CPU": "Quad Core ARM Cortex-A53",
+        "GPU": "Mali-450",
+        "OS": "Android 13.0",
+        "Memory": "2GB/4GB",
+        "Storage": "16GB/32GB",
+        "Wi-Fi": "WLAN 802.11a/b/g/n/ac",
+        "Bluetooth": "BT V5.1",
+        "Video Output": "4K*2K UHD Output",
+        "I/O": "1*HD, 1*USB, 1*USB 2.0, 1*DC, 1*TF support",
+        "Power": "12V/4A"
       }
     },
     {
@@ -1099,16 +1132,16 @@
           "compare_at_cents": 9399
         }
       ],
-      "image": "assets/products/hk1-s905x3/main.jpg",
+      "image": "assets/products/hk1-s905x3/perf-main.jpg",
       "gallery": [
-        "assets/products/hk1-s905x3/main.jpg",
-        "assets/products/hk1-s905x3/detail-1.jpg",
-        "assets/products/hk1-s905x3/detail-2.jpg",
-        "assets/products/hk1-s905x3/detail-3.jpg",
-        "assets/products/hk1-s905x3/detail-4.jpg",
-        "assets/products/hk1-s905x3/detail-5.jpg",
-        "assets/products/hk1-s905x3/detail-6.jpg",
-        "assets/products/hk1-s905x3/detail-7.jpg"
+        "assets/products/hk1-s905x3/perf-main.jpg",
+        "assets/products/hk1-s905x3/perf-network.jpg",
+        "assets/products/hk1-s905x3/perf-storage.jpg",
+        "assets/products/hk1-s905x3/perf-package.jpg",
+        "assets/products/hk1-s905x3/perf-apps.jpg",
+        "assets/products/hk1-s905x3/perf-ports.jpg",
+        "assets/products/hk1-s905x3/perf-wifi.jpg",
+        "assets/products/hk1-s905x3/perf-package-list.jpg"
       ],
       "detail_url": "/products/hk1-s905x3/",
       "specs": {

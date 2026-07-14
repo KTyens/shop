@@ -76,7 +76,7 @@ pre { white-space: pre-wrap; max-width: 520px; color: #cbd8df; }
 <main>
   <div class="topbar">
     <div><h1>Email Queue</h1><p class="muted">Order confirmations and member login codes queued by the site.</p></div>
-    <nav class="links"><a href="orders.php">Orders</a><a href="members.php">Members</a><a href="coupons.php">Coupons</a></nav>
+    <nav class="links"><a href="index.php">Dashboard</a><a href="orders.php">Orders</a><a href="members.php">Members</a><a href="coupons.php">Coupons</a></nav>
   </div>
   <?php if ($message): ?><p class="message"><?= h($message) ?></p><?php endif; ?>
   <?php if (!$hasEmails): ?><p class="muted">Email table not found. Import database/phase4-migration.sql.</p><?php endif; ?>

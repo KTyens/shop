@@ -71,6 +71,23 @@ function crtlu_queue_email(PDO $pdo, ?int $orderId, string $toEmail, string $tem
     ]);
 }
 
+function crtlu_notification_item_lines(array $item): array
+{
+    $quantity = (int)($item['quantity'] ?? 1);
+    $name = trim((string)($item['product_name'] ?? 'Product'));
+    $plugType = '';
+    if (preg_match('/^(.*?)\s*\/\s*Plug:\s*(.+)$/i', $name, $matches)) {
+        $name = trim($matches[1]);
+        $plugType = trim($matches[2]);
+    }
+
+    $lines = ['- ' . $quantity . ' x ' . $name];
+    if ($plugType !== '') {
+        $lines[] = '  Power adapter: ' . $plugType;
+    }
+    return $lines;
+}
+
 function crtlu_send_order_email(PDO $pdo, int $orderId, array $order, array $items): void
 {
     $to = trim((string)($order['customer_email'] ?? ''));
@@ -88,7 +105,7 @@ function crtlu_send_order_email(PDO $pdo, int $orderId, array $order, array $ite
         'Items:',
     ];
     foreach ($items as $item) {
-        $lines[] = '- ' . (int)($item['quantity'] ?? 1) . ' x ' . (string)($item['product_name'] ?? 'Product');
+        array_push($lines, ...crtlu_notification_item_lines($item));
     }
     $lines[] = '';
     $lines[] = 'We will add Yanwen tracking after fulfillment.';
@@ -101,6 +118,76 @@ function crtlu_send_order_email(PDO $pdo, int $orderId, array $order, array $ite
         $headers = 'From: ' . $from . "\r\n" . 'Content-Type: text/plain; charset=UTF-8';
         @mail($to, $subject, $body, $headers);
     }
+}
+
+function crtlu_order_alert_body(int $orderId, array $order, array $items): string
+{
+    $currency = strtoupper((string)($order['currency'] ?? 'usd'));
+    $total = $currency . ' ' . number_format(((int)($order['amount_total'] ?? 0)) / 100, 2);
+    $lines = [
+        'New CRTL U Digital order',
+        '',
+        'Order #' . $orderId,
+        'Total: ' . $total,
+        'Customer: ' . trim((string)($order['customer_name'] ?? '')),
+        'Email: ' . trim((string)($order['customer_email'] ?? '')),
+    ];
+
+    if (!empty($order['coupon_code'])) {
+        $lines[] = 'Coupon: ' . (string)$order['coupon_code'];
+    }
+
+    $lines[] = '';
+    $lines[] = 'Items:';
+    foreach ($items as $item) {
+        array_push($lines, ...crtlu_notification_item_lines($item));
+    }
+
+    $lines[] = '';
+    $lines[] = 'Admin: ' . crtlu_base_url() . '/admin/orders.php';
+    return implode("\n", $lines);
+}
+
+function crtlu_send_telegram_message(string $message): void
+{
+    $token = trim((string)crtlu_config('CRTLU_TELEGRAM_BOT_TOKEN', ''));
+    $chatId = trim((string)crtlu_config('CRTLU_TELEGRAM_CHAT_ID', ''));
+    if ($token === '' || $chatId === '' || !function_exists('curl_init')) {
+        return;
+    }
+
+    $ch = curl_init('https://api.telegram.org/bot' . $token . '/sendMessage');
+    curl_setopt_array($ch, [
+        CURLOPT_POST => true,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => 8,
+        CURLOPT_POSTFIELDS => http_build_query([
+            'chat_id' => $chatId,
+            'text' => $message,
+            'disable_web_page_preview' => 'true',
+        ]),
+    ]);
+    @curl_exec($ch);
+    curl_close($ch);
+}
+
+function crtlu_send_admin_order_notifications(PDO $pdo, int $orderId, array $order, array $items): void
+{
+    $body = crtlu_order_alert_body($orderId, $order, $items);
+    $subject = 'New CRTL U Digital order #' . $orderId;
+
+    $notifyEmail = trim((string)crtlu_config('CRTLU_ORDER_NOTIFY_EMAIL', ''));
+    if ($notifyEmail !== '') {
+        crtlu_queue_email($pdo, $orderId, $notifyEmail, 'admin_order_alert', $subject, $body);
+
+        $from = crtlu_config('CRTLU_MAIL_FROM', '');
+        if ($from !== '' && function_exists('mail')) {
+            $headers = 'From: ' . $from . "\r\n" . 'Content-Type: text/plain; charset=UTF-8';
+            @mail($notifyEmail, $subject, $body, $headers);
+        }
+    }
+
+    crtlu_send_telegram_message($body);
 }
 
 function crtlu_send_member_email(PDO $pdo, string $to, string $template, string $subject, string $body): void

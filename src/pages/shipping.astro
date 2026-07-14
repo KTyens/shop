@@ -1,0 +1,55 @@
+---
+import PolicyPage from '../components/PolicyPage.astro';
+
+const sections = [
+  {
+    id: 'processing',
+    title: 'Order processing',
+    paragraphs: [
+      'Paid orders are normally checked, packed, and handed to the carrier within 1–3 business days. Orders placed on weekends or public holidays begin processing on the next business day.',
+      'We may contact you before dispatch if the shipping address, phone number, product configuration, or selected power adapter plug needs confirmation.',
+    ],
+  },
+  {
+    id: 'destinations',
+    title: 'Shipping destinations & cost',
+    paragraphs: [
+      'Standard checkout currently accepts shipping addresses in the United States, Canada, United Kingdom, Germany, France, Spain, Italy, Netherlands, Australia, and Japan.',
+      'Yanwen tracked shipping is charged at a flat USD 12 per order at checkout. Customers outside the listed destinations should contact support before ordering so availability and freight can be confirmed.',
+    ],
+  },
+  {
+    id: 'delivery',
+    title: 'Delivery estimate',
+    paragraphs: [
+      'The checkout estimate is 7–18 business days after dispatch. This is an estimate, not a guaranteed delivery date. Customs inspection, local carrier handling, severe weather, holidays, or incomplete address information can cause delays.',
+    ],
+  },
+  {
+    id: 'tracking',
+    title: 'Tracking',
+    paragraphs: [
+      'Standard orders use Yanwen tracked shipping. Once the parcel is dispatched and a tracking number is available, the order status is updated. Tracking may take several business days to show its first carrier scan.',
+    ],
+  },
+  {
+    id: 'customs',
+    title: 'Customs, taxes & address accuracy',
+    bullets: [
+      'Import duties, VAT, customs charges, and local handling fees are not included unless Stripe Checkout explicitly shows them.',
+      'The customer is responsible for entering a complete deliverable address and a reachable phone number.',
+      'Contact support immediately if an address needs correction. Changes are not guaranteed after dispatch.',
+      'Extra costs caused by refusal, an incorrect address, or repeated failed delivery may be deducted from any eligible refund.',
+    ],
+  },
+];
+---
+
+<PolicyPage
+  eyebrow="Delivery policy"
+  title="Shipping Policy"
+  description="Where we ship, what tracked delivery costs, and what to expect after placing an order."
+  canonicalPath="/shipping/"
+  keywords={['CRTLU shipping policy', 'Yanwen tracked shipping', 'TV Box international shipping']}
+  sections={sections}
+/>

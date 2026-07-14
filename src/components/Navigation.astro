@@ -1,5 +1,12 @@
 ---
 import '../styles/global.css';
+
+interface Props {
+  showCart?: boolean;
+  currentPage?: string;
+}
+
+const { showCart = true } = Astro.props;
 ---
 
 <header class="nav">
@@ -17,21 +24,23 @@ import '../styles/global.css';
     </nav>
     <div class="nav-actions" style="display:flex;gap:8px;align-items:center;">
       <a class="secondary-button" href="/products/" style="font-size:12px;padding:0 14px;">Shop All</a>
-      <button class="icon-button" type="button" id="openCart" aria-label="Open cart">
-        <span class="bag-icon" aria-hidden="true"></span>
-        <span class="cart-count" id="cartCount">0</span>
-      </button>
+      {showCart && (
+        <button class="icon-button" type="button" id="openCart" aria-label="Open cart">
+          <span class="bag-icon" aria-hidden="true"></span>
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
+      )}
     </div>
   </div>
 </header>
 
-<nav class="mobile-shop-nav" aria-label="Mobile shop navigation">
+<nav class:list={['mobile-shop-nav', { 'without-cart': !showCart }]} aria-label="Mobile shop navigation">
   <a href="/">Home</a>
-  <button type="button" data-mobile-filter="category:tv-box">TV Box</button>
-  <button type="button" data-mobile-filter="category:projector">Projector</button>
+  <a href="/products/?category=tv-box">TV Box</a>
+  <a href="/products/?category=projector">Projector</a>
   <button type="button" data-mobile-language>Language</button>
   <a href="/contact/">Contact</a>
-  <button type="button" id="mobileOpenCart">Cart</button>
+  {showCart && <button type="button" id="mobileOpenCart">Cart</button>}
 </nav>
 
 <style>
@@ -41,6 +50,10 @@ import '../styles/global.css';
       grid-template-columns: repeat(6, minmax(0, 1fr));
       max-width: 100vw;
       overflow: hidden;
+    }
+
+    .mobile-shop-nav.without-cart {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
     }
 
     .mobile-shop-nav a,

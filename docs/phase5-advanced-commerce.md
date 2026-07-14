@@ -55,6 +55,21 @@ The project still works if `mail()` is not configured: messages are queued into 
 
 For production reliability, the next best upgrade is SMTP/API mail delivery through a provider such as Brevo, SendGrid, Mailgun, or Amazon SES.
 
+## Owner Order Alerts
+
+After Stripe webhook writes a paid order, the backend can notify the store owner by email and Telegram.
+
+Configure these in `api/config.local.php` on Serv00:
+
+```php
+define('CRTLU_MAIL_FROM', 'support@crtlu.me');
+define('CRTLU_ORDER_NOTIFY_EMAIL', 'owner@gmail.com');
+define('CRTLU_TELEGRAM_BOT_TOKEN', '123456:replace_me');
+define('CRTLU_TELEGRAM_CHAT_ID', '123456789');
+```
+
+`CRTLU_ORDER_NOTIFY_EMAIL` queues an `admin_order_alert` email and attempts PHP `mail()` when `CRTLU_MAIL_FROM` is set. Telegram is optional; leave the token and chat id empty to disable it.
+
 ## Current Boundaries
 
 This is now a practical lightweight commerce account system, not a full Shopify clone. It intentionally does not yet include:

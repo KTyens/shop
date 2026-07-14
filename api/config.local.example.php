@@ -17,6 +17,9 @@ define('CRTLU_ADMIN_PASS', 'change_this_password');
 
 // Optional phase-4 customer communication defaults.
 define('CRTLU_MAIL_FROM', 'support@crtlu.me');
+define('CRTLU_ORDER_NOTIFY_EMAIL', 'owner@gmail.com');
+define('CRTLU_TELEGRAM_BOT_TOKEN', '');
+define('CRTLU_TELEGRAM_CHAT_ID', '');
 define('CRTLU_DEFAULT_LOCALE', 'en');
 define('CRTLU_DEFAULT_CURRENCY', 'USD');
 define('CRTLU_LOGIN_CODE_DEBUG', '0');

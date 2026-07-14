@@ -1,0 +1,69 @@
+---
+import PolicyPage from '../components/PolicyPage.astro';
+
+const sections = [
+  {
+    id: 'store-use',
+    title: 'Using this store',
+    paragraphs: [
+      'By using this website or placing an order, you agree to these terms and the linked shipping, returns, warranty, and privacy policies. You must provide accurate contact, payment, and delivery information and be legally able to enter a purchase agreement in your country.',
+    ],
+  },
+  {
+    id: 'products',
+    title: 'Products & compatibility',
+    paragraphs: [
+      'We aim to describe product hardware, configurations, included accessories, and images accurately. Minor packaging, remote-control, interface, or firmware differences may occur between production batches without changing the essential advertised hardware.',
+      'TV boxes and projectors are sold as hardware. Third-party apps, subscriptions, streaming services, channels, and content are not included unless explicitly stated. Their availability, licensing, compatibility, and regional restrictions are controlled by their providers and may change.',
+    ],
+  },
+  {
+    id: 'orders',
+    title: 'Orders, prices & payment',
+    paragraphs: [
+      'Prices are shown in the selected display currency for convenience, while Stripe Checkout confirms the actual charge currency and final amount. An order is accepted after payment succeeds and the order can be fulfilled. We may cancel and refund an order affected by a pricing error, suspected fraud, unavailable stock, or an undeliverable destination.',
+      'Payment is processed through Stripe Checkout. Coupon eligibility, shipping charges, and discounts are confirmed during checkout.',
+    ],
+  },
+  {
+    id: 'delivery',
+    title: 'Delivery, returns & warranty',
+    paragraphs: [
+      'Delivery is governed by the Shipping Policy. Cancellations, returns, and refunds are governed by the Returns & Refunds Policy. Hardware faults are handled under the Limited Warranty. These policies form part of these terms.',
+    ],
+  },
+  {
+    id: 'responsibility',
+    title: 'Customer responsibility',
+    bullets: [
+      'Choose the correct product configuration and power adapter plug for the destination.',
+      'Use the device, supplied accessories, and power adapter according to the manufacturer’s instructions.',
+      'Use only lawful apps, services, subscriptions, and content for which you have the necessary rights.',
+      'Back up important data before troubleshooting, reset, repair, return, or warranty service.',
+    ],
+  },
+  {
+    id: 'liability',
+    title: 'Service availability & liability',
+    paragraphs: [
+      'The website may occasionally be unavailable for maintenance or events outside our control. To the extent permitted by applicable law, we are not responsible for indirect losses, third-party service interruption, lost data, or problems caused by misuse or unsupported modification. Nothing in these terms excludes rights or liability that cannot legally be excluded.',
+    ],
+  },
+  {
+    id: 'changes',
+    title: 'Changes & questions',
+    paragraphs: [
+      'We may update these terms when products, checkout, fulfillment, or legal requirements change. The version in effect when an order is placed applies to that order. Contact support first if a purchase or policy issue needs resolution.',
+    ],
+  },
+];
+---
+
+<PolicyPage
+  eyebrow="Store agreement"
+  title="Terms of Service"
+  description="The terms that apply when browsing the storefront, selecting a device, and placing an order."
+  canonicalPath="/terms/"
+  keywords={['CRTLU terms of service', 'TV Box store terms', 'ecommerce purchase terms']}
+  sections={sections}
+/>

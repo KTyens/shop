@@ -1,0 +1,50 @@
+---
+import PolicyPage from '../components/PolicyPage.astro';
+
+const sections = [
+  {
+    id: 'coverage',
+    title: 'Limited hardware warranty',
+    paragraphs: [
+      'Unless a product page states a different term, physical devices purchased directly from this store include a 12-month limited hardware warranty beginning on the recorded delivery date.',
+      'The warranty covers verified manufacturing defects that prevent the device or an included essential accessory from operating as intended under normal use.',
+    ],
+  },
+  {
+    id: 'not-covered',
+    title: 'What is not covered',
+    bullets: [
+      'Accidental damage, liquid, impact, overheating caused by blocked ventilation, misuse, neglect, or normal cosmetic wear.',
+      'Damage caused by power surges, incorrect voltage, incompatible accessories, or use of a power adapter not supplied or approved for the device.',
+      'Unauthorized repair, disassembly, modified firmware, root access, or unsupported system changes.',
+      'Availability, performance, licensing, or regional restrictions of third-party apps, subscriptions, streaming services, or online content.',
+      'Loss of settings, files, accounts, or other data stored on the device.',
+    ],
+  },
+  {
+    id: 'claim',
+    title: 'How to make a claim',
+    paragraphs: [
+      'Email support with the order email, product model and configuration, selected plug type, serial number when available, and a clear description of the fault. Photos or a short video may be required so the issue can be verified remotely.',
+      'Do not send a product back until return instructions have been provided.',
+    ],
+  },
+  {
+    id: 'remedy',
+    title: 'Warranty remedy',
+    paragraphs: [
+      'For an approved claim, the available remedy may be troubleshooting, replacement of an accessory, repair, replacement with the same or an equivalent model, or a refund when another remedy is not practical. The remedy depends on the verified fault, product age, and stock availability.',
+      'Mandatory consumer rights in the customer’s country are not limited by this policy.',
+    ],
+  },
+];
+---
+
+<PolicyPage
+  eyebrow="Product protection"
+  title="Limited Warranty"
+  description="Hardware coverage, exclusions, claim requirements, and the remedies available for verified faults."
+  canonicalPath="/warranty/"
+  keywords={['CRTLU warranty', 'TV Box hardware warranty', 'projector warranty']}
+  sections={sections}
+/>

@@ -41,14 +41,14 @@ const itemListJsonLd = {
   description="Browse Android TV boxes, Google TV streamers, 4K set-top boxes, HK1, H96Max, Tanix, T95, X5, and compact projectors by brand, tier, configuration, and price."
   keywords={catalogKeywords}
   canonicalPath="/products/"
-  image="/assets/hero-cinema.png"
+  image="/assets/hero-cinema.jpg"
   jsonLd={itemListJsonLd}
 >
   <Navigation />
   <CartDrawer />
   <PlugSelectorStyles />
 
-  <main>
+  <main id="main-content">
     <section class="hero wrap">
       <div class="eyebrow">Complete Catalog</div>
       <h1>All active Android TV box and projector gear.</h1>
@@ -112,6 +112,7 @@ const itemListJsonLd = {
       tier?: string;
       category?: string;
       description?: string;
+      image?: string;
     }
 
     interface PlugType {
@@ -133,8 +134,12 @@ const itemListJsonLd = {
       detail_url?: string;
     }
 
+    const initialParams = new URLSearchParams(window.location.search);
+    const requestedCategory = initialParams.get('category');
     let variants: Variant[] = [];
-    let activeFilter = 'all';
+    let activeFilter = requestedCategory === 'tv-box' || requestedCategory === 'projector'
+      ? `category:${requestedCategory}`
+      : 'all';
     let searchQuery = '';
     let sortMode = 'featured';
     let selected: Record<string, string> = {};
@@ -153,6 +158,7 @@ const itemListJsonLd = {
           tier: item.tier,
           category: item.category,
           description: item.description,
+          image: item.image,
         }))
       );
     }
@@ -371,6 +377,7 @@ const itemListJsonLd = {
             if (!variant) return '';
             return `
               <div class="cart-item">
+                <img class="cart-thumb" src="${variant.image || ''}" alt="${variant.seriesName}" loading="lazy" decoding="async">
                 <div>
                   <h3>${variant.seriesName}</h3>
                   <p>${variant.label} / ${variant.sku}<br><strong class="cart-plug">${plugLabel(item.plug)}</strong></p>
@@ -561,6 +568,8 @@ const itemListJsonLd = {
       // Mobile nav
       const mobileCartBtn = document.getElementById('mobileOpenCart');
       if (mobileCartBtn) mobileCartBtn.addEventListener('click', openCart);
+
+      if (initialParams.get('cart') === 'open') openCart();
     }
 
     init();

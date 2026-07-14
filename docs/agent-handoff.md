@@ -36,7 +36,14 @@ shop/
     layouts/Layout.astro             Shared HTML shell and API base injection
     components/Navigation.astro      Header and cart entry points
     components/CartDrawer.astro      Cart drawer markup
+    components/Footer.astro          Sitewide footer with customer contact and support links
     pages/index.astro                Homepage and featured product cards
+    pages/contact.astro              Customer contact and support information page
+    pages/shipping.astro             Shipping destinations, cost, timing, tracking, and customs policy
+    pages/returns.astro              Return request, damaged-item, cancellation, and refund policy
+    pages/warranty.astro             Limited hardware warranty coverage and claim process
+    pages/privacy.astro              Customer and order data privacy policy
+    pages/terms.astro                Store purchase and service terms
     pages/success.astro              Stripe success/order status page
     pages/account.astro              Member login, profile, addresses, orders
     pages/products/index.astro       All-products listing page
@@ -80,6 +87,7 @@ shop/
     account-logout.php               Ends member session
 
   admin/
+    index.php                        Admin dashboard hub linking orders, members, coupons, email queue, and Yanwen tools
     auth.php                         Basic auth helper
     orders.php                       Order dashboard and fulfillment status editor
     export-yanwen.php                CSV export for Yanwen fulfillment
@@ -115,6 +123,8 @@ Use these files as the durable source of truth:
 | Product image selection rules | `shop/docs/product-media-guidelines.md` |
 | Coupon rules | `shop/data/coupons.json` |
 | Storefront UI translations | `shop/assets/i18n.js` |
+| Customer contact surface | `shop/src/components/Footer.astro`, `shop/src/pages/contact.astro` |
+| Shipping, returns, warranty, privacy, and store terms | `shop/src/pages/shipping.astro`, `returns.astro`, `warranty.astro`, `privacy.astro`, `terms.astro` |
 | Live server secrets | `shop/api/config.local.php` on server only |
 | Database schema | `shop/database/schema.sql` |
 
@@ -192,6 +202,13 @@ Current primary pages:
 | `/products/<slug>/` | `src/pages/products/[slug].astro` | Generic product detail page |
 | `/account/` | `src/pages/account.astro` | Member login, profile, addresses, orders |
 | `/success/` | `src/pages/success.astro` | Stripe success and order lookup |
+| `/shipping/` | `src/pages/shipping.astro` | Shipping destinations, flat rate, delivery estimate, tracking |
+| `/returns/` | `src/pages/returns.astro` | Returns, damaged items, cancellations, refunds |
+| `/warranty/` | `src/pages/warranty.astro` | Limited hardware warranty |
+| `/privacy/` | `src/pages/privacy.astro` | Customer privacy and data handling |
+| `/terms/` | `src/pages/terms.astro` | Store terms of service |
+
+The policy pages share `src/components/PolicyPage.astro`. Keep their public promises aligned with the live Stripe checkout country list, shipping charge, delivery estimate, and actual support process. Policy pages intentionally hide the cart control because their static page bundle does not own the cart controller; users retain the `Shop All` route back to commerce pages.
 
 ### API Base URL
 
@@ -294,6 +311,9 @@ Optional production config:
 ```php
 define('CRTLU_ALLOWED_ORIGINS', 'https://shop.crtlu.me,https://shop-crtlu.pages.dev,http://localhost:4321,http://127.0.0.1:4321');
 define('CRTLU_MAIL_FROM', 'support@crtlu.me');
+define('CRTLU_ORDER_NOTIFY_EMAIL', 'owner@gmail.com');
+define('CRTLU_TELEGRAM_BOT_TOKEN', '');
+define('CRTLU_TELEGRAM_CHAT_ID', '');
 define('CRTLU_LOGIN_CODE_DEBUG', '0');
 ```
 
@@ -493,6 +513,13 @@ https://api.crtlu.me/admin/export-yanwen.php
 
 This exports pending paid/processing shipments for manual fulfillment. Direct Yanwen API integration has not been implemented.
 
+Owner order alerts:
+
+- Gmail/email alerts use `CRTLU_ORDER_NOTIFY_EMAIL`.
+- Telegram alerts use `CRTLU_TELEGRAM_BOT_TOKEN` and `CRTLU_TELEGRAM_CHAT_ID`.
+- Alerts are sent from `api/stripe-webhook.php` only after a paid Stripe order has been written.
+- Email alerts are also queued in `admin/emails.php` with template `admin_order_alert`.
+
 ## Deployment
 
 Frontend deployment target:
@@ -601,6 +628,20 @@ https://api.crtlu.me/admin/orders.php
 ```
 
 `api/health.php` should return `"ok": true`.
+
+## Storefront Trust And Accessibility
+
+The Astro storefront now includes:
+
+- Dedicated shipping, returns, warranty, privacy, and terms pages linked from the footer and cart.
+- Product-detail purchase guidance, policy summaries, and six-item FAQ content with `FAQPage` JSON-LD.
+- A required UK/EU/US power-adapter choice before a product can be added to the cart.
+- Homepage product buttons that open the detail page to choose a variant and adapter instead of bypassing required options.
+- Mobile TV Box and Projector links that open `/products/` with the correct category filter.
+- A skip-to-content link, visible keyboard focus, reduced-motion support, and live checkout/coupon status messages.
+- A compressed JPEG hero asset at `public/assets/hero-cinema.jpg`; the original PNG is retained as source material but is no longer requested by the storefront.
+
+For mobile QA, verify the homepage, catalog, one TV-box detail page, one projector detail page, and an open cart at 390px. The document width must not exceed the viewport width.
 
 ## Current Product State
 

@@ -1,0 +1,56 @@
+---
+import PolicyPage from '../components/PolicyPage.astro';
+
+const sections = [
+  {
+    id: 'request-window',
+    title: 'Return request window',
+    paragraphs: [
+      'Contact support within 14 calendar days after recorded delivery to request a return. A return must be approved before it is sent. Unapproved parcels may be refused or delayed.',
+      'For a change-of-mind return, the product must be unused or in resalable condition and include the original device, power adapter, remote, cables, manuals, packaging, and other supplied accessories.',
+    ],
+  },
+  {
+    id: 'damaged',
+    title: 'Damaged, defective, or incorrect items',
+    paragraphs: [
+      'Contact us within 7 calendar days after delivery if the parcel arrives damaged, the wrong model was sent, or the product has an immediate hardware fault. Include the order email, photos of the shipping label and packaging, and clear photos or a short video showing the issue.',
+      'After review, we may provide troubleshooting, replacement parts, a replacement product, or a refund depending on the verified problem and available stock.',
+    ],
+  },
+  {
+    id: 'shipping-costs',
+    title: 'Return shipping costs',
+    paragraphs: [
+      'For an approved change-of-mind return, the customer pays return shipping and is responsible for the parcel until it is received. If we confirm that the delivered item was incorrect or had a covered hardware defect on arrival, we will provide an appropriate return or replacement solution.',
+    ],
+  },
+  {
+    id: 'not-eligible',
+    title: 'Items not eligible for return',
+    bullets: [
+      'Products damaged by misuse, liquid, impact, power surge, incorrect voltage, or unauthorized repair.',
+      'Devices with removed or altered serial labels, modified firmware, root access, or unsupported software changes.',
+      'Returns missing major accessories or showing use beyond what is necessary to inspect the product.',
+      'Issues caused only by a third-party app, subscription, regional restriction, or service-provider change.',
+    ],
+  },
+  {
+    id: 'refunds',
+    title: 'Refunds & cancellations',
+    paragraphs: [
+      'Approved refunds are sent to the original Stripe payment method after the returned item is received and inspected. Banks and card providers commonly take 5–10 business days to post a completed refund.',
+      'A paid order may be cancelled before dispatch. Once tracking has been issued, the return process applies instead.',
+    ],
+  },
+];
+---
+
+<PolicyPage
+  eyebrow="After-sales policy"
+  title="Returns & Refunds"
+  description="A clear process for return requests, delivery damage, incorrect items, cancellations, and refunds."
+  canonicalPath="/returns/"
+  keywords={['CRTLU return policy', 'TV Box returns', 'projector refund policy']}
+  sections={sections}
+/>
