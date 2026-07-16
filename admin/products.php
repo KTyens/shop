@@ -114,14 +114,17 @@ input, select {
   <div class="topbar">
     <div>
       <h1>产品管理</h1>
-      <p class="muted">手动上架新产品，或编辑已有型号的名称、规格、价格与图片。改完后前端需 <code>npm run build</code> 或 dev 热更新后才能完整反映。</p>
+      <p class="muted">手动上架 / 编辑型号、价格与图片。线上后台：<code>https://api.crtlu.me/admin/products.php</code>。改 catalog 后前台若仍旧，需同步 Git 构建或确认 <code>data/catalog.json</code> 与 CF 一致。</p>
     </div>
     <nav class="links" aria-label="Admin nav">
       <a href="index.php">Dashboard</a>
       <a class="primary" href="products.php">产品</a>
-      <a class="primary" href="product-new.php" style="background:linear-gradient(90deg,#7cff8c,#5de7ff);color:#001014;border:0;">+ 上架产品</a>
+      <a class="primary" href="product-new.php" style="background:linear-gradient(90deg,#7cff8c,#5de7ff);color:#001014;border:0;">+ 上架</a>
       <a href="orders.php">订单</a>
+      <a href="members.php">会员</a>
       <a href="coupons.php">优惠券</a>
+      <a href="emails.php">邮件</a>
+      <a href="export-yanwen.php">燕文导出</a>
     </nav>
   </div>
 

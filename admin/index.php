@@ -232,7 +232,11 @@ h1 { margin: 8px 0 10px; font-size: clamp(34px, 5vw, 62px); line-height: .95; }
     <?php endforeach; ?>
   </section>
 
-  <p class="footer">安全提示：这个后台使用 Basic Auth。请只把 admin、api、data 放在 Serv00 的 api.crtlu.me/public_html 下面，并保管好 api/config.local.php。</p>
+  <p class="footer">
+    <strong>线上入口：</strong><a href="https://api.crtlu.me/admin/">https://api.crtlu.me/admin/</a><br>
+    使用 HTTP Basic Auth（账号密码在 Serv00 的 <code>api/config.local.php</code>：<code>CRTLU_ADMIN_USER</code> / <code>CRTLU_ADMIN_PASS</code>）。<br>
+    产品图预览走前台 <code>https://shop.crtlu.me</code>；在后台改图后若前台未变，需把 <code>public/assets/products</code> 与 catalog 同步到 Git/Cloudflare。
+  </p>
 </main>
 </body>
 </html>

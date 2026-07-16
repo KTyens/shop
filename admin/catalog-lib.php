@@ -158,6 +158,17 @@ function crtlu_series_folder(array $series): string
 function crtlu_public_url(string $relative): string
 {
     $relative = ltrim(str_replace('\\', '/', $relative), '/');
+    // On Serv00 (api.crtlu.me), product images live on the storefront host (CF Pages).
+    // Use CRTLU_BASE_URL so admin previews work without mirroring 100MB+ assets.
+    if (function_exists('crtlu_config')) {
+        $store = (string)crtlu_config('CRTLU_BASE_URL', '');
+        $host = (string)($_SERVER['HTTP_HOST'] ?? '');
+        $isLocalHost = $host === '' || str_contains($host, '127.0.0.1') || str_contains($host, 'localhost');
+        $storeIsLocal = $store === '' || str_contains($store, '127.0.0.1') || str_contains($store, 'localhost');
+        if ($store !== '' && !$storeIsLocal && !$isLocalHost) {
+            return rtrim($store, '/') . '/' . $relative;
+        }
+    }
     return '/' . $relative;
 }
 
@@ -174,10 +185,19 @@ function crtlu_cache_bust(string $url): string
 /** Front-store base URL for “前台预览” links (Astro, not the PHP admin host). */
 function crtlu_storefront_base(): string
 {
-    $base = 'http://127.0.0.1:4322';
+    $base = 'https://shop.crtlu.me';
+    $host = (string)($_SERVER['HTTP_HOST'] ?? '');
+    $isLocalHost = str_contains($host, '127.0.0.1') || str_contains($host, 'localhost');
+    if ($isLocalHost) {
+        $base = 'http://127.0.0.1:4322';
+    }
     if (function_exists('crtlu_config')) {
         $configured = crtlu_config('CRTLU_BASE_URL', $base);
         if (is_string($configured) && $configured !== '') {
+            // Prefer production storefront when admin is on api.* host even if local file still has 4322
+            if (!$isLocalHost && (str_contains($configured, '127.0.0.1') || str_contains($configured, 'localhost'))) {
+                return 'https://shop.crtlu.me';
+            }
             $base = $configured;
         }
     }
