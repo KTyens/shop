@@ -207,3 +207,10 @@ Japan ship default **RMB 40** + packaging **RMB 5**. Formula: `landed/7.20/0.60`
 Not listed: **X96 MINI / X96 AIR** (no media folder). Specs refined from supplier xlsx for S400 / X4 / X98Q / X96Q PRO.
 
 Media root: `KJ/03-产品图片/TV BOX/Gurobaru Konekuto/X96/`.
+
+### Sitewide promo adjustment (2026-07-16)
+
+- **Rule applied:** sell price **unchanged if &lt; $40**; otherwise **≥10% off** snapped to `.99` (compare-at also reduced ~10% or previous sell).
+- **Keyboards and entry SKUs under $40** kept (I8, T18+, X96Q/S400 low configs, etc.).
+- Source of truth: `data/catalog.json` after this cut.
+
