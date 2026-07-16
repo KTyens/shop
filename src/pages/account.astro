@@ -10,6 +10,7 @@ const locales = [
   { code: 'ja', label: '日本語' },
   { code: 'zh-CN', label: '简体中文' },
   { code: 'zh-TW', label: '繁體中文' },
+  { code: 'ar', label: 'العربية' },
   { code: 'es', label: 'Español' },
   { code: 'pt', label: 'Português' },
   { code: 'id', label: 'Bahasa Indonesia' },
@@ -36,24 +37,24 @@ const locales = [
       </div>
 
       <!-- Login panel -->
-      <div class="panel" id="loginPanel" style="border:1px solid var(--line);background:rgba(255,255,255,.045);padding:28px;margin-bottom:22px;">
+      <div class="panel" id="loginPanel" style="border:1px solid var(--line);background:#fff;padding:28px;margin-bottom:22px;max-width:560px;">
         <h2 style="margin:0 0 8px;font-size:22px;">Email sign-in</h2>
         <p style="color:var(--muted);line-height:1.65;margin:0 0 18px;font-size:14px;">Use the same email you enter at Stripe Checkout. We will send a one-time 6-digit code.</p>
 
-        <div style="display:grid;grid-template-columns:1fr 160px;gap:10px;">
+        <div class="account-login-row">
           <label>
             <span style="color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;">Email</span>
-            <input id="loginEmail" type="email" autocomplete="email" placeholder="you@example.com" style="width:100%;min-height:42px;border:1px solid var(--line);background:rgba(0,0,0,.24);color:var(--text);padding:0 12px;font:inherit;" />
+            <input id="loginEmail" type="email" autocomplete="email" placeholder="you@example.com" />
           </label>
           <button class="primary-button" type="button" id="sendCode">Send code</button>
         </div>
 
-        <div style="display:grid;grid-template-columns:1fr 160px;gap:10px;margin-top:12px;">
+        <div class="account-login-row" style="margin-top:12px;">
           <label>
             <span style="color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;">6-digit code</span>
-            <input id="loginCode" inputmode="numeric" maxlength="6" placeholder="123456" style="width:100%;min-height:42px;border:1px solid var(--line);background:rgba(0,0,0,.24);color:var(--text);padding:0 12px;font:inherit;" />
+            <input id="loginCode" inputmode="numeric" maxlength="6" placeholder="123456" />
           </label>
-          <button type="button" id="verifyCode">Sign in</button>
+          <button class="primary-button" type="button" id="verifyCode">Sign in</button>
         </div>
 
         <div class="message" id="loginMessage" style="min-height:22px;margin-top:10px;color:var(--green);font-size:14px;"></div>

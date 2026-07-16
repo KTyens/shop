@@ -147,3 +147,63 @@ Recalculate prices if any of these change:
 - If the storefront supports compare-at pricing, use standard price as compare-at and launch promo as active price.
 - Do not overwrite this document with guessed marketplace prices. Marketplace checks can inform positioning, but supplier cost plus margin target is the source of truth.
 - If the user provides a newer cost screenshot, create a new dated note or update this document with the new source date.
+
+### MECOOL KM series (added 2026-07-15, costs corrected)
+
+Purchase costs confirmed by user 2026-07-15:
+- KM7 Plus 2+16G: **RMB 505**
+- KM2 Plus 2+16G: **RMB 690**
+
+Pricing: `landed = cost + 40 + 5`, `standard ≈ landed / 7.20 / 0.60`, launch ≈ $5 under standard.
+
+| SKU | Purchase Cost RMB | Landed RMB | Standard USD (compare-at) | Launch Promo USD (sell) | Gross margin @ launch |
+|---|---:|---:|---:|---:|---:|
+| MECOOL KM7 Plus 2+16G | 505 | 550 | 129.99 | 124.99 | ≈38.9% |
+| MECOOL KM2 Plus 2+16G | 690 | 735 | 174.99 | 169.99 | ≈39.9% |
+
+Supplier media: `KJ/03-产品图片/TV BOX/深圳市广进环宇科技有限公司/KM2 Plus` and `KM7 Plus`.
+
+### Wireless HDMI WX50 / WX100 (added 2026-07-15)
+
+Cost source: `成本表.xlsx` → `试算(日元)` rows `WHDMI-wx50-YS` / `WHDMI-wx100-YS`.
+Japan logistics from sheet: **RMB 40**; packaging RMB 5.
+
+| SKU | Purchase Cost RMB | Japan ship RMB | Landed RMB | Standard USD | Launch Promo USD |
+|---|---:|---:|---:|---:|---:|
+| WX50 (CRT-WHDMI-WX50) | 172 | 40 | 217 | 54.99 | 49.99 |
+| WX100 (CRT-WHDMI-WX100) | 182 | 40 | 227 | 59.99 | 54.99 |
+
+Media: ziniao `02-图片/无线HDMI` (主图/白底 + 详情).
+
+### Mini keyboards I8 / T18+ (added 2026-07-15)
+
+Cost source: `成本表.xlsx` → `试算(日元)` rows `YS-I8-13` / `T18+61`.
+Japan logistics from sheet: **RMB 31** (I8 light parcel) / **RMB 40** (T18+); packaging RMB 5.
+
+| SKU | Purchase Cost RMB | Japan ship RMB | Landed RMB | Standard USD | Launch Promo USD |
+|---|---:|---:|---:|---:|---:|
+| I8 Mini Keyboard (CRT-KB-I8) | 13 | 31 | 49 | 11.99 | 9.99 |
+| T18+ Full Touchpad Keyboard (CRT-KB-T18P) | 61 | 40 | 106 | 24.99 | 19.99 |
+
+Media: `KJ/03-产品图片/TV BOX/i8` and `KJ/03-产品图片/TV BOX/深圳市无限电科技有限公司` (主图白底 + 详情/宣传).
+
+### X96 / X98 series (added / revised 2026-07-15)
+
+Cost sources: `成本表.xlsx` 试算 + **user-confirmed costs 2026-07-15** for S400 / X4 / X98Q 2+16.  
+Japan ship default **RMB 40** + packaging **RMB 5**. Formula: `landed/7.20/0.60` → standard `.99`, launch ≈ $5 under.
+
+| Product | SKU | Cost RMB | Sell USD | Compare USD | Notes |
+|---|---|---:|---:|---:|---|
+| X96Q 1+8 / 2+16 | CRT-X96Q-* | 85 / 100 | 25.99 / 28.99 | +$5 | 试算 |
+| X96Q PRO 2+16 | CRT-X96QP-2G16G | 110 | 30.99 | 35.99 | YB827 media; user keep |
+| X96 S400 1+8 / 2+16 | CRT-X96-S400-* | **95 / 110** | 27.99 / 30.99 | +$5 | **user cost** |
+| X98 PLUS 2+16 / 4+32 / 4+64 | CRT-X98P-* | 150 / 180 / 235 | 40.99 / 47.99 / 59.99 | +$5 | 试算 |
+| X96 Max+ Ultra 4+32 / 4+64 | CRT-X96MU-* | 240 / 288 | 60.99 / 72.99 | +$5 | 试算 |
+| X96 X4 100M 4+32 / 4+64 | CRT-X96X4-100M-* | **273 / 318** | 68.99 / 79.99 | +$5 | **user cost** |
+| X96 X4 1000M 4+32 / 4+64 | CRT-X96X4-1G-* | **283 / 328** | 70.99 / 81.99 | +$5 | **user cost** (64G was 318→328) |
+| X98Q 1+8 / 2+16 | CRT-X98Q-* | 68 / **160** | 21.99 / 42.99 | +$5 | 1+8 试算/订单；2+16 **user** |
+| X98K 4+32 / 4+64 | CRT-X98K-* | 140 / 205 | 37.99 / 52.99 | +$5 | 试算；2+16 cost 0 skipped |
+
+Not listed: **X96 MINI / X96 AIR** (no media folder). Specs refined from supplier xlsx for S400 / X4 / X98Q / X96Q PRO.
+
+Media root: `KJ/03-产品图片/TV BOX/Gurobaru Konekuto/X96/`.

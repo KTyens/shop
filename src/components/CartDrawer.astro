@@ -5,38 +5,38 @@ import '../styles/global.css';
 <div class="drawer-backdrop" id="cartBackdrop"></div>
 <aside class="cart-drawer" id="cartDrawer" role="dialog" aria-modal="true" aria-labelledby="cartTitle" aria-hidden="true">
   <div class="cart-head">
-    <h2 id="cartTitle">Your cart</h2>
+    <h2 id="cartTitle" data-i18n="cart.title">Your cart</h2>
     <button class="icon-button" type="button" id="closeCart" aria-label="Close cart">
       <span class="close-icon" aria-hidden="true"></span>
     </button>
   </div>
   <div class="cart-items" id="cartItems">
-    <div class="empty">Your cart is empty.</div>
+    <div class="empty" data-i18n="cart.empty.home">Your cart is empty.</div>
   </div>
   <div class="cart-foot">
     <div class="summary-line">
-      <span>Subtotal</span>
+      <span data-i18n="cart.subtotal">Subtotal</span>
       <span id="cartSubtotal">$0.00</span>
     </div>
     <div class="summary-line">
-      <span>Tracked shipping</span>
+      <span data-i18n="cart.shipping">Tracked shipping</span>
       <span id="cartShipping">$12.00</span>
     </div>
     <div class="summary-line discount" id="discountLine" hidden>
-      <span>Coupon discount</span>
+      <span data-i18n="cart.discount">Coupon discount</span>
       <span id="cartDiscount">-$0.00</span>
     </div>
     <div class="summary-line total">
-      <span>Total</span>
+      <span data-i18n="cart.total">Total</span>
       <span id="cartTotal">$0.00</span>
     </div>
     <div class="cart-delivery-context">
-      <strong>Yanwen tracked delivery</strong>
-      <span>Estimated 7–18 business days after dispatch. Stripe confirms the final charge before payment.</span>
+      <strong data-i18n="cart.shipping">Yanwen tracked delivery</strong>
+      <span data-i18n="cart.delivery">Estimated 7–18 business days after dispatch. Stripe confirms the final charge before payment.</span>
     </div>
     <div class="phase4-controls">
       <label>
-        <span>Currency</span>
+        <span data-i18n="cart.currency">Currency</span>
         <select id="currencySelect">
           <option value="USD">USD ($)</option>
           <option value="JPY">JPY (¥)</option>
@@ -45,12 +45,13 @@ import '../styles/global.css';
         </select>
       </label>
       <label>
-        <span>Language</span>
+        <span data-i18n="cart.language">Language</span>
         <select id="localeSelect">
           <option value="en">English</option>
           <option value="ja">日本語</option>
           <option value="zh-CN">简体中文</option>
           <option value="zh-TW">繁體中文</option>
+          <option value="ar">العربية</option>
           <option value="es">Español</option>
           <option value="pt">Português</option>
           <option value="id">Bahasa Indonesia</option>
@@ -62,14 +63,14 @@ import '../styles/global.css';
     </div>
     <div class="coupon-box">
       <label>
-        <span>Coupon</span>
+        <span data-i18n="cart.coupon">Coupon</span>
         <input id="couponCode" type="text" placeholder="WELCOME5" />
       </label>
-      <button type="button" id="applyCoupon">Apply</button>
-      <button type="button" id="clearCoupon">Clear</button>
+      <button type="button" id="applyCoupon" data-i18n="cart.apply">Apply</button>
+      <button type="button" id="clearCoupon" data-i18n="cart.clear">Clear</button>
     </div>
     <div class="status" id="couponStatus" aria-live="polite"></div>
-    <button class="primary-button" type="button" id="checkoutButton" style="width:100%">Checkout with Stripe</button>
+    <button class="primary-button" type="button" id="checkoutButton" style="width:100%" data-i18n="cart.checkout">Checkout with Stripe</button>
     <div class="status" id="checkoutStatus" aria-live="polite"></div>
     <p class="cart-policy-note">
       By continuing, you agree to our <a href="/terms/">Terms</a> and <a href="/privacy/">Privacy Policy</a>.
@@ -91,8 +92,8 @@ import '../styles/global.css';
     gap: 4px;
     margin: -2px 0 14px;
     padding: 11px 12px;
-    border: 1px solid rgba(139, 255, 133, .22);
-    background: rgba(139, 255, 133, .055);
+    border: 1px solid rgba(0,0,0,0.08);
+    background: rgba(0,0,0,0.08);
   }
 
   .cart-delivery-context strong {

@@ -101,7 +101,7 @@ button { background: #5de7ff; color: #001014; font-weight: 800; cursor: pointer;
       <p class="muted">Paid Stripe orders. Update fulfillment status and export pending shipments for Yanwen.</p>
     </div>
     <div class="order-actions">
-      <a class="button" href="index.php">Dashboard</a>
+      <a class="button" href="index.php">Dashboard</a><a href="products.php">Products</a>
       <a class="button" href="members.php">Members</a>
       <a class="button" href="coupons.php">Coupons</a>
       <a class="button" href="emails.php">Emails</a>

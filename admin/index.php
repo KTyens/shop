@@ -55,7 +55,37 @@ try {
     $dbError = $error->getMessage();
 }
 
+$productCount = 0;
+try {
+    $catalogPath = dirname(__DIR__) . '/data/catalog.json';
+    if (is_readable($catalogPath)) {
+        $catalog = json_decode((string)file_get_contents($catalogPath), true);
+        if (is_array($catalog) && isset($catalog['series']) && is_array($catalog['series'])) {
+            $productCount = count($catalog['series']);
+        }
+    }
+} catch (Throwable $error) {
+    $productCount = 0;
+}
+
 $cards = [
+    [
+        'title' => '产品管理',
+        'desc' => '手动上架新产品；编辑名称、描述、规格、价格；替换主图与详情图、排序删除图片。',
+        'href' => 'products.php',
+        'metric' => $productCount,
+        'metric_label' => 'product series',
+        'action' => 'Edit products',
+        'primary' => true,
+    ],
+    [
+        'title' => '上架新产品',
+        'desc' => '填写型号信息与价格，可选上传主图/详情图，创建后进入编辑页完善。',
+        'href' => 'product-new.php',
+        'metric' => '+',
+        'metric_label' => 'new listing',
+        'action' => 'Create product',
+    ],
     [
         'title' => '订单管理',
         'desc' => '查看 Stripe 订单、客户地址、商品明细，更新订单状态和燕文单号。',
@@ -95,7 +125,6 @@ $cards = [
         'metric' => $stats['unshipped'],
         'metric_label' => 'ready to export',
         'action' => 'Download CSV',
-        'primary' => true,
     ],
     [
         'title' => '快递追踪',
@@ -163,10 +192,11 @@ h1 { margin: 8px 0 10px; font-size: clamp(34px, 5vw, 62px); line-height: .95; }
     <div>
       <div class="eyebrow">CRTLU Admin</div>
       <h1>后台管理中心</h1>
-      <p>统一进入订单、会员、优惠券、邮件通知、燕文导出和快递追踪。以后只需要记住这个地址：<strong>/admin/</strong></p>
+      <p>统一进入产品、订单、会员、优惠券、邮件通知、燕文导出和快递追踪。以后只需要记住这个地址：<strong>/admin/</strong></p>
     </div>
     <nav class="quick" aria-label="Quick actions">
-      <a class="button primary" href="orders.php">订单</a>
+      <a class="button primary" href="products.php">产品</a>
+      <a class="button" href="orders.php">订单</a>
       <a class="button" href="members.php">会员</a>
       <a class="button" href="coupons.php">优惠券</a>
       <a class="button" href="emails.php">邮件</a>

@@ -37,6 +37,8 @@ Use this file to compare what has already been published on shop.crtlu.me agains
 | HY300 PRO Projector | HY | budget | Standard | 1 |
 | HY320 MINI Projector | HY | best-value | Standard | 1 |
 | A10 Projector | A10 | main | Standard | 1 |
+| I8 Mini Keyboard | YS | budget | Standard (2.4G + touchpad) | 1 |
+| T18+ Full Touchpad Keyboard | WXD | main | Standard (full touchpad + backlight) | 1 |
 
 ## Published Variants
 
@@ -119,6 +121,8 @@ Use this file to compare what has already been published on shop.crtlu.me agains
 | HY300 PRO Projector | CRT-HY300-PRO | Standard | 100 | $34.99 | $39.99 | hy300-pro-projector-standard |
 | HY320 MINI Projector | CRT-HY320-MINI | Standard | 160 | $49.99 | $54.99 | hy320-mini-projector-standard |
 | A10 Projector | CRT-A10-PROJECTOR | Standard | 250 | $69.99 | $74.99 | a10-projector-standard |
+| I8 Mini Keyboard | CRT-KB-I8 | Standard (2.4G + touchpad) | 13 | $9.99 | $11.99 | mini-keyboard-i8-standard |
+| T18+ Full Touchpad Keyboard | CRT-KB-T18P | Standard (full touchpad + backlight) | 61 | $19.99 | $24.99 | mini-keyboard-t18-plus-standard |
 
 ## Not Published / Needs Confirmation
 
@@ -127,3 +131,10 @@ Use this file to compare what has already been published on shop.crtlu.me agains
 | T95 5G Version 4+128G | Cost is not visible in the current reference image, so this configuration is not published yet. |
 | HK1MAX RK3318 | Currently out of stock; do not publish for now. |
 | H96 MAX V56 2+16G / 8+128G | Currently out of stock; cost values are set to 0, so do not publish for now. |
+
+## MECOOL KM (added 2026-07-15)
+
+| Product Line | Brand | Tier | Published Configurations | Variant Count |
+|---|---|---|---|---:|
+| MECOOL KM2 Plus | MECOOL | main | 2GB RAM + 16GB ROM | 1 |
+| MECOOL KM7 Plus | MECOOL | main | 2GB RAM + 16GB ROM | 1 |

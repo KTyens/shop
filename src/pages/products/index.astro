@@ -50,29 +50,50 @@ const itemListJsonLd = {
 
   <main id="main-content">
     <section class="hero wrap">
-      <div class="eyebrow">Complete Catalog</div>
-      <h1>All active Android TV box and projector gear.</h1>
-      <p class="lead">Browse the models currently published for independent-store sales, including Android TV boxes, TV set-top boxes, 4K streaming devices, compact projectors, and home cinema gear. The homepage stays focused on a few hero products; this page keeps the full catalog searchable and ready for checkout.</p>
+      <div class="eyebrow" data-i18n="catalog.page.eyebrow">Complete catalog</div>
+      <h1 data-i18n="catalog.page.title">All models. Clear specs. Ready to checkout.</h1>
+      <p class="lead" data-i18n="catalog.page.lead">Browse every published Android TV box and compact projector by brand, tier, configuration, and price. Choose memory options and power-plug type before Stripe checkout.</p>
 
       <div class="catalog-console" aria-label="Catalog controls">
         <div class="catalog-controls">
           <label class="search-field">
             <span class="sr-only">Search catalog</span>
-            <input type="search" id="catalogSearch" placeholder="Search model, brand, SKU, chipset..." />
+            <input type="search" id="catalogSearch" placeholder="Search model, brand, SKU, chipset..." data-i18n-placeholder="catalog.page.search" />
             <button class="clear-search" type="button" id="clearSearch" aria-label="Clear search">×</button>
           </label>
           <label class="sort-field">
             <span class="sr-only">Sort catalog</span>
             <select id="catalogSort" aria-label="Sort catalog">
-              <option value="featured">Featured order</option>
-              <option value="price-asc">Price: low to high</option>
-              <option value="price-desc">Price: high to low</option>
-              <option value="name-asc">Name: A to Z</option>
+              <option value="featured" data-i18n="catalog.page.sortFeatured">Featured order</option>
+              <option value="price-asc" data-i18n="catalog.page.sortPriceAsc">Price: low to high</option>
+              <option value="price-desc" data-i18n="catalog.page.sortPriceDesc">Price: high to low</option>
+              <option value="name-asc" data-i18n="catalog.page.sortName">Name: A to Z</option>
             </select>
           </label>
         </div>
         <div class="toolbar" id="filters"></div>
-        <div class="summary" id="summary">Loading catalog...</div>
+        <div class="summary" id="summary" data-i18n="catalog.page.loading">Loading catalog...</div>
+      </div>
+
+      <!-- Category intro video: shown when Type = TV Boxes -->
+      <div class="catalog-cat-video" id="catalogCatVideo" hidden>
+        <div class="catalog-cat-video-frame">
+          <video
+            id="catalogCatVideoEl"
+            poster="/assets/videos/category-tv-box-poster.jpg"
+            muted
+            playsinline
+            loop
+            controls
+            preload="metadata"
+          >
+            <source src="/assets/videos/category-tv-box.mp4" type="video/mp4" />
+          </video>
+        </div>
+        <div class="catalog-cat-video-meta">
+          <strong data-i18n="catalog.page.videoTvTitle">TV Box series overview</strong>
+          <span data-i18n="catalog.page.videoTvLead">Short look at the Android TV box lineup — specs and packing style vary by model.</span>
+        </div>
       </div>
     </section>
 
@@ -96,6 +117,45 @@ const itemListJsonLd = {
       { id: 'eu', label: 'EU Plug', code: 'Europlug' },
       { id: 'us', label: 'US Plug', code: 'NEMA 1-15' },
     ]);
+
+    /** i18n helper — must exist before renderFilters/renderProducts (crash here falls back to legacy chips). */
+    function t(key: string, vars?: Record<string, string>) {
+      if ((window as any).CRTLU_I18N?.t) return (window as any).CRTLU_I18N.t(key, vars);
+      const fallbacks: Record<string, string> = {
+        'catalog.page.filterAll': 'All',
+        'catalog.page.filterTv': 'TV Boxes',
+        'catalog.page.filterProj': 'Projectors',
+        'catalog.page.filterWirelessHdmi': 'Wireless HDMI',
+        'catalog.page.filterAccessory': 'Accessories',
+        'catalog.page.groupType': 'Type',
+        'catalog.page.groupBrand': 'Brand',
+        'catalog.page.groupTier': 'Tier',
+        'catalog.page.lines': '{n} product lines',
+        'catalog.page.configs': '{n} configurations',
+        'catalog.page.noMatch': 'No matching products.',
+        'catalog.page.search': 'Search model, brand, SKU, chipset...',
+        'catalog.page.sortFeatured': 'Featured order',
+        'catalog.page.sortPriceAsc': 'Price: low to high',
+        'catalog.page.sortPriceDesc': 'Price: high to low',
+        'catalog.page.sortName': 'Name: A to Z',
+        'catalog.page.configLabel': 'Configuration',
+        'home.compare.budget': 'Budget',
+        'home.compare.performance': 'Performance',
+        'home.compare.flagship': 'Flagship',
+        'pdp.plugTitle': 'Power plug',
+        'pdp.plugHelp': 'Select a plug type for your region.',
+        'pdp.addToCart': 'Add to cart',
+        'product.selected': 'Selected',
+        'product.details': 'Details',
+      };
+      let out = fallbacks[key] || key;
+      if (vars) {
+        for (const [k, v] of Object.entries(vars)) {
+          out = out.replace(new RegExp(`\\{${k}\\}`, 'g'), String(v));
+        }
+      }
+      return out;
+    }
 
     const SHIPPING_CENTS = 1200;
     const cartKey = 'crtlu-cart-v1';
@@ -136,10 +196,14 @@ const itemListJsonLd = {
 
     const initialParams = new URLSearchParams(window.location.search);
     const requestedCategory = initialParams.get('category');
+    const knownCategories = new Set(
+      catalogData.map((item: SeriesItem) => item.category).filter(Boolean) as string[]
+    );
     let variants: Variant[] = [];
-    let activeFilter = requestedCategory === 'tv-box' || requestedCategory === 'projector'
-      ? `category:${requestedCategory}`
-      : 'all';
+    let activeFilter =
+      requestedCategory && knownCategories.has(requestedCategory)
+        ? `category:${requestedCategory}`
+        : 'all';
     let searchQuery = '';
     let sortMode = 'featured';
     let selected: Record<string, string> = {};
@@ -150,7 +214,7 @@ const itemListJsonLd = {
 
     function flattenVariants(series: SeriesItem[]) {
       return series.flatMap(item =>
-        item.variants.map(variant => ({
+        (Array.isArray(item.variants) ? item.variants : []).map(variant => ({
           ...variant,
           seriesId: item.id,
           seriesName: item.name,
@@ -198,32 +262,67 @@ const itemListJsonLd = {
     }
 
     function minPrice(item: SeriesItem) {
-      return Math.min(...item.variants.map(v => v.price_cents));
+      const prices = (item.variants || []).map(v => Number(v.price_cents) || 0);
+      return prices.length ? Math.min(...prices) : 0;
+    }
+
+    /** Friendly labels for product types (auto-extends for new categories). */
+    function categoryLabel(cat: string): string {
+      const map: Record<string, string> = {
+        'tv-box': t('catalog.page.filterTv'),
+        projector: t('catalog.page.filterProj'),
+        'wireless-hdmi': t('catalog.page.filterWirelessHdmi'),
+        accessory: t('catalog.page.filterAccessory'),
+        premium: 'Premium',
+      };
+      if (map[cat]) return map[cat];
+      // Fallback: humanize unknown category keys (e.g. smart-speaker → Smart Speaker)
+      return cat
+        .split(/[-_]/)
+        .filter(Boolean)
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(' ');
+    }
+
+    function brandLabel(brand: string): string {
+      // Keep brand as stored (MECOOL, HK1, H96…); normalize common casing
+      const known: Record<string, string> = {
+        mecool: 'MECOOL',
+        h96: 'H96',
+        hk1: 'HK1',
+        ys: 'YS',
+      };
+      const key = brand.toLowerCase();
+      return known[key] || brand;
+    }
+
+    function tierLabel(tier: string): string {
+      const key = String(tier || '');
+      const tierMap: Record<string, string> = {
+        budget: t('home.compare.budget'),
+        'best-value': 'Best Value',
+        main: 'Main',
+        performance: t('home.compare.performance'),
+        flagship: t('home.compare.flagship'),
+      };
+      return tierMap[key] || key.replace(/-/g, ' ') || '—';
     }
 
     function filterLabel(filterId: string): string {
-      if (filterId === 'all') return 'All';
-      if (filterId.startsWith('category:')) {
-        const cat = filterId.slice(9);
-        return cat === 'tv-box' ? 'TV Boxes' : cat === 'premium' ? 'Premium' : cat === 'projector' ? 'Projectors' : cat;
-      }
-      if (filterId.startsWith('brand:')) return filterId.slice(6);
-      if (filterId.startsWith('tier:')) {
-        const tierMap: Record<string, string> = {
-          budget: 'Budget', 'best-value': 'Best Value', main: 'Main',
-          performance: 'Performance', flagship: 'Flagship'
-        };
-        return tierMap[filterId.slice(5)] || filterId.slice(5);
-      }
+      if (filterId === 'all') return t('catalog.page.filterAll');
+      if (filterId.startsWith('category:')) return categoryLabel(filterId.slice(9));
+      if (filterId.startsWith('brand:')) return brandLabel(filterId.slice(6));
+      if (filterId.startsWith('tier:')) return tierLabel(filterId.slice(5));
       return filterId;
     }
 
     function searchableText(item: SeriesItem) {
+      const variants = Array.isArray(item.variants) ? item.variants : [];
       return [
         item.id, item.name, item.brand, item.category, item.tier, item.description,
         ...(item.specs ? Object.values(item.specs) : []),
-        ...item.variants.flatMap(v => [v.id, v.label, v.sku, String(v.price_cents)]),
-      ].join(' ').toLowerCase();
+        ...variants.flatMap(v => [v.id, v.label, v.sku, String(v.price_cents)]),
+      ].filter(Boolean).join(' ').toLowerCase();
     }
 
     function filteredCatalog() {
@@ -233,9 +332,10 @@ const itemListJsonLd = {
 
       if (activeFilter.startsWith('category:'))
         items = items.filter(item => item.category === activeFilter.slice(9));
-      else if (activeFilter.startsWith('brand:'))
-        items = items.filter(item => item.brand === activeFilter.slice(6));
-      else if (activeFilter.startsWith('tier:'))
+      else if (activeFilter.startsWith('brand:')) {
+        const brandKey = activeFilter.slice(6).toLowerCase();
+        items = items.filter(item => String(item.brand || '').toLowerCase() === brandKey);
+      } else if (activeFilter.startsWith('tier:'))
         items = items.filter(item => item.tier === activeFilter.slice(5));
 
       if (queryTokens.length)
@@ -249,30 +349,54 @@ const itemListJsonLd = {
       return sorted;
     }
 
+    /** Show category intro video for TV Boxes (and future category videos). */
+    function syncCategoryVideo() {
+      const wrap = document.getElementById('catalogCatVideo') as HTMLElement | null;
+      const video = document.getElementById('catalogCatVideoEl') as HTMLVideoElement | null;
+      if (!wrap) return;
+      const show = activeFilter === 'category:tv-box';
+      wrap.hidden = !show;
+      if (video) {
+        if (show) {
+          video.muted = true;
+          const p = video.play();
+          if (p && typeof p.catch === 'function') p.catch(() => {});
+        } else {
+          video.pause();
+        }
+      }
+    }
+
     function renderProducts() {
       const items = filteredCatalog();
       const variantCount = items.reduce((sum, item) => sum + item.variants.length, 0);
+      syncCategoryVideo();
 
-      document.getElementById('summary')!.innerHTML =
-        `<strong>${items.length}</strong> models / <strong>${variantCount}</strong> configs / Filter: <strong>${filterLabel(activeFilter)}</strong>` +
-        (searchQuery.trim() ? ` / Search: "${searchQuery.trim()}"` : '');
+      document.getElementById('summary')!.textContent =
+        t('catalog.page.lines', { n: String(items.length) }) +
+        ' · ' +
+        t('catalog.page.configs', { n: String(variantCount) }) +
+        ' · ' +
+        filterLabel(activeFilter) +
+        (searchQuery.trim() ? ` · "${searchQuery.trim()}"` : '');
 
       if (!items.length) {
         document.getElementById('productGrid')!.innerHTML = `
           <div class="empty-state">
             <div>
-              <strong>No matches found</strong><br />
-              Try adjusting your search or filters.
+              <strong data-i18n="catalog.page.noMatch">${t('catalog.page.noMatch')}</strong>
             </div>
           </div>`;
         return;
       }
 
       document.getElementById('productGrid')!.innerHTML = items.map(item => {
-        const selectedId = selected[item.id] || item.variants[0].id;
+        const itemVariants = Array.isArray(item.variants) ? item.variants : [];
+        if (!itemVariants.length) return '';
+        const selectedId = selected[item.id] || itemVariants[0].id;
         const selectedPlug = selectedPlugs[item.id] || '';
         const needsPlug = Boolean(plugWarnings[item.id]);
-        const current = item.variants.find(v => v.id === selectedId) || item.variants[0];
+        const current = itemVariants.find(v => v.id === selectedId) || itemVariants[0];
 
         const plugHtml = PLUG_TYPES.map((p: PlugType) =>
           `<button class="plug-option ${p.id === selectedPlug ? 'active' : ''}" type="button" data-plug="${item.id}:${p.id}">
@@ -288,34 +412,60 @@ const itemListJsonLd = {
           </button>`
         ).join('');
 
+        const priceHtml = `$${(current.price_cents / 100).toFixed(2)}${
+          current.compare_at_cents && current.compare_at_cents !== current.price_cents
+            ? `<span class="compare">$${(current.compare_at_cents / 100).toFixed(2)}</span>`
+            : ''
+        }`;
+
+        // Multi-config → dropdown; single config → compact static row (shorter cards)
+        let configHtml = '';
+        if (itemVariants.length > 1) {
+          const options = itemVariants.map(variant =>
+            `<option value="${variant.id}" ${variant.id === current.id ? 'selected' : ''}>${variant.label} — $${(variant.price_cents / 100).toFixed(2)}</option>`
+          ).join('');
+          configHtml = `
+            <div class="config-picker">
+              <label class="config-picker-label" for="cfg-${item.id}">${t('catalog.page.configLabel')}</label>
+              <div class="config-picker-row">
+                <select class="config-select" id="cfg-${item.id}" data-variant-select="${item.id}" aria-label="${t('catalog.page.configLabel')}">
+                  ${options}
+                </select>
+                <div class="price config-price">${priceHtml}</div>
+              </div>
+            </div>`;
+        } else {
+          configHtml = `
+            <div class="config-picker config-picker-single">
+              <div class="config-picker-row">
+                <div class="config-single-label">
+                  <strong>${current.label}</strong>
+                </div>
+                <div class="price config-price">${priceHtml}</div>
+              </div>
+            </div>`;
+        }
+
         return `
           <article class="product-card reveal" id="${item.id}">
-            ${item.image ? `<div class="product-media"><img src="${item.image}" alt="${item.name}" loading="lazy" decoding="async"></div>` : ''}
+            ${item.image ? `<a class="product-media-link" href="/products/${item.id}/" aria-label="View ${item.name}"><div class="product-media"><img src="${item.image}" alt="${item.name}" loading="lazy" decoding="async"></div></a>` : ''}
             <div class="card-head">
-              <div class="meta"><span>${item.brand}</span><span>${item.tier.replace('-', ' ')}</span></div>
-              <h2>${item.name}</h2>
-              <p>${item.description}</p>
+              <div class="meta"><span>${item.brand || ''}</span><span>${tierLabel(item.tier)}</span></div>
+              <h2><a class="product-card-link" href="/products/${item.id}/">${item.name}</a></h2>
+              <p>${item.description || ''}</p>
             </div>
             <div class="card-body">
-              ${item.variants.map(variant => `
-                <div class="variant-row ${variant.id === current.id ? 'active' : ''}">
-                  <button type="button" data-select="${item.id}" data-variant="${variant.id}">
-                    <strong>${variant.label}</strong>
-                    <span>${variant.sku}</span>
-                  </button>
-                  <div class="price">$${(variant.price_cents / 100).toFixed(2)}${variant.compare_at_cents && variant.compare_at_cents !== variant.price_cents ? `<span class="compare">$${(variant.compare_at_cents / 100).toFixed(2)}</span>` : ''}</div>
-                </div>
-              `).join('')}
+              ${configHtml}
               <div class="plug-section" style="margin-top:12px;">
-                <div class="plug-section-title">Plug Type <span class="plug-required">*</span></div>
-                <p class="plug-helper ${needsPlug ? 'error' : ''}">${needsPlug ? 'Choose a plug type before adding to cart.' : 'Choose the wall plug for the destination country.'}</p>
+                <div class="plug-section-title">${t('pdp.plugTitle')} <span class="plug-required">*</span></div>
+                <p class="plug-helper ${needsPlug ? 'error' : ''}">${t('pdp.plugHelp')}</p>
                 <div class="plug-selector plug-selector-inline">${plugHtml}</div>
               </div>
               <div class="card-foot">
-                <span class="sku">Selected: ${current.sku}</span>
+                <span class="sku">${t('product.selected')}: ${current.sku}</span>
                 <span class="card-actions">
-                  <a class="secondary-button" href="/products/${item.id}/" style="padding:0 12px;font-size:12px;">Details</a>
-                  <button class="primary-button" type="button" data-add="${current.id}" style="padding:0 12px;font-size:12px;">Add to Cart</button>
+                  <a class="secondary-button" href="/products/${item.id}/" style="padding:0 12px;font-size:12px;">${t('product.details')}</a>
+                  <button class="primary-button" type="button" data-add="${current.id}" style="padding:0 12px;font-size:12px;">${t('pdp.addToCart')}</button>
                 </span>
               </div>
             </div>
@@ -336,22 +486,47 @@ const itemListJsonLd = {
     }
 
     function renderFilters() {
-      const brands = [...new Set(catalogData.map(item => item.brand))].sort();
-      const categoryLabels: Record<string, string> = {
-        'tv-box': 'TV Boxes', premium: 'Premium', projector: 'Projectors'
-      };
-      const categories = ['tv-box', 'premium', 'projector']
-        .filter(cat => catalogData.some(item => item.category === cat))
-        .map(cat => [`category:${cat}`, categoryLabels[cat] || cat]);
-      const tiers = [
-        ['budget', 'Budget'], ['best-value', 'Best Value'], ['main', 'Main'],
-        ['performance', 'Performance'], ['flagship', 'Flagship']
-      ].filter(([tier]) => catalogData.some(item => item.tier === tier));
-      const filters = [['all', 'All'], ...categories, ...brands.map(b => [`brand:${b}`, b]), ...tiers.map(([id, label]) => [`tier:${id}`, label])];
+      // Preferred type order; any new category from catalog is appended automatically.
+      const preferredCatOrder = ['tv-box', 'projector', 'wireless-hdmi', 'accessory', 'premium'];
+      const categories = [...new Set(catalogData.map((item) => item.category).filter(Boolean))] as string[];
+      categories.sort((a, b) => {
+        const ia = preferredCatOrder.indexOf(a);
+        const ib = preferredCatOrder.indexOf(b);
+        return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib) || a.localeCompare(b);
+      });
 
-      document.getElementById('filters')!.innerHTML = filters.map(([id, label]) =>
-        `<button class="filter ${id === activeFilter ? 'active' : ''}" type="button" data-filter="${id}">${label}</button>`
-      ).join('');
+      // Brands / series from catalog (MECOOL, H96, HK1, YS, …) — auto when new brands appear.
+      const preferredBrandOrder = ['MECOOL', 'H96', 'HK1', 'Tanix', 'T95', 'TX', 'X5', 'HY', 'A10', 'YS'];
+      const brands = [...new Set(catalogData.map((item) => item.brand).filter(Boolean))] as string[];
+      brands.sort((a, b) => {
+        const ia = preferredBrandOrder.findIndex((x) => x.toLowerCase() === a.toLowerCase());
+        const ib = preferredBrandOrder.findIndex((x) => x.toLowerCase() === b.toLowerCase());
+        return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib) || a.localeCompare(b, undefined, { sensitivity: 'base' });
+      });
+
+      const preferredTier = ['budget', 'best-value', 'main', 'performance', 'flagship'];
+      const tiers = [...new Set(catalogData.map((item) => item.tier).filter(Boolean))] as string[];
+      tiers.sort((a, b) => {
+        const ia = preferredTier.indexOf(a);
+        const ib = preferredTier.indexOf(b);
+        return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib) || a.localeCompare(b);
+      });
+
+      const chip = (id: string, label: string) =>
+        `<button class="filter ${id === activeFilter ? 'active' : ''}" type="button" data-filter="${id}">${label}</button>`;
+
+      const typeChips = categories.map((cat) => chip(`category:${cat}`, categoryLabel(cat))).join('');
+      const brandChips = brands.map((b) => chip(`brand:${b}`, brandLabel(b))).join('');
+      const tierChips = tiers.map((tier) => chip(`tier:${tier}`, tierLabel(tier))).join('');
+
+      document.getElementById('filters')!.innerHTML = `
+        <div class="filter-row">
+          ${chip('all', t('catalog.page.filterAll'))}
+        </div>
+        ${typeChips ? `<div class="filter-row"><span class="filter-group-label" data-i18n="catalog.page.groupType">${t('catalog.page.groupType')}</span>${typeChips}</div>` : ''}
+        ${brandChips ? `<div class="filter-row"><span class="filter-group-label" data-i18n="catalog.page.groupBrand">${t('catalog.page.groupBrand')}</span>${brandChips}</div>` : ''}
+        ${tierChips ? `<div class="filter-row"><span class="filter-group-label" data-i18n="catalog.page.groupTier">${t('catalog.page.groupTier')}</span>${tierChips}</div>` : ''}
+      `;
     }
 
     function renderCart() {
@@ -497,6 +672,28 @@ const itemListJsonLd = {
       variants = flattenVariants(catalogData);
       renderFilters();
       renderProducts();
+      window.addEventListener('crtlu:localechange', () => {
+        if (window.CRTLU_I18N?.apply) window.CRTLU_I18N.apply(document);
+        // refresh sort option labels
+        const sort = document.getElementById('catalogSort');
+        if (sort) {
+          const map = {
+            featured: 'catalog.page.sortFeatured',
+            'price-asc': 'catalog.page.sortPriceAsc',
+            'price-desc': 'catalog.page.sortPriceDesc',
+            'name-asc': 'catalog.page.sortName',
+          };
+          [...sort.options].forEach(opt => {
+            const key = map[opt.value];
+            if (key) opt.textContent = t(key);
+          });
+        }
+        const search = document.getElementById('catalogSearch');
+        if (search) search.setAttribute('placeholder', t('catalog.page.search'));
+        renderFilters();
+        renderProducts();
+      });
+
       renderCart();
       initReveal();
 
@@ -530,14 +727,17 @@ const itemListJsonLd = {
         renderProducts();
       });
 
-      // Product grid actions (select variant / plug type / add to cart)
-      document.getElementById('productGrid')!.addEventListener('click', event => {
-        const select = (event.target as HTMLElement).closest('[data-select]');
-        if (select) {
-          selected[select.dataset.select!] = select.dataset.variant!;
+      // Product grid: config dropdown change
+      document.getElementById('productGrid')!.addEventListener('change', event => {
+        const sel = (event.target as HTMLElement).closest('[data-variant-select]') as HTMLSelectElement | null;
+        if (sel && sel.dataset.variantSelect) {
+          selected[sel.dataset.variantSelect] = sel.value;
           renderProducts();
         }
+      });
 
+      // Product grid actions (plug type / add to cart)
+      document.getElementById('productGrid')!.addEventListener('click', event => {
         const plug = (event.target as HTMLElement).closest('[data-plug]');
         if (plug) {
           const [seriesId, plugId] = plug.dataset.plug!.split(':');
@@ -576,13 +776,16 @@ const itemListJsonLd = {
   </script>
 
   <script is:inline>
+    // Safety net: only runs if the main catalog script never left "Loading catalog..."
+    // (e.g. JS error). Builds dynamic type/brand chips + search so new products stay findable.
     window.setTimeout(() => {
       const summary = document.getElementById('summary');
       const grid = document.getElementById('productGrid');
       const filters = document.getElementById('filters');
       const catalog = Array.isArray(window.__CATALOG__) ? window.__CATALOG__ : [];
-
-      if (!summary || !grid || !summary.textContent.includes('Loading catalog')) return;
+      // Main script already painted the grid (or main filters with data-filter) — do nothing.
+      if (!summary || !grid || grid.children.length > 0) return;
+      if (filters && filters.querySelector('[data-filter]')) return;
 
       const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({
         '&': '&amp;',
@@ -591,20 +794,89 @@ const itemListJsonLd = {
         '"': '&quot;',
         "'": '&#39;',
       })[char]);
-      const minPrice = (item) => Math.min(...(item.variants || []).map((variant) => Number(variant.price_cents) || 0));
-      const variantCount = catalog.reduce((sum, item) => sum + ((item.variants || []).length), 0);
 
-      summary.innerHTML = `<strong>${catalog.length}</strong> models / <strong>${variantCount}</strong> configs`;
+      const categoryLabel = (cat) => {
+        const map = {
+          'tv-box': 'TV Boxes',
+          projector: 'Projectors',
+          'wireless-hdmi': 'Wireless HDMI',
+          accessory: 'Accessories',
+          premium: 'Premium',
+        };
+        if (map[cat]) return map[cat];
+        return String(cat || '')
+          .split(/[-_]/)
+          .filter(Boolean)
+          .map((p) => p.charAt(0).toUpperCase() + p.slice(1))
+          .join(' ') || 'Other';
+      };
 
-      if (filters) {
-        filters.innerHTML = [
-          ['all', 'All'],
-          ['category:tv-box', 'TV Boxes'],
-          ['category:projector', 'Projectors'],
-        ].map(([id, label]) => `<button class="filter ${id === 'all' ? 'active' : ''}" type="button" data-fallback-filter="${id}">${label}</button>`).join('');
-      }
+      const preferredCatOrder = ['tv-box', 'projector', 'wireless-hdmi', 'accessory', 'premium'];
+      const preferredBrandOrder = ['MECOOL', 'H96', 'HK1', 'Tanix', 'T95', 'TX', 'X5', 'HY', 'A10', 'YS'];
+      const categories = [...new Set(catalog.map((item) => item.category).filter(Boolean))].sort((a, b) => {
+        const ia = preferredCatOrder.indexOf(a);
+        const ib = preferredCatOrder.indexOf(b);
+        return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib) || String(a).localeCompare(String(b));
+      });
+      const brands = [...new Set(catalog.map((item) => item.brand).filter(Boolean))].sort((a, b) => {
+        const ia = preferredBrandOrder.findIndex((x) => x.toLowerCase() === String(a).toLowerCase());
+        const ib = preferredBrandOrder.findIndex((x) => x.toLowerCase() === String(b).toLowerCase());
+        return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib) || String(a).localeCompare(String(b), undefined, { sensitivity: 'base' });
+      });
+
+      let activeFilter = 'all';
+      let searchQuery = '';
+
+      const minPrice = (item) => {
+        const prices = (item.variants || []).map((v) => Number(v.price_cents) || 0);
+        return prices.length ? Math.min(...prices) : 0;
+      };
+
+      const searchableText = (item) => [
+        item.id, item.name, item.brand, item.category, item.tier, item.description,
+        ...Object.values(item.specs || {}),
+        ...(item.variants || []).flatMap((v) => [v.id, v.label, v.sku, String(v.price_cents)]),
+      ].filter(Boolean).join(' ').toLowerCase();
+
+      const filteredItems = () => {
+        let items = catalog;
+        if (activeFilter.startsWith('category:')) {
+          items = items.filter((item) => item.category === activeFilter.slice(9));
+        } else if (activeFilter.startsWith('brand:')) {
+          const key = activeFilter.slice(6).toLowerCase();
+          items = items.filter((item) => String(item.brand || '').toLowerCase() === key);
+        }
+        const tokens = searchQuery.trim().toLowerCase().split(/\s+/).filter(Boolean);
+        if (tokens.length) {
+          items = items.filter((item) => tokens.every((token) => searchableText(item).includes(token)));
+        }
+        return items;
+      };
+
+      const chip = (id, label) =>
+        `<button class="filter ${id === activeFilter ? 'active' : ''}" type="button" data-fallback-filter="${escapeHtml(id)}">${escapeHtml(label)}</button>`;
+
+      const renderFallbackFilters = () => {
+        if (!filters) return;
+        const typeChips = categories.map((cat) => chip(`category:${cat}`, categoryLabel(cat))).join('');
+        const brandChips = brands.map((b) => chip(`brand:${b}`, b)).join('');
+        filters.innerHTML = `
+          <div class="filter-row">${chip('all', 'All')}</div>
+          ${typeChips ? `<div class="filter-row"><span class="filter-group-label">Type</span>${typeChips}</div>` : ''}
+          ${brandChips ? `<div class="filter-row"><span class="filter-group-label">Brand</span>${brandChips}</div>` : ''}
+        `;
+      };
 
       const renderFallbackProducts = (items) => {
+        const variantCount = items.reduce((sum, item) => sum + ((item.variants || []).length), 0);
+        summary.innerHTML = `<strong>${items.length}</strong> models / <strong>${variantCount}</strong> configs`
+          + (searchQuery.trim() ? ` · "${escapeHtml(searchQuery.trim())}"` : '');
+
+        if (!items.length) {
+          grid.innerHTML = `<div class="empty-state"><div><strong>No matching products.</strong></div></div>`;
+          return;
+        }
+
         grid.innerHTML = items.map((item) => {
           const firstVariant = (item.variants || [])[0];
           const price = minPrice(item);
@@ -614,10 +886,10 @@ const itemListJsonLd = {
 
           return `
             <article class="product-card reveal visible" id="${escapeHtml(item.id)}">
-              ${item.image ? `<div class="product-media"><img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name)}" loading="lazy" decoding="async"></div>` : ''}
+              ${item.image ? `<a class="product-media-link" href="/products/${encodeURIComponent(item.id)}/"><div class="product-media"><img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name)}" loading="lazy" decoding="async"></div></a>` : ''}
               <div class="card-head">
-                <div class="meta"><span>${escapeHtml(item.brand)}</span><span>${escapeHtml(item.tier || item.category)}</span></div>
-                <h2>${escapeHtml(item.name)}</h2>
+                <div class="meta"><span>${escapeHtml(item.brand)}</span><span>${escapeHtml(String(item.tier || item.category || '').replace(/-/g, ' '))}</span></div>
+                <h2><a class="product-card-link" href="/products/${encodeURIComponent(item.id)}/">${escapeHtml(item.name)}</a></h2>
                 <p>${escapeHtml(item.description)}</p>
               </div>
               <div class="card-body">
@@ -642,17 +914,37 @@ const itemListJsonLd = {
         }).join('');
       };
 
-      renderFallbackProducts(catalog);
+      const refresh = () => {
+        renderFallbackFilters();
+        renderFallbackProducts(filteredItems());
+      };
+
+      refresh();
 
       if (filters) {
         filters.addEventListener('click', (event) => {
           const button = event.target.closest('[data-fallback-filter]');
           if (!button) return;
-          const filter = button.dataset.fallbackFilter;
-          const filtered = filter === 'all' ? catalog : catalog.filter((item) => `category:${item.category}` === filter);
-          filters.querySelectorAll('[data-fallback-filter]').forEach((item) => item.classList.toggle('active', item === button));
-          summary.innerHTML = `<strong>${filtered.length}</strong> models / fallback catalog render`;
-          renderFallbackProducts(filtered);
+          activeFilter = button.dataset.fallbackFilter || 'all';
+          refresh();
+        });
+      }
+
+      const searchInput = document.getElementById('catalogSearch');
+      if (searchInput && !searchInput.dataset.fallbackBound) {
+        searchInput.dataset.fallbackBound = '1';
+        searchInput.addEventListener('input', (event) => {
+          searchQuery = event.target.value || '';
+          renderFallbackProducts(filteredItems());
+        });
+      }
+      const clearSearch = document.getElementById('clearSearch');
+      if (clearSearch && !clearSearch.dataset.fallbackBound) {
+        clearSearch.dataset.fallbackBound = '1';
+        clearSearch.addEventListener('click', () => {
+          searchQuery = '';
+          if (searchInput) searchInput.value = '';
+          renderFallbackProducts(filteredItems());
         });
       }
     }, 1000);

@@ -1,18 +1,24 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+// Vite watches this import so HMR invalidates when catalog.json changes.
+// Runtime loadCatalog() still prefers the live file on disk (admin edits).
+import catalogImport from '../../data/catalog.json';
+
 export interface Variant {
   id: string;
   label: string;
   sku: string;
   price_cents: number;
   compare_at_cents?: number;
+  rmb_price?: number;
   seriesId?: string;
   seriesName?: string;
   brand?: string;
   tier?: string;
   category?: string;
   description?: string;
+  image?: string;
 }
 
 export interface PlugType {
@@ -29,6 +35,7 @@ export interface SeriesItem {
   category: string;
   description: string;
   image: string;
+  status?: string;
   variants: Variant[];
   specs?: Record<string, string>;
   detail_url?: string;
@@ -43,33 +50,74 @@ export interface CatalogData {
   pending?: unknown[];
 }
 
-function publicAssetPath(value: string | undefined): string {
+export function publicAssetPath(value: string | undefined): string {
   if (!value) return '';
   if (/^(https?:)?\/\//i.test(value) || value.startsWith('/')) return value;
   return `/${value.replace(/^\/+/, '')}`;
 }
 
-function normalizeSeriesItem(item: SeriesItem): SeriesItem {
+/** Append cache-busting query so replaced images show without hard-refresh. */
+export function withAssetVersion(url: string | undefined, version?: string): string {
+  const base = publicAssetPath(url);
+  if (!base || !version) return base;
+  if (/^(https?:)?\/\//i.test(base)) return base;
+  const sep = base.includes('?') ? '&' : '?';
+  return `${base}${sep}v=${encodeURIComponent(version)}`;
+}
+
+function normalizeSeriesItem(item: SeriesItem, version?: string): SeriesItem {
+  const image = withAssetVersion(item.image, version);
+  const gallery = Array.isArray(item.gallery)
+    ? item.gallery.map((g) => withAssetVersion(g, version)).filter(Boolean)
+    : item.gallery;
   return {
     ...item,
-    image: publicAssetPath(item.image),
-    gallery: Array.isArray(item.gallery) ? item.gallery.map(publicAssetPath) : item.gallery,
+    image,
+    gallery,
   };
 }
 
+function catalogPath(): string {
+  return path.join(process.cwd(), 'data', 'catalog.json');
+}
+
+/** Read catalog: live disk first (picks up admin edits), import as fallback. */
+export function readCatalogData(): CatalogData {
+  try {
+    const live = JSON.parse(fs.readFileSync(catalogPath(), 'utf-8')) as CatalogData;
+    if (live && Array.isArray(live.series)) return live;
+  } catch {
+    // fall through
+  }
+  return catalogImport as CatalogData;
+}
+
+/** Version string for cache-busting product images. */
+export function catalogMediaVersion(data?: CatalogData): string {
+  const catalog = data || readCatalogData();
+  if (catalog.updated) return String(catalog.updated);
+  try {
+    const st = fs.statSync(catalogPath());
+    return String(Math.floor(st.mtimeMs));
+  } catch {
+    return '';
+  }
+}
+
 export function loadCatalog(): SeriesItem[] {
-  const projectRoot = process.cwd();
-  const catalogPath = path.join(projectRoot, 'data', 'catalog.json');
-  const catalogData = JSON.parse(fs.readFileSync(catalogPath, 'utf-8')) as CatalogData;
+  const catalogData = readCatalogData();
+  const version = catalogMediaVersion(catalogData);
   return (catalogData.series || [])
-    .filter((item) => item.status === 'published')
-    .map(normalizeSeriesItem);
+    .filter((item) => (item.status || 'published') === 'published')
+    .map((item) => normalizeSeriesItem(item, version));
+}
+
+export function loadSeriesById(id: string): SeriesItem | undefined {
+  return loadCatalog().find((item) => item.id === id);
 }
 
 export function loadPlugTypes(): PlugType[] {
-  const projectRoot = process.cwd();
-  const catalogPath = path.join(projectRoot, 'data', 'catalog.json');
-  const catalogData = JSON.parse(fs.readFileSync(catalogPath, 'utf-8')) as CatalogData;
+  const catalogData = readCatalogData();
   const plugTypes = Array.isArray(catalogData.plug_types) ? catalogData.plug_types : [];
   return plugTypes
     .map((plug) => ({

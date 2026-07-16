@@ -48,7 +48,7 @@ th { color: #8bff85; }
 <main>
   <div class="topbar">
     <div><h1>Members</h1><p class="muted">Verified customer accounts and repeat purchase context.</p></div>
-    <nav class="links"><a href="index.php">Dashboard</a><a href="orders.php">Orders</a><a href="coupons.php">Coupons</a><a href="emails.php">Emails</a></nav>
+    <nav class="links"><a href="index.php">Dashboard</a><a href="products.php">Products</a><a href="orders.php">Orders</a><a href="coupons.php">Coupons</a><a href="emails.php">Emails</a></nav>
   </div>
   <?php if (!$hasMembers): ?>
     <p class="muted">Members table not found. Import database/phase4-migration.sql and database/phase5-migration.sql.</p>
