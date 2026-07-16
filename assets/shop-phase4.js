@@ -108,18 +108,44 @@
       throw new Error(response.ok ? fallback : `${fallback} (${response.status})`);
     }
 
-    try {
-      return JSON.parse(text);
-    } catch {
-      const plainText = text
-        .replace(/<script[\s\S]*?<\/script>/gi, " ")
-        .replace(/<style[\s\S]*?<\/style>/gi, " ")
-        .replace(/<[^>]*>/g, " ")
-        .replace(/\s+/g, " ")
-        .trim();
-      const detail = plainText ? `: ${plainText.slice(0, 180)}` : "";
-      throw new Error(`${fallback}${detail}`);
+    const tryParse = (raw) => {
+      try {
+        return JSON.parse(raw);
+      } catch {
+        return null;
+      }
+    };
+
+    // 1) Clean JSON body
+    let payload = tryParse(text);
+
+    // 2) Body may include PHP warnings/HTML before/after JSON — extract first object
+    if (!payload) {
+      const start = text.indexOf("{");
+      const end = text.lastIndexOf("}");
+      if (start !== -1 && end > start) {
+        payload = tryParse(text.slice(start, end + 1));
+      }
     }
+
+    // 3) Recover Stripe Checkout URL if session was created but body is truncated/noisy
+    if (!payload || (!payload.url && !payload.error)) {
+      const urlMatch = text.match(/https:\/\/checkout\.stripe\.com\/[^\s"'<>\\]+/i);
+      if (urlMatch) {
+        payload = { url: urlMatch[0].replace(/[)\\],.]+$/g, "") };
+      }
+    }
+
+    if (payload) return payload;
+
+    const plainText = text
+      .replace(/<script[\s\S]*?<\/script>/gi, " ")
+      .replace(/<style[\s\S]*?<\/style>/gi, " ")
+      .replace(/<[^>]*>/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+    const detail = plainText ? `: ${plainText.slice(0, 180)}` : "";
+    throw new Error(`${fallback}${detail}`);
   }
 
   function initControls(options) {

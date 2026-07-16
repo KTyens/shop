@@ -4,12 +4,17 @@ require __DIR__ . '/config.php';
 require __DIR__ . '/promotions.php';
 require __DIR__ . '/member-auth.php';
 
-header('Content-Type: application/json');
+// Drop any accidental buffered notices from includes so the body stays pure JSON.
+while (ob_get_level() > 0) {
+    ob_end_clean();
+}
+header('Content-Type: application/json; charset=utf-8');
+header('X-Content-Type-Options: nosniff');
 
 function fail_checkout(string $message, int $status = 400): void
 {
     http_response_code($status);
-    echo json_encode(['error' => $message], JSON_UNESCAPED_SLASHES);
+    echo json_encode(['error' => $message], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     exit;
 }
 
@@ -186,4 +191,11 @@ $params = array_merge($lineItems, [
 ]);
 
 $session = post_stripe('checkout/sessions', $params);
-echo json_encode(['url' => $session['url'] ?? null], JSON_UNESCAPED_SLASHES);
+$url = trim((string)($session['url'] ?? ''));
+if ($url === '' || !preg_match('#^https://checkout\.stripe\.com/#i', $url)) {
+    fail_checkout('Stripe session was created without a usable checkout URL.', 502);
+}
+
+// Final clean JSON only (no trailing whitespace/warnings).
+echo json_encode(['url' => $url, 'id' => $session['id'] ?? null], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+exit;
