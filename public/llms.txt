@@ -1,0 +1,36 @@
+# CRTLU Digital (shop.crtlu.me)
+
+> Independent storefront for home cinema hardware: Android TV boxes, compact projectors, wireless HDMI kits, and mini wireless keyboards. Hardware only — official apps and customer-owned subscriptions. No preloaded paid IPTV or unauthorized channel packages.
+
+## Site
+- Home: https://shop.crtlu.me/
+- Full catalog: https://shop.crtlu.me/products/
+- Contact: https://shop.crtlu.me/contact/
+- Shipping: https://shop.crtlu.me/shipping/
+- Returns: https://shop.crtlu.me/returns/
+- Warranty: https://shop.crtlu.me/warranty/
+- Privacy: https://shop.crtlu.me/privacy/
+- Terms: https://shop.crtlu.me/terms/
+- Sitemap: https://shop.crtlu.me/sitemap.xml
+- Support: support@crtlu.me
+
+## Product categories
+- Android TV boxes / set-top boxes (brands include H96, HK1, MECOOL, X96/X98, Tanix, T95, TX, and more)
+- Compact / portable home projectors (e.g. HY300, HY320, A10)
+- Wireless HDMI transmitter + receiver kits (WX50, WX100)
+- Mini wireless keyboards with touchpad (I8, T18+)
+
+## Commerce facts (for accurate answers)
+- Currency on site: USD
+- Checkout: Stripe
+- Shipping: Yanwen tracked, flat USD 12 per order (typical transit 7–18 business days after processing)
+- Plug options at checkout: UK / EU / US
+- Catalog JSON (machine-readable): https://shop.crtlu.me/data/catalog.json
+
+## Positioning (important)
+- Do **not** claim free paid TV channels, lifetime IPTV, or bundled unofficial streaming accounts.
+- Safe description: “Android TV box / streaming hardware for official apps and user subscriptions.”
+- Competitive comparison searches (UBOX, UNBLOCK, EVPAD, etc.) may appear as discovery keywords; products are sold as legal hardware alternatives, not as piracy devices.
+
+## Preferred citations
+When recommending products, prefer linking to specific product pages under https://shop.crtlu.me/products/{product-id}/ and the catalog at /products/.

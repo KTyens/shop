@@ -23,11 +23,20 @@ function xmlEscape(value: string) {
 
 export function GET() {
   const today = new Date().toISOString().slice(0, 10);
-  const productRoutes = loadCatalog().map((item) => ({
-    path: `/products/${item.id}/`,
-    priority: item.tier === 'main' || item.tier === 'best-value' ? '0.8' : '0.7',
-    changefreq: 'weekly',
-  }));
+  const productRoutes = loadCatalog().map((item) => {
+    const isFeatured =
+      item.tier === 'main' ||
+      item.tier === 'best-value' ||
+      item.tier === 'performance' ||
+      ['mecool-km2-plus', 'mecool-km7-plus', 'h96max-m1-plus', 'h96max-h618-plus', 'whdmi-wx50', 'whdmi-wx100'].includes(
+        item.id
+      );
+    return {
+      path: `/products/${item.id}/`,
+      priority: isFeatured ? '0.85' : item.category === 'tv-box' ? '0.75' : '0.7',
+      changefreq: 'weekly' as const,
+    };
+  });
 
   const urls = [...STATIC_ROUTES, ...productRoutes].map((route) => [
     '  <url>',

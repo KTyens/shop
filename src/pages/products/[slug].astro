@@ -5,7 +5,7 @@ import Navigation from '../../components/Navigation.astro';
 import CartDrawer from '../../components/CartDrawer.astro';
 import PlugSelectorStyles from '../../components/PlugSelectorStyles.astro';
 import '../../styles/global.css';
-import { productJsonLd, productKeywords } from '../../lib/seo';
+import { breadcrumbJsonLd, productJsonLd, productKeywords, productPageDescription, productPageTitle } from '../../lib/seo';
 
 // Paths only — product body is re-loaded by slug each request so gallery
 // always follows data/catalog.json (not a stale props snapshot).
@@ -42,9 +42,14 @@ const variantsPayload = variants;
 const plugTypesPayload = plugTypes;
 const mediaVersionPayload = mediaVersion;
 const productSeoKeywords = productKeywords(product);
-const productTitle = `${product.name} ${product.category === 'projector' ? 'Home Cinema Projector' : 'Android TV Box'} | CRTL U Digital`;
-const productDescription = `${product.description} Shop ${product.name} configurations with secure Stripe checkout, Yanwen tracked shipping, and no preloaded paid content.`;
+const productTitle = productPageTitle(product);
+const productDescription = productPageDescription(product);
 const productSchema = productJsonLd(product);
+const productBreadcrumb = breadcrumbJsonLd([
+  { name: 'Home', path: '/' },
+  { name: 'Products', path: '/products/' },
+  { name: product.name, path: `/products/${product.id}/` },
+]);
 const isProjector = product.category === 'projector';
 const buyerFit = isProjector
   ? 'Home movie nights, bedroom viewing, casual gaming, and portable big-screen setups.'
@@ -103,7 +108,7 @@ const faqSchema = {
   canonicalPath={`/products/${product.id}/`}
   image={product.image}
   type="product"
-  jsonLd={[productSchema, faqSchema]}
+  jsonLd={[productSchema, faqSchema, productBreadcrumb]}
 >
   <Navigation />
   <CartDrawer />

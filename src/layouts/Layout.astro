@@ -40,8 +40,11 @@ const jsonLdItems = Array.isArray(jsonLd) ? jsonLd : [jsonLd];
     <meta name="description" content={description} />
     {keywordContent && <meta name="keywords" content={keywordContent} />}
     <meta name="robots" content={robots} />
+    <meta name="author" content={SITE_NAME} />
     <link rel="canonical" href={canonicalUrl} />
+    <link rel="alternate" type="text/plain" href={absoluteUrl('/llms.txt')} title="LLM store summary" />
     <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:type" content={type} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />

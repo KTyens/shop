@@ -1,8 +1,8 @@
 # SEO Keyword Strategy
 
-Last updated: 2026-07-07
+Last updated: 2026-07-16
 
-This file records the storefront keyword system for `shop.crtlu.me`.
+This file records the storefront keyword and AI-discovery system for `shop.crtlu.me`.
 
 ## Primary Head Terms
 
@@ -20,78 +20,102 @@ Use these terms naturally in page titles, headings, descriptions, product copy, 
 | Android set-top box | 家庭影院投影仪 |
 | home cinema projector | 便携投影仪 |
 | compact projector | 小型投影仪 |
+| wireless HDMI | 无线HDMI |
+| mini wireless keyboard | 迷你无线键盘 |
 
-## Brand And Discovery Terms
+## Catalog Expansion (2026-07)
 
-The user asked to include these related brand/search terms:
+Add model/brand discovery terms when writing titles and meta (accurate products only):
+
+```text
+MECOOL, MECOOL KM2 Plus, MECOOL KM7 Plus
+X96, X96Q, X96Q PRO, X96 S400, X96 X4, X96 Max+ Ultra
+X98 PLUS, X98Q, X98K
+Wireless HDMI WX50, WX100
+I8 mini keyboard, T18+ mini keyboard
+H96Max H618 Plus, H96Max M1 Plus, H96 MAX V58, H96Max M12
+HK1 RBOX K8S, X4S, W2, H8…
+Tanix, T95, TX98, X5 YB962
+```
+
+Chipset modifiers when accurate:
+
+```text
+Amlogic S905X4, S905W2, S905X3
+Allwinner H618, H313
+Rockchip RK3528, RK3588
+Android 10 / 11 / 14 TV Box
+Wi-Fi 6, dual-band, Gigabit Ethernet, 100M LAN
+AV1 decode, 4K HDR
+```
+
+## Brand And Discovery Terms (comparison searches)
 
 ```text
 UBOX12, UBOX, UNBLOCK TECH, 安博盒子, 台湾安博, 华人电视,
 电视机顶盒, UNBLOCK TV BOX, EVPAD, 小云电视盒子, 易橎
 ```
 
-Use these cautiously. Some users search for these terms when comparing TV boxes, but the storefront should not imply bundled paid channels, pirated IPTV, or unauthorized content.
-
-Recommended positioning:
-
-- "Android TV box alternatives and home cinema devices"
-- "TV set-top boxes for official apps and user-owned subscriptions"
-- "No preloaded paid content"
-- "Legal streaming with your own subscriptions"
-
-Avoid:
-
-- Claiming free paid channels.
-- Claiming lifetime IPTV access.
-- Using third-party streaming app logos as the main SEO or product promise.
-- Writing copy that suggests the product includes unauthorized content.
-
-## Technical Modifiers
-
-Use product-specific modifiers when accurate:
-
-```text
-Android 14 TV Box
-Android 13 TV Box
-Wi-Fi 6 TV Box
-Bluetooth 5.4 TV Box
-4K HDR TV Box
-8K TV Box
-RK3528 TV Box
-RK3588 TV Box
-Allwinner H618 TV Box
-Allwinner H313 TV Box
-Amlogic S905X3 TV Box
-2GB 16GB TV Box
-4GB 32GB TV Box
-4GB 64GB TV Box
-4GB 128GB TV Box
-```
+Use cautiously. Position as legal hardware for official apps — never imply bundled paid channels or IPTV.
 
 ## Market Modifiers
 
-Current target market assumptions from the pricing system:
-
 ```text
-TV Box Japan
-Android TV Box Japan
-Google TV Box Japan
-4K streaming device Japan
-home cinema projector Japan
+TV Box Japan / Android TV Box Japan
+Android TV Box USA / Canada / UK / EU / Australia
+global shipping TV box
+Yanwen tracked shipping
 ```
 
-Secondary market terms can be added later for the United States, Canada, UK, EU, Australia, and New Zealand when logistics/pricing pages are expanded.
+## Implementation Map
 
-## Implementation
+| File | Role |
+|---|---|
+| `src/lib/seo.ts` | Keyword lists, Product/Org/WebSite/FAQ/Breadcrumb JSON-LD |
+| `src/layouts/Layout.astro` | Canonical, robots, OG/Twitter, JSON-LD, link to `llms.txt` |
+| `src/pages/index.astro` | Home title/description + WebSite + Org + FAQ + ItemList |
+| `src/pages/products/index.astro` | Catalog title/description + ItemList |
+| `src/pages/products/[slug].astro` | Product title/description + Product + FAQ + Breadcrumb |
+| `src/pages/robots.txt.ts` | Allow index + explicit AI crawlers |
+| `src/pages/sitemap.xml.ts` | All published product URLs |
+| `public/llms.txt` | **AI agent summary** (what we sell / policies / key URLs) |
+| `public/data/catalog.json` | Machine-readable product data for tools & agents |
 
-Current SEO implementation lives in:
+## Google SEO Priorities
 
-- `src/lib/seo.ts`: shared keyword lists, URL helpers, JSON-LD helpers.
-- `src/layouts/Layout.astro`: canonical, robots, Open Graph, Twitter card, keywords, JSON-LD rendering.
-- `src/pages/index.astro`: homepage SEO title, description, keywords, Website/Organization schema.
-- `src/pages/products/index.astro`: catalog SEO title, description, keywords, ItemList schema.
-- `src/pages/products/[slug].astro`: product SEO title, description, keywords, Product schema.
-- `src/pages/robots.txt.ts`: search crawler policy.
-- `src/pages/sitemap.xml.ts`: generated sitemap from the published catalog.
+1. Accurate **title + meta description** per product (name, config, category, price from).
+2. **Product JSON-LD** with AggregateOffer, shippingDetails, InStock.
+3. **Sitemap** freshness after catalog changes (`npm run build` + deploy).
+4. Helpful FAQ on PDP + homepage (also used by AI overviews).
+5. Avoid keyword stuffing; write clear buying copy.
 
-Search engines ignore or downweight raw `meta keywords`, so do not rely on keyword stuffing. Stronger SEO work should add useful comparison and buying-guide pages.
+## AI / Agent Discoverability
+
+| Mechanism | Purpose |
+|---|---|
+| `llms.txt` | Short, citable store facts for ChatGPT/Claude/Perplexity-style tools |
+| `robots.txt` Allow for GPTBot, ClaudeBot, Google-Extended, PerplexityBot, etc. | Do not block training/browse bots unless policy changes |
+| `catalog.json` public URL | Structured inventory agents can fetch |
+| Schema.org Product / Offer / FAQ / Organization | Rich results + grounded citations |
+| BreadcrumbList | Clear site hierarchy in SERP and parsers |
+
+Optional later (not required for launch):
+
+- Google Search Console property + sitemap submit
+- Merchant Center / product feed if running Google Shopping ads
+- Comparison / buying-guide articles (content SEO)
+- `hreflang` only if full localized URL trees exist
+
+## Safety Rules
+
+Avoid:
+
+- Free paid channels / lifetime IPTV claims
+- Third-party streaming brand logos as the main promise
+- Unauthorized content implications
+
+Prefer:
+
+- “Official apps only”
+- “Bring your own subscriptions”
+- “Legal streaming device / hardware”

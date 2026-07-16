@@ -3,7 +3,15 @@ import { loadCatalog } from '../lib/catalog-data';
 import Layout from '../layouts/Layout.astro';
 import Navigation from '../components/Navigation.astro';
 import '../styles/global.css';
-import { BRAND_DISCOVERY_KEYWORDS, CORE_SEO_KEYWORDS, SAFE_COMMERCE_KEYWORDS, organizationJsonLd, websiteJsonLd } from '../lib/seo';
+import {
+  BRAND_DISCOVERY_KEYWORDS,
+  CORE_SEO_KEYWORDS,
+  SAFE_COMMERCE_KEYWORDS,
+  itemListJsonLd,
+  organizationJsonLd,
+  storeFaqJsonLd,
+  websiteJsonLd,
+} from '../lib/seo';
 
 const series = loadCatalog();
 
@@ -93,16 +101,30 @@ const homeKeywords = [
   'buy Android TV box online',
   'premium TV boxes',
   'compact home projector',
+  'MECOOL KM2 Plus',
+  'MECOOL KM7 Plus',
+  'X96 TV Box',
+  'X98Q',
+  'wireless HDMI WX50',
+  'wireless HDMI WX100',
+  'I8 mini keyboard',
+  'T18+ mini keyboard',
+  ...items.slice(0, 24).map((i) => i.name),
 ];
 ---
 
 <Layout
-  title="Premium Android TV Boxes, Google TV Streamers & Compact Projectors | CRTL U Digital"
-  description="Shop curated Android TV boxes, Google TV streamers, 4K TV boxes, set-top boxes, and compact projectors with secure Stripe checkout and Yanwen tracked shipping."
+  title="Android TV Boxes, Projectors, Wireless HDMI & Mini Keyboards | CRTLU Digital"
+  description={`Shop Android TV boxes (H96, HK1, MECOOL, X96/X98), compact projectors, wireless HDMI kits, and mini keyboards. Official apps only, Stripe checkout, Yanwen shipping from ${money(fromPrice)}.`}
   keywords={homeKeywords}
   canonicalPath="/"
   image={assetUrl(heroProduct?.image) || '/assets/hero-cinema.jpg'}
-  jsonLd={[websiteJsonLd(), organizationJsonLd()]}
+  jsonLd={[
+    websiteJsonLd(),
+    organizationJsonLd(),
+    storeFaqJsonLd(),
+    itemListJsonLd('CRTLU Digital featured and catalog products', items.slice(0, 40)),
+  ]}
 >
   <Navigation currentPage="home" />
 
