@@ -1,6 +1,8 @@
 <?php
 
 require __DIR__ . '/auth.php';
+require __DIR__ . '/admin-shell.php';
+require_once __DIR__ . '/../api/yanwen-client.php';
 
 crtlu_require_admin();
 
@@ -12,20 +14,44 @@ function crtlu_admin_order_item_parts(string $name): array
     if (preg_match('/^(.*?)\s*\/\s*Plug:\s*(.+)$/i', trim($name), $matches)) {
         return [trim($matches[1]), trim($matches[2])];
     }
-
     return [trim($name), ''];
 }
 
+$flash = null;
+$flashError = false;
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $action = (string)($_POST['action'] ?? 'save');
+    $orderId = (int)($_POST['id'] ?? 0);
+    $statusFilter = (string)($_GET['status'] ?? '');
+    $redirect = 'orders.php' . ($statusFilter !== '' ? '?status=' . urlencode($statusFilter) : '');
+
+    if ($action === 'create_yanwen') {
+        $force = !empty($_POST['force_yanwen']);
+        $result = yanwen_fulfill_shop_order($pdo, $orderId, $force);
+        $q = $statusFilter !== '' ? '&status=' . urlencode($statusFilter) : '';
+        if (!empty($result['ok'])) {
+            header('Location: orders.php?yanwen=ok&msg=' . rawurlencode((string)$result['message']) . $q);
+        } else {
+            header('Location: orders.php?yanwen=err&msg=' . rawurlencode((string)$result['message']) . $q);
+        }
+        exit;
+    }
+
     $status = in_array($_POST['status'] ?? '', $allowedStatuses, true) ? $_POST['status'] : 'paid';
     $stmt = $pdo->prepare('UPDATE orders SET status = :status, yanwen_tracking = :tracking WHERE id = :id');
     $stmt->execute([
         ':status' => $status,
         ':tracking' => trim((string)($_POST['yanwen_tracking'] ?? '')),
-        ':id' => (int)($_POST['id'] ?? 0),
+        ':id' => $orderId,
     ]);
-    header('Location: orders.php?status=' . urlencode((string)($_GET['status'] ?? '')));
+    header('Location: ' . $redirect);
     exit;
+}
+
+if (isset($_GET['yanwen'], $_GET['msg'])) {
+    $flash = (string)$_GET['msg'];
+    $flashError = (string)$_GET['yanwen'] === 'err';
 }
 
 $statusFilter = (string)($_GET['status'] ?? '');
@@ -56,69 +82,39 @@ $summary = [
     'revenue' => array_sum(array_map(static fn(array $order): int => (int)$order['amount_total'], $orders)),
     'unshipped' => count(array_filter($orders, static fn(array $order): bool => in_array($order['status'], ['paid', 'processing'], true))),
 ];
+
+$yanwenReady = yanwen_is_configured() && trim((string)yanwen_config('YANWEN_CHANNEL_ID', '')) !== '';
+
+crtlu_admin_header('订单管理', '查看 Stripe 订单、一键创建燕文运单、更新履约状态。');
 ?>
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CRTLU Orders</title>
-<style>
-body { margin: 0; font-family: system-ui, sans-serif; background: #071016; color: #f5fbff; }
-main { max-width: 1280px; margin: 0 auto; padding: 28px; }
-a { color: inherit; }
-.topbar { display: flex; justify-content: space-between; gap: 18px; align-items: center; margin-bottom: 18px; }
-.muted { color: #91a1ae; }
-.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 18px 0; }
-.card { background: #0d171f; border: 1px solid rgba(255,255,255,.12); padding: 16px; }
-.card strong { display: block; font-size: 26px; margin-top: 6px; }
-.filters { display: flex; gap: 8px; flex-wrap: wrap; margin: 18px 0; }
-.filters a, .button { display: inline-flex; align-items: center; min-height: 34px; padding: 0 12px; border: 1px solid rgba(255,255,255,.18); text-decoration: none; background: #0d171f; }
-.filters a.active, .button.primary { background: #5de7ff; color: #001014; font-weight: 800; }
-table { width: 100%; border-collapse: collapse; background: #0d171f; }
-th, td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,.12); text-align: left; vertical-align: top; font-size: 14px; }
-th { color: #8bff85; }
-input, select, button { min-height: 34px; border: 1px solid rgba(255,255,255,.18); background: #071016; color: #fff; padding: 0 8px; }
-button { background: #5de7ff; color: #001014; font-weight: 800; cursor: pointer; }
-.items { margin: 8px 0 0; padding-left: 17px; color: #c9d8df; }
-.items li { margin: 0 0 10px; }
-.plug-pill { display: inline-flex; margin-top: 5px; padding: 4px 7px; border: 1px solid rgba(93,231,255,.32); background: rgba(93,231,255,.08); color: #8feeff; font-size: 12px; font-weight: 800; }
-.status-pill { display: inline-flex; padding: 4px 8px; border: 1px solid rgba(139,255,133,.3); color: #8bff85; background: rgba(139,255,133,.08); }
-.address { max-width: 260px; }
-.order-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-@media (max-width: 900px) {
-  .cards { grid-template-columns: 1fr; }
-  table { min-width: 1100px; }
-  .table-wrap { overflow-x: auto; }
-}
-</style>
-</head>
-<body>
-<main>
-  <div class="topbar">
-    <div>
-      <h1>CRTLU Orders</h1>
-      <p class="muted">Paid Stripe orders. Update fulfillment status and export pending shipments for Yanwen.</p>
-    </div>
-    <div class="order-actions">
-      <a class="button" href="index.php">Dashboard</a><a href="products.php">Products</a>
-      <a class="button" href="members.php">Members</a>
-      <a class="button" href="coupons.php">Coupons</a>
-      <a class="button" href="emails.php">Emails</a>
-      <a class="button primary" href="export-yanwen.php">Export Yanwen CSV</a>
-    </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;">
+    <a class="button primary" href="export-yanwen.php">导出燕文 CSV</a>
+    <a class="button" href="yanwen.php">燕文 API 对接</a>
   </div>
+
+  <?php if ($flash !== null): ?>
+    <p class="message<?= $flashError ? ' error' : '' ?>" style="margin:0 0 14px;"><?= htmlspecialchars($flash) ?></p>
+  <?php endif; ?>
+
+  <?php if (!yanwen_is_configured()): ?>
+    <p class="message error" style="margin:0 0 14px;">燕文密钥未配置：请在 <code>api/config.local.php</code> 填写后，到「燕文 API」页测试连通。</p>
+  <?php elseif (!$yanwenReady): ?>
+    <p class="message error" style="margin:0 0 14px;">
+      已配置密钥，但未设置 <code>YANWEN_CHANNEL_ID</code>。请打开
+      <a href="yanwen.php?action=channels">拉取已开通产品</a>，把产品 id 写入 config 后再一键创建运单。
+    </p>
+  <?php endif; ?>
 
   <div class="cards">
-    <div class="card"><span class="muted">Current view orders</span><strong><?= htmlspecialchars((string)$summary['orders']) ?></strong></div>
-    <div class="card"><span class="muted">Current view revenue</span><strong><?= htmlspecialchars(crtlu_money((int)$summary['revenue'], 'usd')) ?></strong></div>
-    <div class="card"><span class="muted">Unshipped in view</span><strong><?= htmlspecialchars((string)$summary['unshipped']) ?></strong></div>
+    <div class="card"><span class="muted">当前列表订单数</span><strong><?= htmlspecialchars((string)$summary['orders']) ?></strong></div>
+    <div class="card"><span class="muted">当前列表金额</span><strong><?= htmlspecialchars(crtlu_money((int)$summary['revenue'], 'usd')) ?></strong></div>
+    <div class="card"><span class="muted">待发货（本页）</span><strong><?= htmlspecialchars((string)$summary['unshipped']) ?></strong></div>
   </div>
 
-  <nav class="filters" aria-label="Order filters">
-    <a class="<?= $statusFilter === '' ? 'active' : '' ?>" href="orders.php">All</a>
+  <nav class="filters" aria-label="订单筛选">
+    <a class="<?= $statusFilter === '' ? 'active' : '' ?>" href="orders.php">全部</a>
     <?php foreach ($allowedStatuses as $status): ?>
-      <a class="<?= $statusFilter === $status ? 'active' : '' ?>" href="orders.php?status=<?= urlencode($status) ?>"><?= htmlspecialchars($status) ?></a>
+      <a class="<?= $statusFilter === $status ? 'active' : '' ?>" href="orders.php?status=<?= urlencode($status) ?>"><?= htmlspecialchars(crtlu_admin_status_label($status)) ?></a>
     <?php endforeach; ?>
   </nav>
 
@@ -126,18 +122,22 @@ button { background: #5de7ff; color: #001014; font-weight: 800; cursor: pointer;
     <table>
       <thead>
         <tr>
-          <th>ID</th>
-          <th>Customer</th>
-          <th>Items</th>
-          <th>Total</th>
-          <th>Ship To</th>
-          <th>Status</th>
-          <th>Yanwen Tracking</th>
+          <th>订单</th>
+          <th>客户</th>
+          <th>商品</th>
+          <th>金额</th>
+          <th>收件地址</th>
+          <th>状态</th>
+          <th>燕文运单 / 更新</th>
         </tr>
       </thead>
       <tbody>
         <?php foreach ($orders as $order): ?>
-        <?php $addressLines = crtlu_address_lines($order['shipping_address_json'] ?? null); ?>
+        <?php
+          $addressLines = crtlu_address_lines($order['shipping_address_json'] ?? null);
+          $hasTracking = trim((string)($order['yanwen_tracking'] ?? '')) !== '';
+          $canCreate = in_array((string)$order['status'], ['paid', 'processing', 'shipped'], true);
+        ?>
         <tr>
           <td>
             #<?= htmlspecialchars((string)$order['id']) ?><br>
@@ -150,12 +150,12 @@ button { background: #5de7ff; color: #001014; font-weight: 800; cursor: pointer;
             <span class="muted"><?= htmlspecialchars($order['phone']) ?></span>
           </td>
           <td>
-            <ul class="items">
+            <ul style="margin:8px 0 0;padding-left:17px;color:#c9d8df;">
               <?php foreach (($itemsByOrder[(int)$order['id']] ?? []) as $item): ?>
                 <?php [$itemName, $plugType] = crtlu_admin_order_item_parts((string)$item['product_name']); ?>
-                <li>
-                  <?= htmlspecialchars((string)$item['quantity']) ?> x <?= htmlspecialchars($itemName) ?>
-                  <?php if ($plugType !== ''): ?><br><span class="plug-pill">Power adapter: <?= htmlspecialchars($plugType) ?></span><?php endif; ?>
+                <li style="margin:0 0 10px;">
+                  <?= htmlspecialchars((string)$item['quantity']) ?> × <?= htmlspecialchars($itemName) ?>
+                  <?php if ($plugType !== ''): ?><br><span class="plug-pill">电源插头：<?= htmlspecialchars($plugType) ?></span><?php endif; ?>
                 </li>
               <?php endforeach; ?>
             </ul>
@@ -163,42 +163,55 @@ button { background: #5de7ff; color: #001014; font-weight: 800; cursor: pointer;
           <td>
             <?= htmlspecialchars(crtlu_money((int)$order['amount_total'], $order['currency'])) ?><br>
             <?php if (!empty($order['coupon_code'])): ?>
-              <span class="muted">Coupon: <?= htmlspecialchars($order['coupon_code']) ?></span><br>
-              <span class="muted">Discount: <?= htmlspecialchars(crtlu_money((int)($order['discount_total'] ?? 0), $order['currency'])) ?></span><br>
+              <span class="muted">优惠码：<?= htmlspecialchars($order['coupon_code']) ?></span><br>
+              <span class="muted">优惠：<?= htmlspecialchars(crtlu_money((int)($order['discount_total'] ?? 0), $order['currency'])) ?></span><br>
             <?php endif; ?>
             <?php if (!empty($order['display_currency']) || !empty($order['locale'])): ?>
-              <span class="muted">Pref: <?= htmlspecialchars(trim(($order['display_currency'] ?? '') . ' ' . ($order['locale'] ?? ''))) ?></span>
+              <span class="muted">偏好：<?= htmlspecialchars(trim(($order['display_currency'] ?? '') . ' ' . ($order['locale'] ?? ''))) ?></span>
             <?php endif; ?>
           </td>
-          <td class="address">
+          <td style="max-width:260px;">
             <strong><?= htmlspecialchars($order['shipping_name']) ?></strong><br>
             <?php foreach ($addressLines as $line): ?>
               <span class="muted"><?= htmlspecialchars($line) ?></span><br>
             <?php endforeach; ?>
           </td>
           <td>
-            <span class="status-pill"><?= htmlspecialchars($order['status']) ?></span>
+            <span class="status-pill"><?= htmlspecialchars(crtlu_admin_status_label((string)$order['status'])) ?></span>
           </td>
           <td>
-            <form method="post" class="order-actions">
+            <form method="post" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px;">
+              <input type="hidden" name="action" value="save">
               <input type="hidden" name="id" value="<?= htmlspecialchars((string)$order['id']) ?>">
-              <select name="status">
+              <select name="status" aria-label="订单状态">
                 <?php foreach ($allowedStatuses as $status): ?>
-                  <option value="<?= $status ?>" <?= $order['status'] === $status ? 'selected' : '' ?>><?= $status ?></option>
+                  <option value="<?= $status ?>" <?= $order['status'] === $status ? 'selected' : '' ?>><?= htmlspecialchars(crtlu_admin_status_label($status)) ?></option>
                 <?php endforeach; ?>
               </select>
-              <input name="yanwen_tracking" value="<?= htmlspecialchars($order['yanwen_tracking'] ?? '') ?>" placeholder="Yanwen tracking">
-              <button type="submit">Save</button>
+              <input name="yanwen_tracking" value="<?= htmlspecialchars($order['yanwen_tracking'] ?? '') ?>" placeholder="燕文运单号">
+              <button class="button primary" type="submit">保存</button>
             </form>
+            <?php if ($canCreate): ?>
+            <form method="post" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;" onsubmit="return confirm('确认向燕文创建运单？成功后将写回运单号<?= $hasTracking ? '（当前已有号，需勾选强制才会重建）' : '' ?>。');">
+              <input type="hidden" name="action" value="create_yanwen">
+              <input type="hidden" name="id" value="<?= htmlspecialchars((string)$order['id']) ?>">
+              <button class="button" type="submit" <?= $yanwenReady ? '' : 'disabled title="请先配置 YANWEN_CHANNEL_ID"' ?>>
+                创建燕文运单
+              </button>
+              <?php if ($hasTracking): ?>
+                <label class="muted" style="font-size:12px;display:inline-flex;gap:4px;align-items:center;">
+                  <input type="checkbox" name="force_yanwen" value="1"> 强制重建
+                </label>
+              <?php endif; ?>
+            </form>
+            <?php endif; ?>
           </td>
         </tr>
         <?php endforeach; ?>
         <?php if (!$orders): ?>
-        <tr><td colspan="7" class="muted">No orders in this view.</td></tr>
+        <tr><td colspan="7" class="muted">当前筛选下没有订单。</td></tr>
         <?php endif; ?>
       </tbody>
     </table>
   </div>
-</main>
-</body>
-</html>
+<?php crtlu_admin_footer(); ?>

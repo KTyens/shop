@@ -9,6 +9,7 @@ Git repository root for `shop.crtlu.me`.
 3. `docs/pricing-system.md`
 4. `docs/product-media-guidelines.md`
 5. `docs/published-products.md`
+6. `docs/yanwen-api-integration.md` — **燕文 API 用法、能力边界（免填单号/实时轨迹尚未上线）**
 
 ## Hard rules
 

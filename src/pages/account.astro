@@ -134,6 +134,7 @@ const locales = [
       login: apiUrl('/api/account-login.php'),
       account: apiUrl('/api/account.php'),
       logout: apiUrl('/api/account-logout.php'),
+      track: apiUrl('/api/yanwen-track.php'),
     };
 
     let state = { authenticated: false, member: null, orders: [], addresses: [] };
@@ -234,7 +235,7 @@ const locales = [
 
       $('ordersList').innerHTML = orders.length
         ? orders.map(order => `
-            <article style="border:1px solid var(--line);background:rgba(0,0,0,.18);padding:16px;margin-bottom:12px;">
+            <article style="border:1px solid var(--line);background:rgba(0,0,0,.18);padding:16px;margin-bottom:12px;" data-order-id="${esc(order.id)}">
               <div style="display:flex;justify-content:space-between;gap:12px;align-items:start;margin-bottom:10px;">
                 <div>
                   <strong>Order #${esc(order.id)}</strong>
@@ -244,10 +245,55 @@ const locales = [
               </div>
               <div style="font-size:14px;">Total: <strong>${esc(money(order.amount_total, order.currency))}</strong></div>
               ${order.coupon_code ? `<div style="color:var(--muted);font-size:14px;">Coupon ${esc(order.coupon_code)} saved ${esc(money(order.discount_total, order.currency))}</div>` : ''}
-              ${order.yanwen_tracking ? `<div style="font-size:14px;">Yanwen: <strong>${esc(order.yanwen_tracking)}</strong></div>` : `<div style="color:var(--muted);font-size:14px;">Tracking will be added after shipment</div>`}
+              ${order.yanwen_tracking
+                ? `<div style="font-size:14px;margin-top:6px;">Tracking: <strong>${esc(order.yanwen_tracking)}</strong>
+                    <button type="button" class="secondary-button" data-track-order="${esc(order.id)}" style="margin-left:10px;font-size:12px;padding:0 12px;min-height:32px;">View tracking</button>
+                   </div>
+                   <div class="track-panel" data-track-panel="${esc(order.id)}" hidden style="margin-top:12px;padding:12px;border:1px solid var(--line);background:rgba(0,0,0,.22);font-size:13px;line-height:1.55;"></div>`
+                : `<div style="color:var(--muted);font-size:14px;">Tracking will be added after shipment</div>`}
               ${(order.items && order.items.length) ? `<ul style="margin:10px 0 0;padding-left:18px;color:#cbd8df;font-size:14px;">${order.items.map(item => `<li>${item.quantity} x ${esc(item.product_name)}</li>`).join('')}</ul>` : ''}
             </article>`).join('')
         : '<div style="color:var(--muted);border:1px dashed var(--line);padding:16px;">No orders yet.</div>';
+
+      $('ordersList').querySelectorAll('[data-track-order]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const orderId = btn.getAttribute('data-track-order');
+          const panel = $('ordersList').querySelector(`[data-track-panel="${orderId}"]`);
+          if (!panel) return;
+          panel.hidden = false;
+          panel.innerHTML = '<span style="color:var(--muted);">Loading tracking…</span>';
+          btn.disabled = true;
+          try {
+            const data = await post(api.track, { order_id: Number(orderId) });
+            if (!data.ok) {
+              panel.innerHTML = `<span style="color:var(--danger);">${esc(data.message || 'Tracking unavailable')}</span>`;
+              return;
+            }
+            const cps = Array.isArray(data.checkpoints) ? data.checkpoints : [];
+            const head = [
+              data.exchange_number ? `Last-mile: <strong>${esc(data.exchange_number)}</strong>` : '',
+              data.tracking_status ? `Status: <strong>${esc(data.tracking_status)}</strong>` : '',
+            ].filter(Boolean).join(' · ');
+            if (!cps.length) {
+              panel.innerHTML = `${head ? `<div style="margin-bottom:8px;">${head}</div>` : ''}<div style="color:var(--muted);">No checkpoint events yet. Check again later.</div>`;
+              return;
+            }
+            panel.innerHTML = `
+              ${head ? `<div style="margin-bottom:10px;">${head}</div>` : ''}
+              <ol style="margin:0;padding-left:18px;">
+                ${cps.map(cp => `<li style="margin:0 0 8px;">
+                  <div><strong>${esc(cp.time || '')}</strong> ${cp.time_zone ? `<span style="color:var(--muted);">${esc(cp.time_zone)}</span>` : ''}</div>
+                  <div>${esc(cp.message || cp.status || '')}</div>
+                  ${cp.location ? `<div style="color:var(--muted);">${esc(cp.location)}</div>` : ''}
+                </li>`).join('')}
+              </ol>`;
+          } catch (error) {
+            panel.innerHTML = `<span style="color:var(--danger);">${esc(error.message || 'Tracking failed')}</span>`;
+          } finally {
+            btn.disabled = false;
+          }
+        });
+      });
     }
 
     // ---- Event handlers ----
