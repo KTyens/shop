@@ -316,7 +316,17 @@ const locales = [
       setMessage('loginMessage', 'Sending...');
       try {
         const data = await post(api.requestCode, { email: $('loginEmail').value });
-        setMessage('loginMessage', data.debug_code ? `Code sent. Debug code: ${data.debug_code}` : data.message);
+        if (data.debug_code) {
+          setMessage('loginMessage', `Debug code: ${data.debug_code}`);
+        } else if (data.mail_sent === false) {
+          setMessage(
+            'loginMessage',
+            data.message || 'Code was created but email delivery failed. Contact support or check admin mail queue.',
+            true
+          );
+        } else {
+          setMessage('loginMessage', data.message || 'Code sent. Check your email (and spam).');
+        }
       } catch (error) {
         setMessage('loginMessage', error.message, true);
       }

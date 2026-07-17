@@ -16,13 +16,25 @@ define('CRTLU_ADMIN_USER', 'admin');
 define('CRTLU_ADMIN_PASS', 'Ydkj.9298');
 
 // Optional phase-4 customer communication defaults.
-define('CRTLU_MAIL_FROM', 'support@crtlu.me');
+define('CRTLU_MAIL_FROM', 'support@crtlu.me');       // must be a domain you control
+define('CRTLU_MAIL_FROM_NAME', 'CRTLU Digital');
 define('CRTLU_ORDER_NOTIFY_EMAIL', 'owner@gmail.com');
+// --- Email delivery (login codes / order mail) ---
+// PHP mail() on shared hosts often never reaches Gmail. Prefer ONE of:
+// A) Resend (https://resend.com) — easiest deliverability
+// define('CRTLU_RESEND_API_KEY', 're_xxxxxxxx');
+// B) SMTP (Gmail app password / domain mailbox / SendGrid SMTP)
+// define('CRTLU_SMTP_HOST', 'smtp.example.com');
+// define('CRTLU_SMTP_PORT', '587');
+// define('CRTLU_SMTP_USER', 'support@crtlu.me');
+// define('CRTLU_SMTP_PASS', 'your_smtp_password');
+// define('CRTLU_SMTP_SECURE', 'tls'); // tls | ssl | none
+// Emergency only: return code in API JSON (never leave on in production)
+define('CRTLU_LOGIN_CODE_DEBUG', '0');
 define('CRTLU_TELEGRAM_BOT_TOKEN', '');
 define('CRTLU_TELEGRAM_CHAT_ID', '');
 define('CRTLU_DEFAULT_LOCALE', 'en');
 define('CRTLU_DEFAULT_CURRENCY', 'USD');
-define('CRTLU_LOGIN_CODE_DEBUG', '0');
 
 // 燕文开放平台（详见 docs/yanwen-api-integration.md）
 // define('YANWEN_USER_ID', '客户号');

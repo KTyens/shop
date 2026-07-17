@@ -183,10 +183,30 @@ function crtlu_issue_login_code(PDO $pdo, string $email): ?string
         $code,
         '',
         'This code expires in 15 minutes. If you did not request it, you can ignore this email.',
+        '',
+        '— CRTLU Digital',
+        'https://shop.crtlu.me/account/',
     ]);
-    crtlu_send_member_email($pdo, $email, 'member_login_code', 'Your CRTL U Digital sign-in code', $body);
+    $mail = crtlu_send_member_email($pdo, $email, 'member_login_code', 'Your CRTL U Digital sign-in code', $body);
 
-    return crtlu_config('CRTLU_LOGIN_CODE_DEBUG', '0') === '1' ? $code : null;
+    // Stash last send result for account-request-code.php response (request-scoped).
+    $GLOBALS['crtlu_last_login_mail'] = $mail;
+
+    // Debug / emergency: return code in API only when explicitly enabled on server.
+    if (crtlu_config('CRTLU_LOGIN_CODE_DEBUG', '0') === '1') {
+        return $code;
+    }
+    // If mail failed, still do not leak code to the public API in production.
+    return null;
+}
+
+/**
+ * @return array{ok:bool,via:string,error:?string,queued_id:int}|null
+ */
+function crtlu_last_login_mail_result(): ?array
+{
+    $r = $GLOBALS['crtlu_last_login_mail'] ?? null;
+    return is_array($r) ? $r : null;
 }
 
 function crtlu_verify_login_code(PDO $pdo, string $email, string $code): array
