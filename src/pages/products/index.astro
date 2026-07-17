@@ -82,6 +82,7 @@ const catalogItemList = itemListJsonLd(
         <div class="catalog-cat-video-frame">
           <video
             id="catalogCatVideoEl"
+            src="/assets/videos/category-tv-box.mp4"
             poster="/assets/videos/category-tv-box-poster.jpg"
             muted
             playsinline
@@ -89,9 +90,8 @@ const catalogItemList = itemListJsonLd(
             loop
             controls
             preload="auto"
-          >
-            <source src="/assets/videos/category-tv-box.mp4" type="video/mp4" />
-          </video>
+            disablepictureinpicture
+          ></video>
         </div>
         <div class="catalog-cat-video-meta">
           <strong data-i18n="catalog.page.videoTvTitle">TV Box series overview</strong>
@@ -360,25 +360,40 @@ const catalogItemList = itemListJsonLd(
       const show = activeFilter === 'category:tv-box';
       wrap.hidden = !show;
       if (!video) return;
-      // iOS: property + attributes required for inline muted playback
-      video.muted = true;
-      video.defaultMuted = true;
-      video.playsInline = true;
-      video.setAttribute('playsinline', '');
-      video.setAttribute('webkit-playsinline', '');
-      video.setAttribute('muted', '');
+
+      const prime = () => {
+        video.muted = true;
+        video.defaultMuted = true;
+        video.volume = 0;
+        video.playsInline = true;
+        video.setAttribute('playsinline', '');
+        video.setAttribute('webkit-playsinline', '');
+        video.setAttribute('muted', '');
+      };
+
+      const tryPlay = () => {
+        prime();
+        const p = video.play();
+        if (p && typeof p.catch === 'function') p.catch(() => {});
+      };
+
       if (show) {
-        // Unhiding from display:none — load then play after layout
-        const tryPlay = () => {
-          video.muted = true;
-          const p = video.play();
-          if (p && typeof p.catch === 'function') p.catch(() => {});
-        };
+        prime();
+        // display:none → visible needs a fresh load + staggered retries
         if (video.readyState < 2) {
-          video.load();
-          video.addEventListener('canplay', tryPlay, { once: true });
+          try {
+            video.load();
+          } catch {
+            /* ignore */
+          }
         }
+        tryPlay();
         requestAnimationFrame(() => tryPlay());
+        [100, 300, 800, 1600].forEach((ms) => setTimeout(() => {
+          if (video.paused && !wrap.hidden) tryPlay();
+        }, ms));
+        video.addEventListener('canplay', tryPlay, { once: true });
+        video.addEventListener('loadeddata', tryPlay, { once: true });
       } else {
         video.pause();
       }

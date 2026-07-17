@@ -159,6 +159,7 @@ const homeKeywords = [
         <div class="el-hero-stage-frame el-hero-video-frame">
           <video
             class="el-hero-video"
+            src="/assets/videos/category-tv-box.mp4"
             poster="/assets/videos/category-tv-box-poster.jpg"
             autoplay
             muted
@@ -166,11 +167,25 @@ const homeKeywords = [
             webkit-playsinline
             loop
             preload="auto"
+            disablepictureinpicture
             data-hero-video
             aria-label="Android TV box series overview"
-          >
-            <source src="/assets/videos/category-tv-box.mp4" type="video/mp4" />
-          </video>
+          ></video>
+          <!-- Early start: run before main bundle / cart script so mobile can autoplay sooner -->
+          <script is:inline>
+            (function () {
+              var v = document.querySelector('video[data-hero-video]');
+              if (!v) return;
+              v.muted = true;
+              v.defaultMuted = true;
+              v.volume = 0;
+              v.playsInline = true;
+              try {
+                var p = v.play();
+                if (p && p.catch) p.catch(function () {});
+              } catch (e) {}
+            })();
+          </script>
           <button
             type="button"
             class="el-hero-video-play"
@@ -394,86 +409,158 @@ const homeKeywords = [
 
     renderCart();
 
-    // Hero TV-box category video — mobile-safe muted autoplay + play fallback
+    // Hero video: maximize muted autoplay success; play button only after retries fail
     (function initHeroVideo() {
       const video = document.querySelector('video[data-hero-video]') as HTMLVideoElement | null;
       if (!video) return;
       const playBtn = document.querySelector('[data-hero-video-play]') as HTMLButtonElement | null;
+      const reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 
-      // iOS needs both the attribute and the JS property
-      video.muted = true;
-      video.defaultMuted = true;
-      video.playsInline = true;
-      video.setAttribute('playsinline', '');
-      video.setAttribute('webkit-playsinline', '');
-      video.setAttribute('muted', '');
+      let attempts = 0;
+      let isPlaying = false;
+      let btnTimer: ReturnType<typeof setTimeout> | 0 = 0;
+      let gestureBound = false;
 
-      const showPlayBtn = (show: boolean) => {
-        if (!playBtn) return;
-        playBtn.hidden = !show;
+      const prime = () => {
+        video.muted = true;
+        video.defaultMuted = true;
+        video.volume = 0;
+        video.playsInline = true;
+        video.setAttribute('playsinline', '');
+        video.setAttribute('webkit-playsinline', '');
+        video.setAttribute('muted', '');
+        video.setAttribute('autoplay', '');
+      };
+
+      const hidePlayBtn = () => {
+        if (btnTimer) {
+          clearTimeout(btnTimer);
+          btnTimer = 0;
+        }
+        if (playBtn) playBtn.hidden = true;
+      };
+
+      /** Only show fallback after sustained failure — avoid flash while buffering. */
+      const schedulePlayBtn = () => {
+        if (!playBtn || isPlaying || !video.paused) return;
+        if (btnTimer) return;
+        btnTimer = setTimeout(() => {
+          btnTimer = 0;
+          if (!isPlaying && video.paused) playBtn.hidden = false;
+        }, 1600);
       };
 
       const playSafe = () => {
-        video.muted = true;
-        video.playsInline = true;
-        const p = video.play();
+        if (reduce || isPlaying) return;
+        prime();
+        attempts += 1;
+        let p: Promise<void> | undefined;
+        try {
+          p = video.play();
+        } catch {
+          if (attempts >= 3) schedulePlayBtn();
+          return;
+        }
         if (p && typeof p.then === 'function') {
-          p.then(() => showPlayBtn(false)).catch(() => showPlayBtn(true));
-        } else if (video.paused) {
-          showPlayBtn(true);
-        } else {
-          showPlayBtn(false);
+          p.then(() => {
+            isPlaying = !video.paused;
+            if (isPlaying) hidePlayBtn();
+          }).catch(() => {
+            // NotAllowedError / AbortError — keep retrying; button later
+            if (attempts >= 5) schedulePlayBtn();
+          });
+        } else if (!video.paused) {
+          isPlaying = true;
+          hidePlayBtn();
+        } else if (attempts >= 5) {
+          schedulePlayBtn();
         }
       };
 
-      const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (reduce) {
         video.removeAttribute('autoplay');
         video.pause();
-        showPlayBtn(true);
-      } else if ('IntersectionObserver' in window) {
-        const io = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              // Lower threshold so mobile hero (partially on-screen) still starts
-              if (entry.isIntersecting && entry.intersectionRatio > 0.15) playSafe();
-              else if (!entry.isIntersecting) video.pause();
-            });
-          },
-          { threshold: [0, 0.15, 0.25, 0.5] }
-        );
-        io.observe(video);
+        if (playBtn) playBtn.hidden = false;
       } else {
+        prime();
+        // Do not wait for IntersectionObserver — hero is above the fold
         playSafe();
-      }
+        requestAnimationFrame(() => playSafe());
+        [80, 200, 500, 1000, 2000, 3500].forEach((ms) => {
+          setTimeout(() => {
+            if (!isPlaying && video.paused) playSafe();
+          }, ms);
+        });
 
-      // Retry after enough data is buffered (common mobile fail: play() before canplay)
-      video.addEventListener('loadeddata', () => {
-        if (!reduce && video.paused) playSafe();
-      });
-      video.addEventListener('canplay', () => {
-        if (!reduce && video.paused) playSafe();
-      });
-      // Resume after tab/app returns (iOS often pauses background media)
-      document.addEventListener('visibilitychange', () => {
-        if (!document.hidden && !reduce && video.paused) playSafe();
-      });
+        const onReady = () => {
+          if (!isPlaying && video.paused) playSafe();
+        };
+        video.addEventListener('loadedmetadata', onReady);
+        video.addEventListener('loadeddata', onReady);
+        video.addEventListener('canplay', onReady);
+        video.addEventListener('canplaythrough', onReady);
+        video.addEventListener('playing', () => {
+          isPlaying = true;
+          hidePlayBtn();
+        });
+        video.addEventListener('pause', () => {
+          // User/system pause — allow resume attempts unless fully off-screen handled below
+          isPlaying = false;
+        });
+
+        // Pause only when fully off-screen; resume as soon as any pixel is visible
+        if ('IntersectionObserver' in window) {
+          const io = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  if (video.paused) playSafe();
+                } else {
+                  video.pause();
+                  isPlaying = false;
+                }
+              });
+            },
+            { threshold: 0, rootMargin: '40px 0px' }
+          );
+          io.observe(video);
+        }
+
+        // Any early page gesture unlocks autoplay policies (iOS / strict Chrome)
+        const unlock = () => {
+          if (video.paused) playSafe();
+        };
+        const bindGestures = () => {
+          if (gestureBound) return;
+          gestureBound = true;
+          ['touchstart', 'pointerdown', 'click', 'scroll', 'wheel'].forEach((ev) => {
+            document.addEventListener(ev, unlock, { passive: true, capture: true });
+          });
+        };
+        bindGestures();
+
+        document.addEventListener('visibilitychange', () => {
+          if (!document.hidden && video.paused) {
+            isPlaying = false;
+            playSafe();
+          }
+        });
+        // Do not call video.load() here — it aborts an in-flight autoplay started by the inline script.
+      }
 
       if (playBtn) {
         playBtn.addEventListener('click', (e) => {
           e.preventDefault();
           e.stopPropagation();
-          playSafe();
+          prime();
+          const p = video.play();
+          if (p && typeof p.then === 'function') {
+            p.then(() => {
+              isPlaying = true;
+              hidePlayBtn();
+            }).catch(() => schedulePlayBtn());
+          }
         });
-      }
-
-      // First user gesture unlocks stricter mobile autoplay policies
-      const frame = video.closest('.el-hero-video-frame');
-      if (frame) {
-        const unlock = () => {
-          if (video.paused) playSafe();
-        };
-        frame.addEventListener('touchstart', unlock, { passive: true, once: true });
       }
     })();
   </script>
