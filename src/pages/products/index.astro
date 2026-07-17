@@ -85,9 +85,10 @@ const catalogItemList = itemListJsonLd(
             poster="/assets/videos/category-tv-box-poster.jpg"
             muted
             playsinline
+            webkit-playsinline
             loop
             controls
-            preload="metadata"
+            preload="auto"
           >
             <source src="/assets/videos/category-tv-box.mp4" type="video/mp4" />
           </video>
@@ -358,14 +359,28 @@ const catalogItemList = itemListJsonLd(
       if (!wrap) return;
       const show = activeFilter === 'category:tv-box';
       wrap.hidden = !show;
-      if (video) {
-        if (show) {
+      if (!video) return;
+      // iOS: property + attributes required for inline muted playback
+      video.muted = true;
+      video.defaultMuted = true;
+      video.playsInline = true;
+      video.setAttribute('playsinline', '');
+      video.setAttribute('webkit-playsinline', '');
+      video.setAttribute('muted', '');
+      if (show) {
+        // Unhiding from display:none — load then play after layout
+        const tryPlay = () => {
           video.muted = true;
           const p = video.play();
           if (p && typeof p.catch === 'function') p.catch(() => {});
-        } else {
-          video.pause();
+        };
+        if (video.readyState < 2) {
+          video.load();
+          video.addEventListener('canplay', tryPlay, { once: true });
         }
+        requestAnimationFrame(() => tryPlay());
+      } else {
+        video.pause();
       }
     }
 

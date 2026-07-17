@@ -1628,10 +1628,15 @@ a.product-media-link {
 
 /* Scheme B: right stage = category promo video (16:9) */
 .el-hero-video-frame {
+  position: relative;
   display: block;
+  width: min(100%, 560px);
   aspect-ratio: 16 / 9;
   padding: 0;
   border-radius: 4px;
+  overflow: hidden;
+  background: #0b0b0b;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   transition: border-color 160ms ease, box-shadow 200ms ease;
 }
 
@@ -1646,6 +1651,48 @@ a.product-media-link {
   display: block;
   object-fit: cover;
   background: #0b0b0b;
+  /* Critical for iOS: keep video in normal layer, not zero-size */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+/* Fallback play control when autoplay is blocked (Low Power Mode / strict mobile) */
+.el-hero-video-play {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: rgba(0, 0, 0, 0.28);
+  color: #fff;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.el-hero-video-play[hidden] {
+  display: none !important;
+}
+
+.el-hero-video-play span {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #111;
+  font-size: 22px;
+  line-height: 1;
+  padding-left: 4px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+}
+
+.el-hero-video-play:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: -4px;
 }
 
 .el-hero-caption {

@@ -152,20 +152,35 @@ const homeKeywords = [
         </div>
       </div>
       <div class="el-hero-stage" aria-label="TV box series video">
-        <a class="el-hero-stage-frame el-hero-video-frame" href="/products/?category=tv-box">
+        <!--
+          Do NOT wrap <video> in <a>: iOS Safari often blocks autoplay inside links,
+          and taps navigate away instead of starting playback.
+        -->
+        <div class="el-hero-stage-frame el-hero-video-frame">
           <video
             class="el-hero-video"
             poster="/assets/videos/category-tv-box-poster.jpg"
+            autoplay
             muted
             playsinline
+            webkit-playsinline
             loop
-            preload="metadata"
+            preload="auto"
             data-hero-video
             aria-label="Android TV box series overview"
           >
             <source src="/assets/videos/category-tv-box.mp4" type="video/mp4" />
           </video>
-        </a>
+          <button
+            type="button"
+            class="el-hero-video-play"
+            data-hero-video-play
+            hidden
+            aria-label="Play video"
+          >
+            <span aria-hidden="true">▶</span>
+          </button>
+        </div>
         <div class="el-hero-caption">
           <span data-i18n="home.hero.videoCaption">TV Box series</span>
           <a class="el-hero-video-link" href="/products/?category=tv-box" data-i18n="home.hero.videoCta">Browse TV boxes →</a>
@@ -379,34 +394,86 @@ const homeKeywords = [
 
     renderCart();
 
-    // Hero TV-box category video (muted, play when visible; respect reduced motion)
+    // Hero TV-box category video — mobile-safe muted autoplay + play fallback
     (function initHeroVideo() {
       const video = document.querySelector('video[data-hero-video]') as HTMLVideoElement | null;
       if (!video) return;
+      const playBtn = document.querySelector('[data-hero-video-play]') as HTMLButtonElement | null;
+
+      // iOS needs both the attribute and the JS property
+      video.muted = true;
+      video.defaultMuted = true;
+      video.playsInline = true;
+      video.setAttribute('playsinline', '');
+      video.setAttribute('webkit-playsinline', '');
+      video.setAttribute('muted', '');
+
+      const showPlayBtn = (show: boolean) => {
+        if (!playBtn) return;
+        playBtn.hidden = !show;
+      };
+
       const playSafe = () => {
         video.muted = true;
+        video.playsInline = true;
         const p = video.play();
-        if (p && typeof p.catch === 'function') p.catch(() => {});
+        if (p && typeof p.then === 'function') {
+          p.then(() => showPlayBtn(false)).catch(() => showPlayBtn(true));
+        } else if (video.paused) {
+          showPlayBtn(true);
+        } else {
+          showPlayBtn(false);
+        }
       };
+
       const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (reduce) {
         video.removeAttribute('autoplay');
         video.pause();
-        return;
-      }
-      if ('IntersectionObserver' in window) {
+        showPlayBtn(true);
+      } else if ('IntersectionObserver' in window) {
         const io = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
-              if (entry.isIntersecting && entry.intersectionRatio > 0.25) playSafe();
-              else video.pause();
+              // Lower threshold so mobile hero (partially on-screen) still starts
+              if (entry.isIntersecting && entry.intersectionRatio > 0.15) playSafe();
+              else if (!entry.isIntersecting) video.pause();
             });
           },
-          { threshold: [0, 0.25, 0.5] }
+          { threshold: [0, 0.15, 0.25, 0.5] }
         );
         io.observe(video);
       } else {
         playSafe();
+      }
+
+      // Retry after enough data is buffered (common mobile fail: play() before canplay)
+      video.addEventListener('loadeddata', () => {
+        if (!reduce && video.paused) playSafe();
+      });
+      video.addEventListener('canplay', () => {
+        if (!reduce && video.paused) playSafe();
+      });
+      // Resume after tab/app returns (iOS often pauses background media)
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden && !reduce && video.paused) playSafe();
+      });
+
+      if (playBtn) {
+        playBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          playSafe();
+        });
+      }
+
+      // First user gesture unlocks stricter mobile autoplay policies
+      const frame = video.closest('.el-hero-video-frame');
+      if (frame) {
+        const unlock = () => {
+          if (video.paused) playSafe();
+        };
+        frame.addEventListener('touchstart', unlock, { passive: true, once: true });
       }
     })();
   </script>
