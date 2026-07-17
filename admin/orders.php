@@ -192,7 +192,7 @@ crtlu_admin_header('订单管理', '查看 Stripe 订单、一键创建燕文运
               <button class="button primary" type="submit">保存</button>
             </form>
             <?php if ($canCreate): ?>
-            <form method="post" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;" onsubmit="return confirm('确认向燕文创建运单？成功后将写回运单号<?= $hasTracking ? '（当前已有号，需勾选强制才会重建）' : '' ?>。');">
+            <form method="post" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px;" onsubmit="return confirm('确认向燕文创建运单？成功后将写回运单号<?= $hasTracking ? '（当前已有号，需勾选强制才会重建）' : '' ?>。');">
               <input type="hidden" name="action" value="create_yanwen">
               <input type="hidden" name="id" value="<?= htmlspecialchars((string)$order['id']) ?>">
               <button class="button" type="submit" <?= $yanwenReady ? '' : 'disabled title="请先配置 YANWEN_CHANNEL_ID"' ?>>
@@ -204,6 +204,16 @@ crtlu_admin_header('订单管理', '查看 Stripe 订单、一键创建燕文运
                 </label>
               <?php endif; ?>
             </form>
+            <?php endif; ?>
+            <?php if ($hasTracking && yanwen_is_configured()): ?>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+              <a class="button" href="yanwen-label.php?order_id=<?= (int)$order['id'] ?>" target="_blank" rel="noopener">
+                打印标签 PDF
+              </a>
+              <a class="button" href="yanwen-label.php?order_id=<?= (int)$order['id'] ?>&amp;print_remark=1" target="_blank" rel="noopener" title="含拣货单信息">
+                标签+拣货单
+              </a>
+            </div>
             <?php endif; ?>
           </td>
         </tr>

@@ -98,14 +98,21 @@ define('YANWEN_WAREHOUSE_CODE', '');</pre>
     <h2 style="margin:0 0 10px;font-size:18px;">对接阶段</h2>
     <ul class="muted" style="line-height:1.75;margin:0;padding-left:18px;">
       <li><strong style="color:var(--green)">P0–P1</strong>：签名、连通、国家/仓/产品列表</li>
-      <li><strong style="color:var(--green)">P2</strong>：订单页「创建燕文运单」→ 写回 <code>yanwen_tracking</code>（需配置 <code>YANWEN_CHANNEL_ID</code>）</li>
+      <li><strong style="color:var(--green)">P2</strong>：订单页「创建燕文运单」→ 写回 <code>yanwen_tracking</code></li>
+      <li><strong style="color:var(--green)">P3</strong>：订单页「打印标签 PDF」/「标签+拣货单」（<code>express.order.label.get</code>）</li>
       <li><strong style="color:var(--green)">P4</strong>：前台账户「View tracking」轨迹节点</li>
-      <li><strong>P3</strong>：标签打印（方法已预留，UI 待做）</li>
     </ul>
     <p class="muted" style="margin:12px 0 0;line-height:1.6;">
       一键创建前请先在本页拉「已开通产品」，把产品 id 写入 Serv00 <code>config.local.php</code> 的
-      <code>YANWEN_CHANNEL_ID</code>，再到 <a href="orders.php">订单</a> 点「创建燕文运单」。
+      <code>YANWEN_CHANNEL_ID</code>，再到 <a href="orders.php">订单</a> 创建运单并打印标签。
     </p>
+    <form method="get" action="yanwen-label.php" target="_blank" style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+      <input name="waybill" placeholder="运单号 YE…" style="min-width:200px;" required>
+      <label class="muted" style="font-size:12px;display:inline-flex;gap:4px;align-items:center;">
+        <input type="checkbox" name="print_remark" value="1"> 含拣货单
+      </label>
+      <button class="button" type="submit">按运单号打印标签</button>
+    </form>
     <p class="muted" style="margin:12px 0 0;">详细设计：仓库内 <code>docs/yanwen-api-integration.md</code></p>
   </section>
 <?php crtlu_admin_footer(); ?>

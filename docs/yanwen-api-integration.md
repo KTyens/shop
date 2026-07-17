@@ -39,7 +39,7 @@ Last updated: 2026-07-17
 | P0 | 公共签名客户端 + 配置探测 | **已完成** |
 | P1 | 交货仓 / 已开通产品列表 | **已完成**（`express.channel.getlist`） |
 | P2 | 订单页一键创建运单 → 写回 tracking | **已完成**（需 `YANWEN_CHANNEL_ID`） |
-| P3 | 打印标签 PDF/URL | 方法预留，UI 未做 |
+| P3 | 打印标签 PDF | **已完成**（`admin/yanwen-label.php` + 订单页按钮） |
 | P4 | 轨迹查询 + 前台账户展示 | **已完成** |
 | 兜底 | CSV + 手填运单号 | 仍可用 |
 
@@ -194,6 +194,13 @@ define('YANWEN_DEFAULT_HSCODE', '851762');
 
 **兜底：** 导出燕文 CSV / 客户中心制单 → 订单页手填运单号。
 
+### 7.3b 打印标签（P3）
+
+1. 订单已有 `yanwen_tracking`（创建运单或手填）。  
+2. 订单行点 **「打印标签 PDF」** 或 **「标签+拣货单」** → 下载 PDF。  
+3. 也可在燕文 API 页用运单号直接打印：`admin/yanwen-label.php?waybill=YE…`  
+4. 接口：`express.order.label.get`，响应 `data.base64String` 解码为 PDF。
+
 
 ### 7.4 代码调用（开发用）
 
@@ -254,7 +261,7 @@ $payload = yanwen_build_create_payload($orderRow, $itemRows);
 - [x] 轨迹网关 + 账户 View tracking  
 - [ ] **运营**：写入 `YANWEN_CHANNEL_ID`（否则创建按钮禁用）  
 - [ ] **运营**：可选 `YANWEN_WAREHOUSE_CODE`  
-- [ ] 打印标签 UI（P3）  
+- [x] 打印标签 PDF（P3：`yanwen_fetch_label_pdf` + 订单页下载）  
 - [ ] 用真实已付款订单做一票端到端验收  
 
 
@@ -267,6 +274,6 @@ $payload = yanwen_build_create_payload($orderRow, $itemRows);
 | 展示运单号 | `orders.yanwen_tracking` | 账户有则显示 |
 | 自动创建运单 | `yanwen_fulfill_shop_order` / 订单页 | **P2 已接** |
 | 轨迹节点 | `yanwen_track` + `/api/yanwen-track.php` | **P4 已接**（点击拉取） |
-| 打印标签 | `yanwen_print_label` | 方法预留 |
+| 打印标签 | `yanwen_fetch_label_pdf` / `admin/yanwen-label.php` | **P3 已接** |
 
 **部署：** PHP 上传 Serv00；账户页前端随 Cloudflare Pages。创建密钥勿提交 Git。

@@ -240,11 +240,96 @@ function yanwen_create_order(array $payload): array
     return yanwen_request($method, $payload);
 }
 
-/** 打印标签 */
+/**
+ * 打印标签 express.order.label.get
+ * @see https://opendocs.yw56.com.cn/webfile/6993833920655527936/
+ */
 function yanwen_print_label(array $payload): array
 {
     $method = (string)yanwen_config('YANWEN_METHOD_LABEL', 'express.order.label.get');
     return yanwen_request($method, $payload);
+}
+
+/**
+ * Fetch shipping label PDF for a waybill number.
+ *
+ * @return array{
+ *   ok:bool,
+ *   message:string,
+ *   waybill?:string,
+ *   pdf_binary?:string,
+ *   label_type?:string,
+ *   yanwen?:array
+ * }
+ */
+function yanwen_fetch_label_pdf(string $waybillNumber, bool $printRemark = false): array
+{
+    $waybill = trim($waybillNumber);
+    if ($waybill === '') {
+        return ['ok' => false, 'message' => '运单号为空'];
+    }
+    if (!yanwen_is_configured()) {
+        return ['ok' => false, 'message' => '燕文 API 未配置密钥'];
+    }
+
+    $payload = [
+        'waybillNumber' => $waybill,
+        'printRemark' => $printRemark ? 1 : 0,
+    ];
+    $result = yanwen_print_label($payload);
+    if (empty($result['ok'])) {
+        return [
+            'ok' => false,
+            'message' => (string)($result['error'] ?? '打印标签失败'),
+            'waybill' => $waybill,
+            'yanwen' => $result,
+        ];
+    }
+
+    $data = is_array($result['response']['data'] ?? null) ? $result['response']['data'] : [];
+    // Some channels nest success under data.isSuccess
+    if (array_key_exists('isSuccess', $data) && !$data['isSuccess'] && empty($data['base64String'])) {
+        return [
+            'ok' => false,
+            'message' => (string)($data['errorMsg'] ?? '标签生成失败'),
+            'waybill' => $waybill,
+            'yanwen' => $result,
+        ];
+    }
+
+    $b64 = (string)($data['base64String'] ?? $data['base64'] ?? '');
+    // Strip data-uri prefix if present
+    if (str_contains($b64, 'base64,')) {
+        $b64 = substr($b64, (int)strpos($b64, 'base64,') + 7);
+    }
+    $b64 = preg_replace('/\s+/', '', $b64) ?? '';
+    if ($b64 === '') {
+        return [
+            'ok' => false,
+            'message' => '燕文返回成功但无 base64String 标签内容',
+            'waybill' => $waybill,
+            'yanwen' => $result,
+        ];
+    }
+
+    $binary = base64_decode($b64, true);
+    if ($binary === false || $binary === '') {
+        return [
+            'ok' => false,
+            'message' => '标签 base64 解码失败',
+            'waybill' => $waybill,
+            'yanwen' => $result,
+        ];
+    }
+
+    return [
+        'ok' => true,
+        'message' => '标签已生成',
+        'waybill' => (string)($data['waybillNumber'] ?? $waybill),
+        'pdf_binary' => $binary,
+        'label_type' => (string)($data['labelType'] ?? ''),
+        'yanwen' => $result,
+    ];
 }
 
 /** 取消运单 */
