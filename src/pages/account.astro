@@ -152,14 +152,29 @@ const locales = [
     }
 
     async function post(url, payload) {
-      const response = await fetch(url, {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload || {}),
-      });
-      const data = await response.json();
-      if (!response.ok || data.ok === false) throw new Error(data.message || 'Request failed.');
+      let response;
+      try {
+        response = await fetch(url, {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload || {}),
+        });
+      } catch {
+        throw new Error(
+          'Failed to reach the login server (network/CORS). If this persists, the account API may be blocked — try again or contact support.'
+        );
+      }
+      const text = await response.text();
+      let data = {};
+      try {
+        data = text ? JSON.parse(text) : {};
+      } catch {
+        throw new Error(text.slice(0, 180) || `Invalid response (${response.status}).`);
+      }
+      if (!response.ok || data.ok === false) {
+        throw new Error(data.message || data.error || `Request failed (${response.status}).`);
+      }
       return data;
     }
 

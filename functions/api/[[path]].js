@@ -27,26 +27,55 @@ function proxyHeaders(request) {
   return headers;
 }
 
-async function normalizeJsonResponse(response) {
+function rewriteUpstreamCookies(responseHeaders, requestUrl) {
+  const headers = new Headers(responseHeaders);
+  const host = new URL(requestUrl).hostname;
+  // Re-emit Set-Cookie so the browser stores the session on shop.crtlu.me (proxy host), not api host.
+  const cookies = typeof responseHeaders.getSetCookie === 'function'
+    ? responseHeaders.getSetCookie()
+    : [];
+  if (cookies.length) {
+    headers.delete('set-cookie');
+    for (const raw of cookies) {
+      let next = raw
+        .replace(/;\s*Domain=[^;]*/gi, '')
+        .replace(/;\s*SameSite=[^;]*/gi, '');
+      // Same-origin proxy: Lax is fine on shop host
+      if (!/;\s*Secure/i.test(next) && requestUrl.startsWith('https:')) {
+        next += '; Secure';
+      }
+      next += '; SameSite=Lax';
+      // Ensure path
+      if (!/;\s*Path=/i.test(next)) {
+        next += '; Path=/';
+      }
+      headers.append('set-cookie', next);
+    }
+  }
+  // Avoid leaking upstream CORS that confuses same-origin clients
+  headers.delete('access-control-allow-origin');
+  headers.delete('access-control-allow-credentials');
+  void host;
+  return headers;
+}
+
+async function normalizeJsonResponse(response, requestUrl) {
   const contentType = response.headers.get('content-type') || '';
+  const headers = rewriteUpstreamCookies(response.headers, requestUrl);
+  headers.delete('content-length');
+
   if (!contentType.toLowerCase().includes('application/json')) {
-    return response;
+    return new Response(response.body, {
+      status: response.status,
+      statusText: response.statusText,
+      headers,
+    });
   }
 
   const body = await response.text();
   const cleanedBody = body
     .replace(/^```php\s*/i, '')
     .replace(/\s*```\s*$/i, '');
-  const headers = new Headers(response.headers);
-  headers.delete('content-length');
-
-  if (cleanedBody === body) {
-    return new Response(body, {
-      status: response.status,
-      statusText: response.statusText,
-      headers,
-    });
-  }
 
   return new Response(cleanedBody, {
     status: response.status,
@@ -57,6 +86,18 @@ async function normalizeJsonResponse(response) {
 
 export async function onRequest({ request, params, env }) {
   try {
+    // Same-origin preflight (rare) — answer locally
+    if (request.method.toUpperCase() === 'OPTIONS') {
+      return new Response(null, {
+        status: 204,
+        headers: {
+          'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+          'Access-Control-Max-Age': '86400',
+        },
+      });
+    }
+
     const targetUrl = buildTargetUrl(request, params, env);
     const method = request.method.toUpperCase();
     const init = {
@@ -71,7 +112,7 @@ export async function onRequest({ request, params, env }) {
     }
 
     const response = await fetch(targetUrl.toString(), init);
-    return normalizeJsonResponse(response);
+    return normalizeJsonResponse(response, request.url);
   } catch (error) {
     return Response.json(
       { error: error instanceof Error ? error.message : 'API proxy failed.' },

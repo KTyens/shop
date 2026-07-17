@@ -9,14 +9,20 @@ function crtlu_member_session_start(): void
         return;
     }
 
-    $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+    $https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+        || (strtolower((string)($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '')) === 'https');
+    // Cross-subdomain shop.crtlu.me ↔ api.crtlu.me needs SameSite=None + Secure when cookie is set on API host.
+    $origin = rtrim((string)($_SERVER['HTTP_ORIGIN'] ?? ''), '/');
+    $crossSite = $origin !== '' && function_exists('crtlu_origin_is_allowed') && crtlu_origin_is_allowed($origin);
+    $sameSite = ($crossSite && $https) ? 'None' : 'Lax';
+
     session_name('crtlu_member');
     session_set_cookie_params([
         'lifetime' => 60 * 60 * 24 * 30,
         'path' => '/',
-        'secure' => $secure,
+        'secure' => $https || $sameSite === 'None',
         'httponly' => true,
-        'samesite' => 'Lax',
+        'samesite' => $sameSite,
     ]);
     session_start();
 }
@@ -77,8 +83,80 @@ function crtlu_require_member(PDO $pdo): array
     return $member;
 }
 
+/**
+ * Ensure Phase-5 member tables exist (safe IF NOT EXISTS).
+ * Fixes production "Member login table is missing" without manual SQL.
+ */
+function crtlu_ensure_member_tables(PDO $pdo): void
+{
+    static $ensured = false;
+    if ($ensured) {
+        return;
+    }
+    $ensured = true;
+
+    if (!crtlu_table_exists($pdo, 'members')) {
+        $pdo->exec(
+            "CREATE TABLE IF NOT EXISTS `members` (
+              id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+              email VARCHAR(255) NOT NULL,
+              name VARCHAR(255) NOT NULL DEFAULT '',
+              locale VARCHAR(16) NOT NULL DEFAULT 'en',
+              currency VARCHAR(8) NOT NULL DEFAULT 'USD',
+              status VARCHAR(40) NOT NULL DEFAULT 'active',
+              last_login_at TIMESTAMP NULL DEFAULT NULL,
+              created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+              PRIMARY KEY (id),
+              UNIQUE KEY uniq_members_email (email)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"
+        );
+    }
+
+    if (!crtlu_table_exists($pdo, 'member_login_codes')) {
+        $pdo->exec(
+            "CREATE TABLE IF NOT EXISTS `member_login_codes` (
+              id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+              email VARCHAR(255) NOT NULL,
+              code_hash VARCHAR(255) NOT NULL,
+              expires_at TIMESTAMP NOT NULL,
+              used_at TIMESTAMP NULL DEFAULT NULL,
+              created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              PRIMARY KEY (id),
+              KEY idx_login_email_created (email, created_at),
+              KEY idx_login_expires_at (expires_at)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"
+        );
+    }
+
+    if (!crtlu_table_exists($pdo, 'member_addresses')) {
+        $pdo->exec(
+            "CREATE TABLE IF NOT EXISTS `member_addresses` (
+              id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+              member_id BIGINT UNSIGNED NOT NULL,
+              label VARCHAR(80) NOT NULL DEFAULT 'Default',
+              recipient_name VARCHAR(255) NOT NULL DEFAULT '',
+              phone VARCHAR(80) NOT NULL DEFAULT '',
+              country VARCHAR(80) NOT NULL DEFAULT '',
+              postal_code VARCHAR(40) NOT NULL DEFAULT '',
+              state VARCHAR(120) NOT NULL DEFAULT '',
+              city VARCHAR(120) NOT NULL DEFAULT '',
+              line1 VARCHAR(255) NOT NULL DEFAULT '',
+              line2 VARCHAR(255) NOT NULL DEFAULT '',
+              is_default TINYINT(1) NOT NULL DEFAULT 0,
+              created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+              PRIMARY KEY (id),
+              KEY idx_member_addresses_member_id (member_id),
+              KEY idx_member_addresses_default (member_id, is_default)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"
+        );
+    }
+}
+
 function crtlu_issue_login_code(PDO $pdo, string $email): ?string
 {
+    crtlu_ensure_member_tables($pdo);
     if (!crtlu_table_exists($pdo, 'member_login_codes')) {
         throw new RuntimeException('Member login table is missing. Import database/phase5-migration.sql first.');
     }
@@ -113,6 +191,7 @@ function crtlu_issue_login_code(PDO $pdo, string $email): ?string
 
 function crtlu_verify_login_code(PDO $pdo, string $email, string $code): array
 {
+    crtlu_ensure_member_tables($pdo);
     if (!crtlu_table_exists($pdo, 'member_login_codes')) {
         throw new RuntimeException('Member login table is missing. Import database/phase5-migration.sql first.');
     }

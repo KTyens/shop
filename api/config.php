@@ -27,14 +27,43 @@ function crtlu_allowed_origins(): array
     }, explode(',', $raw))));
 }
 
+/**
+ * True when browser Origin may call this API with credentials.
+ * Includes configured list + same parent domain as CRTLU_BASE_URL (e.g. shop/api.crtlu.me).
+ */
+function crtlu_origin_is_allowed(string $origin): bool
+{
+    $origin = rtrim($origin, '/');
+    if ($origin === '') {
+        return false;
+    }
+    if (in_array($origin, crtlu_allowed_origins(), true)) {
+        return true;
+    }
+
+    $originHost = parse_url($origin, PHP_URL_HOST);
+    $baseHost = parse_url(crtlu_base_url(), PHP_URL_HOST);
+    if (!is_string($originHost) || $originHost === '' || !is_string($baseHost) || $baseHost === '') {
+        return false;
+    }
+
+    $parentOf = static function (string $host): string {
+        $parts = explode('.', strtolower($host));
+        if (count($parts) < 2) {
+            return $host;
+        }
+        return implode('.', array_slice($parts, -2));
+    };
+
+    return $parentOf($originHost) === $parentOf($baseHost);
+}
+
 function crtlu_apply_cors(): void
 {
     $origin = rtrim((string)($_SERVER['HTTP_ORIGIN'] ?? ''), '/');
-    if ($origin === '') {
-        return;
-    }
+    $method = strtoupper((string)($_SERVER['REQUEST_METHOD'] ?? 'GET'));
+    $allowed = $origin !== '' && crtlu_origin_is_allowed($origin);
 
-    $allowed = in_array($origin, crtlu_allowed_origins(), true);
     if ($allowed) {
         header('Access-Control-Allow-Origin: ' . $origin);
         header('Access-Control-Allow-Credentials: true');
@@ -44,8 +73,9 @@ function crtlu_apply_cors(): void
         header('Vary: Origin', false);
     }
 
-    if (($_SERVER['REQUEST_METHOD'] ?? '') === 'OPTIONS') {
-        http_response_code($allowed ? 204 : 403);
+    // Always terminate preflight here so endpoint body parsers never run on OPTIONS.
+    if ($method === 'OPTIONS') {
+        http_response_code($allowed || $origin === '' ? 204 : 403);
         exit;
     }
 }

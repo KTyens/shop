@@ -17,7 +17,9 @@ const {
   jsonLd = [],
 } = Astro.props;
 
-const configuredApiBase = (import.meta.env.PUBLIC_CRTLU_API_BASE_URL || 'https://api.crtlu.me/api').trim();
+// Prefer same-origin /api (Cloudflare Pages proxies to Serv00). Avoids CORS "Failed to fetch"
+// when the browser talks to api.crtlu.me cross-origin. Override with PUBLIC_CRTLU_API_BASE_URL only if needed.
+const configuredApiBase = (import.meta.env.PUBLIC_CRTLU_API_BASE_URL || '').trim();
 const apiBaseUrl = (configuredApiBase || '/api').replace(/\/+$/, '');
 const canonicalUrl = absoluteUrl(canonicalPath);
 const imageUrl = absoluteUrl(image);
