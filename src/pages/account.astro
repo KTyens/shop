@@ -18,7 +18,7 @@ const currencies = ['USD', 'JPY', 'CNY', 'EUR'];
       <div class="account-loading" id="accountLoading" aria-busy="true" aria-live="polite">
         <div class="account-loading-card">
           <div class="account-loading-spinner" aria-hidden="true"></div>
-          <p>Loading your account…</p>
+          <p data-i18n="account.loading">Loading your account…</p>
         </div>
       </div>
 
@@ -26,30 +26,30 @@ const currencies = ['USD', 'JPY', 'CNY', 'EUR'];
       <section class="account-auth" id="loginPanel" hidden>
         <div class="account-auth-card">
           <img class="account-auth-brand" src="/assets/brand-mark.png" width="56" height="56" alt="" decoding="async" />
-          <h1 class="account-auth-title">Sign in to your account</h1>
-          <p class="account-auth-lead" id="accountLead">
+          <h1 class="account-auth-title" data-i18n="account.signInTitle">Sign in to your account</h1>
+          <p class="account-auth-lead" id="accountLead" data-i18n="account.loginHelpFull">
             Use the same email you enter at Stripe Checkout. We’ll send a one-time 6-digit code — no password needed.
           </p>
 
           <div class="account-field">
-            <label for="loginEmail">Email</label>
+            <label for="loginEmail" data-i18n="account.email">Email</label>
             <div class="account-field-row">
-              <input id="loginEmail" type="email" autocomplete="email" placeholder="you@example.com" />
-              <button class="primary-button" type="button" id="sendCode">Send code</button>
+              <input id="loginEmail" type="email" autocomplete="email" placeholder="you@example.com" data-i18n-placeholder="account.emailPlaceholder" />
+              <button class="primary-button" type="button" id="sendCode" data-i18n="account.sendCode">Send code</button>
             </div>
           </div>
 
           <div class="account-field">
-            <label for="loginCode">6-digit code</label>
+            <label for="loginCode" data-i18n="account.code">6-digit code</label>
             <div class="account-field-row">
-              <input id="loginCode" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="123456" />
-              <button class="primary-button" type="button" id="verifyCode">Sign in</button>
+              <input id="loginCode" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="123456" data-i18n-placeholder="account.codePlaceholder" />
+              <button class="primary-button" type="button" id="verifyCode" data-i18n="account.signIn">Sign in</button>
             </div>
           </div>
 
           <div class="account-message" id="loginMessage" role="status" aria-live="polite"></div>
 
-          <p class="account-auth-footnote">
+          <p class="account-auth-footnote" data-i18n="account.authFootnote">
             New here? Place an order with your email — your account is created automatically after payment.
           </p>
         </div>
@@ -62,29 +62,29 @@ const currencies = ['USD', 'JPY', 'CNY', 'EUR'];
           <div class="account-sidebar-profile">
             <div class="account-sidebar-avatar" id="userChipAvatar" aria-hidden="true">?</div>
             <div class="account-sidebar-meta">
-              <strong id="sidebarName">Member</strong>
+              <strong id="sidebarName" data-i18n="account.member">Member</strong>
               <span id="signedInAs">—</span>
             </div>
           </div>
 
-          <nav class="account-side-nav" aria-label="Account sections">
+          <nav class="account-side-nav" aria-label="Account sections" data-i18n-aria="account.sectionsAria">
             <button type="button" class="account-side-link is-active" data-tab="orders" id="tabOrders">
               <span class="account-side-ico" aria-hidden="true">☰</span>
-              Orders
+              <span data-i18n="account.orders">Orders</span>
               <span class="account-side-count" id="ordersCount" hidden>0</span>
             </button>
             <button type="button" class="account-side-link" data-tab="profile" id="tabProfile">
               <span class="account-side-ico" aria-hidden="true">◎</span>
-              Profile
+              <span data-i18n="account.profile">Profile</span>
             </button>
             <button type="button" class="account-side-link" data-tab="addresses" id="tabAddresses">
               <span class="account-side-ico" aria-hidden="true">⌖</span>
-              Addresses
+              <span data-i18n="account.addresses">Addresses</span>
               <span class="account-side-count" id="addressesCount" hidden>0</span>
             </button>
           </nav>
 
-          <button class="account-side-signout" type="button" id="logoutButton">Sign out</button>
+          <button class="account-side-signout" type="button" id="logoutButton" data-i18n="account.signOut">Sign out</button>
         </aside>
 
         <!-- Content -->
@@ -93,8 +93,8 @@ const currencies = ['USD', 'JPY', 'CNY', 'EUR'];
           <div class="account-pane is-active" id="pane-orders" data-pane="orders">
             <header class="account-pane-head">
               <div>
-                <h2>Orders</h2>
-                <p>Track purchases made with this email.</p>
+                <h2 data-i18n="account.orders">Orders</h2>
+                <p data-i18n="account.ordersLead">Track purchases made with this email.</p>
               </div>
             </header>
             <div id="ordersList" class="account-list"></div>
@@ -104,29 +104,29 @@ const currencies = ['USD', 'JPY', 'CNY', 'EUR'];
           <div class="account-pane" id="pane-profile" data-pane="profile" hidden>
             <header class="account-pane-head">
               <div>
-                <h2>Profile</h2>
-                <p>Your name and checkout preferences.</p>
+                <h2 data-i18n="account.profile">Profile</h2>
+                <p data-i18n="account.profileLead">Your name and checkout preferences.</p>
               </div>
             </header>
             <div class="account-card">
               <div class="account-form-grid">
                 <label class="account-field account-field-full">
-                  <span>Name</span>
-                  <input id="profileName" autocomplete="name" placeholder="Your name" />
+                  <span data-i18n="account.name">Name</span>
+                  <input id="profileName" autocomplete="name" placeholder="Your name" data-i18n-placeholder="account.namePlaceholder" />
                 </label>
                 <label class="account-field">
-                  <span>Language</span>
+                  <span data-i18n="account.language">Language</span>
                   <select id="profileLocale"></select>
                 </label>
                 <label class="account-field">
-                  <span>Preferred currency</span>
+                  <span data-i18n="account.currency">Preferred currency</span>
                   <select id="profileCurrency">
                     {currencies.map((currency) => <option value={currency}>{currency}</option>)}
                   </select>
                 </label>
               </div>
               <div class="account-card-actions">
-                <button class="primary-button" type="button" id="saveProfile">Save profile</button>
+                <button class="primary-button" type="button" id="saveProfile" data-i18n="account.saveProfile">Save profile</button>
                 <div class="account-message" id="profileMessage" role="status"></div>
               </div>
             </div>
@@ -136,55 +136,55 @@ const currencies = ['USD', 'JPY', 'CNY', 'EUR'];
           <div class="account-pane" id="pane-addresses" data-pane="addresses" hidden>
             <header class="account-pane-head">
               <div>
-                <h2>Addresses</h2>
-                <p>Saved delivery addresses for faster checkout.</p>
+                <h2 data-i18n="account.addresses">Addresses</h2>
+                <p data-i18n="account.addressesLead">Saved delivery addresses for faster checkout.</p>
               </div>
             </header>
 
             <div id="addressesList" class="account-list"></div>
 
             <div class="account-card account-card-form">
-              <h3 class="account-card-title">Add / update address</h3>
+              <h3 class="account-card-title" data-i18n="account.addressFormTitle">Add / update address</h3>
               <div class="account-form-grid">
                 <label class="account-field">
-                  <span>Label</span>
-                  <input id="addrLabel" placeholder="Home" />
+                  <span data-i18n="account.label">Label</span>
+                  <input id="addrLabel" placeholder="Home" data-i18n-placeholder="account.labelPlaceholder" />
                 </label>
                 <label class="account-field">
-                  <span>Recipient</span>
+                  <span data-i18n="account.recipient">Recipient</span>
                   <input id="addrName" autocomplete="name" />
                 </label>
                 <label class="account-field">
-                  <span>Phone</span>
+                  <span data-i18n="account.phone">Phone</span>
                   <input id="addrPhone" autocomplete="tel" />
                 </label>
                 <label class="account-field">
-                  <span>Country</span>
-                  <input id="addrCountry" placeholder="Japan" autocomplete="country-name" />
+                  <span data-i18n="account.country">Country</span>
+                  <input id="addrCountry" placeholder="Japan" autocomplete="country-name" data-i18n-placeholder="account.countryPlaceholder" />
                 </label>
                 <label class="account-field">
-                  <span>Postal code</span>
+                  <span data-i18n="account.postal">Postal code</span>
                   <input id="addrPostal" autocomplete="postal-code" />
                 </label>
                 <label class="account-field">
-                  <span>State / province</span>
+                  <span data-i18n="account.state">State / province</span>
                   <input id="addrState" autocomplete="address-level1" />
                 </label>
                 <label class="account-field">
-                  <span>City</span>
+                  <span data-i18n="account.city">City</span>
                   <input id="addrCity" autocomplete="address-level2" />
                 </label>
                 <label class="account-field account-field-full">
-                  <span>Address line 1</span>
+                  <span data-i18n="account.line1">Address line 1</span>
                   <input id="addrLine1" autocomplete="address-line1" />
                 </label>
                 <label class="account-field account-field-full">
-                  <span>Address line 2</span>
+                  <span data-i18n="account.line2">Address line 2</span>
                   <input id="addrLine2" autocomplete="address-line2" />
                 </label>
               </div>
               <div class="account-card-actions">
-                <button class="primary-button" type="button" id="saveAddress">Save address</button>
+                <button class="primary-button" type="button" id="saveAddress" data-i18n="account.saveAddress">Save address</button>
                 <div class="account-message" id="addressMessage" role="status"></div>
               </div>
             </div>
@@ -749,6 +749,27 @@ const currencies = ['USD', 'JPY', 'CNY', 'EUR'];
     let activeTab = 'orders';
     const $ = (id) => document.getElementById(id);
 
+    function tt(key, vars) {
+      try {
+        if (window.CRTLU_I18N && typeof window.CRTLU_I18N.t === 'function') {
+          return window.CRTLU_I18N.t(key, vars);
+        }
+      } catch {
+        /* ignore */
+      }
+      return key;
+    }
+
+    function applyI18n(root) {
+      try {
+        if (window.CRTLU_I18N && typeof window.CRTLU_I18N.apply === 'function') {
+          window.CRTLU_I18N.apply(root || document);
+        }
+      } catch {
+        /* ignore */
+      }
+    }
+
     function esc(value) {
       return String(value ?? '').replace(/[&<>"']/g, (ch) =>
         ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[ch])
@@ -815,7 +836,7 @@ const currencies = ['USD', 'JPY', 'CNY', 'EUR'];
       const name = String(member?.name || '').trim();
       if (name) return name;
       const email = String(member?.email || '');
-      return email.split('@')[0] || 'Member';
+      return email.split('@')[0] || tt('account.member');
     }
 
     function switchTab(tab) {
@@ -867,7 +888,10 @@ const currencies = ['USD', 'JPY', 'CNY', 'EUR'];
         window.crtluRefreshAccountNav();
       }
 
-      if (!authed) return;
+      if (!authed) {
+        applyI18n(document.getElementById('loginPanel') || document);
+        return;
+      }
 
       const member = state.member || {};
       $('signedInAs').textContent = member.email || '—';
@@ -896,6 +920,7 @@ const currencies = ['USD', 'JPY', 'CNY', 'EUR'];
       renderAddresses();
       renderOrders();
       switchTab(tabFromHash());
+      applyI18n(document.getElementById('accountPanel') || document);
     }
 
     function renderLanguageOptions() {
@@ -912,10 +937,10 @@ const currencies = ['USD', 'JPY', 'CNY', 'EUR'];
             <article class="account-item">
               <div class="account-item-top">
                 <div>
-                  <strong>${esc(addr.label || 'Address')}</strong>
-                  ${addr.is_default ? '<span class="account-badge is-default" style="margin-left:8px;">Default</span>' : ''}
+                  <strong>${esc(addr.label || tt('account.address'))}</strong>
+                  ${addr.is_default ? `<span class="account-badge is-default" style="margin-left:8px;">${esc(tt('account.default'))}</span>` : ''}
                 </div>
-                <button type="button" class="account-link-btn" data-delete-address="${esc(addr.id)}">Delete</button>
+                <button type="button" class="account-link-btn" data-delete-address="${esc(addr.id)}">${esc(tt('account.delete'))}</button>
               </div>
               <div class="account-item-body">
                 <div>${esc(addr.recipient_name)}${addr.phone ? ` · ${esc(addr.phone)}` : ''}</div>
@@ -925,16 +950,16 @@ const currencies = ['USD', 'JPY', 'CNY', 'EUR'];
             </article>`
             )
             .join('')
-        : `<div class="account-empty">No saved addresses yet. Add one below for faster checkout.</div>`;
+        : `<div class="account-empty">${esc(tt('account.noAddressHint'))}</div>`;
 
       $('addressesList').querySelectorAll('[data-delete-address]').forEach((btn) => {
         btn.addEventListener('click', async () => {
-          setMessage('addressMessage', 'Deleting...');
+          setMessage('addressMessage', tt('account.deleting'));
           try {
             await post(api.account, { action: 'delete_address', id: btn.dataset.deleteAddress });
             await loadAccount();
             switchTab('addresses');
-            setMessage('addressMessage', 'Address deleted.');
+            setMessage('addressMessage', tt('account.addressDeleted'));
           } catch (error) {
             setMessage('addressMessage', error.message, true);
           }
@@ -954,22 +979,22 @@ const currencies = ['USD', 'JPY', 'CNY', 'EUR'];
             <article class="account-item" data-order-id="${esc(order.id)}">
               <div class="account-item-top">
                 <div>
-                  <strong>Order #${esc(order.id)}</strong>
+                  <strong>${esc(tt('account.orderNum'))}${esc(order.id)}</strong>
                   <div class="account-item-meta">${esc(order.created_at || '')}</div>
                 </div>
                 <span class="account-badge is-status">${esc(order.status || 'paid')}</span>
               </div>
               <div class="account-item-body">
-                <div>Total: <strong>${esc(money(order.amount_total, order.currency))}</strong></div>
+                <div>${esc(tt('account.total'))}: <strong>${esc(money(order.amount_total, order.currency))}</strong></div>
                 ${
                   order.coupon_code
-                    ? `<div class="muted">Coupon ${esc(order.coupon_code)} saved ${esc(money(order.discount_total, order.currency))}</div>`
+                    ? `<div class="muted">${esc(tt('account.coupon'))} ${esc(order.coupon_code)} · −${esc(money(order.discount_total, order.currency))}</div>`
                     : ''
                 }
                 ${
                   order.yanwen_tracking
-                    ? `<div style="margin-top:6px;">Tracking: <strong>${esc(order.yanwen_tracking)}</strong></div>`
-                    : `<div class="muted" style="margin-top:6px;">Tracking will appear after shipment</div>`
+                    ? `<div style="margin-top:6px;">${esc(tt('account.tracking'))}: <strong>${esc(order.yanwen_tracking)}</strong></div>`
+                    : `<div class="muted" style="margin-top:6px;">${esc(tt('account.trackingSoon'))}</div>`
                 }
                 ${
                   order.items && order.items.length
@@ -982,7 +1007,7 @@ const currencies = ['USD', 'JPY', 'CNY', 'EUR'];
               ${
                 order.yanwen_tracking
                   ? `<div class="account-item-actions">
-                      <button type="button" class="secondary-button" data-track-order="${esc(order.id)}">View tracking</button>
+                      <button type="button" class="secondary-button" data-track-order="${esc(order.id)}">${esc(tt('account.viewTracking'))}</button>
                     </div>
                     <div class="account-track-panel" data-track-panel="${esc(order.id)}" hidden></div>`
                   : ''
@@ -990,7 +1015,7 @@ const currencies = ['USD', 'JPY', 'CNY', 'EUR'];
             </article>`
             )
             .join('')
-        : `<div class="account-empty">No orders yet.<br><a href="/products/">Browse products</a> to place your first order.</div>`;
+        : `<div class="account-empty">${esc(tt('account.noOrdersHint'))}<br><a href="/products/">${esc(tt('account.browseProducts'))}</a></div>`;
 
       $('ordersList').querySelectorAll('[data-track-order]').forEach((btn) => {
         btn.addEventListener('click', async () => {
@@ -998,23 +1023,23 @@ const currencies = ['USD', 'JPY', 'CNY', 'EUR'];
           const panel = $('ordersList').querySelector(`[data-track-panel="${orderId}"]`);
           if (!panel) return;
           panel.hidden = false;
-          panel.innerHTML = '<span class="muted">Loading tracking…</span>';
+          panel.innerHTML = `<span class="muted">${esc(tt('account.trackingLoading'))}</span>`;
           btn.disabled = true;
           try {
             const data = await post(api.track, { order_id: Number(orderId) });
             if (!data.ok) {
-              panel.innerHTML = `<span style="color:var(--danger)">${esc(data.message || 'Tracking unavailable')}</span>`;
+              panel.innerHTML = `<span style="color:var(--danger)">${esc(data.message || tt('account.trackingUnavailable'))}</span>`;
               return;
             }
             const cps = Array.isArray(data.checkpoints) ? data.checkpoints : [];
             const head = [
-              data.exchange_number ? `Last-mile: <strong>${esc(data.exchange_number)}</strong>` : '',
-              data.tracking_status ? `Status: <strong>${esc(data.tracking_status)}</strong>` : '',
+              data.exchange_number ? `${esc(tt('account.lastMile'))}: <strong>${esc(data.exchange_number)}</strong>` : '',
+              data.tracking_status ? `${esc(tt('account.status'))}: <strong>${esc(data.tracking_status)}</strong>` : '',
             ]
               .filter(Boolean)
               .join(' · ');
             if (!cps.length) {
-              panel.innerHTML = `${head ? `<div style="margin-bottom:8px;">${head}</div>` : ''}<div class="muted">No checkpoint events yet. Check again later.</div>`;
+              panel.innerHTML = `${head ? `<div style="margin-bottom:8px;">${head}</div>` : ''}<div class="muted">${esc(tt('account.trackingEmpty'))}</div>`;
               return;
             }
             panel.innerHTML = `
@@ -1031,7 +1056,7 @@ const currencies = ['USD', 'JPY', 'CNY', 'EUR'];
                   .join('')}
               </ol>`;
           } catch (error) {
-            panel.innerHTML = `<span style="color:var(--danger)">${esc(error.message || 'Tracking failed')}</span>`;
+            panel.innerHTML = `<span style="color:var(--danger)">${esc(error.message || tt('account.trackingFailed'))}</span>`;
           } finally {
             btn.disabled = false;
           }
@@ -1049,19 +1074,15 @@ const currencies = ['USD', 'JPY', 'CNY', 'EUR'];
 
     // Login
     $('sendCode').addEventListener('click', async () => {
-      setMessage('loginMessage', 'Sending code…');
+      setMessage('loginMessage', tt('account.sending'));
       try {
         const data = await post(api.requestCode, { email: $('loginEmail').value });
         if (data.debug_code) {
-          setMessage('loginMessage', `Debug code: ${data.debug_code}`);
+          setMessage('loginMessage', `${tt('account.debugCode')}: ${data.debug_code}`);
         } else if (data.mail_sent === false) {
-          setMessage(
-            'loginMessage',
-            data.message || 'Code created but email delivery failed. Contact support.',
-            true
-          );
+          setMessage('loginMessage', data.message || tt('account.mailFailed'), true);
         } else {
-          setMessage('loginMessage', data.message || 'Code sent. Check your email (and spam).');
+          setMessage('loginMessage', data.message || tt('account.codeSent'));
         }
       } catch (error) {
         setMessage('loginMessage', error.message, true);
@@ -1069,7 +1090,7 @@ const currencies = ['USD', 'JPY', 'CNY', 'EUR'];
     });
 
     $('verifyCode').addEventListener('click', async () => {
-      setMessage('loginMessage', 'Signing in…');
+      setMessage('loginMessage', tt('account.signingIn'));
       const btn = $('verifyCode');
       btn.disabled = true;
       try {
@@ -1092,20 +1113,12 @@ const currencies = ['USD', 'JPY', 'CNY', 'EUR'];
           $('loginCode').value = '';
           switchTab(tabFromHash());
         } else {
-          setMessage(
-            'loginMessage',
-            'Sign-in accepted, but the session cookie was not kept. Hard-refresh and try a new code.',
-            true
-          );
+          setMessage('loginMessage', tt('account.sessionCookieLost'), true);
         }
       } catch (error) {
         const msg = String(error.message || '');
         if (/invalid or expired/i.test(msg)) {
-          setMessage(
-            'loginMessage',
-            'Code is invalid or expired (each code works once). Click Send code for a new one.',
-            true
-          );
+          setMessage('loginMessage', tt('account.codeInvalid'), true);
         } else {
           setMessage('loginMessage', msg, true);
         }
@@ -1135,7 +1148,7 @@ const currencies = ['USD', 'JPY', 'CNY', 'EUR'];
     });
 
     $('saveProfile').addEventListener('click', async () => {
-      setMessage('profileMessage', 'Saving…');
+      setMessage('profileMessage', tt('account.saving'));
       try {
         await post(api.account, {
           action: 'profile',
@@ -1145,14 +1158,14 @@ const currencies = ['USD', 'JPY', 'CNY', 'EUR'];
         });
         await loadAccount();
         switchTab('profile');
-        setMessage('profileMessage', 'Profile saved.');
+        setMessage('profileMessage', tt('account.profileSaved'));
       } catch (error) {
         setMessage('profileMessage', error.message, true);
       }
     });
 
     $('saveAddress').addEventListener('click', async () => {
-      setMessage('addressMessage', 'Saving…');
+      setMessage('addressMessage', tt('account.saving'));
       try {
         await post(api.account, {
           action: 'save_address',
@@ -1171,13 +1184,24 @@ const currencies = ['USD', 'JPY', 'CNY', 'EUR'];
         });
         await loadAccount();
         switchTab('addresses');
-        setMessage('addressMessage', 'Address saved.');
+        setMessage('addressMessage', tt('account.addressSaved'));
       } catch (error) {
         setMessage('addressMessage', error.message, true);
       }
     });
 
+    window.addEventListener('crtlu:localechange', () => {
+      if (state.authenticated) {
+        renderAddresses();
+        renderOrders();
+        applyI18n(document.getElementById('accountPanel') || document);
+      } else {
+        applyI18n(document.getElementById('loginPanel') || document);
+      }
+    });
+
     renderLanguageOptions();
+    applyI18n(document);
     loadAccount();
   </script>
 </Layout>

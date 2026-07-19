@@ -80,8 +80,8 @@ define('YANWEN_CHANNEL_ID', '481'); // 燕文专线追踪-普货
 ## 5. 建议下次顺序
 
 1. **燕文真单** — 确认 `YANWEN_CHANNEL_ID=481`；上传含 P2/P3/P4 的 PHP；后台创建运单 → 标签 → 前台轨迹  
-2. **邮件域名** — SPF/DKIM（Resend 域名验证，提升送达）  
-3. **打磨（非阻塞）** — 规格/SKU 核对、价格文档对齐、账户 i18n  
+2. ~~邮件域名~~ — Resend 域名已 Verified（2026-07-19）  
+3. ~~打磨~~ — 2026-07-19 已完成：`docs/published-products.md` 现价矩阵、`docs/spec-sku-audit.md`、账户页 i18n（en+zh-CN）、`scripts/regenerate-published-products.py`  
 
 ---
 
