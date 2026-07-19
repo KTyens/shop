@@ -17,7 +17,7 @@ const currencies = ['USD', 'JPY', 'CNY', 'EUR'];
       <!-- ========== Guest: centered sign-in ========== -->
       <section class="account-auth" id="loginPanel">
         <div class="account-auth-card">
-          <img class="account-auth-brand" src="/assets/brand-mark.svg" width="48" height="48" alt="" decoding="async" />
+          <img class="account-auth-brand" src="/assets/brand-mark.png" width="56" height="56" alt="" decoding="async" />
           <h1 class="account-auth-title">Sign in to your account</h1>
           <p class="account-auth-lead" id="accountLead">
             Use the same email you enter at Stripe Checkout. We’ll send a one-time 6-digit code — no password needed.
@@ -214,13 +214,14 @@ const currencies = ['USD', 'JPY', 'CNY', 'EUR'];
     }
 
     .account-auth-brand {
-      width: 48px;
-      height: 48px;
+      width: 56px;
+      height: 56px;
       display: block;
-      border-radius: 12px;
+      border-radius: 14px;
       margin-bottom: 20px;
-      object-fit: contain;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      object-fit: cover;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16);
+      background: #0a0a0a;
     }
 
     .account-auth-title {
