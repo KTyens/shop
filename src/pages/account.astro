@@ -14,8 +14,16 @@ const currencies = ['USD', 'JPY', 'CNY', 'EUR'];
   <main id="main-content" class="account-page">
     <div class="account-page-inner">
 
+      <!-- Session check — avoids flash of login form when already signed in -->
+      <div class="account-loading" id="accountLoading" aria-busy="true" aria-live="polite">
+        <div class="account-loading-card">
+          <div class="account-loading-spinner" aria-hidden="true"></div>
+          <p>Loading your account…</p>
+        </div>
+      </div>
+
       <!-- ========== Guest: centered sign-in ========== -->
-      <section class="account-auth" id="loginPanel">
+      <section class="account-auth" id="loginPanel" hidden>
         <div class="account-auth-card">
           <img class="account-auth-brand" src="/assets/brand-mark.png" width="56" height="56" alt="" decoding="async" />
           <h1 class="account-auth-title">Sign in to your account</h1>
@@ -198,11 +206,48 @@ const currencies = ['USD', 'JPY', 'CNY', 'EUR'];
       margin: 0 auto;
     }
 
+    /* ---- Loading (session probe) ---- */
+    .account-loading {
+      display: flex;
+      justify-content: center;
+      padding: 64px 0 80px;
+    }
+
+    .account-loading[hidden] {
+      display: none !important;
+    }
+
+    .account-loading-card {
+      display: grid;
+      justify-items: center;
+      gap: 14px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .account-loading-spinner {
+      width: 28px;
+      height: 28px;
+      border: 2.5px solid var(--line);
+      border-top-color: #111;
+      border-radius: 50%;
+      animation: account-spin 0.7s linear infinite;
+    }
+
+    @keyframes account-spin {
+      to { transform: rotate(360deg); }
+    }
+
     /* ---- Auth (guest) ---- */
     .account-auth {
       display: flex;
       justify-content: center;
       padding: 24px 0 40px;
+    }
+
+    .account-auth[hidden] {
+      display: none !important;
     }
 
     .account-auth-card {
@@ -748,12 +793,14 @@ const currencies = ['USD', 'JPY', 'CNY', 'EUR'];
       try {
         const response = await fetch(api.account, { credentials: 'include' });
         state = await response.json();
-        render();
-        if (state.message && !state.authenticated) setMessage('loginMessage', state.message, true);
       } catch {
         state = { authenticated: false, member: null, orders: [], addresses: [] };
-        render();
       }
+      // Hide spinner first so render can show login or dashboard (no flash).
+      const loading = $('accountLoading');
+      if (loading) loading.hidden = true;
+      render();
+      if (state.message && !state.authenticated) setMessage('loginMessage', state.message, true);
     }
 
     function memberInitial(member) {
@@ -798,9 +845,22 @@ const currencies = ['USD', 'JPY', 'CNY', 'EUR'];
       const authed = !!state.authenticated;
       const login = $('loginPanel');
       const dash = $('accountPanel');
+      const loading = $('accountLoading');
 
-      if (login) login.hidden = authed;
-      if (login) login.style.display = authed ? 'none' : 'flex';
+      // While session probe is visible, keep auth UI hidden
+      if (loading && !loading.hidden) {
+        if (login) {
+          login.hidden = true;
+          login.style.display = 'none';
+        }
+        if (dash) dash.hidden = true;
+        return;
+      }
+
+      if (login) {
+        login.hidden = authed;
+        login.style.display = authed ? 'none' : 'flex';
+      }
       if (dash) dash.hidden = !authed;
 
       if (typeof window.crtluRefreshAccountNav === 'function') {
@@ -1069,6 +1129,8 @@ const currencies = ['USD', 'JPY', 'CNY', 'EUR'];
       }
       state = { authenticated: false, member: null, orders: [], addresses: [] };
       history.replaceState(null, '', '/account/');
+      const loading = $('accountLoading');
+      if (loading) loading.hidden = true;
       render();
     });
 
