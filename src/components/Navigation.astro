@@ -26,7 +26,14 @@ const { showCart = true } = Astro.props;
       <!-- Placeholder: i18n.js injects .language-switcher before the cart button -->
       <div class="language-switcher-slot" data-language-slot aria-label="Language"></div>
 
-      <!-- Mainstream account entry (avatar / menu) — next to cart -->
+      {showCart && (
+        <button class="icon-button" type="button" id="openCart" aria-label="Open cart" data-i18n-aria="mobile.cart">
+          <span class="bag-icon" aria-hidden="true"></span>
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
+      )}
+
+      <!-- Account avatar — rightmost (after cart) -->
       <div class="account-nav" id="accountNav" data-account-nav>
         <button
           class="icon-button account-nav-trigger"
@@ -57,13 +64,6 @@ const { showCart = true } = Astro.props;
           <a class="account-nav-item account-nav-signin" role="menuitem" href="/account/" id="accountNavSignIn" data-i18n="account.signIn">Sign in</a>
         </div>
       </div>
-
-      {showCart && (
-        <button class="icon-button" type="button" id="openCart" aria-label="Open cart" data-i18n-aria="mobile.cart">
-          <span class="bag-icon" aria-hidden="true"></span>
-          <span class="cart-count" id="cartCount">0</span>
-        </button>
-      )}
     </div>
   </div>
 </header>
