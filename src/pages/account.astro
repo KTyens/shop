@@ -5,133 +5,679 @@ import CartDrawer from '../components/CartDrawer.astro';
 import '../styles/global.css';
 
 const currencies = ['USD', 'JPY', 'CNY', 'EUR'];
-const locales = [
-  { code: 'en', label: 'English' },
-  { code: 'ja', label: '日本語' },
-  { code: 'zh-CN', label: '简体中文' },
-  { code: 'zh-TW', label: '繁體中文' },
-  { code: 'ar', label: 'العربية' },
-  { code: 'es', label: 'Español' },
-  { code: 'pt', label: 'Português' },
-  { code: 'id', label: 'Bahasa Indonesia' },
-  { code: 'th', label: 'ภาษาไทย' },
-  { code: 'vi', label: 'Tiếng Việt' },
-  { code: 'ms', label: 'Bahasa Melayu' },
-];
 ---
 
 <Layout title="Account | CRTLU Digital" description="Sign in to view orders, manage addresses, and keep checkout preferences." canonicalPath="/account/" robots="noindex, follow">
   <Navigation />
   <CartDrawer />
 
-  <main id="main-content" style="padding:44px 0;">
-    <div style="width:min(var(--max),calc(100% - 44px));margin:0 auto;">
-      <h1 style="font-size:clamp(36px,7vw,72px);line-height:.92;margin:0 0 10px;letter-spacing:0;">Account</h1>
-      <p id="accountLead" style="color:var(--muted);line-height:1.65;margin:0 0 22px;max-width:680px;">Sign in with your email to view orders, save delivery addresses, and keep checkout preferences ready for repeat purchases.</p>
+  <main id="main-content" class="account-page">
+    <div class="account-page-inner">
 
-      <!-- Signed-in identity chip (mainstream avatar style) -->
-      <div class="account-user-chip" id="userChip" hidden>
-        <div class="account-user-chip-avatar" id="userChipAvatar" aria-hidden="true">?</div>
-        <div class="account-user-chip-meta">
-          <span class="eyebrow" style="font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);">Signed in as</span>
-          <strong id="signedInAs">Guest</strong>
-        </div>
-        <button class="secondary-button" type="button" id="logoutButton" style="color:var(--danger);margin-left:8px;">Sign out</button>
-      </div>
+      <!-- ========== Guest: centered sign-in ========== -->
+      <section class="account-auth" id="loginPanel">
+        <div class="account-auth-card">
+          <div class="account-auth-brand" aria-hidden="true">C</div>
+          <h1 class="account-auth-title">Sign in to your account</h1>
+          <p class="account-auth-lead" id="accountLead">
+            Use the same email you enter at Stripe Checkout. We’ll send a one-time 6-digit code — no password needed.
+          </p>
 
-      <!-- Login panel -->
-      <div class="panel" id="loginPanel" style="border:1px solid var(--line);background:#fff;padding:28px;margin-bottom:22px;max-width:560px;">
-        <h2 style="margin:0 0 8px;font-size:22px;">Email sign-in</h2>
-        <p style="color:var(--muted);line-height:1.65;margin:0 0 18px;font-size:14px;">Use the same email you enter at Stripe Checkout. We will send a one-time 6-digit code.</p>
-
-        <div class="account-login-row">
-          <label>
-            <span style="color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;">Email</span>
-            <input id="loginEmail" type="email" autocomplete="email" placeholder="you@example.com" />
-          </label>
-          <button class="primary-button" type="button" id="sendCode">Send code</button>
-        </div>
-
-        <div class="account-login-row" style="margin-top:12px;">
-          <label>
-            <span style="color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;">6-digit code</span>
-            <input id="loginCode" inputmode="numeric" maxlength="6" placeholder="123456" />
-          </label>
-          <button class="primary-button" type="button" id="verifyCode">Sign in</button>
-        </div>
-
-        <div class="message" id="loginMessage" style="min-height:22px;margin-top:10px;color:var(--green);font-size:14px;"></div>
-      </div>
-
-      <!-- Account panel (hidden until logged in) -->
-      <div id="accountPanel" style="display:grid;grid-template-columns:1fr 1fr;gap:18px;" class="hidden">
-        <!-- Profile -->
-        <div class="panel" style="border:1px solid var(--line);background:rgba(255,255,255,.045);padding:28px;">
-          <h2 style="margin:0 0 18px;font-size:22px;">Profile</h2>
-          <div style="display:grid;grid-template-columns:1fr;gap:12px;">
-            <label>
-              <span style="color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;">Name</span>
-              <input id="profileName" autocomplete="name" placeholder="Your name" style="width:100%;min-height:42px;border:1px solid var(--line);background:rgba(0,0,0,.24);color:var(--text);padding:0 12px;font:inherit;" />
-            </label>
-            <label>
-              <span style="color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;">Language</span>
-              <select id="profileLocale" style="width:100%;min-height:42px;border:1px solid var(--line);background:rgba(0,0,0,.24);color:var(--text);padding:0 12px;font:inherit;"></select>
-            </label>
-            <label>
-              <span style="color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;">Preferred currency</span>
-              <select id="profileCurrency" style="width:100%;min-height:42px;border:1px solid var(--line);background:rgba(0,0,0,.24);color:var(--text);padding:0 12px;font:inherit;">
-                {currencies.map((currency) => <option value={currency}>{currency}</option>)}
-              </select>
-            </label>
+          <div class="account-field">
+            <label for="loginEmail">Email</label>
+            <div class="account-field-row">
+              <input id="loginEmail" type="email" autocomplete="email" placeholder="you@example.com" />
+              <button class="primary-button" type="button" id="sendCode">Send code</button>
+            </div>
           </div>
-          <button class="primary-button" type="button" id="saveProfile" style="margin-top:16px;">Save profile</button>
-          <div class="message" id="profileMessage" style="min-height:22px;margin-top:10px;color:var(--green);font-size:14px;"></div>
-        </div>
 
-        <!-- Saved address form -->
-        <div class="panel" style="border:1px solid var(--line);background:rgba(255,255,255,.045);padding:28px;">
-          <h2 style="margin:0 0 18px;font-size:22px;">Saved address</h2>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-            <label><span style="color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;">Label</span><input id="addrLabel" placeholder="Home" style="width:100%;min-height:42px;border:1px solid var(--line);background:rgba(0,0,0,.24);color:var(--text);padding:0 12px;font:inherit;" /></label>
-            <label><span style="color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;">Recipient</span><input id="addrName" autocomplete="name" style="width:100%;min-height:42px;border:1px solid var(--line);background:rgba(0,0,0,.24);color:var(--text);padding:0 12px;font:inherit;" /></label>
-            <label><span style="color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;">Phone</span><input id="addrPhone" autocomplete="tel" style="width:100%;min-height:42px;border:1px solid var(--line);background:rgba(0,0,0,.24);color:var(--text);padding:0 12px;font:inherit;" /></label>
-            <label><span style="color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;">Country</span><input id="addrCountry" placeholder="Japan" style="width:100%;min-height:42px;border:1px solid var(--line);background:rgba(0,0,0,.24);color:var(--text);padding:0 12px;font:inherit;" /></label>
-            <label><span style="color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;">Postal code</span><input id="addrPostal" style="width:100%;min-height:42px;border:1px solid var(--line);background:rgba(0,0,0,.24);color:var(--text);padding:0 12px;font:inherit;" /></label>
-            <label><span style="color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;">State</span><input id="addrState" style="width:100%;min-height:42px;border:1px solid var(--line);background:rgba(0,0,0,.24);color:var(--text);padding:0 12px;font:inherit;" /></label>
-            <label><span style="color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;">City</span><input id="addrCity" style="width:100%;min-height:42px;border:1px solid var(--line);background:rgba(0,0,0,.24);color:var(--text);padding:0 12px;font:inherit;" /></label>
-            <label class="wide" style="grid-column:1/-1;"><span style="color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;">Address line 1</span><input id="addrLine1" style="width:100%;min-height:42px;border:1px solid var(--line);background:rgba(0,0,0,.24);color:var(--text);padding:0 12px;font:inherit;" /></label>
-            <label class="wide" style="grid-column:1/-1;"><span style="color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;">Address line 2</span><input id="addrLine2" style="width:100%;min-height:42px;border:1px solid var(--line);background:rgba(0,0,0,.24);color:var(--text);padding:0 12px;font:inherit;" /></label>
+          <div class="account-field">
+            <label for="loginCode">6-digit code</label>
+            <div class="account-field-row">
+              <input id="loginCode" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="123456" />
+              <button class="primary-button" type="button" id="verifyCode">Sign in</button>
+            </div>
           </div>
-          <button class="primary-button" type="button" id="saveAddress" style="margin-top:16px;">Save address</button>
-          <div class="message" id="addressMessage" style="min-height:22px;margin-top:10px;color:var(--green);font-size:14px;"></div>
-        </div>
 
-        <!-- Addresses list -->
-        <div class="panel full" style="grid-column:1/-1;border:1px solid var(--line);background:rgba(255,255,255,.045);padding:28px;">
-          <h2 style="margin:0 0 18px;font-size:22px;">Addresses</h2>
-          <div id="addressesList"></div>
-        </div>
+          <div class="account-message" id="loginMessage" role="status" aria-live="polite"></div>
 
-        <!-- Orders list -->
-        <div class="panel full" id="orders" style="grid-column:1/-1;border:1px solid var(--line);background:rgba(255,255,255,.045);padding:28px;">
-          <h2 style="margin:0 0 18px;font-size:22px;">Orders</h2>
-          <div id="ordersList"></div>
+          <p class="account-auth-footnote">
+            New here? Place an order with your email — your account is created automatically after payment.
+          </p>
         </div>
-      </div>
+      </section>
+
+      <!-- ========== Member dashboard ========== -->
+      <section class="account-dash" id="accountPanel" hidden>
+        <!-- Sidebar -->
+        <aside class="account-sidebar">
+          <div class="account-sidebar-profile">
+            <div class="account-sidebar-avatar" id="userChipAvatar" aria-hidden="true">?</div>
+            <div class="account-sidebar-meta">
+              <strong id="sidebarName">Member</strong>
+              <span id="signedInAs">—</span>
+            </div>
+          </div>
+
+          <nav class="account-side-nav" aria-label="Account sections">
+            <button type="button" class="account-side-link is-active" data-tab="orders" id="tabOrders">
+              <span class="account-side-ico" aria-hidden="true">☰</span>
+              Orders
+              <span class="account-side-count" id="ordersCount" hidden>0</span>
+            </button>
+            <button type="button" class="account-side-link" data-tab="profile" id="tabProfile">
+              <span class="account-side-ico" aria-hidden="true">◎</span>
+              Profile
+            </button>
+            <button type="button" class="account-side-link" data-tab="addresses" id="tabAddresses">
+              <span class="account-side-ico" aria-hidden="true">⌖</span>
+              Addresses
+              <span class="account-side-count" id="addressesCount" hidden>0</span>
+            </button>
+          </nav>
+
+          <button class="account-side-signout" type="button" id="logoutButton">Sign out</button>
+        </aside>
+
+        <!-- Content -->
+        <div class="account-content">
+          <!-- Orders -->
+          <div class="account-pane is-active" id="pane-orders" data-pane="orders">
+            <header class="account-pane-head">
+              <div>
+                <h2>Orders</h2>
+                <p>Track purchases made with this email.</p>
+              </div>
+            </header>
+            <div id="ordersList" class="account-list"></div>
+          </div>
+
+          <!-- Profile -->
+          <div class="account-pane" id="pane-profile" data-pane="profile" hidden>
+            <header class="account-pane-head">
+              <div>
+                <h2>Profile</h2>
+                <p>Your name and checkout preferences.</p>
+              </div>
+            </header>
+            <div class="account-card">
+              <div class="account-form-grid">
+                <label class="account-field account-field-full">
+                  <span>Name</span>
+                  <input id="profileName" autocomplete="name" placeholder="Your name" />
+                </label>
+                <label class="account-field">
+                  <span>Language</span>
+                  <select id="profileLocale"></select>
+                </label>
+                <label class="account-field">
+                  <span>Preferred currency</span>
+                  <select id="profileCurrency">
+                    {currencies.map((currency) => <option value={currency}>{currency}</option>)}
+                  </select>
+                </label>
+              </div>
+              <div class="account-card-actions">
+                <button class="primary-button" type="button" id="saveProfile">Save profile</button>
+                <div class="account-message" id="profileMessage" role="status"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Addresses -->
+          <div class="account-pane" id="pane-addresses" data-pane="addresses" hidden>
+            <header class="account-pane-head">
+              <div>
+                <h2>Addresses</h2>
+                <p>Saved delivery addresses for faster checkout.</p>
+              </div>
+            </header>
+
+            <div id="addressesList" class="account-list"></div>
+
+            <div class="account-card account-card-form">
+              <h3 class="account-card-title">Add / update address</h3>
+              <div class="account-form-grid">
+                <label class="account-field">
+                  <span>Label</span>
+                  <input id="addrLabel" placeholder="Home" />
+                </label>
+                <label class="account-field">
+                  <span>Recipient</span>
+                  <input id="addrName" autocomplete="name" />
+                </label>
+                <label class="account-field">
+                  <span>Phone</span>
+                  <input id="addrPhone" autocomplete="tel" />
+                </label>
+                <label class="account-field">
+                  <span>Country</span>
+                  <input id="addrCountry" placeholder="Japan" autocomplete="country-name" />
+                </label>
+                <label class="account-field">
+                  <span>Postal code</span>
+                  <input id="addrPostal" autocomplete="postal-code" />
+                </label>
+                <label class="account-field">
+                  <span>State / province</span>
+                  <input id="addrState" autocomplete="address-level1" />
+                </label>
+                <label class="account-field">
+                  <span>City</span>
+                  <input id="addrCity" autocomplete="address-level2" />
+                </label>
+                <label class="account-field account-field-full">
+                  <span>Address line 1</span>
+                  <input id="addrLine1" autocomplete="address-line1" />
+                </label>
+                <label class="account-field account-field-full">
+                  <span>Address line 2</span>
+                  <input id="addrLine2" autocomplete="address-line2" />
+                </label>
+              </div>
+              <div class="account-card-actions">
+                <button class="primary-button" type="button" id="saveAddress">Save address</button>
+                <div class="account-message" id="addressMessage" role="status"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   </main>
 
   <style>
-    .panel { display: none; }
-    .panel:not(.hidden) { display: block; }
-    .wide { grid-column: 1 / -1; }
+    .account-page {
+      padding: 40px 0 72px;
+      min-height: calc(100vh - 160px);
+      background: var(--bg-soft);
+    }
+
+    .account-page-inner {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    /* ---- Auth (guest) ---- */
+    .account-auth {
+      display: flex;
+      justify-content: center;
+      padding: 24px 0 40px;
+    }
+
+    .account-auth-card {
+      width: min(440px, 100%);
+      background: #fff;
+      border: 1px solid var(--line);
+      padding: 36px 32px 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .account-auth-brand {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      background: #111;
+      color: #fff;
+      font-weight: 800;
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    .account-auth-title {
+      margin: 0 0 8px;
+      font-size: clamp(24px, 4vw, 30px);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+
+    .account-auth-lead {
+      margin: 0 0 28px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .account-auth-footnote {
+      margin: 22px 0 0;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    /* ---- Dashboard shell ---- */
+    .account-dash {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .account-dash[hidden] {
+      display: none !important;
+    }
+
+    /* Sidebar */
+    .account-sidebar {
+      background: #fff;
+      border: 1px solid var(--line);
+      padding: 22px 16px 16px;
+      position: sticky;
+      top: 88px;
+    }
+
+    .account-sidebar-profile {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 0 8px 18px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 12px;
+    }
+
+    .account-sidebar-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 999px;
+      background: #111;
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .account-sidebar-meta {
+      min-width: 0;
+      display: grid;
+      gap: 2px;
+    }
+
+    .account-sidebar-meta strong {
+      font-size: 14px;
+      font-weight: 800;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .account-sidebar-meta span {
+      font-size: 12px;
+      color: var(--muted);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .account-side-nav {
+      display: grid;
+      gap: 4px;
+    }
+
+    .account-side-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      text-align: left;
+      padding: 12px 12px;
+      border: 0;
+      background: transparent;
+      color: var(--text);
+      font: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+
+    .account-side-link:hover {
+      background: var(--bg-soft);
+    }
+
+    .account-side-link.is-active {
+      background: #111;
+      color: #fff;
+    }
+
+    .account-side-ico {
+      width: 18px;
+      text-align: center;
+      opacity: 0.7;
+      font-size: 12px;
+    }
+
+    .account-side-count {
+      margin-left: auto;
+      min-width: 22px;
+      height: 22px;
+      padding: 0 6px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: rgba(0, 0, 0, 0.08);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .account-side-link.is-active .account-side-count {
+      background: rgba(255, 255, 255, 0.18);
+      color: #fff;
+    }
+
+    .account-side-signout {
+      margin-top: 16px;
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--danger);
+      font: inherit;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .account-side-signout:hover {
+      border-color: var(--danger);
+      background: rgba(180, 35, 24, 0.04);
+    }
+
+    /* Content panes */
+    .account-content {
+      min-width: 0;
+    }
+
+    .account-pane[hidden] {
+      display: none !important;
+    }
+
+    .account-pane-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .account-pane-head h2 {
+      margin: 0 0 4px;
+      font-size: clamp(22px, 3vw, 28px);
+      letter-spacing: -0.02em;
+    }
+
+    .account-pane-head p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .account-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      padding: 24px;
+    }
+
+    .account-card-form {
+      margin-top: 16px;
+    }
+
+    .account-card-title {
+      margin: 0 0 16px;
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .account-form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px 16px;
+    }
+
+    .account-field {
+      display: grid;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .account-field-full {
+      grid-column: 1 / -1;
+    }
+
+    .account-field > span,
+    .account-field > label,
+    .account-auth-card .account-field > label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .account-field input,
+    .account-field select,
+    .account-field-row input {
+      width: 100%;
+      min-height: 44px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      padding: 0 12px;
+      font: inherit;
+      font-size: 14px;
+    }
+
+    .account-field input:focus,
+    .account-field select:focus,
+    .account-field-row input:focus {
+      outline: none;
+      border-color: #111;
+    }
+
+    .account-field-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+    }
+
+    .account-card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 14px;
+      margin-top: 20px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+    }
+
+    .account-message {
+      min-height: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .account-message.is-error {
+      color: var(--danger);
+    }
+
+    .account-message.is-ok {
+      color: #0f7a3a;
+    }
+
+    /* Lists: orders & addresses */
+    .account-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .account-empty {
+      background: #fff;
+      border: 1px dashed var(--line);
+      padding: 36px 24px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .account-empty a {
+      text-decoration: underline;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .account-item {
+      background: #fff;
+      border: 1px solid var(--line);
+      padding: 18px 20px;
+    }
+
+    .account-item-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+
+    .account-item-top strong {
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .account-item-meta {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 3px;
+    }
+
+    .account-badge {
+      display: inline-flex;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border: 1px solid var(--line);
+      background: var(--bg-soft);
+      white-space: nowrap;
+    }
+
+    .account-badge.is-default,
+    .account-badge.is-status {
+      border-color: #111;
+      background: #111;
+      color: #fff;
+    }
+
+    .account-item-body {
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .account-item-body .muted {
+      color: var(--muted);
+    }
+
+    .account-item-actions {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .account-item-actions .secondary-button {
+      min-height: 34px;
+      padding: 0 12px;
+      font-size: 11px;
+    }
+
+    .account-link-btn {
+      background: none;
+      border: 0;
+      padding: 0;
+      color: var(--danger);
+      font: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    .account-track-panel {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      background: var(--bg-soft);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .account-item-items {
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
     @media (max-width: 860px) {
-      #accountPanel { grid-template-columns: 1fr !important; }
+      .account-dash {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .account-sidebar {
+        position: static;
+        padding: 16px;
+      }
+
+      .account-sidebar-profile {
+        padding-bottom: 14px;
+        margin-bottom: 10px;
+      }
+
+      .account-side-nav {
+        display: flex;
+        gap: 6px;
+        overflow-x: auto;
+        padding-bottom: 4px;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .account-side-link {
+        flex: 0 0 auto;
+        white-space: nowrap;
+        padding: 10px 14px;
+      }
+
+      .account-side-signout {
+        margin-top: 10px;
+      }
+
+      .account-form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .account-field-row {
+        grid-template-columns: 1fr;
+      }
+
+      .account-auth-card {
+        padding: 28px 20px 22px;
+      }
     }
   </style>
 
   <script>
-    // Must live in client script (Astro frontmatter `locales` is not visible here).
     const locales = [
       { code: 'en', label: 'English' },
       { code: 'ja', label: '日本語' },
@@ -146,7 +692,7 @@ const locales = [
       { code: 'ms', label: 'Bahasa Melayu' },
     ];
 
-    const apiUrl = path => window.crtluApiUrl ? window.crtluApiUrl(path) : path;
+    const apiUrl = (path) => (window.crtluApiUrl ? window.crtluApiUrl(path) : path);
     const api = {
       requestCode: apiUrl('/api/account-request-code.php'),
       login: apiUrl('/api/account-login.php'),
@@ -156,17 +702,20 @@ const locales = [
     };
 
     let state = { authenticated: false, member: null, orders: [], addresses: [] };
-    const $ = id => document.getElementById(id);
+    let activeTab = 'orders';
+    const $ = (id) => document.getElementById(id);
 
     function esc(value) {
-      return String(value ?? '').replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[ch]));
+      return String(value ?? '').replace(/[&<>"']/g, (ch) =>
+        ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[ch])
+      );
     }
 
     function setMessage(id, text, error = false) {
       const el = $(id);
+      if (!el) return;
       el.textContent = text || '';
-      el.className = error ? 'message error' : 'message';
-      el.style.color = error ? 'var(--danger)' : 'var(--green)';
+      el.className = 'account-message' + (text ? (error ? ' is-error' : ' is-ok') : '');
     }
 
     async function post(url, payload) {
@@ -180,7 +729,7 @@ const locales = [
         });
       } catch {
         throw new Error(
-          'Failed to reach the login server (network/CORS). If this persists, the account API may be blocked — try again or contact support.'
+          'Failed to reach the login server (network/CORS). If this persists, try again or contact support.'
         );
       }
       const text = await response.text();
@@ -201,7 +750,7 @@ const locales = [
         const response = await fetch(api.account, { credentials: 'include' });
         state = await response.json();
         render();
-        if (state.message) setMessage('loginMessage', state.message, true);
+        if (state.message && !state.authenticated) setMessage('loginMessage', state.message, true);
       } catch {
         state = { authenticated: false, member: null, orders: [], addresses: [] };
         render();
@@ -216,22 +765,44 @@ const locales = [
       return '?';
     }
 
+    function displayName(member) {
+      const name = String(member?.name || '').trim();
+      if (name) return name;
+      const email = String(member?.email || '');
+      return email.split('@')[0] || 'Member';
+    }
+
+    function switchTab(tab) {
+      activeTab = tab || 'orders';
+      document.querySelectorAll('.account-side-link').forEach((btn) => {
+        btn.classList.toggle('is-active', btn.getAttribute('data-tab') === activeTab);
+      });
+      document.querySelectorAll('.account-pane').forEach((pane) => {
+        const on = pane.getAttribute('data-pane') === activeTab;
+        pane.hidden = !on;
+        pane.classList.toggle('is-active', on);
+      });
+      if (activeTab === 'orders' || location.hash === '#orders') {
+        history.replaceState(null, '', activeTab === 'orders' ? '#orders' : `#${activeTab}`);
+      } else {
+        history.replaceState(null, '', `#${activeTab}`);
+      }
+    }
+
+    function tabFromHash() {
+      const h = (location.hash || '').replace(/^#/, '');
+      if (h === 'profile' || h === 'addresses' || h === 'orders') return h;
+      return 'orders';
+    }
+
     function render() {
       const authed = !!state.authenticated;
-      $('loginPanel').style.display = authed ? 'none' : 'block';
-      $('accountPanel').style.display = authed ? 'grid' : 'none';
-      const chip = $('userChip');
-      if (chip) chip.hidden = !authed;
-      const lead = $('accountLead');
-      if (lead) lead.style.display = authed ? 'none' : 'block';
+      const login = $('loginPanel');
+      const dash = $('accountPanel');
 
-      if (authed && state.member) {
-        $('signedInAs').textContent = state.member.email || 'Member';
-        const av = $('userChipAvatar');
-        if (av) av.textContent = memberInitial(state.member);
-      } else {
-        $('signedInAs').textContent = 'Guest';
-      }
+      if (login) login.hidden = authed;
+      if (login) login.style.display = authed ? 'none' : 'flex';
+      if (dash) dash.hidden = !authed;
 
       if (typeof window.crtluRefreshAccountNav === 'function') {
         window.crtluRefreshAccountNav();
@@ -239,44 +810,71 @@ const locales = [
 
       if (!authed) return;
 
-      $('profileName').value = state.member.name || '';
+      const member = state.member || {};
+      $('signedInAs').textContent = member.email || '—';
+      $('sidebarName').textContent = displayName(member);
+      const av = $('userChipAvatar');
+      if (av) av.textContent = memberInitial(member);
+
+      const orderCount = (state.orders || []).length;
+      const addrCount = (state.addresses || []).length;
+      const oc = $('ordersCount');
+      const ac = $('addressesCount');
+      if (oc) {
+        oc.hidden = orderCount < 1;
+        oc.textContent = String(orderCount);
+      }
+      if (ac) {
+        ac.hidden = addrCount < 1;
+        ac.textContent = String(addrCount);
+      }
+
+      $('profileName').value = member.name || '';
       renderLanguageOptions();
-      $('profileLocale').value = state.member.locale || 'en';
-      $('profileCurrency').value = state.member.currency || 'USD';
+      $('profileLocale').value = member.locale || 'en';
+      $('profileCurrency').value = member.currency || 'USD';
 
       renderAddresses();
       renderOrders();
+      switchTab(tabFromHash());
     }
 
     function renderLanguageOptions() {
       const select = $('profileLocale');
-      select.innerHTML = locales.map(l => `<option value="${l.code}">${l.label}</option>`).join('');
+      select.innerHTML = locales.map((l) => `<option value="${l.code}">${l.label}</option>`).join('');
     }
 
     function renderAddresses() {
       const list = state.addresses || [];
       $('addressesList').innerHTML = list.length
-        ? list.map(addr => `
-            <article style="border:1px solid var(--line);background:rgba(0,0,0,.18);padding:16px;margin-bottom:12px;">
-              <div style="display:flex;justify-content:space-between;gap:12px;align-items:start;margin-bottom:10px;">
+        ? list
+            .map(
+              (addr) => `
+            <article class="account-item">
+              <div class="account-item-top">
                 <div>
                   <strong>${esc(addr.label || 'Address')}</strong>
-                  ${addr.is_default ? '<span style="display:inline-flex;padding:4px 8px;color:var(--green);border:1px solid rgba(130,255,143,.36);background:rgba(130,255,143,.08);font-size:12px;text-transform:uppercase;font-weight:900;margin-left:8px;">Default</span>' : ''}
+                  ${addr.is_default ? '<span class="account-badge is-default" style="margin-left:8px;">Default</span>' : ''}
                 </div>
-                <button type="button" data-delete-address="${esc(addr.id)}" style="color:var(--danger);background:none;padding:0;border:none;cursor:pointer;font:inherit;font-size:12px;">Delete</button>
+                <button type="button" class="account-link-btn" data-delete-address="${esc(addr.id)}">Delete</button>
               </div>
-              <div style="color:var(--muted);font-size:14px;">${esc(addr.recipient_name)} ${esc(addr.phone)}</div>
-              <div style="font-size:14px;">${esc(addr.line1)} ${esc(addr.line2)}</div>
-              <div style="color:var(--muted);font-size:14px;">${esc(addr.city)} ${esc(addr.state)} ${esc(addr.postal_code)} ${esc(addr.country)}</div>
-            </article>`).join('')
-        : '<div style="color:var(--muted);border:1px dashed var(--line);padding:16px;">No saved addresses.</div>';
+              <div class="account-item-body">
+                <div>${esc(addr.recipient_name)}${addr.phone ? ` · ${esc(addr.phone)}` : ''}</div>
+                <div>${esc(addr.line1)}${addr.line2 ? `, ${esc(addr.line2)}` : ''}</div>
+                <div class="muted">${[addr.city, addr.state, addr.postal_code, addr.country].filter(Boolean).map(esc).join(', ')}</div>
+              </div>
+            </article>`
+            )
+            .join('')
+        : `<div class="account-empty">No saved addresses yet. Add one below for faster checkout.</div>`;
 
-      $('addressesList').querySelectorAll('[data-delete-address]').forEach(btn => {
+      $('addressesList').querySelectorAll('[data-delete-address]').forEach((btn) => {
         btn.addEventListener('click', async () => {
           setMessage('addressMessage', 'Deleting...');
           try {
             await post(api.account, { action: 'delete_address', id: btn.dataset.deleteAddress });
             await loadAccount();
+            switchTab('addresses');
             setMessage('addressMessage', 'Address deleted.');
           } catch (error) {
             setMessage('addressMessage', error.message, true);
@@ -287,64 +885,94 @@ const locales = [
 
     function renderOrders() {
       const orders = state.orders || [];
-      const money = (cents, currency) => `${(currency || 'USD').toUpperCase()} ${(Number(cents || 0) / 100).toFixed(2)}`;
+      const money = (cents, currency) =>
+        `${(currency || 'USD').toUpperCase()} ${(Number(cents || 0) / 100).toFixed(2)}`;
 
       $('ordersList').innerHTML = orders.length
-        ? orders.map(order => `
-            <article style="border:1px solid var(--line);background:rgba(0,0,0,.18);padding:16px;margin-bottom:12px;" data-order-id="${esc(order.id)}">
-              <div style="display:flex;justify-content:space-between;gap:12px;align-items:start;margin-bottom:10px;">
+        ? orders
+            .map(
+              (order) => `
+            <article class="account-item" data-order-id="${esc(order.id)}">
+              <div class="account-item-top">
                 <div>
                   <strong>Order #${esc(order.id)}</strong>
-                  <div style="color:var(--muted);font-size:13px;margin-top:2px;">${esc(order.created_at || '')}</div>
+                  <div class="account-item-meta">${esc(order.created_at || '')}</div>
                 </div>
-                <span style="display:inline-flex;padding:4px 8px;color:var(--green);border:1px solid rgba(130,255,143,.36);background:rgba(130,255,143,.08);font-size:12px;text-transform:uppercase;font-weight:900;">${esc(order.status || 'paid')}</span>
+                <span class="account-badge is-status">${esc(order.status || 'paid')}</span>
               </div>
-              <div style="font-size:14px;">Total: <strong>${esc(money(order.amount_total, order.currency))}</strong></div>
-              ${order.coupon_code ? `<div style="color:var(--muted);font-size:14px;">Coupon ${esc(order.coupon_code)} saved ${esc(money(order.discount_total, order.currency))}</div>` : ''}
-              ${order.yanwen_tracking
-                ? `<div style="font-size:14px;margin-top:6px;">Tracking: <strong>${esc(order.yanwen_tracking)}</strong>
-                    <button type="button" class="secondary-button" data-track-order="${esc(order.id)}" style="margin-left:10px;font-size:12px;padding:0 12px;min-height:32px;">View tracking</button>
-                   </div>
-                   <div class="track-panel" data-track-panel="${esc(order.id)}" hidden style="margin-top:12px;padding:12px;border:1px solid var(--line);background:rgba(0,0,0,.22);font-size:13px;line-height:1.55;"></div>`
-                : `<div style="color:var(--muted);font-size:14px;">Tracking will be added after shipment</div>`}
-              ${(order.items && order.items.length) ? `<ul style="margin:10px 0 0;padding-left:18px;color:#cbd8df;font-size:14px;">${order.items.map(item => `<li>${item.quantity} x ${esc(item.product_name)}</li>`).join('')}</ul>` : ''}
-            </article>`).join('')
-        : '<div style="color:var(--muted);border:1px dashed var(--line);padding:16px;">No orders yet.</div>';
+              <div class="account-item-body">
+                <div>Total: <strong>${esc(money(order.amount_total, order.currency))}</strong></div>
+                ${
+                  order.coupon_code
+                    ? `<div class="muted">Coupon ${esc(order.coupon_code)} saved ${esc(money(order.discount_total, order.currency))}</div>`
+                    : ''
+                }
+                ${
+                  order.yanwen_tracking
+                    ? `<div style="margin-top:6px;">Tracking: <strong>${esc(order.yanwen_tracking)}</strong></div>`
+                    : `<div class="muted" style="margin-top:6px;">Tracking will appear after shipment</div>`
+                }
+                ${
+                  order.items && order.items.length
+                    ? `<ul class="account-item-items">${order.items
+                        .map((item) => `<li>${item.quantity} × ${esc(item.product_name)}</li>`)
+                        .join('')}</ul>`
+                    : ''
+                }
+              </div>
+              ${
+                order.yanwen_tracking
+                  ? `<div class="account-item-actions">
+                      <button type="button" class="secondary-button" data-track-order="${esc(order.id)}">View tracking</button>
+                    </div>
+                    <div class="account-track-panel" data-track-panel="${esc(order.id)}" hidden></div>`
+                  : ''
+              }
+            </article>`
+            )
+            .join('')
+        : `<div class="account-empty">No orders yet.<br><a href="/products/">Browse products</a> to place your first order.</div>`;
 
-      $('ordersList').querySelectorAll('[data-track-order]').forEach(btn => {
+      $('ordersList').querySelectorAll('[data-track-order]').forEach((btn) => {
         btn.addEventListener('click', async () => {
           const orderId = btn.getAttribute('data-track-order');
           const panel = $('ordersList').querySelector(`[data-track-panel="${orderId}"]`);
           if (!panel) return;
           panel.hidden = false;
-          panel.innerHTML = '<span style="color:var(--muted);">Loading tracking…</span>';
+          panel.innerHTML = '<span class="muted">Loading tracking…</span>';
           btn.disabled = true;
           try {
             const data = await post(api.track, { order_id: Number(orderId) });
             if (!data.ok) {
-              panel.innerHTML = `<span style="color:var(--danger);">${esc(data.message || 'Tracking unavailable')}</span>`;
+              panel.innerHTML = `<span style="color:var(--danger)">${esc(data.message || 'Tracking unavailable')}</span>`;
               return;
             }
             const cps = Array.isArray(data.checkpoints) ? data.checkpoints : [];
             const head = [
               data.exchange_number ? `Last-mile: <strong>${esc(data.exchange_number)}</strong>` : '',
               data.tracking_status ? `Status: <strong>${esc(data.tracking_status)}</strong>` : '',
-            ].filter(Boolean).join(' · ');
+            ]
+              .filter(Boolean)
+              .join(' · ');
             if (!cps.length) {
-              panel.innerHTML = `${head ? `<div style="margin-bottom:8px;">${head}</div>` : ''}<div style="color:var(--muted);">No checkpoint events yet. Check again later.</div>`;
+              panel.innerHTML = `${head ? `<div style="margin-bottom:8px;">${head}</div>` : ''}<div class="muted">No checkpoint events yet. Check again later.</div>`;
               return;
             }
             panel.innerHTML = `
               ${head ? `<div style="margin-bottom:10px;">${head}</div>` : ''}
               <ol style="margin:0;padding-left:18px;">
-                ${cps.map(cp => `<li style="margin:0 0 8px;">
-                  <div><strong>${esc(cp.time || '')}</strong> ${cp.time_zone ? `<span style="color:var(--muted);">${esc(cp.time_zone)}</span>` : ''}</div>
+                ${cps
+                  .map(
+                    (cp) => `<li style="margin:0 0 8px;">
+                  <div><strong>${esc(cp.time || '')}</strong> ${cp.time_zone ? `<span class="muted">${esc(cp.time_zone)}</span>` : ''}</div>
                   <div>${esc(cp.message || cp.status || '')}</div>
-                  ${cp.location ? `<div style="color:var(--muted);">${esc(cp.location)}</div>` : ''}
-                </li>`).join('')}
+                  ${cp.location ? `<div class="muted">${esc(cp.location)}</div>` : ''}
+                </li>`
+                  )
+                  .join('')}
               </ol>`;
           } catch (error) {
-            panel.innerHTML = `<span style="color:var(--danger);">${esc(error.message || 'Tracking failed')}</span>`;
+            panel.innerHTML = `<span style="color:var(--danger)">${esc(error.message || 'Tracking failed')}</span>`;
           } finally {
             btn.disabled = false;
           }
@@ -352,9 +980,17 @@ const locales = [
       });
     }
 
-    // ---- Event handlers ----
+    // Tabs
+    document.querySelectorAll('.account-side-link').forEach((btn) => {
+      btn.addEventListener('click', () => switchTab(btn.getAttribute('data-tab')));
+    });
+    window.addEventListener('hashchange', () => {
+      if (state.authenticated) switchTab(tabFromHash());
+    });
+
+    // Login
     $('sendCode').addEventListener('click', async () => {
-      setMessage('loginMessage', 'Sending...');
+      setMessage('loginMessage', 'Sending code…');
       try {
         const data = await post(api.requestCode, { email: $('loginEmail').value });
         if (data.debug_code) {
@@ -362,7 +998,7 @@ const locales = [
         } else if (data.mail_sent === false) {
           setMessage(
             'loginMessage',
-            data.message || 'Code was created but email delivery failed. Contact support or check admin mail queue.',
+            data.message || 'Code created but email delivery failed. Contact support.',
             true
           );
         } else {
@@ -374,13 +1010,14 @@ const locales = [
     });
 
     $('verifyCode').addEventListener('click', async () => {
-      setMessage('loginMessage', 'Signing in...');
+      setMessage('loginMessage', 'Signing in…');
       const btn = $('verifyCode');
       btn.disabled = true;
       try {
-        const data = await post(api.login, { email: $('loginEmail').value, code: $('loginCode').value });
-        // Login API already returns member — show account UI immediately even if a
-        // follow-up session cookie race fails on the next request.
+        const data = await post(api.login, {
+          email: $('loginEmail').value,
+          code: $('loginCode').value,
+        });
         if (data.member || data.authenticated) {
           state = {
             authenticated: true,
@@ -394,10 +1031,11 @@ const locales = [
         if (state.authenticated) {
           setMessage('loginMessage', '');
           $('loginCode').value = '';
+          switchTab(tabFromHash());
         } else {
           setMessage(
             'loginMessage',
-            'Sign-in was accepted, but the browser session cookie was not kept. Hard-refresh the page, or send a new code and try once more.',
+            'Sign-in accepted, but the session cookie was not kept. Hard-refresh and try a new code.',
             true
           );
         }
@@ -406,7 +1044,7 @@ const locales = [
         if (/invalid or expired/i.test(msg)) {
           setMessage(
             'loginMessage',
-            'The sign-in code is invalid or expired (each code works only once). Click Send code for a new one.',
+            'Code is invalid or expired (each code works once). Click Send code for a new one.',
             true
           );
         } else {
@@ -417,14 +1055,26 @@ const locales = [
       }
     });
 
+    $('loginCode')?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') $('verifyCode').click();
+    });
+    $('loginEmail')?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') $('sendCode').click();
+    });
+
     $('logoutButton').addEventListener('click', async () => {
-      await post(api.logout, {});
+      try {
+        await post(api.logout, {});
+      } catch {
+        /* still clear UI */
+      }
       state = { authenticated: false, member: null, orders: [], addresses: [] };
+      history.replaceState(null, '', '/account/');
       render();
     });
 
     $('saveProfile').addEventListener('click', async () => {
-      setMessage('profileMessage', 'Saving...');
+      setMessage('profileMessage', 'Saving…');
       try {
         await post(api.account, {
           action: 'profile',
@@ -433,6 +1083,7 @@ const locales = [
           currency: $('profileCurrency').value,
         });
         await loadAccount();
+        switchTab('profile');
         setMessage('profileMessage', 'Profile saved.');
       } catch (error) {
         setMessage('profileMessage', error.message, true);
@@ -440,7 +1091,7 @@ const locales = [
     });
 
     $('saveAddress').addEventListener('click', async () => {
-      setMessage('addressMessage', 'Saving...');
+      setMessage('addressMessage', 'Saving…');
       try {
         await post(api.account, {
           action: 'save_address',
@@ -458,13 +1109,13 @@ const locales = [
           },
         });
         await loadAccount();
+        switchTab('addresses');
         setMessage('addressMessage', 'Address saved.');
       } catch (error) {
         setMessage('addressMessage', error.message, true);
       }
     });
 
-    // Init
     renderLanguageOptions();
     loadAccount();
   </script>
