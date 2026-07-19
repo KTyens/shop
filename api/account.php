@@ -4,15 +4,34 @@ require __DIR__ . '/member-auth.php';
 
 function account_orders(PDO $pdo, array $member): array
 {
-    $stmt = $pdo->prepare(
-        'SELECT * FROM orders
-        WHERE member_id = :member_id OR customer_email = :email
-        ORDER BY created_at DESC LIMIT 50'
-    );
-    $stmt->execute([
-        ':member_id' => (int)$member['id'],
-        ':email' => (string)$member['email'],
-    ]);
+    if (!crtlu_table_exists($pdo, 'orders')) {
+        return [];
+    }
+
+    // Ensure phase-4 columns (esp. member_id) exist on older production DBs.
+    crtlu_ensure_orders_member_columns($pdo);
+    $cols = function_exists('crtlu_columns') ? crtlu_columns($pdo, 'orders') : [];
+    $hasMemberId = in_array('member_id', $cols, true);
+
+    if ($hasMemberId) {
+        $stmt = $pdo->prepare(
+            'SELECT * FROM orders
+            WHERE member_id = :member_id OR customer_email = :email
+            ORDER BY created_at DESC LIMIT 50'
+        );
+        $stmt->execute([
+            ':member_id' => (int)$member['id'],
+            ':email' => (string)$member['email'],
+        ]);
+    } else {
+        // Fallback if ALTER was not permitted — still list by checkout email.
+        $stmt = $pdo->prepare(
+            'SELECT * FROM orders
+            WHERE customer_email = :email
+            ORDER BY created_at DESC LIMIT 50'
+        );
+        $stmt->execute([':email' => (string)$member['email']]);
+    }
     $orders = $stmt->fetchAll();
 
     $ids = array_map(static fn(array $order): int => (int)$order['id'], $orders);
@@ -35,6 +54,7 @@ function account_orders(PDO $pdo, array $member): array
 
 function account_addresses(PDO $pdo, int $memberId): array
 {
+    crtlu_ensure_member_tables($pdo);
     if (!crtlu_table_exists($pdo, 'member_addresses')) {
         return [];
     }
@@ -45,6 +65,7 @@ function account_addresses(PDO $pdo, int $memberId): array
 
 try {
     $pdo = crtlu_pdo();
+    crtlu_ensure_member_tables($pdo);
 } catch (Throwable $error) {
     crtlu_json([
         'authenticated' => false,
@@ -60,15 +81,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (!$member) {
         crtlu_json(['authenticated' => false, 'member' => null, 'orders' => [], 'addresses' => []]);
     }
-    crtlu_json([
-        'authenticated' => true,
-        'member' => $member,
-        'orders' => account_orders($pdo, $member),
-        'addresses' => account_addresses($pdo, (int)$member['id']),
-    ]);
+    try {
+        crtlu_json([
+            'authenticated' => true,
+            'member' => $member,
+            'orders' => account_orders($pdo, $member),
+            'addresses' => account_addresses($pdo, (int)$member['id']),
+        ]);
+    } catch (Throwable $error) {
+        // Profile still usable even if orders query fails on a legacy schema.
+        crtlu_json([
+            'authenticated' => true,
+            'member' => $member,
+            'orders' => [],
+            'addresses' => account_addresses($pdo, (int)$member['id']),
+            'message' => $error->getMessage(),
+        ]);
+    }
 }
 
 $member = crtlu_require_member($pdo);
+crtlu_ensure_member_tables($pdo);
 $payload = crtlu_request_json();
 $action = (string)($payload['action'] ?? '');
 

@@ -216,6 +216,53 @@ function crtlu_ensure_member_tables(PDO $pdo): void
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"
         );
     }
+
+    // Phase-4 columns on existing orders tables (production often predates member_id).
+    crtlu_ensure_orders_member_columns($pdo);
+}
+
+/**
+ * Add missing phase-4 order columns used by account / webhook.
+ * Safe to run repeatedly (checks SHOW COLUMNS first).
+ */
+function crtlu_ensure_orders_member_columns(PDO $pdo): void
+{
+    if (!function_exists('crtlu_table_exists') || !crtlu_table_exists($pdo, 'orders')) {
+        return;
+    }
+    if (!function_exists('crtlu_columns')) {
+        return;
+    }
+
+    $cols = crtlu_columns($pdo, 'orders');
+    $wanted = [
+        'member_id' => 'ADD COLUMN `member_id` BIGINT UNSIGNED NULL',
+        'coupon_code' => "ADD COLUMN `coupon_code` VARCHAR(64) NOT NULL DEFAULT ''",
+        'discount_total' => 'ADD COLUMN `discount_total` INT UNSIGNED NOT NULL DEFAULT 0',
+        'display_currency' => "ADD COLUMN `display_currency` VARCHAR(8) NOT NULL DEFAULT ''",
+        'locale' => "ADD COLUMN `locale` VARCHAR(16) NOT NULL DEFAULT ''",
+    ];
+
+    foreach ($wanted as $column => $fragment) {
+        if (in_array($column, $cols, true)) {
+            continue;
+        }
+        try {
+            $pdo->exec('ALTER TABLE `orders` ' . $fragment);
+            $cols[] = $column;
+        } catch (Throwable $error) {
+            // Column may have been added concurrently; continue.
+        }
+    }
+
+    // Index for member_id (ignore if already exists).
+    if (in_array('member_id', $cols, true)) {
+        try {
+            $pdo->exec('ALTER TABLE `orders` ADD KEY `idx_orders_member_id` (`member_id`)');
+        } catch (Throwable $error) {
+            // Index already exists or no permission — non-fatal.
+        }
+    }
 }
 
 function crtlu_issue_login_code(PDO $pdo, string $email): ?string
