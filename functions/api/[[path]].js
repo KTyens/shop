@@ -22,40 +22,58 @@ function proxyHeaders(request) {
   headers.delete('cf-ipcountry');
   headers.delete('cf-ray');
   headers.delete('cf-visitor');
-  headers.delete('x-forwarded-proto');
   headers.delete('x-real-ip');
+  // Tell PHP this is the shop → CF → Serv00 path so session cookies use SameSite=Lax.
+  headers.set('X-CRTLU-Proxy', '1');
+  headers.set('X-Forwarded-Proto', 'https');
+  try {
+    const shopHost = new URL(request.url).hostname;
+    headers.set('X-Forwarded-Host', shopHost);
+  } catch {
+    // ignore
+  }
   return headers;
 }
 
-function rewriteUpstreamCookies(responseHeaders, requestUrl) {
-  const headers = new Headers(responseHeaders);
-  const host = new URL(requestUrl).hostname;
-  // Re-emit Set-Cookie so the browser stores the session on shop.crtlu.me (proxy host), not api host.
-  const cookies = typeof responseHeaders.getSetCookie === 'function'
-    ? responseHeaders.getSetCookie()
-    : [];
-  if (cookies.length) {
-    headers.delete('set-cookie');
-    for (const raw of cookies) {
-      let next = raw
-        .replace(/;\s*Domain=[^;]*/gi, '')
-        .replace(/;\s*SameSite=[^;]*/gi, '');
-      // Same-origin proxy: Lax is fine on shop host
-      if (!/;\s*Secure/i.test(next) && requestUrl.startsWith('https:')) {
-        next += '; Secure';
-      }
-      next += '; SameSite=Lax';
-      // Ensure path
-      if (!/;\s*Path=/i.test(next)) {
-        next += '; Path=/';
-      }
-      headers.append('set-cookie', next);
-    }
+function collectSetCookies(responseHeaders) {
+  if (typeof responseHeaders.getSetCookie === 'function') {
+    const list = responseHeaders.getSetCookie();
+    if (Array.isArray(list) && list.length) return list;
   }
+  // Fallback: some runtimes only expose a single combined header
+  const single = responseHeaders.get('set-cookie');
+  if (!single) return [];
+  // Prefer not to split on commas (expires dates contain commas); treat as one cookie.
+  return [single];
+}
+
+function rewriteUpstreamCookies(responseHeaders, requestUrl) {
+  // Rebuild headers so Set-Cookie is never dropped by Headers() copy quirks.
+  const headers = new Headers();
+  for (const [key, value] of responseHeaders.entries()) {
+    if (key.toLowerCase() === 'set-cookie') continue;
+    headers.append(key, value);
+  }
+
+  const cookies = collectSetCookies(responseHeaders);
+  for (const raw of cookies) {
+    let next = String(raw)
+      .replace(/;\s*Domain=[^;]*/gi, '')
+      .replace(/;\s*SameSite=[^;]*/gi, '');
+    // Same-origin proxy: Lax + Secure on shop host
+    if (!/;\s*Secure/i.test(next) && requestUrl.startsWith('https:')) {
+      next += '; Secure';
+    }
+    next += '; SameSite=Lax';
+    if (!/;\s*Path=/i.test(next)) {
+      next += '; Path=/';
+    }
+    headers.append('set-cookie', next);
+  }
+
   // Avoid leaking upstream CORS that confuses same-origin clients
   headers.delete('access-control-allow-origin');
   headers.delete('access-control-allow-credentials');
-  void host;
   return headers;
 }
 

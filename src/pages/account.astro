@@ -334,12 +334,45 @@ const locales = [
 
     $('verifyCode').addEventListener('click', async () => {
       setMessage('loginMessage', 'Signing in...');
+      const btn = $('verifyCode');
+      btn.disabled = true;
       try {
-        await post(api.login, { email: $('loginEmail').value, code: $('loginCode').value });
+        const data = await post(api.login, { email: $('loginEmail').value, code: $('loginCode').value });
+        // Login API already returns member — show account UI immediately even if a
+        // follow-up session cookie race fails on the next request.
+        if (data.member || data.authenticated) {
+          state = {
+            authenticated: true,
+            member: data.member || { email: $('loginEmail').value },
+            orders: [],
+            addresses: [],
+          };
+          render();
+        }
         await loadAccount();
-        setMessage('loginMessage', '');
+        if (state.authenticated) {
+          setMessage('loginMessage', '');
+          $('loginCode').value = '';
+        } else {
+          setMessage(
+            'loginMessage',
+            'Sign-in was accepted, but the browser session cookie was not kept. Hard-refresh the page, or send a new code and try once more.',
+            true
+          );
+        }
       } catch (error) {
-        setMessage('loginMessage', error.message, true);
+        const msg = String(error.message || '');
+        if (/invalid or expired/i.test(msg)) {
+          setMessage(
+            'loginMessage',
+            'The sign-in code is invalid or expired (each code works only once). Click Send code for a new one.',
+            true
+          );
+        } else {
+          setMessage('loginMessage', msg, true);
+        }
+      } finally {
+        btn.disabled = false;
       }
     });
 

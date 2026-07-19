@@ -3,17 +3,81 @@
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/notifications.php';
 
+/**
+ * True when the browser hits the shop host and Cloudflare proxies to Serv00.
+ * In that case the cookie is stored on shop.crtlu.me (same-site), so SameSite=Lax is correct.
+ * Direct browser → api.crtlu.me calls still need SameSite=None + Secure for credentials.
+ */
+function crtlu_request_is_proxied(): bool
+{
+    $proxy = strtolower(trim((string)($_SERVER['HTTP_X_CRTLU_PROXY'] ?? '')));
+    if ($proxy === '1' || $proxy === 'true') {
+        return true;
+    }
+    // Cloudflare / reverse-proxy markers when Worker forwards the shop Host.
+    $fwdHost = strtolower(trim((string)($_SERVER['HTTP_X_FORWARDED_HOST'] ?? '')));
+    if ($fwdHost !== '' && (str_contains($fwdHost, 'shop.crtlu.me') || str_contains($fwdHost, 'pages.dev'))) {
+        return true;
+    }
+    return false;
+}
+
+function crtlu_session_is_https(): bool
+{
+    if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') {
+        return true;
+    }
+    $proto = strtolower((string)($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? ''));
+    if ($proto === 'https') {
+        return true;
+    }
+    // Production hosts are always HTTPS even if the proxy omitted the header.
+    $host = strtolower((string)($_SERVER['HTTP_HOST'] ?? ''));
+    return str_ends_with($host, 'crtlu.me') || str_contains($host, 'pages.dev');
+}
+
+/**
+ * Emit the member session cookie explicitly (helps reverse-proxy / regenerate_id edge cases).
+ */
+function crtlu_emit_member_session_cookie(): void
+{
+    if (session_status() !== PHP_SESSION_ACTIVE) {
+        return;
+    }
+
+    $https = crtlu_session_is_https();
+    $proxied = crtlu_request_is_proxied();
+    $origin = rtrim((string)($_SERVER['HTTP_ORIGIN'] ?? ''), '/');
+    $crossSite = !$proxied
+        && $origin !== ''
+        && function_exists('crtlu_origin_is_allowed')
+        && crtlu_origin_is_allowed($origin);
+    $sameSite = ($crossSite && $https) ? 'None' : 'Lax';
+
+    setcookie(session_name(), session_id(), [
+        'expires' => time() + 60 * 60 * 24 * 30,
+        'path' => '/',
+        'secure' => $https || $sameSite === 'None',
+        'httponly' => true,
+        'samesite' => $sameSite,
+    ]);
+}
+
 function crtlu_member_session_start(): void
 {
     if (session_status() === PHP_SESSION_ACTIVE) {
         return;
     }
 
-    $https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-        || (strtolower((string)($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '')) === 'https');
+    $https = crtlu_session_is_https();
+    $proxied = crtlu_request_is_proxied();
     // Cross-subdomain shop.crtlu.me ↔ api.crtlu.me needs SameSite=None + Secure when cookie is set on API host.
+    // Proxied same-origin /api calls store the cookie on the shop host → Lax.
     $origin = rtrim((string)($_SERVER['HTTP_ORIGIN'] ?? ''), '/');
-    $crossSite = $origin !== '' && function_exists('crtlu_origin_is_allowed') && crtlu_origin_is_allowed($origin);
+    $crossSite = !$proxied
+        && $origin !== ''
+        && function_exists('crtlu_origin_is_allowed')
+        && crtlu_origin_is_allowed($origin);
     $sameSite = ($crossSite && $https) ? 'None' : 'Lax';
 
     session_name('crtlu_member');
@@ -241,8 +305,14 @@ function crtlu_verify_login_code(PDO $pdo, string $email, string $code): array
     }
 
     crtlu_member_session_start();
-    session_regenerate_id(true);
+    // Prefer regenerate without immediate destroy: if a reverse proxy drops the new
+    // Set-Cookie, deleting the old session leaves the browser with a dead id.
+    if (session_status() === PHP_SESSION_ACTIVE) {
+        @session_regenerate_id(false);
+    }
     $_SESSION['member_id'] = $memberId;
+    // Force Set-Cookie on the login response (critical for Cloudflare Pages proxy).
+    crtlu_emit_member_session_cookie();
 
     return $member;
 }
