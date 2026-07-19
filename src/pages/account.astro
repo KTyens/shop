@@ -27,13 +27,16 @@ const locales = [
   <main id="main-content" style="padding:44px 0;">
     <div style="width:min(var(--max),calc(100% - 44px));margin:0 auto;">
       <h1 style="font-size:clamp(36px,7vw,72px);line-height:.92;margin:0 0 10px;letter-spacing:0;">Account</h1>
-      <p style="color:var(--muted);line-height:1.65;margin:0 0 22px;max-width:680px;">Sign in with your email to view orders, save delivery addresses, and keep checkout preferences ready for repeat purchases.</p>
+      <p id="accountLead" style="color:var(--muted);line-height:1.65;margin:0 0 22px;max-width:680px;">Sign in with your email to view orders, save delivery addresses, and keep checkout preferences ready for repeat purchases.</p>
 
-      <!-- Status card -->
-      <div style="display:inline-flex;align-items:center;gap:18px;padding:18px 22px;border:1px solid var(--line);background:rgba(255,255,255,.045);margin-bottom:28px;">
-        <span style="color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.06em;">Signed in as</span>
-        <strong id="signedInAs" style="font-size:18px;">Guest</strong>
-        <button class="secondary-button" type="button" id="logoutButton" style="color:var(--danger);display:none;">Sign out</button>
+      <!-- Signed-in identity chip (mainstream avatar style) -->
+      <div class="account-user-chip" id="userChip" hidden>
+        <div class="account-user-chip-avatar" id="userChipAvatar" aria-hidden="true">?</div>
+        <div class="account-user-chip-meta">
+          <span class="eyebrow" style="font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);">Signed in as</span>
+          <strong id="signedInAs">Guest</strong>
+        </div>
+        <button class="secondary-button" type="button" id="logoutButton" style="color:var(--danger);margin-left:8px;">Sign out</button>
       </div>
 
       <!-- Login panel -->
@@ -110,7 +113,7 @@ const locales = [
         </div>
 
         <!-- Orders list -->
-        <div class="panel full" style="grid-column:1/-1;border:1px solid var(--line);background:rgba(255,255,255,.045);padding:28px;">
+        <div class="panel full" id="orders" style="grid-column:1/-1;border:1px solid var(--line);background:rgba(255,255,255,.045);padding:28px;">
           <h2 style="margin:0 0 18px;font-size:22px;">Orders</h2>
           <div id="ordersList"></div>
         </div>
@@ -205,13 +208,36 @@ const locales = [
       }
     }
 
-    function render() {
-      $('loginPanel').style.display = state.authenticated ? 'none' : 'block';
-      $('accountPanel').style.display = state.authenticated ? 'grid' : 'none';
-      $('logoutButton').style.display = state.authenticated ? 'inline-flex' : 'none';
-      $('signedInAs').textContent = state.member?.email || 'Guest';
+    function memberInitial(member) {
+      const name = String(member?.name || '').trim();
+      if (name) return name.charAt(0).toUpperCase();
+      const email = String(member?.email || '').trim();
+      if (email) return email.charAt(0).toUpperCase();
+      return '?';
+    }
 
-      if (!state.authenticated) return;
+    function render() {
+      const authed = !!state.authenticated;
+      $('loginPanel').style.display = authed ? 'none' : 'block';
+      $('accountPanel').style.display = authed ? 'grid' : 'none';
+      const chip = $('userChip');
+      if (chip) chip.hidden = !authed;
+      const lead = $('accountLead');
+      if (lead) lead.style.display = authed ? 'none' : 'block';
+
+      if (authed && state.member) {
+        $('signedInAs').textContent = state.member.email || 'Member';
+        const av = $('userChipAvatar');
+        if (av) av.textContent = memberInitial(state.member);
+      } else {
+        $('signedInAs').textContent = 'Guest';
+      }
+
+      if (typeof window.crtluRefreshAccountNav === 'function') {
+        window.crtluRefreshAccountNav();
+      }
+
+      if (!authed) return;
 
       $('profileName').value = state.member.name || '';
       renderLanguageOptions();

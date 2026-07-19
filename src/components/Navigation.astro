@@ -19,13 +19,45 @@ const { showCart = true } = Astro.props;
       <a href="/" data-i18n="nav.home">Home</a>
       <a href="/#popular" data-i18n="nav.featured">Popular</a>
       <a href="/products/" data-i18n="nav.allProducts">All Products</a>
-      <a href="/account/" data-i18n="nav.account">Account</a>
       <a href="/contact/" data-i18n="nav.contact">Contact</a>
     </nav>
     <div class="nav-actions" style="display:flex;gap:8px;align-items:center;">
       <a class="secondary-button" href="/products/" style="font-size:11px;padding:0 14px;min-height:40px;" data-i18n="nav.shopAll">Shop All</a>
       <!-- Placeholder: i18n.js injects .language-switcher before the cart button -->
       <div class="language-switcher-slot" data-language-slot aria-label="Language"></div>
+
+      <!-- Mainstream account entry (avatar / menu) — next to cart -->
+      <div class="account-nav" id="accountNav" data-account-nav>
+        <button
+          class="icon-button account-nav-trigger"
+          type="button"
+          id="accountNavTrigger"
+          aria-haspopup="menu"
+          aria-expanded="false"
+          aria-controls="accountNavMenu"
+          aria-label="Account"
+          data-i18n-aria="nav.account"
+        >
+          <span class="account-nav-avatar" id="accountNavAvatar" aria-hidden="true">
+            <span class="user-icon" id="accountNavIcon"></span>
+            <span class="account-nav-initial" id="accountNavInitial" hidden></span>
+          </span>
+        </button>
+        <div class="account-nav-menu" id="accountNavMenu" role="menu" hidden>
+          <div class="account-nav-menu-head" id="accountNavMenuHead" hidden>
+            <div class="account-nav-menu-avatar" id="accountNavMenuAvatar" aria-hidden="true">?</div>
+            <div class="account-nav-menu-meta">
+              <strong id="accountNavMenuName">Guest</strong>
+              <span id="accountNavMenuEmail"></span>
+            </div>
+          </div>
+          <a class="account-nav-item" role="menuitem" href="/account/" data-i18n="nav.account">Account</a>
+          <a class="account-nav-item" role="menuitem" href="/account/#orders" data-account-orders-link data-i18n="account.orders">Orders</a>
+          <button class="account-nav-item account-nav-signout" type="button" role="menuitem" id="accountNavSignOut" hidden data-i18n="account.signOut">Sign out</button>
+          <a class="account-nav-item account-nav-signin" role="menuitem" href="/account/" id="accountNavSignIn" data-i18n="account.signIn">Sign in</a>
+        </div>
+      </div>
+
       {showCart && (
         <button class="icon-button" type="button" id="openCart" aria-label="Open cart" data-i18n-aria="mobile.cart">
           <span class="bag-icon" aria-hidden="true"></span>
@@ -41,7 +73,7 @@ const { showCart = true } = Astro.props;
   <a href="/products/?category=tv-box" data-i18n="mobile.tvBox">TV Box</a>
   <a href="/products/?category=projector" data-i18n="mobile.projector">Projector</a>
   <button type="button" data-mobile-language data-i18n="nav.language">Language</button>
-  <a href="/contact/" data-i18n="nav.contact">Contact</a>
+  <a href="/account/" data-i18n="nav.account">Account</a>
   {showCart && <button type="button" id="mobileOpenCart" data-i18n="mobile.cart">Cart</button>}
 </nav>
 

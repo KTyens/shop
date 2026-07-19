@@ -324,6 +324,208 @@ img {
   font-weight: 700;
 }
 
+/* Account avatar menu (top-right, next to cart) */
+.account-nav {
+  position: relative;
+}
+
+.account-nav-trigger {
+  width: 44px;
+  min-height: 42px;
+}
+
+.account-nav-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #fff;
+  color: #111;
+}
+
+.account-nav.is-authenticated .account-nav-avatar {
+  background: #111;
+  color: #fff;
+  border: 1px solid #111;
+}
+
+.account-nav-initial {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.user-icon {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+.user-icon::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 1px;
+  width: 7px;
+  height: 7px;
+  border: 1.5px solid currentColor;
+  border-radius: 50%;
+  transform: translateX(-50%);
+}
+
+.user-icon::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 12px;
+  height: 6px;
+  border: 1.5px solid currentColor;
+  border-bottom: 0;
+  border-radius: 8px 8px 0 0;
+  transform: translateX(-50%);
+}
+
+.account-nav-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: min(260px, calc(100vw - 24px));
+  padding: 8px 0;
+  border: 1px solid var(--line);
+  background: #fff;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+  z-index: 80;
+}
+
+.account-nav-menu[hidden] {
+  display: none !important;
+}
+
+.account-nav-menu-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px 14px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 6px;
+}
+
+.account-nav-menu-head[hidden] {
+  display: none !important;
+}
+
+.account-nav-menu-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: #111;
+  color: #fff;
+  font-weight: 800;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.account-nav-menu-meta {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.account-nav-menu-meta strong {
+  font-size: 13px;
+  font-weight: 800;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.account-nav-menu-meta span {
+  font-size: 12px;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.account-nav-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 11px 14px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.account-nav-item:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.account-nav-signout {
+  color: var(--danger, #c0392b);
+  border-top: 1px solid var(--line);
+  margin-top: 6px;
+}
+
+.account-nav-signin {
+  font-weight: 800;
+}
+
+/* Account page signed-in chip */
+.account-user-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  border: 1px solid var(--line);
+  background: #fff;
+  margin-bottom: 28px;
+  max-width: 100%;
+}
+
+.account-user-chip-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: #111;
+  color: #fff;
+  font-weight: 800;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.account-user-chip-meta {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.account-user-chip-meta .eyebrow {
+  margin: 0;
+}
+
+.account-user-chip-meta strong {
+  font-size: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* ============================================
    Typography
    ============================================ */

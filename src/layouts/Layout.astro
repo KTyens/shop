@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import i18nScriptUrl from '../../assets/i18n.js?url';
 import phase4ScriptUrl from '../../assets/shop-phase4.js?url';
+import accountNavScriptUrl from '../../assets/account-nav.js?url';
 import Footer from '../components/Footer.astro';
 import WhatsAppChat from '../components/WhatsAppChat.astro';
 import { absoluteUrl, DEFAULT_OG_IMAGE, SITE_NAME } from '../lib/seo';
@@ -80,6 +81,7 @@ const jsonLdItems = Array.isArray(jsonLd) ? jsonLd : [jsonLd];
     </script>
     <script src={i18nScriptUrl} defer></script>
     <script src={phase4ScriptUrl} defer></script>
+    <script src={accountNavScriptUrl} defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to main content</a>
