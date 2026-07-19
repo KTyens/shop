@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" role="img" aria-label="CRTLU Digital">
+  <defs>
+    <linearGradient id="crtlu-bg" x1="8" y1="4" x2="58" y2="60" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2A2A2A"/>
+      <stop offset="0.45" stop-color="#111111"/>
+      <stop offset="1" stop-color="#050505"/>
+    </linearGradient>
+    <linearGradient id="crtlu-sheen" x1="12" y1="6" x2="40" y2="36" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="crtlu-c" x1="18" y1="14" x2="48" y2="50" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#E8E8E8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Soft device plate -->
+  <rect x="2" y="2" width="60" height="60" rx="16" fill="url(#crtlu-bg)"/>
+  <rect x="2.75" y="2.75" width="58.5" height="58.5" rx="15.25" stroke="#FFFFFF" stroke-opacity="0.12"/>
+  <path d="M18 4.5H46C52.5 4.5 57.5 9.5 57.5 16V22C48 10 34 6 18 4.5Z" fill="url(#crtlu-sheen)"/>
+
+  <!-- Geometric C monogram (open ring) -->
+  <path
+    d="M44.2 22.6C41.7 18.9 37.2 16.4 32 16.4C23.4 16.4 16.4 23.4 16.4 32C16.4 40.6 23.4 47.6 32 47.6C37.2 47.6 41.7 45.1 44.2 41.4"
+    stroke="url(#crtlu-c)"
+    stroke-width="6.2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- Digital signal accent (broadcast / stream) -->
+  <path d="M39.5 28.2C41.1 29.5 42.1 31.6 42.1 34C42.1 36.4 41.1 38.5 39.5 39.8" stroke="#FFFFFF" stroke-opacity="0.92" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M44.8 25.2C47.5 27.5 49.2 30.6 49.2 34C49.2 37.4 47.5 40.5 44.8 42.8" stroke="#FFFFFF" stroke-opacity="0.42" stroke-width="2.1" stroke-linecap="round"/>
+</svg>
