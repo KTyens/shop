@@ -40,6 +40,7 @@ export interface SeriesItem {
   specs?: Record<string, string>;
   detail_url?: string;
   gallery?: string[];
+  requires_plug?: boolean;
 }
 
 export interface CatalogData {

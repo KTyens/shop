@@ -31,16 +31,19 @@ const catalogKeywords = [
   'X96 X98 TV box',
   'wireless HDMI catalog',
   'mini keyboard for Android TV box',
+  'portable label printer',
+  'Bluetooth thermal label maker',
+  'A4 tattoo transfer printer',
 ];
 const catalogItemList = itemListJsonLd(
-  'CRTLU Digital catalog — Android TV boxes, projectors, wireless HDMI, accessories',
+  'CRTLU Digital catalog — Android TV boxes, projectors, label printers, tattoo printers, wireless HDMI, accessories',
   series
 );
 ---
 
 <Layout
-  title="All Android TV Boxes, Projectors, Wireless HDMI & Accessories | CRTLU Digital"
-  description="Browse the full CRTLU catalog: H96, HK1, MECOOL, X96/X98 TV boxes, projectors, wireless HDMI kits, and mini keyboards. Filter by brand, tier, and price. Stripe checkout + Yanwen shipping."
+  title="TV Boxes, Projectors & Thermal Printers | CRTLU Digital"
+  description="Browse the full CRTLU catalog: Android TV boxes, compact projectors, portable label printers, an A4 tattoo transfer printer, wireless HDMI kits, and mini keyboards. Stripe checkout + Yanwen tracked shipping."
   keywords={catalogKeywords}
   canonicalPath="/products/"
   image="/assets/hero-cinema.jpg"
@@ -54,7 +57,7 @@ const catalogItemList = itemListJsonLd(
     <section class="hero wrap">
       <div class="eyebrow" data-i18n="catalog.page.eyebrow">Complete catalog</div>
       <h1 data-i18n="catalog.page.title">All models. Clear specs. Ready to checkout.</h1>
-      <p class="lead" data-i18n="catalog.page.lead">Browse every published Android TV box and compact projector by brand, tier, configuration, and price. Choose memory options and power-plug type before Stripe checkout.</p>
+      <p class="lead" data-i18n="catalog.page.lead">Browse every published TV box, projector, label printer, tattoo printer, and accessory by type, brand, configuration, and price.</p>
 
       <div class="catalog-console" aria-label="Catalog controls">
         <div class="catalog-controls">
@@ -130,6 +133,7 @@ const catalogItemList = itemListJsonLd(
         'catalog.page.filterProj': 'Projectors',
         'catalog.page.filterWirelessHdmi': 'Wireless HDMI',
         'catalog.page.filterAccessory': 'Accessories',
+        'catalog.page.filterPrinter': 'Label / Tattoo Printers',
         'catalog.page.groupType': 'Type',
         'catalog.page.groupBrand': 'Brand',
         'catalog.page.groupTier': 'Tier',
@@ -195,6 +199,7 @@ const catalogItemList = itemListJsonLd(
       variants: Variant[];
       specs?: Record<string, string>;
       detail_url?: string;
+      requires_plug?: boolean;
     }
 
     const initialParams = new URLSearchParams(window.location.search);
@@ -247,6 +252,13 @@ const catalogItemList = itemListJsonLd(
       return Boolean(plugById(id));
     }
 
+    function cartItemHasValidPlug(item: { id: string; plug?: string }): boolean {
+      const variant = variantById(item.id);
+      if (!variant) return false;
+      const series = catalogData.find((entry: SeriesItem) => entry.id === variant.seriesId);
+      return series?.requires_plug === false || isValidPlug(item.plug);
+    }
+
     function loadCart() {
       try {
         const parsed = JSON.parse(localStorage.getItem(cartKey) || '[]');
@@ -276,6 +288,7 @@ const catalogItemList = itemListJsonLd(
         projector: t('catalog.page.filterProj'),
         'wireless-hdmi': t('catalog.page.filterWirelessHdmi'),
         accessory: t('catalog.page.filterAccessory'),
+        printer: t('catalog.page.filterPrinter'),
         premium: 'Premium',
       };
       if (map[cat]) return map[cat];
@@ -427,7 +440,8 @@ const catalogItemList = itemListJsonLd(
         if (!itemVariants.length) return '';
         const selectedId = selected[item.id] || itemVariants[0].id;
         const selectedPlug = selectedPlugs[item.id] || '';
-        const needsPlug = Boolean(plugWarnings[item.id]);
+        const requiresPlug = item.requires_plug !== false;
+        const needsPlug = requiresPlug && Boolean(plugWarnings[item.id]);
         const current = itemVariants.find(v => v.id === selectedId) || itemVariants[0];
 
         const plugHtml = PLUG_TYPES.map((p: PlugType) =>
@@ -488,11 +502,11 @@ const catalogItemList = itemListJsonLd(
             </div>
             <div class="card-body">
               ${configHtml}
-              <div class="plug-section" style="margin-top:12px;">
+              ${requiresPlug ? `<div class="plug-section" style="margin-top:12px;">
                 <div class="plug-section-title">${t('pdp.plugTitle')} <span class="plug-required">*</span></div>
                 <p class="plug-helper ${needsPlug ? 'error' : ''}">${t('pdp.plugHelp')}</p>
                 <div class="plug-selector plug-selector-inline">${plugHtml}</div>
-              </div>
+              </div>` : ''}
               <div class="card-foot">
                 <span class="sku">${t('product.selected')}: ${current.sku}</span>
                 <span class="card-actions">
@@ -519,7 +533,7 @@ const catalogItemList = itemListJsonLd(
 
     function renderFilters() {
       // Preferred type order; any new category from catalog is appended automatically.
-      const preferredCatOrder = ['tv-box', 'projector', 'wireless-hdmi', 'accessory', 'premium'];
+      const preferredCatOrder = ['tv-box', 'projector', 'printer', 'wireless-hdmi', 'accessory', 'premium'];
       const categories = [...new Set(catalogData.map((item) => item.category).filter(Boolean))] as string[];
       categories.sort((a, b) => {
         const ia = preferredCatOrder.indexOf(a);
@@ -562,7 +576,7 @@ const catalogItemList = itemListJsonLd(
     }
 
     function renderCart() {
-      cart = cart.filter(item => variantById(item.id) && isValidPlug(item.plug));
+      cart = cart.filter(cartItemHasValidPlug);
       saveCart();
 
       const count = cart.reduce((sum, item) => sum + item.qty, 0);
@@ -639,8 +653,10 @@ const catalogItemList = itemListJsonLd(
     }
 
     function addToCart(id: string, seriesId?: string) {
+      const series = seriesId ? catalogData.find((item: SeriesItem) => item.id === seriesId) : null;
+      const requiresPlug = series?.requires_plug !== false;
       const plug = seriesId && selectedPlugs[seriesId] ? selectedPlugs[seriesId] : '';
-      if (!plug) {
+      if (requiresPlug && !plug) {
         if (seriesId) {
           plugWarnings[seriesId] = true;
           renderProducts();
@@ -675,7 +691,7 @@ const catalogItemList = itemListJsonLd(
       status.textContent = 'Creating checkout session...';
       const phase4 = (window as any).CRTLU_PHASE4;
       const checkoutMeta = phase4?.checkoutMeta ? phase4.checkoutMeta() : {};
-      if (!cart.every(item => isValidPlug(item.plug))) {
+      if (!cart.every(cartItemHasValidPlug)) {
         status.className = 'status error';
         status.textContent = 'Please choose a power adapter plug type for every item.';
         return;
@@ -833,6 +849,7 @@ const catalogItemList = itemListJsonLd(
           projector: 'Projectors',
           'wireless-hdmi': 'Wireless HDMI',
           accessory: 'Accessories',
+          printer: 'Label / Tattoo Printers',
           premium: 'Premium',
         };
         if (map[cat]) return map[cat];
@@ -843,7 +860,7 @@ const catalogItemList = itemListJsonLd(
           .join(' ') || 'Other';
       };
 
-      const preferredCatOrder = ['tv-box', 'projector', 'wireless-hdmi', 'accessory', 'premium'];
+      const preferredCatOrder = ['tv-box', 'projector', 'printer', 'wireless-hdmi', 'accessory', 'premium'];
       const preferredBrandOrder = ['MECOOL', 'H96', 'HK1', 'Tanix', 'T95', 'TX', 'X5', 'HY', 'A10', 'YS'];
       const categories = [...new Set(catalog.map((item) => item.category).filter(Boolean))].sort((a, b) => {
         const ia = preferredCatOrder.indexOf(a);

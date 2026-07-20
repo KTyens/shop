@@ -89,6 +89,7 @@ while (featured.length < 6) {
 const heroProduct = items.find(i => i.id === 'h96max-m1-plus') ?? featured[0];
 const catTv = items.find(i => i.category === 'tv-box') ?? heroProduct;
 const catProj = items.find(i => i.category === 'projector') ?? featured.find(i => i.category === 'projector') ?? heroProduct;
+const catPrinter = items.find(i => i.category === 'printer') ?? heroProduct;
 const storyProduct = items.find(i => i.id === 'h96-max-v58') ?? heroProduct;
 
 const fromPrice = Math.min(...items.flatMap(i => i.variants.map(v => v.price_cents)));
@@ -109,13 +110,15 @@ const homeKeywords = [
   'wireless HDMI WX100',
   'I8 mini keyboard',
   'T18+ mini keyboard',
+  'portable thermal label printer',
+  'tattoo transfer printer',
   ...items.slice(0, 24).map((i) => i.name),
 ];
 ---
 
 <Layout
-  title="Android TV Boxes, Projectors, Wireless HDMI & Mini Keyboards | CRTLU Digital"
-  description={`Shop Android TV boxes (H96, HK1, MECOOL, X96/X98), compact projectors, wireless HDMI kits, and mini keyboards. Official apps only, Stripe checkout, Yanwen shipping from ${money(fromPrice)}.`}
+  title="TV Boxes, Projectors & Thermal Printers | CRTLU Digital"
+  description={`Shop Android TV boxes (H96, HK1, MECOOL, X96/X98), compact projectors, portable label and tattoo printers, wireless HDMI kits, and mini keyboards. Stripe checkout and Yanwen shipping from ${money(fromPrice)}.`}
   keywords={homeKeywords}
   canonicalPath="/"
   image={assetUrl(heroProduct?.image) || '/assets/hero-cinema.jpg'}
@@ -233,9 +236,9 @@ const homeKeywords = [
         <div class="section-head">
           <div>
             <div class="eyebrow" data-i18n="home.cats.eyebrow">Choose your setup</div>
-            <h2 data-i18n="home.cats.title">High-performance home cinema</h2>
+            <h2 data-i18n="home.cats.title">Devices for screens, labels, and creative work</h2>
           </div>
-          <p data-i18n="home.cats.lead">Start with the form factor that fits your room — streaming box or compact projector.</p>
+          <p data-i18n="home.cats.lead">Choose streaming hardware, compact projection, or portable thermal printing for your next setup.</p>
         </div>
         <div class="el-cat-grid">
           <a class="el-cat-card" href="/products/?category=tv-box">
@@ -248,6 +251,12 @@ const homeKeywords = [
             <img src={assetUrl(catProj?.image)} alt="" loading="lazy" decoding="async" />
             <h3 data-i18n="home.cats.projTitle">Projectors</h3>
             <p data-i18n="home.cats.projBody">Compact smart projectors for bedrooms, movie nights, and portable screens.</p>
+            <span class="el-more" data-i18n="home.cats.more">More</span>
+          </a>
+          <a class="el-cat-card el-cat-card-wide" href="/products/?category=printer">
+            <img src={assetUrl(catPrinter?.image)} alt="" loading="lazy" decoding="async" />
+            <h3 data-i18n="home.cats.printerTitle">Label &amp; Tattoo Printers</h3>
+            <p data-i18n="home.cats.printerBody">Inkless portable printers for organization labels, wide-format stickers, A4 line art, and tattoo stencil transfers.</p>
             <span class="el-more" data-i18n="home.cats.more">More</span>
           </a>
         </div>

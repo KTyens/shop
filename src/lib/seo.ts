@@ -21,6 +21,12 @@ export const CORE_SEO_KEYWORDS = [
   'wireless HDMI transmitter',
   'mini wireless keyboard',
   'TV box remote keyboard',
+  'portable thermal label printer',
+  'Bluetooth label maker',
+  'wide label printer',
+  'A4 thermal printer',
+  'tattoo transfer printer',
+  'tattoo stencil printer',
   'TV Box Japan',
   'Android TV Box Japan',
   '电视盒子',
@@ -96,6 +102,7 @@ export const CATEGORY_SEO_LABEL: Record<string, string> = {
   projector: 'Home Cinema Projector',
   'wireless-hdmi': 'Wireless HDMI Kit',
   accessory: 'TV Box Accessory',
+  printer: 'Thermal Label and Tattoo Printer',
   premium: 'Premium Streaming Device',
 };
 
@@ -128,6 +135,8 @@ export function productKeywords(product: SeriesItem) {
     cat === 'tv-box' || cat === 'premium' ? 'Android TV Box' : null,
     cat === 'wireless-hdmi' ? 'wireless HDMI transmitter receiver' : null,
     cat === 'accessory' ? 'mini keyboard touchpad TV box' : null,
+    cat === 'printer' ? 'portable thermal printer' : null,
+    cat === 'printer' && product.id.includes('tattoo') ? 'tattoo stencil transfer printer' : null,
     product.tier,
     chipset,
     ...memoryHints,
@@ -137,7 +146,7 @@ export function productKeywords(product: SeriesItem) {
           .map(([, v]) => v)
       : []),
     ...product.variants.flatMap((variant) => [variant.label, variant.sku]),
-    `${product.brand} TV Box`,
+    cat === 'tv-box' || cat === 'premium' ? `${product.brand} TV Box` : `${product.brand} ${catLabel}`,
     `buy ${product.name}`,
     ...CORE_SEO_KEYWORDS,
     ...BRAND_DISCOVERY_KEYWORDS,
@@ -157,7 +166,10 @@ export function productPageDescription(product: SeriesItem): string {
   const prices = (product.variants || []).map((v) => v.price_cents).filter((n) => n > 0);
   const from = prices.length ? `From $${(Math.min(...prices) / 100).toFixed(2)}. ` : '';
   const cat = categorySeoLabel(product.category);
-  return `${product.description} ${from}Shop ${product.name} (${cat}) with secure Stripe checkout, Yanwen tracked shipping, UK/EU/US plug options, and official apps only — no preloaded paid content.`.replace(
+  const fulfillment = product.requires_plug === false
+    ? 'USB Type-C charging, secure Stripe checkout, and Yanwen tracked shipping.'
+    : 'UK/EU/US plug options, secure Stripe checkout, Yanwen tracked shipping, and official apps only — no preloaded paid content.';
+  return `${product.description} ${from}Shop ${product.name} (${cat}) with ${fulfillment}`.replace(
     /\s+/g,
     ' '
   ).trim();
@@ -282,7 +294,7 @@ export function websiteJsonLd() {
     name: SITE_NAME,
     url: SITE_URL,
     description:
-      'Android TV boxes, projectors, wireless HDMI kits, and mini keyboards with Stripe checkout and Yanwen shipping.',
+      'Android TV boxes, projectors, thermal label and tattoo printers, wireless HDMI kits, and mini keyboards with Stripe checkout and Yanwen shipping.',
     inLanguage: ['en', 'zh-CN', 'ja', 'zh-TW', 'ar'],
     potentialAction: {
       '@type': 'SearchAction',
@@ -305,7 +317,7 @@ export function organizationJsonLd() {
     logo: absoluteUrl('/favicon.svg'),
     alternateName: ['CRTLU Digital Shop', 'CRTL U Digital', 'CRTLU'],
     description:
-      'Independent store for Android TV boxes, compact projectors, wireless HDMI, and accessories. Hardware only — official apps and your own subscriptions.',
+      'Independent store for Android TV boxes, compact projectors, portable thermal printers, wireless HDMI, and accessories.',
     contactPoint: [
       {
         '@type': 'ContactPoint',
@@ -330,11 +342,11 @@ export function storeFaqJsonLd() {
     },
     {
       q: 'What products does CRTLU Digital sell?',
-      a: 'Android TV boxes (H96, HK1, MECOOL, X96/X98, Tanix, and more), compact projectors, wireless HDMI kits, and mini wireless keyboards for TV box control.',
+      a: 'Android TV boxes (H96, HK1, MECOOL, X96/X98, Tanix, and more), compact projectors, portable label and tattoo transfer printers, wireless HDMI kits, and mini wireless keyboards.',
     },
     {
       q: 'How do I choose a power plug?',
-      a: 'Select UK (BS 1363), EU (Europlug), or US (NEMA 1-15) at checkout based on the delivery country. The plug type is stored with the order for fulfillment.',
+      a: 'Products supplied with a wall adapter require UK (BS 1363), EU (Europlug), or US (NEMA 1-15) selection. USB Type-C printer models do not require a wall-plug selection.',
     },
   ];
   return {

@@ -51,8 +51,13 @@ const productBreadcrumb = breadcrumbJsonLd([
   { name: product.name, path: `/products/${product.id}/` },
 ]);
 const isProjector = product.category === 'projector';
+const isPrinter = product.category === 'printer';
 const buyerFit = isProjector
   ? 'Home movie nights, bedroom viewing, casual gaming, and portable big-screen setups.'
+  : isPrinter
+    ? product.id === 'x8t-tattoo-printer'
+      ? 'Tattoo artists, apprentices, studios, and mobile creators who need portable A4 stencil and monochrome line-art output.'
+      : 'Home organization, office filing, small-shop packaging, gifts, pricing, and everyday label-making.'
   : product.tier === 'budget'
     ? 'Essential streaming, local media playback, and a lower-cost secondary TV setup.'
     : product.tier === 'flagship' || product.tier === 'performance'
@@ -60,16 +65,45 @@ const buyerFit = isProjector
       : 'Everyday family streaming, official apps, local media, and a balanced living-room setup.';
 const packageContents = isProjector
   ? 'Projector, remote control, selected power adapter, and the documentation or accessories shown for this model.'
-  : 'TV box, remote control, HDMI cable, selected power adapter, and the documentation or accessories shown for this model.';
+  : isPrinter
+    ? product.id === 'x8t-tattoo-printer'
+      ? 'X8T printer, 10 tattoo transfer sheets, Type-C cable, carry pouch, and multilingual manual.'
+      : 'Printer, Type-C charging cable, documentation, and the label accessories shown for this model.'
+    : 'TV box, remote control, HDMI cable, selected power adapter, and the documentation or accessories shown for this model.';
+const comparisonFocus = isPrinter
+  ? 'Compare print width, supported media, resolution, connectivity, battery, and included consumables against your intended use.'
+  : 'Compare the chipset, memory, connectivity, and operating system below against the apps and display you plan to use.';
+const productFaqItems = isPrinter
+  ? [
+      {
+        question: 'Does this printer need ink or toner?',
+        answer: 'No. It uses direct thermal printing. Use compatible thermal label, paper, or tattoo transfer media for the selected model.',
+      },
+      {
+        question: 'Which labels or paper should I buy?',
+        answer: product.id === 'p15-label-printer'
+          ? 'Use compatible 12–15mm gap labels.'
+          : product.id === 'p50-label-printer'
+            ? 'Use compatible gap or continuous thermal labels within the recommended 20–50mm width range.'
+            : 'Use compatible 210–216mm A4 thermal paper or tattoo transfer paper. This set includes 10 tattoo transfer sheets.',
+      },
+      {
+        question: 'Do I need to choose a wall-plug type?',
+        answer: 'No. This model charges through USB Type-C and does not require a UK, EU, or US wall-plug selection. A wall charger is not promised unless it is specifically shown in the packing list.',
+      },
+    ]
+  : [
+      {
+        question: 'Does this product include paid channels or streaming subscriptions?',
+        answer: 'No. CRTL U Digital sells the hardware only. Use official apps and your own valid subscriptions. No IPTV access, paid channel bundle, or unofficial streaming account is included.',
+      },
+      {
+        question: 'Which power adapter plug should I choose?',
+        answer: 'Choose the wall-plug type used at the delivery destination: UK Plug (BS 1363), EU Plug (Europlug), or US Plug (NEMA 1-15). The selected type is stored with the order and shown to our fulfillment team.',
+      },
+    ];
 const faqItems = [
-  {
-    question: 'Does this product include paid channels or streaming subscriptions?',
-    answer: 'No. CRTL U Digital sells the hardware only. Use official apps and your own valid subscriptions. No IPTV access, paid channel bundle, or unofficial streaming account is included.',
-  },
-  {
-    question: 'Which power adapter plug should I choose?',
-    answer: 'Choose the wall-plug type used at the delivery destination: UK Plug (BS 1363), EU Plug (Europlug), or US Plug (NEMA 1-15). The selected type is stored with the order and shown to our fulfillment team.',
-  },
+  ...productFaqItems,
   {
     question: 'How much is shipping and how long does delivery take?',
     answer: 'Yanwen tracked shipping is USD 12 per order. Orders normally take 1–3 business days to process, followed by an estimated 7–18 business days in transit. Customs or local-carrier delays can extend this estimate.',
@@ -82,10 +116,10 @@ const faqItems = [
     question: 'Can I return the product and is there a warranty?',
     answer: 'Return requests should be made within 14 calendar days after delivery. Unless a product page states otherwise, physical devices include a 12-month limited hardware warranty for verified manufacturing defects. Policy exclusions apply.',
   },
-  {
+  ...(!isPrinter ? [{
     question: 'Are Netflix, YouTube, Google TV, or other third-party apps guaranteed?',
     answer: 'App availability, certification, playback resolution, subscriptions, and regional restrictions are controlled by each third-party provider and can change. Check the required app and region before purchase if it is essential to your setup.',
-  },
+  }] : []),
 ];
 const faqSchema = {
   '@context': 'https://schema.org',
@@ -155,7 +189,7 @@ const faqSchema = {
         <article class="purchase-guide-item">
           <span>01 / Best for</span>
           <h3>{buyerFit}</h3>
-          <p>Compare the chipset, memory, connectivity, and operating system below against the apps and display you plan to use.</p>
+          <p>{comparisonFocus}</p>
         </article>
         <article class="purchase-guide-item">
           <span>02 / In the box</span>
@@ -503,6 +537,7 @@ const faqSchema = {
       { id: 'eu', label: 'EU Plug', code: 'Europlug' },
       { id: 'us', label: 'US Plug', code: 'NEMA 1-15' },
     ]);
+    const requiresPlug = product?.requires_plug !== false;
 
     let selectedId = null;
     let selectedPlug = '';
@@ -519,6 +554,13 @@ const faqSchema = {
       return plug ? `${plug.label}${plug.code ? ` (${plug.code})` : ''}` : '';
     }
     function isValidPlug(id) { return Boolean(plugById(id)); }
+
+    function cartItemHasValidPlug(item) {
+      const variant = variantById(item.id);
+      if (!variant) return false;
+      const series = catalogData.find((entry) => entry.id === variant.seriesId);
+      return series?.requires_plug === false || isValidPlug(item.plug);
+    }
     function saveCart() { localStorage.setItem(cartKey, JSON.stringify(cart)); }
     function money(cents) { return '$' + (cents / 100).toFixed(2); }
     function apiUrl(path) { return window.crtluApiUrl ? window.crtluApiUrl(path) : path; }
@@ -592,11 +634,15 @@ const faqSchema = {
           <span class="plug-option-sublabel">${p.code || ''}</span>
         </button>`
       ).join('');
-      document.getElementById('plugSection').innerHTML = `
-        <div class="plug-section-title">${t('pdp.plugTitle')} <span class="plug-required">*</span></div>
-        <p class="plug-helper">${t('pdp.plugHelp')}</p>
-        <div class="plug-selector">${plugHtml}</div>
-      `;
+      const plugSection = document.getElementById('plugSection');
+      if (plugSection) {
+        plugSection.style.display = requiresPlug ? 'grid' : 'none';
+        plugSection.innerHTML = requiresPlug ? `
+          <div class="plug-section-title">${t('pdp.plugTitle')} <span class="plug-required">*</span></div>
+          <p class="plug-helper">${t('pdp.plugHelp')}</p>
+          <div class="plug-selector">${plugHtml}</div>
+        ` : '';
+      }
 
       // Specs
       const baseSpecs = {
@@ -677,7 +723,7 @@ const faqSchema = {
     }
 
     function renderCart() {
-      cart = cart.filter(item => variantById(item.id) && isValidPlug(item.plug));
+      cart = cart.filter(cartItemHasValidPlug);
       saveCart();
       const count = cart.reduce((s, i) => s + i.qty, 0);
       const subtotal = cart.reduce((s, i) => s + variantById(i.id).price_cents * i.qty, 0);
@@ -731,7 +777,7 @@ const faqSchema = {
     }
 
     function addToCart(id) {
-      if (!selectedPlug) {
+      if (requiresPlug && !selectedPlug) {
         const section = document.getElementById('plugSection');
         if (section) {
           section.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -739,9 +785,10 @@ const faqSchema = {
         }
         return;
       }
-      const existing = cart.find(i => i.id === id && i.plug === selectedPlug);
+      const cartPlug = requiresPlug ? selectedPlug : '';
+      const existing = cart.find(i => i.id === id && (i.plug || '') === cartPlug);
       if (existing) existing.qty += 1;
-      else cart.push({ id, qty: 1, plug: selectedPlug });
+      else cart.push({ id, qty: 1, ...(cartPlug ? { plug: cartPlug } : {}) });
       saveCart(); renderCart(); openCart();
     }
 
@@ -763,7 +810,7 @@ const faqSchema = {
       status.textContent = 'Creating checkout session...';
       const phase4 = window.CRTLU_PHASE4;
       const checkoutMeta = phase4?.checkoutMeta ? phase4.checkoutMeta() : {};
-      if (!cart.every(item => isValidPlug(item.plug))) {
+      if (!cart.every(cartItemHasValidPlug)) {
         status.className = 'status error';
         status.textContent = 'Please choose a power adapter plug type for every item.';
         return;

@@ -214,3 +214,16 @@ Media root: `KJ/03-产品图片/TV BOX/Gurobaru Konekuto/X96/`.
 - **Keyboards and entry SKUs under $40** kept (I8, T18+, X96Q/S400 low configs, etc.).
 - Source of truth: `data/catalog.json` after this cut.
 
+### Portable thermal printers (added 2026-07-20)
+
+Cost sources: SKU archives and FBM calculations under `/Users/apple/Desktop/Codex Projects/跨境电商/印小签/`. These products contain rechargeable batteries and charge by USB Type-C. They do not require the storefront UK/EU/US wall-plug selector.
+
+The supplier files do not yet contain final Yanwen quotes. The catalog therefore uses conservative planning estimates: RMB 55 for P15/P50 and RMB 110 for the heavier X8T set, plus the standard RMB 5 handling allowance. Recalculate when actual packed-parcel quotes are available.
+
+| Product | SKU | Cost RMB | Estimated Ship RMB | Landed RMB | Active USD | Compare-at USD |
+|---|---|---:|---:|---:|---:|---:|
+| P15 Portable Label Printer, white | CRT-PRINT-P15-WHITE | 80 | 55 | 140 | 34.99 | 39.99 |
+| P50 Wide Label Printer, blue | CRT-PRINT-P50-BLUE | 70 | 55 | 130 | 39.99 | 44.99 |
+| X8T A4 Tattoo Transfer Printer Set, white | CRT-PRINT-X8T-WHITE | 180 | 110 | 295 | 79.99 | 89.99 |
+
+P50 is priced above formula floor to preserve its wider-label positioning. X8T includes 10 tattoo transfer sheets and a carry pouch; its higher freight estimate reflects the approximately 860g unit and larger package.

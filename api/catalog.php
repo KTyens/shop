@@ -158,6 +158,7 @@ function crtlu_products(): array
                     'currency' => $decoded['currency'] ?? 'usd',
                     'rmb_price' => $variant['rmb_price'] ?? null,
                     'description' => $series['description'] ?? '',
+                    'requires_plug' => !array_key_exists('requires_plug', $series) || $series['requires_plug'] !== false,
                 ];
             }
         }
@@ -180,6 +181,7 @@ function crtlu_public_products(): array
             'currency' => $product['currency'],
             'rmb_price' => $product['rmb_price'] ?? null,
             'description' => $product['description'],
+            'requires_plug' => $product['requires_plug'] ?? true,
         ];
     }, crtlu_products()));
 }

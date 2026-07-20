@@ -107,10 +107,17 @@ $locale = substr((string)($payload['locale'] ?? 'en'), 0, 12);
 $discountResult = ['valid' => false, 'discount_cents' => 0];
 
 try {
+    $checkoutProducts = crtlu_products();
     foreach ($rawItems as $item) {
+        $itemId = (string)($item['id'] ?? '');
+        $checkoutProduct = $checkoutProducts[$itemId] ?? null;
+        $requiresPlug = !is_array($checkoutProduct) || ($checkoutProduct['requires_plug'] ?? true) !== false;
         $plugId = crtlu_checkout_plug_id($item);
-        if ($plugId === '' || !isset($allowedPlugTypes[$plugId])) {
+        if ($requiresPlug && ($plugId === '' || !isset($allowedPlugTypes[$plugId]))) {
             fail_checkout('Please choose a valid power adapter plug type for every item.');
+        }
+        if (!$requiresPlug && $plugId !== '' && !isset($allowedPlugTypes[$plugId])) {
+            fail_checkout('Cart contains an invalid power adapter plug type.');
         }
     }
 
@@ -144,11 +151,15 @@ foreach ($cart['lines'] as $line) {
     $lineItems["line_items[$index][price_data][currency]"] = $product['currency'];
     $lineItems["line_items[$index][price_data][unit_amount]"] = $line['adjusted_unit_amount'];
     $lineItems["line_items[$index][price_data][product_data][name]"] = $product['name'];
-    $lineItems["line_items[$index][price_data][product_data][description]"] = trim($product['description'] . ' Plug: ' . $plugLabel);
-    $lineItems["line_items[$index][price_data][product_data][metadata][plug_type]"] = $plugLabel;
+    $lineItems["line_items[$index][price_data][product_data][description]"] = trim($product['description'] . ($plugLabel !== '' ? ' Plug: ' . $plugLabel : ''));
+    if ($plugLabel !== '') {
+        $lineItems["line_items[$index][price_data][product_data][metadata][plug_type]"] = $plugLabel;
+    }
     $lineItems["line_items[$index][price_data][product_data][metadata][sku]"] = $product['sku'] ?? $id;
     $metadataItems[] = $id . ':' . $qty;
-    $plugTypes[] = ($product['sku'] ?? $id) . ':' . $plugLabel;
+    if ($plugLabel !== '') {
+        $plugTypes[] = ($product['sku'] ?? $id) . ':' . $plugLabel;
+    }
     $index++;
 }
 

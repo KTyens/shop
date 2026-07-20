@@ -1,6 +1,6 @@
 # 续做入口（下次打开项目先读这里）
 
-**Last session:** 2026-07-19  
+**Last session:** 2026-07-20  
 **Project path:** `/Users/apple/Desktop/Codex Projects/独立站/shop`  
 **Live:** `https://shop.crtlu.me`（前端 CF Pages）· `https://api.crtlu.me`（PHP Serv00）  
 **Git:** `origin/main` → `https://github.com/KTyens/shop.git`  
@@ -42,6 +42,7 @@
 | 登录会话 / 账户页体验 | ✅ 本周收口 |
 | 燕文 P0–P4 代码 | ✅ 全做完 |
 | 燕文线上验收（真单） | ⏳ 待 CHANNEL_ID + 包部署 |
+| P15 / P50 标签机、X8T 纹身转印机 | ✅ 前端目录完成；Serv00 商品/结账文件待随本次后端包上传 |
 
 **整体阶段：** **可卖货运营中后期**；物流 API 真单验收是主要未完成业务项。
 
@@ -91,3 +92,10 @@ define('YANWEN_CHANNEL_ID', '481'); // 燕文专线追踪-普货
 - catalog 真相源：`data/catalog.json`（同步 `public/data`）  
 - 改 PHP 必须提醒上传 Serv00  
 - 燕文 / Stripe 密钥不进文档正文  
+
+## 7. 2026-07-20 打印机分类
+
+- 新增分类 `printer`：P15、P50、X8T，共 3 个系列 / 3 个 SKU。
+- 三款均为 USB Type-C 供电，catalog 使用 `requires_plug: false`，结账不要求英规/欧规/美规插头。
+- 每款详情页使用 8 张已优化图片；价格与运费估算见 `docs/pricing-system.md`。
+- Cloudflare Pages 随 `main` 推送部署前端；Serv00 还需上传本次后端包中的 `api/` 与 `data/catalog.json`，否则 Stripe 后端不认识新 SKU。

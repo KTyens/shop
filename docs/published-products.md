@@ -1,6 +1,6 @@
 # Published Product Matrix
 
-Last updated: 2026-07-19
+Last updated: 2026-07-20
 
 Auto-generated from `data/catalog.json` (source of truth). Do not hand-edit prices here — change catalog then run:
 
@@ -56,6 +56,9 @@ python3 scripts/regenerate-published-products.py
 | X98Q | X96 | budget | tv-box | 1GB RAM + 8GB ROM<br>2GB RAM + 16GB ROM | 2 | $21.99 |
 | X98K | X96 | main | tv-box | 4GB RAM + 32GB ROM<br>4GB RAM + 64GB ROM | 2 | $37.99 |
 | X96 S400 | X96 | budget | tv-box | 1GB RAM + 8GB ROM<br>2GB RAM + 16GB ROM | 2 | $27.99 |
+| P15 Portable Label Printer | YINXIAOQIAN | compact | printer | White · P15 Printer | 1 | $34.99 |
+| P50 Wide Label Printer | YINXIAOQIAN | best-value | printer | Blue · 20–50mm | 1 | $39.99 |
+| X8T A4 Tattoo Transfer Printer | YINXIAOQIAN | professional | printer | White · Tattoo Transfer Set | 1 | $79.99 |
 
 ## Published Variants
 
@@ -162,6 +165,9 @@ python3 scripts/regenerate-published-products.py
 | X98K | CRT-X98K-4G64G | 4GB RAM + 64GB ROM | 205 | $46.99 | $51.99 | x98k-4-64 |
 | X96 S400 | CRT-X96-S400-1G8G | 1GB RAM + 8GB ROM | 95 | $27.99 | $32.99 | x96-s400-1-8 |
 | X96 S400 | CRT-X96-S400-2G16G | 2GB RAM + 16GB ROM | 110 | $30.99 | $35.99 | x96-s400-2-16 |
+| P15 Portable Label Printer | CRT-PRINT-P15-WHITE | White · P15 Printer | 80 | $34.99 | $39.99 | p15-label-printer-white |
+| P50 Wide Label Printer | CRT-PRINT-P50-BLUE | Blue · 20–50mm | 70 | $39.99 | $44.99 | p50-label-printer-blue |
+| X8T A4 Tattoo Transfer Printer | CRT-PRINT-X8T-WHITE | White · Tattoo Transfer Set | 180 | $79.99 | $89.99 | x8t-tattoo-printer-white-set |
 
 ## Notes
 

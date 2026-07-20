@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-16",
+  "updated": "2026-07-20",
   "currency": "usd",
   "plug_types": [
     {
@@ -2889,6 +2889,163 @@
         "starting_price": "$27.99",
         "brand": "X96",
         "shipping_baseline": "Japan Yanwen baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
+      }
+    },
+    {
+      "id": "p15-label-printer",
+      "brand": "YINXIAOQIAN",
+      "name": "P15 Portable Label Printer",
+      "category": "printer",
+      "tier": "compact",
+      "status": "published",
+      "requires_plug": false,
+      "detail_url": "/products/p15-label-printer/",
+      "description": "Compact Bluetooth thermal label maker for home organization, office files, cables, gifts, and everyday 12–15mm labels — no ink cartridge required.",
+      "image": "assets/products/p15-label-printer/main.jpg",
+      "gallery": [
+        "assets/products/p15-label-printer/main.jpg",
+        "assets/products/p15-label-printer/detail-1.jpg",
+        "assets/products/p15-label-printer/detail-2.jpg",
+        "assets/products/p15-label-printer/detail-3.jpg",
+        "assets/products/p15-label-printer/detail-4.jpg",
+        "assets/products/p15-label-printer/detail-5.jpg",
+        "assets/products/p15-label-printer/detail-6.jpg",
+        "assets/products/p15-label-printer/detail-7.jpg"
+      ],
+      "variants": [
+        {
+          "id": "p15-label-printer-white",
+          "sku": "CRT-PRINT-P15-WHITE",
+          "label": "White · P15 Printer",
+          "rmb_price": 80,
+          "shipping_rmb": 55,
+          "price_cents": 3499,
+          "compare_at_cents": 3999
+        }
+      ],
+      "specs": {
+        "Model": "P15",
+        "Product Type": "Portable Thermal Label Printer",
+        "Printing Method": "Direct thermal; no ink or toner",
+        "Resolution": "203 DPI",
+        "Label Width": "12–15 mm gap labels",
+        "Print Speed": "Up to 20 mm/s",
+        "Connectivity": "Bluetooth through the Marklife app",
+        "Charging": "USB Type-C",
+        "Battery": "1300 mAh rechargeable battery",
+        "Dimensions": "74 × 95 × 40 mm",
+        "Weight": "About 205 g",
+        "Color": "White",
+        "Use Cases": "Home organization, kitchen labels, files, cables, stationery, reminders, and gifts",
+        "configurations": "White · P15 Printer",
+        "starting_price": "$34.99",
+        "brand": "YINXIAOQIAN",
+        "shipping_baseline": "Estimated Japan battery-parcel freight RMB 55 + packaging RMB 5; customer shipping per store policy"
+      }
+    },
+    {
+      "id": "p50-label-printer",
+      "brand": "YINXIAOQIAN",
+      "name": "P50 Wide Label Printer",
+      "category": "printer",
+      "tier": "best-value",
+      "status": "published",
+      "requires_plug": false,
+      "detail_url": "/products/p50-label-printer/",
+      "description": "Portable wide-format thermal label maker for 20–50mm labels, barcodes, QR codes, addresses, pricing, office organization, and small-shop packaging.",
+      "image": "assets/products/p50-label-printer/main.jpg",
+      "gallery": [
+        "assets/products/p50-label-printer/main.jpg",
+        "assets/products/p50-label-printer/detail-1.jpg",
+        "assets/products/p50-label-printer/detail-2.jpg",
+        "assets/products/p50-label-printer/detail-3.jpg",
+        "assets/products/p50-label-printer/detail-4.jpg",
+        "assets/products/p50-label-printer/detail-5.jpg",
+        "assets/products/p50-label-printer/detail-6.jpg",
+        "assets/products/p50-label-printer/detail-7.jpg"
+      ],
+      "variants": [
+        {
+          "id": "p50-label-printer-blue",
+          "sku": "CRT-PRINT-P50-BLUE",
+          "label": "Blue · 20–50mm",
+          "rmb_price": 70,
+          "shipping_rmb": 55,
+          "price_cents": 3999,
+          "compare_at_cents": 4499
+        }
+      ],
+      "specs": {
+        "Model": "P50",
+        "Product Type": "Wide Thermal Label Printer",
+        "Printing Method": "Direct thermal; no ink or toner",
+        "Resolution": "203 DPI",
+        "Label Width": "20–50 mm recommended; gap and continuous labels",
+        "Print Speed": "Up to 20 mm/s",
+        "Connectivity": "Mobile app printing; computer support varies by platform and driver",
+        "Charging": "USB Type-C",
+        "Battery": "1300 mAh rechargeable battery",
+        "Dimensions": "80 × 44.5 × 113 mm",
+        "Weight": "About 405 g",
+        "Color": "Blue",
+        "Use Cases": "Address, price, barcode, QR code, gift, bakery, office, and organization labels",
+        "configurations": "Blue · 20–50mm",
+        "starting_price": "$39.99",
+        "brand": "YINXIAOQIAN",
+        "shipping_baseline": "Estimated Japan battery-parcel freight RMB 55 + packaging RMB 5; customer shipping per store policy"
+      }
+    },
+    {
+      "id": "x8t-tattoo-printer",
+      "brand": "YINXIAOQIAN",
+      "name": "X8T A4 Tattoo Transfer Printer",
+      "category": "printer",
+      "tier": "professional",
+      "status": "published",
+      "requires_plug": false,
+      "detail_url": "/products/x8t-tattoo-printer/",
+      "description": "Portable A4 thermal printer set for tattoo stencil transfers, monochrome line art, notes, and documents, supplied with 10 tattoo transfer sheets and a carry pouch.",
+      "image": "assets/products/x8t-tattoo-printer/main.jpg",
+      "gallery": [
+        "assets/products/x8t-tattoo-printer/main.jpg",
+        "assets/products/x8t-tattoo-printer/detail-1.jpg",
+        "assets/products/x8t-tattoo-printer/detail-2.jpg",
+        "assets/products/x8t-tattoo-printer/detail-3.jpg",
+        "assets/products/x8t-tattoo-printer/detail-4.jpg",
+        "assets/products/x8t-tattoo-printer/detail-5.jpg",
+        "assets/products/x8t-tattoo-printer/detail-6.jpg",
+        "assets/products/x8t-tattoo-printer/detail-7.jpg"
+      ],
+      "variants": [
+        {
+          "id": "x8t-tattoo-printer-white-set",
+          "sku": "CRT-PRINT-X8T-WHITE",
+          "label": "White · Tattoo Transfer Set",
+          "rmb_price": 180,
+          "shipping_rmb": 110,
+          "price_cents": 7999,
+          "compare_at_cents": 8999
+        }
+      ],
+      "specs": {
+        "Model": "X8T",
+        "Product Type": "A4 Thermal Tattoo Transfer Printer",
+        "Printing Method": "Direct thermal; monochrome, no ink or toner",
+        "Resolution": "203 DPI",
+        "Paper Width": "210–216 mm; roll, fanfold, and tattoo transfer paper",
+        "Print Speed": "Up to 12 mm/s",
+        "Connectivity": "Bluetooth through Marklife app; USB computer connection",
+        "Charging": "USB Type-C",
+        "Battery": "1250 mAh rechargeable battery",
+        "Dimensions": "265 × 56 × 47 mm",
+        "Weight": "About 860 g",
+        "Color": "White",
+        "In the Box": "X8T printer, 10 tattoo transfer sheets, Type-C cable, carry pouch, and multilingual manual",
+        "Use Cases": "Tattoo stencils, monochrome line art, notes, study sheets, and mobile document printing",
+        "configurations": "White · Tattoo Transfer Set",
+        "starting_price": "$79.99",
+        "brand": "YINXIAOQIAN",
+        "shipping_baseline": "Estimated Japan battery-parcel freight RMB 110 + packaging RMB 5; customer shipping per store policy"
       }
     }
   ],

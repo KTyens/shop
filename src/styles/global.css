@@ -1981,6 +1981,14 @@ a.product-media-link {
   transition: border-color 160ms ease;
 }
 
+.el-cat-card-wide {
+  grid-column: 1 / -1;
+}
+
+.el-cat-card-wide img {
+  width: min(38%, 360px);
+}
+
 .el-cat-card:hover {
   border-color: #111;
 }

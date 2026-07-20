@@ -3,7 +3,7 @@ import { WHATSAPP_NUMBER, whatsappUrl } from '../lib/contact';
 import { absoluteUrl } from '../lib/seo';
 
 const currentUrl = absoluteUrl(Astro.url.pathname);
-const defaultMessage = `Hi CRTL U Digital, I have a question about your TV boxes or projectors. Page: ${currentUrl}`;
+const defaultMessage = `Hi CRTL U Digital, I have a question about your TV boxes, projectors, or printers. Page: ${currentUrl}`;
 const chatUrl = whatsappUrl(defaultMessage);
 ---
 
