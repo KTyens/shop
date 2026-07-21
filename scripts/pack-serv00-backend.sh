@@ -15,6 +15,8 @@ zip -r "$OUT" \
   .htaccess \
   docs/deployment-guide-zh.md \
   docs/DEPLOYMENT.md \
+  docs/yanwen-api-integration.md \
+  api/config.local.example.php \
   -x '*.DS_Store' \
   -x 'api/config.local.php' \
   -x 'api/config.local.example.php.bak' \

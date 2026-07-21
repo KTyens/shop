@@ -10,9 +10,9 @@ function crtlu_require_admin(): void
     $givenPass = $_SERVER['PHP_AUTH_PW'] ?? '';
 
     if (!$pass || !hash_equals($user, $givenUser) || !hash_equals($pass, $givenPass)) {
-        header('WWW-Authenticate: Basic realm="CRTLU Orders"');
+        header('WWW-Authenticate: Basic realm="CRTLU Admin"');
         http_response_code(401);
-        echo 'Authentication required';
+        echo '需要登录后台';
         exit;
     }
 }

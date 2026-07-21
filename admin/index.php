@@ -74,8 +74,8 @@ $cards = [
         'desc' => '手动上架新产品；编辑名称、描述、规格、价格；替换主图与详情图、排序删除图片。',
         'href' => 'products.php',
         'metric' => $productCount,
-        'metric_label' => 'product series',
-        'action' => 'Edit products',
+        'metric_label' => '产品系列',
+        'action' => '进入产品',
         'primary' => true,
     ],
     [
@@ -83,56 +83,64 @@ $cards = [
         'desc' => '填写型号信息与价格，可选上传主图/详情图，创建后进入编辑页完善。',
         'href' => 'product-new.php',
         'metric' => '+',
-        'metric_label' => 'new listing',
-        'action' => 'Create product',
+        'metric_label' => '新建上架',
+        'action' => '立即上架',
     ],
     [
         'title' => '订单管理',
         'desc' => '查看 Stripe 订单、客户地址、商品明细，更新订单状态和燕文单号。',
         'href' => 'orders.php',
         'metric' => $stats['orders'],
-        'metric_label' => 'total orders',
-        'action' => 'Open orders',
+        'metric_label' => '订单总数',
+        'action' => '进入订单',
     ],
     [
         'title' => '会员管理',
         'desc' => '查看已验证会员、登录状态、购买次数和累计消费。',
         'href' => 'members.php',
         'metric' => $stats['members'],
-        'metric_label' => 'members',
-        'action' => 'Open members',
+        'metric_label' => '会员数',
+        'action' => '进入会员',
     ],
     [
         'title' => '优惠券',
         'desc' => '新增、启用、停用或删除结账优惠码。',
         'href' => 'coupons.php',
         'metric' => 'JSON',
-        'metric_label' => 'coupon rules',
-        'action' => 'Edit coupons',
+        'metric_label' => '优惠规则',
+        'action' => '管理优惠券',
     ],
     [
         'title' => '邮件队列',
         'desc' => '查看订单通知、会员验证码邮件，重试失败邮件或标记已发送。',
         'href' => 'emails.php',
         'metric' => $stats['pending_emails'],
-        'metric_label' => 'queued / failed',
-        'action' => 'Open emails',
+        'metric_label' => '排队 / 失败',
+        'action' => '进入邮件',
     ],
     [
-        'title' => '燕文导出',
-        'desc' => '下载待发货订单 CSV，用于导入或整理燕文发货资料。',
+        'title' => '燕文 CSV 导出',
+        'desc' => '下载待发货订单 CSV，用于人工导入燕文发货。',
         'href' => 'export-yanwen.php',
         'metric' => $stats['unshipped'],
-        'metric_label' => 'ready to export',
-        'action' => 'Download CSV',
+        'metric_label' => '待导出',
+        'action' => '下载 CSV',
+    ],
+    [
+        'title' => '燕文 API',
+        'desc' => '开放平台对接面板：签名客户端、连通测试、仓/产品列表。密钥就绪后一键联调。',
+        'href' => 'yanwen.php',
+        'metric' => 'API',
+        'metric_label' => '待填密钥',
+        'action' => '打开对接页',
     ],
     [
         'title' => '快递追踪',
         'desc' => '快速进入已发货订单，检查或补充燕文追踪号。',
         'href' => 'orders.php?status=shipped',
         'metric' => $stats['shipped'],
-        'metric_label' => 'shipped orders',
-        'action' => 'Track shipped',
+        'metric_label' => '已发货',
+        'action' => '查看发货',
     ],
 ];
 ?>
@@ -141,7 +149,7 @@ $cards = [
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CRTLU Admin Dashboard</title>
+<title>后台总览 | CRTLU</title>
 <style>
 :root {
   color-scheme: dark;
@@ -190,16 +198,17 @@ h1 { margin: 8px 0 10px; font-size: clamp(34px, 5vw, 62px); line-height: .95; }
 <main>
   <section class="hero">
     <div>
-      <div class="eyebrow">CRTLU Admin</div>
+      <div class="eyebrow">CRTLU 后台</div>
       <h1>后台管理中心</h1>
-      <p>统一进入产品、订单、会员、优惠券、邮件通知、燕文导出和快递追踪。以后只需要记住这个地址：<strong>/admin/</strong></p>
+      <p>统一进入产品、订单、会员、优惠券、邮件、燕文发货与 API 对接。只需记住：<strong>/admin/</strong></p>
     </div>
-    <nav class="quick" aria-label="Quick actions">
+    <nav class="quick" aria-label="快捷入口">
       <a class="button primary" href="products.php">产品</a>
       <a class="button" href="orders.php">订单</a>
       <a class="button" href="members.php">会员</a>
       <a class="button" href="coupons.php">优惠券</a>
       <a class="button" href="emails.php">邮件</a>
+      <a class="button" href="yanwen.php">燕文API</a>
     </nav>
   </section>
 
@@ -207,14 +216,14 @@ h1 { margin: 8px 0 10px; font-size: clamp(34px, 5vw, 62px); line-height: .95; }
     <div class="notice">数据库暂时不可用：<?= h($dbError) ?>。入口仍可点击，但涉及订单和会员数据的页面可能需要先检查 config.local.php。</div>
   <?php endif; ?>
 
-  <section class="stats" aria-label="Dashboard stats">
+  <section class="stats" aria-label="数据概览">
     <div class="stat"><strong><?= h($stats['orders']) ?></strong><span class="muted">订单总数</span></div>
     <div class="stat"><strong><?= h($stats['unshipped']) ?></strong><span class="muted">待发货</span></div>
     <div class="stat"><strong><?= h($stats['members']) ?></strong><span class="muted">会员</span></div>
     <div class="stat"><strong><?= h($stats['pending_emails']) ?></strong><span class="muted">待处理邮件</span></div>
   </section>
 
-  <section class="grid" aria-label="Admin sections">
+  <section class="grid" aria-label="功能模块">
     <?php foreach ($cards as $card): ?>
       <article class="card<?= !empty($card['primary']) ? ' primary' : '' ?>">
         <div>

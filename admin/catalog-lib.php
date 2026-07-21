@@ -158,14 +158,21 @@ function crtlu_series_folder(array $series): string
 function crtlu_public_url(string $relative): string
 {
     $relative = ltrim(str_replace('\\', '/', $relative), '/');
-    // On Serv00 (api.crtlu.me), product images live on the storefront host (CF Pages).
-    // Use CRTLU_BASE_URL so admin previews work without mirroring 100MB+ assets.
+
+    // Always prefer local files on this server — admin previews need to
+    // show freshly-uploaded images immediately, not stale CF Pages copies.
+    $localPath = crtlu_shop_root() . '/public/' . $relative;
+    if (!is_file($localPath)) {
+        $localPath = crtlu_shop_root() . '/' . $relative;
+    }
+    if (is_file($localPath)) {
+        return '/' . $relative;
+    }
+
+    // Fallback: file not on this server — redirect to storefront CDN.
     if (function_exists('crtlu_config')) {
         $store = (string)crtlu_config('CRTLU_BASE_URL', '');
-        $host = (string)($_SERVER['HTTP_HOST'] ?? '');
-        $isLocalHost = $host === '' || str_contains($host, '127.0.0.1') || str_contains($host, 'localhost');
-        $storeIsLocal = $store === '' || str_contains($store, '127.0.0.1') || str_contains($store, 'localhost');
-        if ($store !== '' && !$storeIsLocal && !$isLocalHost) {
+        if ($store !== '' && !str_contains($store, '127.0.0.1') && !str_contains($store, 'localhost')) {
             return rtrim($store, '/') . '/' . $relative;
         }
     }

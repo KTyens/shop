@@ -317,7 +317,7 @@ th { color: var(--green); font-size: 11px; text-transform: uppercase; }
     </div>
     <nav class="links">
       <a href="products.php">← 产品列表</a>
-      <a href="index.php">Dashboard</a>
+      <a href="index.php">总览</a>
     </nav>
   </div>
 

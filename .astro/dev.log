@@ -2,26 +2,7 @@
 {"message":"Generated 0ms","label":"types","level":"info"}
 {"message":"connected.","label":"vite","level":"info"}
 {"message":"Re-optimizing dependencies because vite config has changed","label":"vite","level":"info"}
-{"message":" astro  v7.0.4 ready in 499 ms\n┃ Local    http://localhost:4321/\n┃ Network  use --host to expose","label":"SKIP_FORMAT","level":"info"}
-{"message":"watching for file changes...","label":null,"level":"info"}
-{"message":"[200] / 12ms","label":null,"level":"info"}
-{"message":"[200] /products/ 4ms","label":null,"level":"info"}
-{"message":"success.html","label":"watch","level":"info"}
-{"message":"account.html","label":"watch","level":"info"}
-{"message":"products/detail.html","label":"watch","level":"info"}
-{"message":"[200] / 18ms","label":null,"level":"info"}
-{"message":"[200] /products/ 4ms","label":null,"level":"info"}
-{"message":"[200] /products/h96max-h618-plus/ 4ms","label":null,"level":"info"}
-{"message":"[200] /account/ 4ms","label":null,"level":"info"}
-{"message":"[200] /success/ 4ms","label":null,"level":"info"}
-{"message":"[200] / 3ms","label":null,"level":"info"}
-{"message":"[200] /products/ 3ms","label":null,"level":"info"}
-{"message":"[200] /products/h96max-h618-plus/ 2ms","label":null,"level":"info"}
-{"message":"[200] /account/ 1ms","label":null,"level":"info"}
-{"message":"[200] /success/ 1ms","label":null,"level":"info"}
-{"message":"[200] / 2ms","label":null,"level":"info"}
-{"message":"[200] / 2ms","label":null,"level":"info"}
-{"message":"[200] /products/h96max-h618-plus/ 2ms","label":null,"level":"info"}
-{"message":"[200] /account/ 2ms","label":null,"level":"info"}
-{"message":"[200] /success/ 1ms","label":null,"level":"info"}
-{"message":"products/h96max-plus.html","label":"watch","level":"info"}
+listen EPERM: operation not permitted 127.0.0.1:4321
+  Stack trace:
+    at Server.setupListenHandle [as _listen2] (node:net:1917:21)
+    at node:net:2205:7
