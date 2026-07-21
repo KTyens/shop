@@ -2,6 +2,7 @@
 
 require __DIR__ . '/auth.php';
 require __DIR__ . '/catalog-lib.php';
+require __DIR__ . '/admin-shell.php';
 
 crtlu_require_admin();
 
@@ -43,93 +44,36 @@ sort($categories);
 
 $countPublished = count(array_filter($series, static fn($s) => ($s['status'] ?? '') === 'published'));
 ?>
-<!doctype html>
-<html lang="zh-CN">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>产品管理 | CRTLU Admin</title>
-<style>
-:root {
-  color-scheme: dark;
-  --bg: #071016;
-  --panel: #0d171f;
-  --line: rgba(255,255,255,.13);
-  --text: #f5fbff;
-  --muted: #91a1ae;
-  --green: #8bff85;
-  --cyan: #5de7ff;
-}
-* { box-sizing: border-box; }
-body { margin: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); }
-main { width: min(1240px, calc(100% - 28px)); margin: 0 auto; padding: 28px 0 48px; }
-a { color: inherit; }
-.topbar { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; align-items: flex-start; margin-bottom: 18px; }
-h1 { margin: 0 0 6px; font-size: 32px; }
-.muted { color: var(--muted); }
-.links { display: flex; gap: 8px; flex-wrap: wrap; }
-.links a, .btn {
-  min-height: 36px; display: inline-flex; align-items: center; justify-content: center;
-  padding: 0 12px; border: 1px solid rgba(255,255,255,.18); background: var(--panel);
-  text-decoration: none; font-weight: 800; font-size: 12px; letter-spacing: .03em; text-transform: uppercase; color: #fff;
-}
-.btn.primary, .links a.primary { background: linear-gradient(90deg, #7cff8c, var(--cyan)); color: #001014; border: 0; }
-.panel { background: var(--panel); border: 1px solid var(--line); padding: 14px; margin-bottom: 16px; }
-.filters { display: flex; gap: 10px; flex-wrap: wrap; align-items: end; }
-label { display: grid; gap: 5px; color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .06em; }
-input, select {
-  min-height: 36px; border: 1px solid rgba(255,255,255,.18); background: #071016; color: #fff; padding: 0 10px; min-width: 160px;
-}
-.stats { display: flex; gap: 16px; flex-wrap: wrap; margin: 0 0 14px; color: var(--muted); font-size: 13px; }
-.stats strong { color: var(--green); }
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
-.card {
-  display: grid; grid-template-rows: 180px auto; border: 1px solid var(--line); background: linear-gradient(180deg, rgba(16,29,38,.96), rgba(10,18,24,.96));
-  overflow: hidden;
-}
-.card:hover { border-color: rgba(93,231,255,.4); }
-.thumb {
-  display: grid; place-items: center; background: #fff; overflow: hidden;
-}
-.thumb img { width: 100%; height: 100%; object-fit: contain; background: #fff; }
-.body { padding: 12px 14px 14px; display: grid; gap: 8px; }
-.body h2 { margin: 0; font-size: 16px; line-height: 1.3; }
-.meta { color: var(--muted); font-size: 12px; line-height: 1.45; }
-.badge {
-  display: inline-flex; align-items: center; min-height: 22px; padding: 0 8px; border-radius: 999px;
-  font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em;
-}
-.badge.published { background: rgba(139,255,133,.14); color: var(--green); }
-.badge.draft { background: rgba(255,180,80,.14); color: #ffb450; }
-.badge.other { background: rgba(255,255,255,.08); color: var(--muted); }
-.row { display: flex; justify-content: space-between; gap: 8px; align-items: center; }
-.actions { display: flex; gap: 8px; flex-wrap: wrap; }
-.actions a { min-height: 32px; font-size: 11px; }
-.empty { padding: 28px; text-align: center; color: var(--muted); border: 1px dashed var(--line); }
-.hint { margin-top: 14px; color: var(--muted); font-size: 13px; line-height: 1.6; }
-</style>
-</head>
-<body>
-<main>
-  <div class="topbar">
-    <div>
-      <h1>产品管理</h1>
-      <p class="muted">手动上架 / 编辑型号、价格与图片。线上后台：<code>https://api.crtlu.me/admin/products.php</code>。改 catalog 后前台若仍旧，需同步 Git 构建或确认 <code>data/catalog.json</code> 与 CF 一致。</p>
-    </div>
-    <nav class="links" aria-label="Admin nav">
-      <a href="index.php">Dashboard</a>
-      <a class="primary" href="products.php">产品</a>
-      <a class="primary" href="product-new.php" style="background:linear-gradient(90deg,#7cff8c,#5de7ff);color:#001014;border:0;">+ 上架</a>
-      <a href="orders.php">订单</a>
-      <a href="members.php">会员</a>
-      <a href="coupons.php">优惠券</a>
-      <a href="emails.php">邮件</a>
-      <a href="export-yanwen.php">燕文导出</a>
-    </nav>
-  </div>
-
+<?php
+crtlu_admin_header(
+    '产品管理',
+    '上架 / 编辑型号、价格与图片。线上后台：<code>https://api.crtlu.me/admin/products.php</code>。改 catalog 后前台若仍旧，需同步 Git 构建或确认 <code>data/catalog.json</code> 与 CF 一致。',
+    [
+        '.stats{display:flex;gap:16px;flex-wrap:wrap;margin:0 0 14px;color:var(--muted);font-size:13px}',
+        '.stats strong{color:var(--green)}',
+        '.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}',
+        '.card{display:grid;grid-template-rows:180px auto;border:1px solid var(--line);background:linear-gradient(180deg,rgba(16,29,38,.96),rgba(10,18,24,.96));overflow:hidden}',
+        '.card:hover{border-color:rgba(93,231,255,.4)}',
+        '.thumb{display:grid;place-items:center;background:#fff;overflow:hidden}',
+        '.thumb img{width:100%;height:100%;object-fit:contain;background:#fff}',
+        '.body{padding:12px 14px 14px;display:grid;gap:8px}',
+        '.body h2{margin:0;font-size:16px;line-height:1.3}',
+        '.meta{color:var(--muted);font-size:12px;line-height:1.45}',
+        '.badge{display:inline-flex;align-items:center;min-height:22px;padding:0 8px;border-radius:999px;font-size:11px;font-weight:800}',
+        '.badge.published{background:rgba(139,255,133,.14);color:var(--green)}',
+        '.badge.draft{background:rgba(255,180,80,.14);color:#ffb450}',
+        '.badge.other{background:rgba(255,255,255,.08);color:var(--muted)}',
+        '.row{display:flex;justify-content:space-between;gap:8px;align-items:center}',
+        '.actions{display:flex;gap:8px;flex-wrap:wrap}',
+        '.actions a{min-height:32px;font-size:11px}',
+        '.empty{padding:28px;text-align:center;color:var(--muted);border:1px dashed var(--line)}',
+        '.hint{margin-top:14px;color:var(--muted);font-size:13px;line-height:1.6}',
+        '.filters{align-items:end}',
+    ]
+);
+?>
   <div style="margin:0 0 14px;">
-    <a class="btn primary" href="product-new.php" style="display:inline-flex;min-height:38px;padding:0 16px;align-items:center;justify-content:center;background:linear-gradient(90deg,#7cff8c,#5de7ff);color:#001014;border:0;font-weight:900;text-decoration:none;text-transform:uppercase;font-size:12px;letter-spacing:.04em;">+ 上架新产品</a>
+    <a class="button primary" href="product-new.php">+ 上架新产品</a>
   </div>
 
   <div class="stats">
@@ -181,7 +125,7 @@ input, select {
         <article class="card">
           <div class="thumb">
             <?php if ($img): ?>
-              <img src="<?= crtlu_h(crtlu_cache_bust($img)) ?>" alt="<?= crtlu_h($name) ?>" loading="lazy">
+              <img src="<?= crtlu_h(crtlu_local_asset_url($img)) ?>" alt="<?= crtlu_h($name) ?>" loading="lazy">
             <?php else: ?>
               <span class="muted">无主图</span>
             <?php endif; ?>
@@ -214,6 +158,4 @@ input, select {
     「前台预览」会打开 Astro 前台（默认 <code>http://127.0.0.1:4322</code>），请先另开终端跑
     <code>npm run dev -- --host 127.0.0.1 --port 4322</code>。
   </p>
-</main>
-</body>
-</html>
+<?php crtlu_admin_footer(); ?>

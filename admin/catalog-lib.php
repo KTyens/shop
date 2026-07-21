@@ -182,6 +182,17 @@ function crtlu_cache_bust(string $url): string
     return crtlu_public_url($url) . '?v=' . $v;
 }
 
+/** Local asset URL with cache bust — always reads from this server, never redirects to CF Pages. */
+function crtlu_local_asset_url(string $url): string
+{
+    $path = crtlu_shop_root() . '/public/' . ltrim(str_replace('\\', '/', $url), '/');
+    if (!is_file($path)) {
+        $path = crtlu_shop_root() . '/' . ltrim(str_replace('\\', '/', $url), '/');
+    }
+    $v = is_file($path) ? (string)filemtime($path) : (string)time();
+    return '/' . ltrim(str_replace('\\', '/', $url), '/') . '?v=' . $v;
+}
+
 /** Front-store base URL for “前台预览” links (Astro, not the PHP admin host). */
 function crtlu_storefront_base(): string
 {

@@ -8,7 +8,7 @@ crtlu_require_admin();
 $id = trim((string)($_GET['id'] ?? $_POST['id'] ?? ''));
 if ($id === '') {
     http_response_code(400);
-    echo 'Missing product id';
+    echo '缺少产品 ID';
     exit;
 }
 
@@ -16,7 +16,7 @@ $catalog = crtlu_load_catalog();
 $series = crtlu_find_series($catalog, $id);
 if ($series === null) {
     http_response_code(404);
-    echo 'Product not found: ' . crtlu_h($id);
+    echo '未找到产品：' . crtlu_h($id);
     exit;
 }
 
@@ -465,7 +465,7 @@ th { color: var(--green); font-size: 11px; text-transform: uppercase; }
     <nav class="links">
       <a href="products.php">← 产品列表</a>
       <a href="product-new.php">+ 上架产品</a>
-      <a href="index.php">Dashboard</a>
+      <a href="index.php">总览</a>
       <a href="<?= crtlu_h(crtlu_storefront_product_url($id)) ?>" target="_blank" rel="noopener">前台预览</a>
     </nav>
   </div>
@@ -478,7 +478,7 @@ th { color: var(--green); font-size: 11px; text-transform: uppercase; }
     <h2>主图（白底产品图） <span class="limit-pill">单文件 ≤ <?= crtlu_h(crtlu_upload_limit_label()) ?></span></h2>
     <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start;">
       <div class="main-preview">
-        <img src="<?= crtlu_h(crtlu_cache_bust((string)($series['image'] ?? ''))) ?>" alt="main">
+        <img src="<?= crtlu_h(crtlu_local_asset_url((string)($series['image'] ?? ''))) ?>" alt="main">
       </div>
       <div style="flex:1;min-width:240px;">
         <form method="post" enctype="multipart/form-data" action="product-edit.php?id=<?= urlencode($id) ?>">
@@ -564,7 +564,7 @@ th { color: var(--green); font-size: 11px; text-transform: uppercase; }
                 <input type="checkbox" name="selected_images[]" value="<?= $pathEsc ?>" class="detail-check">
                 选择
               </label>
-              <div class="img"><img src="<?= crtlu_h(crtlu_cache_bust((string)$path)) ?>" alt="<?= crtlu_h($file) ?>" loading="lazy"></div>
+              <div class="img"><img src="<?= crtlu_h(crtlu_local_asset_url((string)$path)) ?>" alt="<?= crtlu_h($file) ?>" loading="lazy"></div>
               <div class="meta">
                 <div class="name">#<?= $idx + 1 ?> · <?= crtlu_h($file) ?></div>
                 <input type="hidden" name="order[]" value="<?= $pathEsc ?>">
