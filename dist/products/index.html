@@ -33,7 +33,7 @@ const plugTypesPayload = [{"id":"uk","label":"UK Plug","code":"BS 1363"},{"id":"
 
     window.__CATALOG__ = catalogPayload;
     window.__PLUG_TYPES__ = plugTypesPayload;
-  })();</script><script type="module" src="/_astro/index.astro_astro_type_script_index_0_lang.DHtYb9rA.js"></script><script>
+  })();</script><script type="module" src="/_astro/index.astro_astro_type_script_index_0_lang.Bp0TtHOA.js"></script><script>
     // Safety net: only runs if the main catalog script never left "Loading catalog..."
     // (e.g. JS error). Builds dynamic type/brand chips + search so new products stay findable.
     window.setTimeout(() => {
@@ -83,7 +83,18 @@ const plugTypesPayload = [{"id":"uk","label":"UK Plug","code":"BS 1363"},{"id":"
         return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib) || String(a).localeCompare(String(b), undefined, { sensitivity: 'base' });
       });
 
-      let activeFilter = 'all';
+      const params = new URLSearchParams(window.location.search);
+      let requested = (params.get('category') || '').trim().toLowerCase();
+      const aliases = {
+        tv: 'tv-box', 'tv-boxes': 'tv-box', tvbox: 'tv-box',
+        projectors: 'projector', printers: 'printer',
+      };
+      if (aliases[requested]) requested = aliases[requested];
+      const known = new Set(catalog.map((item) => item.category).filter(Boolean));
+      let activeFilter =
+        requested && (known.has(requested) || ['tv-box', 'projector', 'printer', 'wireless-hdmi', 'accessory', 'premium'].includes(requested))
+          ? `category:${requested}`
+          : 'all';
       let searchQuery = '';
 
       const minPrice = (item) => {

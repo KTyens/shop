@@ -203,15 +203,73 @@ const catalogItemList = itemListJsonLd(
     }
 
     const initialParams = new URLSearchParams(window.location.search);
-    const requestedCategory = initialParams.get('category');
-    const knownCategories = new Set(
-      catalogData.map((item: SeriesItem) => item.category).filter(Boolean) as string[]
-    );
+    /** Home/nav deep-links use ?category=tv-box|projector|printer|… */
+    const CATEGORY_ALIASES: Record<string, string> = {
+      tv: 'tv-box',
+      'tv-boxes': 'tv-box',
+      tvbox: 'tv-box',
+      projectors: 'projector',
+      printers: 'printer',
+      printer: 'printer',
+      'label-printer': 'printer',
+      'tattoo-printer': 'printer',
+      'wireless-hdmi': 'wireless-hdmi',
+      accessories: 'accessory',
+    };
+    const KNOWN_CATEGORY_KEYS = [
+      'tv-box', 'projector', 'printer', 'wireless-hdmi', 'accessory', 'premium',
+    ];
+
+    function normalizeCategoryKey(raw: string | null | undefined): string {
+      const value = String(raw || '').trim().toLowerCase();
+      if (!value) return '';
+      return CATEGORY_ALIASES[value] || value;
+    }
+
+    function categoryFromLocation(): string {
+      try {
+        const q = new URLSearchParams(window.location.search).get('category');
+        if (q) return normalizeCategoryKey(q);
+        // Fallback: #category=tv-box or #tv-box
+        const hash = String(window.location.hash || '').replace(/^#/, '');
+        if (!hash) return '';
+        if (hash.startsWith('category=')) return normalizeCategoryKey(hash.slice('category='.length));
+        return normalizeCategoryKey(hash);
+      } catch {
+        return '';
+      }
+    }
+
+    function resolveActiveFilterFromUrl(series: SeriesItem[]): string {
+      const cat = categoryFromLocation();
+      if (!cat) return 'all';
+      const inCatalog = series.some((item) => item.category === cat);
+      if (inCatalog || KNOWN_CATEGORY_KEYS.includes(cat)) {
+        return `category:${cat}`;
+      }
+      return 'all';
+    }
+
+    function syncFilterToUrl() {
+      try {
+        const url = new URL(window.location.href);
+        if (activeFilter.startsWith('category:')) {
+          url.searchParams.set('category', activeFilter.slice('category:'.length));
+        } else {
+          url.searchParams.delete('category');
+        }
+        // Drop hash category so query is the single source of truth
+        if (url.hash && /category=|^#(tv-box|projector|printer)/i.test(url.hash)) {
+          url.hash = '';
+        }
+        window.history.replaceState({}, '', url.pathname + url.search + url.hash);
+      } catch {
+        // ignore
+      }
+    }
+
     let variants: Variant[] = [];
-    let activeFilter =
-      requestedCategory && knownCategories.has(requestedCategory)
-        ? `category:${requestedCategory}`
-        : 'all';
+    let activeFilter = resolveActiveFilterFromUrl(catalogData);
     let searchQuery = '';
     let sortMode = 'featured';
     let selected: Record<string, string> = {};
@@ -747,6 +805,8 @@ const catalogItemList = itemListJsonLd(
         catalogData = live;
         (window as any).__CATALOG__ = live;
         variants = flattenVariants(catalogData);
+        // Re-apply ?category= after live catalog loads (must not reset deep-links to "all").
+        activeFilter = resolveActiveFilterFromUrl(catalogData);
         renderFilters();
         renderProducts();
         renderCart();
@@ -790,10 +850,18 @@ const catalogItemList = itemListJsonLd(
       document.getElementById('filters')!.addEventListener('click', event => {
         const filter = (event.target as HTMLElement).closest('[data-filter]');
         if (filter) {
-          activeFilter = filter.dataset.filter!;
+          activeFilter = filter.dataset.filter || 'all';
+          syncFilterToUrl();
           renderFilters();
           renderProducts();
         }
+      });
+
+      // Back/forward or late hash changes
+      window.addEventListener('popstate', () => {
+        activeFilter = resolveActiveFilterFromUrl(catalogData);
+        renderFilters();
+        renderProducts();
       });
 
       // Search
@@ -914,7 +982,18 @@ const catalogItemList = itemListJsonLd(
         return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib) || String(a).localeCompare(String(b), undefined, { sensitivity: 'base' });
       });
 
-      let activeFilter = 'all';
+      const params = new URLSearchParams(window.location.search);
+      let requested = (params.get('category') || '').trim().toLowerCase();
+      const aliases = {
+        tv: 'tv-box', 'tv-boxes': 'tv-box', tvbox: 'tv-box',
+        projectors: 'projector', printers: 'printer',
+      };
+      if (aliases[requested]) requested = aliases[requested];
+      const known = new Set(catalog.map((item) => item.category).filter(Boolean));
+      let activeFilter =
+        requested && (known.has(requested) || ['tv-box', 'projector', 'printer', 'wireless-hdmi', 'accessory', 'premium'].includes(requested))
+          ? `category:${requested}`
+          : 'all';
       let searchQuery = '';
 
       const minPrice = (item) => {
