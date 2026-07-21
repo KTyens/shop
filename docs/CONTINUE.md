@@ -1,18 +1,21 @@
 # 续做入口（下次打开项目先读这里）
 
-**Last session:** 2026-07-20  
+**Last session:** 2026-07-21  
 **Project path:** `/Users/apple/Desktop/Codex Projects/独立站/shop`  
 **Live:** `https://shop.crtlu.me`（前端 CF Pages）· `https://api.crtlu.me`（PHP Serv00）  
 **Git:** `origin/main` → `https://github.com/KTyens/shop.git`  
-**Tip (this arc):** `7c9ab6e` account flash · `77d6bc7` brand PNG · `248a5fe` dashboard · `d67791a` session cookie · Resend 邮件已线上可用
+**Tip (this arc):** `b5bfe70` category deep-link · `72ebece` PDP hydrate · `4f94d96` store-catalog + delete · `61d972f` dual-host preview  
+
+**当日完整账本：** `docs/记录文档.md` → **§0.15 2026-07-21**
 
 ---
 
 ## 0. 给 Agent 的第一句话
 
-> 读 `docs/CONTINUE.md` + `docs/记录文档.md`（0.10–0.14 与后续）。  
-> 整站可卖货；**优先燕文线上真单验收**（CHANNEL_ID=481 + Serv00 后端包）。  
-> 登录/账户体验本周已收口，勿无故重做整站。
+> 读 `docs/CONTINUE.md` + `docs/记录文档.md`（**§0.15** 与 0.10–0.14）。  
+> 整站可卖货；**后台换图已可前台实时见**（双宿主 + store-catalog）；**勿整站回档 Serv00 7/19 备份**。  
+> **下一优先：燕文线上真单验收**（`CHANNEL_ID=481` + Serv00 后端包）。  
+> 登录/账户/改图链路本周已收口，勿无故重做整站。
 
 ---
 
@@ -20,12 +23,12 @@
 
 | 项 | 状态 |
 |---|---|
-| 登录验证码邮件（Resend） | ✅ 用户已配置，Gmail 可收码 |
-| 登录 Session Cookie（CF 反代） | ✅ 已修，Sign in 可进账户 |
-| 账户 Profile/Address（orders.member_id） | ✅ 自动补列 + 前端语言下拉 |
-| 账户 UI（主流个人中心） | ✅ 侧栏 + 右上头像菜单 |
-| 品牌图标（超现实玻璃立方体） | ✅ 暂用 `brand-mark.png` |
-| 账户闪登录页 | ✅ 先 Loading 再分流 |
+| 登录验证码邮件（Resend） | ✅ 线上可用 |
+| 登录 Session / 账户页 | ✅ |
+| 后台产品列表缩略图 | ✅ 双宿主：本地或 shop CDN |
+| 后台换图 → 前台更新 | ✅ live `store-catalog.php` + 详情页 hydrate（`72ebece`） |
+| 后台删除产品 | ✅ 编辑页危险区（输 ID 确认） |
+| 首页分类跳转 | ✅ `?category=`（`b5bfe70`，部署后强刷） |
 | 燕文 P2–P4 线上真单 | ⏳ **下一优先** |
 
 ---
@@ -35,28 +38,35 @@
 | 大块 | 状态 |
 |---|---|
 | 前台商城 / Stripe / catalog | ✅ 可运营 |
-| 分层调价 / shop1 合并 | ✅ 2026-07-16 |
-| 会员 Phase4–5 / 后台 | ✅ 主体完成 |
-| 登录网络（CORS / 同域 /api） | ✅ |
-| 登录邮件 Resend | ✅ 线上可用 |
-| 登录会话 / 账户页体验 | ✅ 本周收口 |
-| 燕文 P0–P4 代码 | ✅ 全做完 |
-| 燕文线上验收（真单） | ⏳ 待 CHANNEL_ID + 包部署 |
-| P15 / P50 标签机、X8T 纹身转印机 | ✅ 前端目录完成；Serv00 商品/结账文件待随本次后端包上传 |
+| 打印机 P15 / P50 / X8T | ✅ 前台 + catalog；双宿主媒体模型已定 |
+| 后台改图 / 删产品 / 实时 catalog | ✅ 2026-07-21 |
+| 燕文 P0–P4 代码 | ✅ |
+| 燕文线上验收（真单） | ⏳ |
 
-**整体阶段：** **可卖货运营中后期**；物流 API 真单验收是主要未完成业务项。
+**整体阶段：** 可卖货运营中后期；物流 API 真单验收是主要未完成业务项。
 
 ---
 
-## 3. 燕文（快递）
+## 3. 双宿主媒体（硬规则）
+
+| 层 | 宿主 | 职责 |
+|---|---|---|
+| 全量产品图 + 静态站 | CF Pages `shop.crtlu.me` | 主图库 |
+| API / 后台 / 运营 catalog | Serv00 `api.crtlu.me` | 轻逻辑；**仅**后台刚上传的覆盖图 |
+
+- 后台预览：`crtlu_local_asset_url` → 本地有则本地，否则 `https://shop.crtlu.me/...`  
+- 前台实时：`/api/store-catalog.php`（CF 反代）→ Serv00 上有文件的图改写为 `https://api.crtlu.me/assets/...?v=mtime`  
+- **禁止**为修预览把整库图上传 Serv00  
+- **禁止**用 `backups/local/20260719` 整目录覆盖 `public_html`
+
+---
+
+## 4. 燕文（快递）
 
 | 阶段 | 能力 | 代码 | 线上 |
 |---|---|---|---|
-| P0 | 签名/连通 | ✅ | ✅ |
-| P1 | 国家/产品/仓列表 | ✅ | 可用 |
-| P2 | 一键创建运单 | ✅ | ⏳ 部署 + CHANNEL_ID |
-| P3 | 打印标签 PDF | ✅ | ⏳ 部署 |
-| P4 | 账户 View tracking | ✅ | ⏳ 部署（登录已可用） |
+| P0–P1 | 签名 / 列表 | ✅ | 可用 |
+| P2–P4 | 运单 / 标签 / 轨迹 | ✅ | ⏳ 真单验收 |
 
 ```php
 define('YANWEN_CHANNEL_ID', '481'); // 燕文专线追踪-普货
@@ -65,37 +75,41 @@ define('YANWEN_CHANNEL_ID', '481'); // 燕文专线追踪-普货
 
 ---
 
-## 4. 部署架构
+## 5. 部署架构
 
 | 层 | 宿主 | 更新方式 |
 |---|---|---|
-| 前端 | CF Pages `shop.crtlu.me` | `git push origin main` |
-| 后端 | Serv00 `api.crtlu.me` | 手动上传 zip/PHP |
-| 密钥 | `api/config.local.php` | 永不提交、永不覆盖丢密钥 |
+| 前端 | CF Pages | `git push origin main`（含 `dist/`） |
+| 后端 | Serv00 | 手动上传 zip/PHP；**永不覆盖丢** `api/config.local.php` |
 
-近期 Serv00 包目录：`独立站/crtlu-serv00-backend-202607*.zip`  
-（mail-fix / session-fix / account-schema-fix 等）
+近期 Serv00 包：
+
+- `独立站/crtlu-serv00-live-catalog-delete-20260721.zip`（store-catalog + admin 删产品/双宿主）  
+- `独立站/crtlu-serv00-admin-image-preview-fix-20260721.zip`（仅预览早期包）  
+- 更早：mail-fix / session-fix / account-schema-fix / printer-update 等  
 
 ---
 
-## 5. 建议下次顺序
+## 6. 建议下次顺序
 
 1. **燕文真单** — 确认 `YANWEN_CHANNEL_ID=481`；上传含 P2/P3/P4 的 PHP；后台创建运单 → 标签 → 前台轨迹  
-2. ~~邮件域名~~ — Resend 域名已 Verified（2026-07-19）  
-3. ~~打磨~~ — 2026-07-19 已完成：`docs/published-products.md` 现价矩阵、`docs/spec-sku-audit.md`、账户页 i18n（en+zh-CN）、`scripts/regenerate-published-products.py`  
+2. 可选：把 Serv00 仅有的覆盖图/catalog 变更回写 Git，清理 CF 陈旧静态  
+3. 可选：删除测试品、对齐 api/shop 两份 catalog 分叉  
 
 ---
 
-## 6. 硬性规则
+## 7. 硬性规则
 
 - 不提交 `api/config.local.php` / secrets  
-- catalog 真相源：`data/catalog.json`（同步 `public/data`）  
+- catalog 真相源：`data/catalog.json`（同步 `public/data`；**运营侧 Serv00 的 catalog 可领先 CF**，前台靠 store-catalog）  
 - 改 PHP 必须提醒上传 Serv00  
 - 燕文 / Stripe 密钥不进文档正文  
 
-## 7. 2026-07-20 打印机分类
+## 8. 2026-07-20 打印机分类（背景）
 
-- 新增分类 `printer`：P15、P50、X8T，共 3 个系列 / 3 个 SKU。
-- 三款均为 USB Type-C 供电，catalog 使用 `requires_plug: false`，结账不要求英规/欧规/美规插头。
-- 每款详情页使用 8 张已优化图片；价格与运费估算见 `docs/pricing-system.md`。
-- Cloudflare Pages 随 `main` 推送部署前端；Serv00 还需上传本次后端包中的 `api/` 与 `data/catalog.json`，否则 Stripe 后端不认识新 SKU。
+- 分类 `printer`：P15、P50、X8T；`requires_plug: false`  
+- 前端随 `main` 推送；结账需 Serv00 认识 SKU（`create-checkout-session` / catalog）  
+
+## 9. 2026-07-21 一句话
+
+> 双宿主已定；换图走 live catalog；详情页 hydrate 崩溃已修；删产品已加；首页分类深链已修。下一刀：燕文真单。
