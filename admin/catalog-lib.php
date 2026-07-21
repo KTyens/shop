@@ -155,49 +155,94 @@ function crtlu_series_folder(array $series): string
     return strtolower(trim((string)$id, '-')) ?: 'product';
 }
 
+/**
+ * Dual-host product assets:
+ * - Serv00 (api.*) is free/small — do NOT store the full product image library here.
+ * - Cloudflare Pages (shop.*) holds public product images.
+ * Admin previews: local file if just uploaded on this server, else storefront CDN.
+ */
+function crtlu_resolve_local_asset_path(string $relative): ?string
+{
+    $relative = ltrim(str_replace('\\', '/', $relative), '/');
+    if ($relative === '') {
+        return null;
+    }
+    $candidates = [
+        crtlu_shop_root() . '/public/' . $relative,
+        crtlu_shop_root() . '/' . $relative,
+    ];
+    foreach ($candidates as $path) {
+        if (is_file($path)) {
+            return $path;
+        }
+    }
+    return null;
+}
+
+/** Storefront origin for product image CDN fallback (never points at api.*). */
+function crtlu_asset_cdn_base(): string
+{
+    $host = (string)($_SERVER['HTTP_HOST'] ?? '');
+    $isLocalHost = $host === '' || str_contains($host, '127.0.0.1') || str_contains($host, 'localhost');
+
+    $store = '';
+    if (function_exists('crtlu_config')) {
+        $store = (string)crtlu_config('CRTLU_BASE_URL', '');
+    }
+    $storeIsLocal = $store === '' || str_contains($store, '127.0.0.1') || str_contains($store, 'localhost');
+
+    // Production admin on api.* must fall back to shop even if config.local still has 4322.
+    if (!$isLocalHost && $storeIsLocal) {
+        return 'https://shop.crtlu.me';
+    }
+    if (!$storeIsLocal) {
+        return rtrim($store, '/');
+    }
+    // True local PHP admin: relative paths (npm run dev / public folder).
+    return '';
+}
+
 function crtlu_public_url(string $relative): string
 {
     $relative = ltrim(str_replace('\\', '/', $relative), '/');
 
-    // Always prefer local files on this server — admin previews need to
-    // show freshly-uploaded images immediately, not stale CF Pages copies.
-    $localPath = crtlu_shop_root() . '/public/' . $relative;
-    if (!is_file($localPath)) {
-        $localPath = crtlu_shop_root() . '/' . $relative;
-    }
-    if (is_file($localPath)) {
+    // Fresh admin upload on this host — show immediately from Serv00 disk.
+    if (crtlu_resolve_local_asset_path($relative) !== null) {
         return '/' . $relative;
     }
 
-    // Fallback: file not on this server — redirect to storefront CDN.
-    if (function_exists('crtlu_config')) {
-        $store = (string)crtlu_config('CRTLU_BASE_URL', '');
-        if ($store !== '' && !str_contains($store, '127.0.0.1') && !str_contains($store, 'localhost')) {
-            return rtrim($store, '/') . '/' . $relative;
-        }
+    // Otherwise product images live on CF Pages (dual-host).
+    $cdn = crtlu_asset_cdn_base();
+    if ($cdn !== '') {
+        return $cdn . '/' . $relative;
     }
     return '/' . $relative;
 }
 
 function crtlu_cache_bust(string $url): string
 {
-    $path = crtlu_shop_root() . '/public/' . ltrim(str_replace('\\', '/', $url), '/');
-    if (!is_file($path)) {
-        $path = crtlu_shop_root() . '/' . ltrim(str_replace('\\', '/', $url), '/');
-    }
-    $v = is_file($path) ? (string)filemtime($path) : (string)time();
-    return crtlu_public_url($url) . '?v=' . $v;
+    $relative = ltrim(str_replace('\\', '/', $url), '/');
+    $path = crtlu_resolve_local_asset_path($relative);
+    // Local mtime for just-uploaded files; otherwise a short-lived bust for CDN.
+    $v = $path !== null ? (string)filemtime($path) : (string)time();
+    return crtlu_public_url($relative) . '?v=' . $v;
 }
 
-/** Local asset URL with cache bust — always reads from this server, never redirects to CF Pages. */
+/**
+ * Admin preview URL with cache bust.
+ * Local file if present on this server; else storefront CDN (shop.crtlu.me).
+ */
 function crtlu_local_asset_url(string $url): string
 {
-    $path = crtlu_shop_root() . '/public/' . ltrim(str_replace('\\', '/', $url), '/');
-    if (!is_file($path)) {
-        $path = crtlu_shop_root() . '/' . ltrim(str_replace('\\', '/', $url), '/');
-    }
-    $v = is_file($path) ? (string)filemtime($path) : (string)time();
-    return '/' . ltrim(str_replace('\\', '/', $url), '/') . '?v=' . $v;
+    return crtlu_cache_bust($url);
+}
+
+/** Reminder: Serv00 admin uploads do not auto-publish to Cloudflare Pages. */
+function crtlu_storefront_sync_hint(): string
+{
+    return '双宿主：产品图主存在 Cloudflare Pages（shop.crtlu.me），Serv00 只跑后台/API。'
+        . '后台预览优先本地刚上传的图，否则读前台 CDN。'
+        . '换图/改 catalog 后前台要更新：把 public/assets/products 与 data/catalog.json 同步进 Git → npm run build → git push origin main。';
 }
 
 /** Front-store base URL for “前台预览” links (Astro, not the PHP admin host). */

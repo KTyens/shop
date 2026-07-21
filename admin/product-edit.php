@@ -122,7 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $series = crtlu_rebuild_gallery($series);
             crtlu_replace_series($catalog, $series);
             crtlu_save_catalog($catalog);
-            $message = '主图已替换（白底方图）。';
+            $message = '主图已替换（白底方图）。后台可立即预览；前台 shop.crtlu.me 需把 public/assets/products 与 catalog 同步 Git 并推送 CF 后才更新。';
         } elseif ($action === 'upload_details') {
             $files = $_FILES['detail_images'] ?? null;
             if (!$files || !is_array($files['tmp_name'] ?? null)) {
@@ -173,7 +173,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $series = crtlu_rebuild_gallery($series);
             crtlu_replace_series($catalog, $series);
             crtlu_save_catalog($catalog);
-            $message = "已上传 {$count} 张详情图。";
+            $message = "已上传 {$count} 张详情图。后台可立即预览；前台需同步 Git → build → push CF 后才更新。";
             if ($skipped) {
                 $message .= ' 部分失败：' . implode(' ', $skipped);
             }
@@ -196,7 +196,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $series = crtlu_rebuild_gallery($series);
             crtlu_replace_series($catalog, $series);
             crtlu_save_catalog($catalog);
-            $message = '已将该图设为主图。';
+            $message = '已将该图设为主图。前台需同步 Git → build → push CF 后才更新。';
         } elseif ($action === 'delete_image') {
             $src = trim((string)($_POST['image'] ?? ''));
             if ($src === '' || str_ends_with($src, '/main.jpg')) {
@@ -489,7 +489,8 @@ th { color: var(--green); font-size: 11px; text-transform: uppercase; }
           </label>
           <p class="hint">
             会自动铺到白底方图（约 1400×1400）。支持 JPG/PNG/WebP/GIF。
-            若提示文件过大，请用项目里的 <code>admin/serve.sh</code> 启动后台（上传上限 64M），不要用默认 2M 的 <code>php -S</code>。
+            若提示文件过大，请用项目里的 <code>admin/serve.sh</code> 启动后台（上传上限 64M），不要用默认 2M 的 <code>php -S</code>。<br>
+            <?= crtlu_h(crtlu_storefront_sync_hint()) ?>
           </p>
           <div class="row-actions">
             <button class="btn primary" type="submit">替换主图</button>

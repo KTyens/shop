@@ -47,7 +47,8 @@ $countPublished = count(array_filter($series, static fn($s) => ($s['status'] ?? 
 <?php
 crtlu_admin_header(
     '产品管理',
-    '上架 / 编辑型号、价格与图片。线上后台：<code>https://api.crtlu.me/admin/products.php</code>。改 catalog 后前台若仍旧，需同步 Git 构建或确认 <code>data/catalog.json</code> 与 CF 一致。',
+    '上架 / 编辑型号、价格与图片。线上：https://api.crtlu.me/admin/products.php。'
+    . crtlu_storefront_sync_hint(),
     [
         '.stats{display:flex;gap:16px;flex-wrap:wrap;margin:0 0 14px;color:var(--muted);font-size:13px}',
         '.stats strong{color:var(--green)}',
@@ -151,11 +152,11 @@ crtlu_admin_header(
   <?php endif; ?>
 
   <p class="hint">
-    图片写入 <code>public/assets/products/&lt;型号文件夹&gt;/</code> 与 <code>data/catalog.json</code>。<br>
+    <?= crtlu_h(crtlu_storefront_sync_hint()) ?><br>
+    后台上传会先写到本机 <code>public/assets/products/&lt;型号文件夹&gt;/</code> 与 <code>data/catalog.json</code>（Serv00 上仅用于预览/API，不会自动进 CF）。<br>
     本地启动后台（推荐，上传上限 64M）：
     <code>./admin/serve.sh</code>
     然后打开 <code>http://127.0.0.1:8088/admin/products.php</code>。<br>
-    「前台预览」会打开 Astro 前台（默认 <code>http://127.0.0.1:4322</code>），请先另开终端跑
-    <code>npm run dev -- --host 127.0.0.1 --port 4322</code>。
+    「前台预览」打开 Astro 前台（线上 <code>https://shop.crtlu.me</code>；本地默认 <code>http://127.0.0.1:4322</code>）。
   </p>
 <?php crtlu_admin_footer(); ?>
