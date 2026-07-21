@@ -15,6 +15,15 @@
           if (value.startsWith('api/')) value = value.slice(4);
           return `${normalizedBase}/${value}`;
         };
+
+        /** Live catalog on Serv00 (admin edits + just-uploaded media). Prefer over static /data/catalog.json. */
+        window.crtluLiveCatalogUrl = () => {
+          const base = window.crtluApiUrl
+            ? window.crtluApiUrl('store-catalog.php')
+            : `${normalizedBase}/store-catalog.php`;
+          const sep = base.includes('?') ? '&' : '?';
+          return `${base}${sep}t=${Date.now()}`;
+        };
       })();
     })();</script><script src="/_astro/i18n.CK_ZUEVd.js" defer></script><script src="/_astro/shop-phase4.DJlUlL81.js" defer></script><script src="/_astro/account-nav.hULByYng.js" defer></script><link rel="stylesheet" href="/_astro/Layout.By93eWL8.css"><style>@media (width<=920px){.mobile-shop-nav[data-astro-cid-yxete6jp]{grid-template-columns:repeat(7,minmax(0,1fr));max-width:100vw;overflow:hidden;display:grid!important}.mobile-shop-nav[data-astro-cid-yxete6jp].without-cart{grid-template-columns:repeat(6,minmax(0,1fr))}.mobile-shop-nav[data-astro-cid-yxete6jp] a[data-astro-cid-yxete6jp],.mobile-shop-nav[data-astro-cid-yxete6jp] button[data-astro-cid-yxete6jp]{letter-spacing:.02em;text-overflow:clip;white-space:nowrap;min-width:0;padding:0 4px;font-size:9px;overflow:hidden}}
 .cart-policy-note[data-astro-cid-7o6y2myb]{color:var(--muted);margin-top:12px;font-size:11px;line-height:1.55}.cart-delivery-context[data-astro-cid-7o6y2myb]{background:#00000014;border:1px solid #00000014;gap:4px;margin:-2px 0 14px;padding:11px 12px;display:grid}.cart-delivery-context[data-astro-cid-7o6y2myb] strong[data-astro-cid-7o6y2myb]{color:var(--text);font-size:12px}.cart-delivery-context[data-astro-cid-7o6y2myb] span[data-astro-cid-7o6y2myb]{color:var(--muted);font-size:11px;line-height:1.45}.cart-policy-note[data-astro-cid-7o6y2myb] a[data-astro-cid-7o6y2myb]{color:var(--cyan);text-underline-offset:2px;text-decoration:underline}
@@ -24,7 +33,7 @@ const plugTypesPayload = [{"id":"uk","label":"UK Plug","code":"BS 1363"},{"id":"
 
     window.__CATALOG__ = catalogPayload;
     window.__PLUG_TYPES__ = plugTypesPayload;
-  })();</script><script type="module" src="/_astro/index.astro_astro_type_script_index_0_lang.DPG1mjk7.js"></script><script>
+  })();</script><script type="module" src="/_astro/index.astro_astro_type_script_index_0_lang.DHtYb9rA.js"></script><script>
     // Safety net: only runs if the main catalog script never left "Loading catalog..."
     // (e.g. JS error). Builds dynamic type/brand chips + search so new products stay findable.
     window.setTimeout(() => {

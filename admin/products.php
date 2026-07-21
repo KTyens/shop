@@ -43,6 +43,7 @@ $categories = array_keys($categories);
 sort($categories);
 
 $countPublished = count(array_filter($series, static fn($s) => ($s['status'] ?? '') === 'published'));
+$deletedNotice = trim((string)($_GET['deleted'] ?? ''));
 ?>
 <?php
 crtlu_admin_header(
@@ -76,6 +77,10 @@ crtlu_admin_header(
   <div style="margin:0 0 14px;">
     <a class="button primary" href="product-new.php">+ 上架新产品</a>
   </div>
+
+  <?php if ($deletedNotice !== ''): ?>
+    <p class="message" style="color:var(--green);margin:0 0 14px;">已删除产品：<code><?= crtlu_h($deletedNotice) ?></code>（catalog 已更新；前台实时接口立即生效，CF 静态页稍后 Git 清理）。</p>
+  <?php endif; ?>
 
   <div class="stats">
     <span>共 <strong><?= count($series) ?></strong> 个型号</span>

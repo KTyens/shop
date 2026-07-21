@@ -78,6 +78,15 @@ const jsonLdItems = Array.isArray(jsonLd) ? jsonLd : [jsonLd];
           if (value.startsWith('api/')) value = value.slice(4);
           return `${normalizedBase}/${value}`;
         };
+
+        /** Live catalog on Serv00 (admin edits + just-uploaded media). Prefer over static /data/catalog.json. */
+        window.crtluLiveCatalogUrl = () => {
+          const base = window.crtluApiUrl
+            ? window.crtluApiUrl('store-catalog.php')
+            : `${normalizedBase}/store-catalog.php`;
+          const sep = base.includes('?') ? '&' : '?';
+          return `${base}${sep}t=${Date.now()}`;
+        };
       })();
     </script>
     <script src={i18nScriptUrl} defer></script>

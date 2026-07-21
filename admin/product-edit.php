@@ -122,7 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $series = crtlu_rebuild_gallery($series);
             crtlu_replace_series($catalog, $series);
             crtlu_save_catalog($catalog);
-            $message = '主图已替换（白底方图）。后台可立即预览；前台 shop.crtlu.me 需把 public/assets/products 与 catalog 同步 Git 并推送 CF 后才更新。';
+            $message = '主图已替换（白底方图）。前台将通过实时 catalog（/api/store-catalog.php）立刻读到 api 上的新图。';
         } elseif ($action === 'upload_details') {
             $files = $_FILES['detail_images'] ?? null;
             if (!$files || !is_array($files['tmp_name'] ?? null)) {
@@ -173,7 +173,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $series = crtlu_rebuild_gallery($series);
             crtlu_replace_series($catalog, $series);
             crtlu_save_catalog($catalog);
-            $message = "已上传 {$count} 张详情图。后台可立即预览；前台需同步 Git → build → push CF 后才更新。";
+            $message = "已上传 {$count} 张详情图。前台实时 catalog 会立刻指向 api 上的新图。";
             if ($skipped) {
                 $message .= ' 部分失败：' . implode(' ', $skipped);
             }
@@ -196,7 +196,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $series = crtlu_rebuild_gallery($series);
             crtlu_replace_series($catalog, $series);
             crtlu_save_catalog($catalog);
-            $message = '已将该图设为主图。前台需同步 Git → build → push CF 后才更新。';
+            $message = '已将该图设为主图。前台实时 catalog 会立刻更新。';
+        } elseif ($action === 'delete_product') {
+            $confirm = trim((string)($_POST['confirm_id'] ?? ''));
+            if ($confirm !== $id) {
+                throw new RuntimeException('请在确认框输入完整产品 ID「' . $id . '」后再删除。');
+            }
+            $folderToDelete = crtlu_series_folder($series);
+            if (!crtlu_remove_series($catalog, $id)) {
+                throw new RuntimeException('catalog 中未找到该产品，可能已被删除。');
+            }
+            crtlu_save_catalog($catalog);
+            crtlu_delete_product_folder($folderToDelete);
+            header('Location: products.php?deleted=' . rawurlencode($id));
+            exit;
         } elseif ($action === 'delete_image') {
             $src = trim((string)($_POST['image'] ?? ''));
             if ($src === '' || str_ends_with($src, '/main.jpg')) {
@@ -706,7 +719,26 @@ th { color: var(--green); font-size: 11px; text-transform: uppercase; }
         <button class="btn" type="button" id="addSpec">+ 添加参数行</button>
         <button class="btn primary" type="submit">保存信息 / 价格 / 规格</button>
       </div>
-      <p class="hint">空的参数行会忽略。改完名称/价格/规格后，前台静态页需重新 <code>npm run build</code>（或 dev 模式刷新）才会更新文字；图片路径写入 catalog 后，dev 模式一般刷新即可。</p>
+      <p class="hint">空的参数行会忽略。名称/价格/规格/图片改完后，前台通过 <code>/api/store-catalog.php</code> 读 Serv00 实时 catalog（刷新详情页/列表即可，不必等 Git 推送）。静态 SEO 页长期归档仍建议 build + push。</p>
+    </form>
+  </section>
+
+  <section class="panel" style="border-color:rgba(255,100,100,.35);">
+    <h2 style="color:var(--danger,#ff8f8f);">危险操作 · 删除产品</h2>
+    <p class="muted">
+      将从 <code>data/catalog.json</code> 移除本型号，并尽量删除本机
+      <code>assets/products/<?= crtlu_h($folder) ?>/</code> 图片目录（Serv00 上的覆盖图）。
+      Cloudflare 上已发布的静态页/图不会自动删掉，需之后 Git 同步清理。
+    </p>
+    <form method="post" action="product-edit.php?id=<?= urlencode($id) ?>" onsubmit="return confirm('确定永久删除产品 <?= crtlu_h($id) ?>？\n此操作会从 catalog 移除该型号。');">
+      <input type="hidden" name="id" value="<?= crtlu_h($id) ?>">
+      <input type="hidden" name="action" value="delete_product">
+      <label>输入产品 ID 确认删除
+        <input type="text" name="confirm_id" placeholder="<?= crtlu_h($id) ?>" autocomplete="off" required style="min-width:min(100%,280px);">
+      </label>
+      <div class="row-actions" style="margin-top:12px;">
+        <button class="btn danger" type="submit">删除此产品</button>
+      </div>
     </form>
   </section>
 </main>

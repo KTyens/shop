@@ -834,13 +834,18 @@ const faqSchema = {
     }
 
     /**
-     * Always re-sync image/gallery (and light product fields) from live
-     * /data/catalog.json so admin edits + renames show without waiting for
-     * a full Astro rebuild / stale getStaticPaths props.
+     * Re-sync product fields from Serv00 live catalog (admin edits + just-uploaded
+     * media on api.*). Falls back to static /data/catalog.json if the API is down.
      */
     async function hydrateFromLiveCatalog() {
       try {
-        const res = await fetch(`/data/catalog.json?t=${Date.now()}`, { cache: 'no-store' });
+        const liveUrl = typeof window.crtluLiveCatalogUrl === 'function'
+          ? window.crtluLiveCatalogUrl()
+          : (apiUrl('store-catalog.php') + (apiUrl('store-catalog.php').includes('?') ? '&' : '?') + 't=' + Date.now());
+        let res = await fetch(liveUrl, { cache: 'no-store', credentials: 'omit' });
+        if (!res.ok) {
+          res = await fetch(`/data/catalog.json?t=${Date.now()}`, { cache: 'no-store' });
+        }
         if (!res.ok) return;
         const data = await res.json();
         const live = Array.isArray(data?.series)
@@ -857,6 +862,7 @@ const faqSchema = {
         if (live.name) product.name = live.name;
         if (live.description) product.description = live.description;
         if (live.brand) product.brand = live.brand;
+        if (live.status) product.status = live.status;
         if (live.specs && typeof live.specs === 'object') product.specs = live.specs;
         if (Array.isArray(live.variants) && live.variants.length) {
           product.variants = live.variants;

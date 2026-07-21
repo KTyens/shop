@@ -117,7 +117,7 @@ const catalogItemList = itemListJsonLd(
   <script>
     // ---- Client-side interactivity ----
 
-    const catalogData = Array.isArray(window.__CATALOG__) ? window.__CATALOG__ : [];
+    let catalogData = Array.isArray(window.__CATALOG__) ? window.__CATALOG__ : [];
     const PLUG_TYPES = (Array.isArray(window.__PLUG_TYPES__) && window.__PLUG_TYPES__.length ? window.__PLUG_TYPES__ : [
       { id: 'uk', label: 'UK Plug', code: 'BS 1363' },
       { id: 'eu', label: 'EU Plug', code: 'Europlug' },
@@ -715,11 +715,52 @@ const catalogItemList = itemListJsonLd(
       }
     }
 
+    function publicAssetPath(value?: string): string {
+      if (!value) return '';
+      if (/^(https?:)?\/\//i.test(value) || value.startsWith('/')) return value;
+      return `/${String(value).replace(/^\/+/, '')}`;
+    }
+
+    /** Pull Serv00 live catalog so admin price/image edits show without a CF rebuild. */
+    async function hydrateFromLiveCatalog() {
+      try {
+        const liveUrl = typeof (window as any).crtluLiveCatalogUrl === 'function'
+          ? (window as any).crtluLiveCatalogUrl()
+          : apiUrl('store-catalog.php') + '?t=' + Date.now();
+        let res = await fetch(liveUrl, { cache: 'no-store', credentials: 'omit' });
+        if (!res.ok) {
+          res = await fetch(`/data/catalog.json?t=${Date.now()}`, { cache: 'no-store' });
+        }
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!Array.isArray(data?.series)) return;
+        const live = data.series
+          .filter((item: any) => item && (item.status || 'published') === 'published')
+          .map((item: any) => ({
+            ...item,
+            image: publicAssetPath(item.image),
+            gallery: Array.isArray(item.gallery)
+              ? item.gallery.map((g: string) => publicAssetPath(g)).filter(Boolean)
+              : item.gallery,
+          }));
+        if (!live.length) return;
+        catalogData = live;
+        (window as any).__CATALOG__ = live;
+        variants = flattenVariants(catalogData);
+        renderFilters();
+        renderProducts();
+        renderCart();
+      } catch {
+        // keep build-time payload
+      }
+    }
+
     // ---- Init ----
     function init() {
       variants = flattenVariants(catalogData);
       renderFilters();
       renderProducts();
+      hydrateFromLiveCatalog();
       window.addEventListener('crtlu:localechange', () => {
         if (window.CRTLU_I18N?.apply) window.CRTLU_I18N.apply(document);
         // refresh sort option labels

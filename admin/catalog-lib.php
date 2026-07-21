@@ -237,12 +237,12 @@ function crtlu_local_asset_url(string $url): string
     return crtlu_cache_bust($url);
 }
 
-/** Reminder: Serv00 admin uploads do not auto-publish to Cloudflare Pages. */
+/** Reminder: dual-host media + live catalog behaviour. */
 function crtlu_storefront_sync_hint(): string
 {
-    return '双宿主：产品图主存在 Cloudflare Pages（shop.crtlu.me），Serv00 只跑后台/API。'
-        . '后台预览优先本地刚上传的图，否则读前台 CDN。'
-        . '换图/改 catalog 后前台要更新：把 public/assets/products 与 data/catalog.json 同步进 Git → npm run build → git push origin main。';
+    return '双宿主：CF Pages 持有全量产品图；Serv00 只存后台刚上传的覆盖图 + 运营 catalog。'
+        . '前台通过 /api/store-catalog.php 读 Serv00 实时 catalog：本地有的图自动走 api 域名（改图即前台可见），其余仍走 shop CDN。'
+        . '长期归档仍建议：public/assets/products + data/catalog.json → npm run build → git push（避免 Serv00 磁盘堆积、也方便回滚）。';
 }
 
 /** Front-store base URL for “前台预览” links (Astro, not the PHP admin host). */
@@ -416,6 +416,46 @@ function crtlu_delete_product_file(string $folder, string $filename): void
             @unlink($path);
         }
     }
+}
+
+/** Remove a product image folder tree under each product image root (best-effort). */
+function crtlu_delete_product_folder(string $folder): void
+{
+    $folder = trim($folder, '/');
+    if ($folder === '' || str_contains($folder, '..')) {
+        return;
+    }
+    foreach (crtlu_product_image_roots() as $root) {
+        $dir = rtrim($root, '/') . '/' . $folder;
+        if (!is_dir($dir)) {
+            continue;
+        }
+        $it = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($dir, FilesystemIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::CHILD_FIRST
+        );
+        foreach ($it as $fileInfo) {
+            /** @var SplFileInfo $fileInfo */
+            $path = $fileInfo->getPathname();
+            if ($fileInfo->isDir()) {
+                @rmdir($path);
+            } else {
+                @unlink($path);
+            }
+        }
+        @rmdir($dir);
+    }
+}
+
+/** Remove a series entry from catalog by id. Returns true if removed. */
+function crtlu_remove_series(array &$catalog, string $id): bool
+{
+    $before = count($catalog['series'] ?? []);
+    $catalog['series'] = array_values(array_filter(
+        is_array($catalog['series'] ?? null) ? $catalog['series'] : [],
+        static fn($item) => is_array($item) && (string)($item['id'] ?? '') !== $id
+    ));
+    return count($catalog['series']) < $before;
 }
 
 function crtlu_rebuild_gallery(array $series): array
