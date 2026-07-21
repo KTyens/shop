@@ -558,8 +558,15 @@ const faqSchema = {
     function cartItemHasValidPlug(item) {
       const variant = variantById(item.id);
       if (!variant) return false;
-      const series = catalogData.find((entry) => entry.id === variant.seriesId);
-      return series?.requires_plug === false || isValidPlug(item.plug);
+      // PDP script has no full catalogData (that exists only on /products/ list).
+      // Use the current product's requires_plug for this series; other cart lines
+      // only need a known plug id when a plug value is present.
+      if (variant.seriesId === product.id && product.requires_plug === false) {
+        return true;
+      }
+      // Empty plug is allowed until checkout validation for plug-required items.
+      if (!item.plug) return true;
+      return isValidPlug(item.plug);
     }
     function saveCart() { localStorage.setItem(cartKey, JSON.stringify(cart)); }
     function money(cents) { return '$' + (cents / 100).toFixed(2); }
@@ -886,8 +893,12 @@ const faqSchema = {
         }
 
         currentImage = '';
-        renderProduct();
-        renderCart();
+        try {
+          renderProduct();
+          renderCart();
+        } catch (err) {
+          console.error('PDP re-render after live catalog failed', err);
+        }
       } catch {
         // keep SSR payload
       }
@@ -899,14 +910,24 @@ const faqSchema = {
       selectedPlug = '';
       currentImage = '';
 
-      renderProduct();
-      renderCart();
-      // Refresh media paths from live catalog (fixes stale interface.jpg etc.)
-      hydrateFromLiveCatalog();
+      // Live catalog first so admin image/price edits win over SSR HTML.
+      // Never let cart render errors block media hydration.
+      hydrateFromLiveCatalog().finally(() => {
+        try {
+          renderProduct();
+          renderCart();
+        } catch (err) {
+          console.error('PDP render failed', err);
+        }
+      });
       window.addEventListener('crtlu:localechange', () => {
         if (window.CRTLU_I18N?.apply) window.CRTLU_I18N.apply(document);
-        renderProduct();
-        renderCart();
+        try {
+          renderProduct();
+          renderCart();
+        } catch (err) {
+          console.error('PDP locale re-render failed', err);
+        }
       });
 
       // Event delegation
