@@ -119,3 +119,14 @@ Prefer:
 - “Official apps only”
 - “Bring your own subscriptions”
 - “Legal streaming device / hardware”
+
+## GEO routes (2026-09-23)
+
+| Path | Role |
+|---|---|
+| `/faq/` | Crawlable FAQ + FAQPage JSON-LD |
+| `/guides/android-tv-box-buyers-guide/` | Answer-first Article + FAQ for AI citations |
+| `/llms.txt` | Short store summary for assistants |
+| `/llms-full.txt` | Full published catalog summary (generated) |
+
+Footer/nav link to FAQ; homepage shows first 4 STORE_FAQS with link to full FAQ.

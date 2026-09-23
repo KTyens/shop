@@ -329,26 +329,43 @@ export function organizationJsonLd() {
   };
 }
 
-/** Storefront FAQ — helps Google + AI overviews cite clear policies. */
-export function storeFaqJsonLd() {
-  const faqs = [
-    {
-      q: 'Does CRTLU Digital include IPTV or paid channels with TV boxes?',
-      a: 'No. We sell hardware only. Use official apps and your own valid subscriptions. No preloaded paid content or unofficial streaming accounts are included.',
-    },
-    {
-      q: 'Which countries do you ship to?',
-      a: 'Yanwen tracked shipping is available to major destinations including the US, Canada, UK, EU countries, Australia, and Japan. Shipping is a flat USD 12 per order with an estimated 7–18 business days in transit after processing.',
-    },
-    {
-      q: 'What products does CRTLU Digital sell?',
-      a: 'Android TV boxes (H96, HK1, MECOOL, X96/X98, Tanix, and more), compact projectors, portable label and tattoo transfer printers, wireless HDMI kits, and mini wireless keyboards.',
-    },
-    {
-      q: 'How do I choose a power plug?',
-      a: 'Products supplied with a wall adapter require UK (BS 1363), EU (Europlug), or US (NEMA 1-15) selection. USB Type-C printer models do not require a wall-plug selection.',
-    },
-  ];
+/** Visible + schema FAQ — keep answers factual for Google/AI citations. */
+export const STORE_FAQS: Array<{ q: string; a: string }> = [
+  {
+    q: 'Does CRTLU Digital include IPTV or paid channels with TV boxes?',
+    a: 'No. We sell hardware only. Use official apps and your own valid subscriptions. No preloaded paid content or unofficial streaming accounts are included.',
+  },
+  {
+    q: 'What products does CRTLU Digital sell?',
+    a: 'Android TV boxes (H96, HK1, MECOOL, X96/X98, Tanix, and more), compact projectors, portable label and tattoo transfer printers, wireless HDMI kits, and mini wireless keyboards.',
+  },
+  {
+    q: 'Which countries do you ship to, and what does shipping cost?',
+    a: 'Yanwen tracked shipping is available to major destinations including the US, Canada, UK, EU countries, Australia, and Japan. Shipping is a flat USD 12 per order with an estimated 7–18 business days in transit after processing.',
+  },
+  {
+    q: 'How do I choose a power plug?',
+    a: 'Products supplied with a wall adapter require UK (BS 1363), EU (Europlug), or US (NEMA 1-15) selection at checkout. USB Type-C printer models do not require a wall-plug selection.',
+  },
+  {
+    q: 'How does checkout and payment work?',
+    a: 'Checkout uses Stripe. Card details are handled by Stripe and are not stored on shop.crtlu.me. Prices are shown in USD.',
+  },
+  {
+    q: 'What is your return and warranty policy?',
+    a: 'Buyers can request a return within 14 days of delivery subject to the returns policy. Hardware carries a 12-month limited warranty. See /returns/ and /warranty/ for details.',
+  },
+  {
+    q: 'How should I choose RAM and storage on an Android TV box?',
+    a: '2GB RAM + 16GB storage suits light app use and a small app set. 4GB RAM with 32GB or 64GB storage is a better daily driver for more apps and smoother multitasking. Check each product page for exact configurations.',
+  },
+  {
+    q: 'How can I contact support?',
+    a: 'Email support@crtlu.me and include your order or Stripe checkout email for existing orders. Typical replies are within 24 business hours. WhatsApp chat is also available from the contact page.',
+  },
+];
+
+export function storeFaqJsonLd(faqs: Array<{ q: string; a: string }> = STORE_FAQS) {
   return {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',

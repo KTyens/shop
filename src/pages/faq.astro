@@ -1,0 +1,83 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+import {
+  STORE_FAQS,
+  storeFaqJsonLd,
+  CORE_SEO_KEYWORDS,
+  SAFE_COMMERCE_KEYWORDS,
+} from '../lib/seo';
+
+const keywords = [
+  'CRTLU Digital FAQ',
+  'Android TV Box FAQ',
+  'TV box shipping',
+  'Yanwen shipping',
+  'Stripe checkout TV box',
+  'TV box warranty',
+  ...CORE_SEO_KEYWORDS.slice(0, 12),
+  ...SAFE_COMMERCE_KEYWORDS.slice(0, 8),
+];
+---
+
+<Layout
+  title="FAQ — Shipping, Warranty & Android TV Boxes | CRTLU Digital"
+  description="Answers about CRTLU Digital products, Stripe checkout, Yanwen shipping, plug types, returns, warranty, and how we sell hardware for official apps only."
+  canonicalPath="/faq/"
+  keywords={keywords}
+  jsonLd={[storeFaqJsonLd()]}
+>
+  <Navigation showCart={true} />
+
+  <main class="policy-page" id="main-content">
+    <header class="policy-hero wrap">
+      <div class="eyebrow">Help center</div>
+      <h1>Frequently asked questions</h1>
+      <p class="lead">
+        Clear answers about what we sell, how checkout and shipping work, and how to choose a configuration.
+        Prefer policies in full? See
+        <a href="/shipping/">Shipping</a>,
+        <a href="/returns/">Returns</a>,
+        <a href="/warranty/">Warranty</a>,
+        or <a href="/contact/">Contact</a>.
+      </p>
+      <p class="policy-updated">Last updated: September 23, 2026</p>
+    </header>
+
+    <div class="policy-layout wrap">
+      <nav class="policy-nav" aria-label="FAQ topics">
+        <strong>On this page</strong>
+        {STORE_FAQS.map((item, i) => (
+          <a href={`#faq-${i + 1}`}>{item.q}</a>
+        ))}
+      </nav>
+
+      <article class="policy-content">
+        <p class="policy-scope">
+          These answers apply to purchases from <strong>shop.crtlu.me</strong>. We sell hardware only — official apps and your own subscriptions.
+        </p>
+        {STORE_FAQS.map((item, i) => (
+          <section id={`faq-${i + 1}`} class="policy-section">
+            <h2>{item.q}</h2>
+            <p>{item.a}</p>
+          </section>
+        ))}
+
+        <section class="policy-contact" aria-labelledby="faq-next-title">
+          <div>
+            <div class="eyebrow">Still deciding?</div>
+            <h2 id="faq-next-title">Browse the catalog or read the buyer&apos;s guide.</h2>
+            <p>Compare published models with structured specs, or start with our Android TV box buying guide.</p>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <a class="primary-button" href="/products/">All products</a>
+            <a class="secondary-button" href="/guides/android-tv-box-buyers-guide/">Buyer&apos;s guide</a>
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

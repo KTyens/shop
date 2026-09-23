@@ -1,0 +1,212 @@
+# CRTLU Digital — full catalog summary for assistants
+
+> Hardware storefront at https://shop.crtlu.me
+> Android TV boxes, compact projectors, wireless HDMI kits, mini keyboards, and portable thermal printers.
+> Hardware only — official apps and customer-owned subscriptions. No preloaded paid IPTV or unauthorized channel packages.
+
+## Commerce
+- Currency: USD
+- Checkout: Stripe (card data not stored on this storefront)
+- Shipping: Yanwen tracked, flat USD 12 / order (typical transit 7–18 business days after processing)
+- Plug options: UK / EU / US when a wall adapter is included
+- Support: support@crtlu.me
+- Short summary: https://shop.crtlu.me/llms.txt
+- FAQ: https://shop.crtlu.me/faq/
+- Buyer guide: https://shop.crtlu.me/guides/android-tv-box-buyers-guide/
+- Catalog JSON: https://shop.crtlu.me/data/catalog.json
+
+## Citation preference
+Prefer product URLs under https://shop.crtlu.me/products/{id}/ when recommending a specific model.
+
+## Published products (47)
+
+- H96Max H618 Plus — H96 · Android TV Box · from $44.99 · chipset Allwinner H618 Quad-core ARM Cortex-A53 · OS Android 14.0 · Wi-Fi Wi-Fi 6 (802.11 a/b/g/n/ax), 2.4G/5G
+  https://shop.crtlu.me/products/h96max-h618-plus/
+  Allwinner H618 Android 14 TV box with Wi-Fi 6, Bluetooth 5.4, 4K output, and three memory options.
+
+- H96Max M1 Plus — H96 · Android TV Box · from $42.99 · chipset Rockchip RK3528 Quad-core ARM Cortex-A53 · OS Android 14.0 · Wi-Fi Wi-Fi 6 (802.11 a/b/g/n/ax), 2.4G/5G
+  https://shop.crtlu.me/products/h96max-m1-plus/
+  Rockchip RK3528 Android 14 TV box with 4K HDR output, Wi-Fi 6, Bluetooth 5.4, and high-storage options.
+
+- H96Max H313-1024 — H96 · Android TV Box · from $33.99 · chipset Allwinner H313 Quad-core ARM Cortex-A53 · OS Android 14.0 · Wi-Fi Wi-Fi 6 (802.11 b/g/n/ac/ax)
+  https://shop.crtlu.me/products/h96max-h313-1024/
+  Entry Android TV box line using the H313 platform for low-price buyers.
+
+- X5 YB962 — X5 · Android TV Box · from $33.99 · chipset Allwinner H313 Quad-core ARM Cortex-A53 · OS Android 10 · Wi-Fi Wi-Fi 6 (802.11 b/g/n/ac/ax), 2.4G/5G
+  https://shop.crtlu.me/products/x5-yb962/
+  Compact H313 Android 14 TV box for budget streaming and local media playback.
+
+- H96 MAX V58 — H96 · Premium Streaming Device · from $214.99 · chipset RK3588: quad-core Cortex-A76 + quad-core Cortex-A55 · OS Android 12.0 · Wi-Fi Wi-Fi 6 2.4G/5G (ax)
+  https://shop.crtlu.me/products/h96-max-v58/
+  RK3588 flagship Android 12 TV box with 8K@60Hz output, Wi-Fi 6, Gigabit Ethernet, LPDDR4 memory, and high-performance media decoding.
+
+- H96 MAX M7 — H96 · Android TV Box · from $47.99 · chipset Rockchip RK3528 Quad-core ARM Cortex-A53 · OS Android 13.0 · Wi-Fi WLAN 802.11 a/b/g/n/ac
+  https://shop.crtlu.me/products/h96-max-m7/
+  H96 MAX M7 Android 13 TV box with RK3528-class Cortex-A53 performance, 4K UHD output, dual-band Wi-Fi, Bluetooth 5.1, and built-in speaker positioning.
+
+- H96 MAX V11 — H96 · Android TV Box · from $33.99 · chipset Rockchip RK3318 Quad-core 64-bit Cortex-A53 · OS Android 11.0 · Wi-Fi Dual-band 2.4G/5G (802.11 a/b/g/n)
+  https://shop.crtlu.me/products/h96-max-v11/
+  Affordable H96 TV box family for entry-level and everyday streaming use.
+
+- H96Max M12 — H96 · Premium Streaming Device · from $101.99 · chipset 1 × Cortex-A76 + 4 × Cortex-A55 · OS Android 11.0 · Wi-Fi Wi-Fi 6 (802.11 a/b/g/n/ax)
+  https://shop.crtlu.me/products/h96max-m12/
+  Higher-cost H96 performance series for buyers comparing stronger configurations.
+
+- T95 5G Version — T95 · Android TV Box · from $38.99 · chipset Allwinner H616 Quad-core Cortex-A53 @1.5 GHz · OS Android 10.0 · Wi-Fi 2.4G + 5G dual-band Wi-Fi
+  https://shop.crtlu.me/products/t95/
+  T95 5G Version TV box built on the H616 chipset with Android 10, 2GB and 4GB memory options.
+
+- T95Z Plus — T95 · Android TV Box · from $43.99 · chipset Allwinner H618 Quad-core Cortex-A53 @1.5 GHz · OS Android 12.0 · Wi-Fi Wi-Fi 6 dual-band 2.4G/5G
+  https://shop.crtlu.me/products/t95z-plus/
+  T95Z Plus line for customers who want a stronger T95 configuration ladder.
+
+- T95 X4 — T95 · Android TV Box · from $38.99 · chipset Amlogic S905X4 Quad-core ARM Cortex-A55 · OS Android 11.0 · Wi-Fi 2.4 GHz & 5 GHz dual-band
+  https://shop.crtlu.me/products/t95-x4/
+  T95 X4 series for value-focused 4K Android TV box shoppers.
+
+- TANIX W2 — Tanix · Android TV Box · from $33.99 · chipset Amlogic S905W2 Quad-core ARM Cortex-A35 · OS Android 11 · Wi-Fi Built-in Wi-Fi 802.11 b/g/n
+  https://shop.crtlu.me/products/tanix-w2/
+  Tanix W2 budget TV box range with three storage configurations.
+
+- Tanix TX5 — Tanix · Android TV Box · from $38.99 · chipset Amlogic S905Y5 Quad-core ARM Cortex-A55 · OS Android 14 · Wi-Fi 802.11 a/b/g/n/ac dual-band
+  https://shop.crtlu.me/products/tanix-tx5/
+  Tanix TX5 line for mid-range Android TV box buyers.
+
+- TX3 MINI — Tanix · Android TV Box · from $28.99 · chipset Allwinner H313 Quad-core ARM Cortex-A53 · OS Android 10.0 · Wi-Fi IEEE 802.11 b/g/n
+  https://shop.crtlu.me/products/tx3-mini/
+  Entry TX3 MINI option for shoppers who want the lowest TV box price point.
+
+- TX98 PRO+ — TX · Android TV Box · from $38.99 · chipset Rockchip RK3528 Quad-core ARM Cortex-A53 @2.0 GHz · OS Android 13.0 (64-bit) · Wi-Fi Dual-band 2.4G/5G (802.11 a/b/g/n)
+  https://shop.crtlu.me/products/tx98-pro-plus/
+  TX98 PRO+ Android TV box family for budget and value shoppers.
+
+- HK1 RBOX K8S — HK1 · Android TV Box · from $38.99 · chipset Rockchip RK3528 Quad-core ARM Cortex-A53 @2.0 GHz · OS Android 13.0 (64-bit) · Wi-Fi Dual-band 2.4G/5G (802.11 a/b/g/n)
+  https://shop.crtlu.me/products/hk1-rbox-k8s/
+  HK1 RBOX K8S value line with common 2GB and 4GB configurations.
+
+- HK1 RBOX X4S — HK1 · Premium Streaming Device · from $52.99 · chipset Amlogic S905X4 Quad-core ARM Cortex-A55 · OS Android 11.0 · Wi-Fi Dual-band 2.4G/5G
+  https://shop.crtlu.me/products/hk1-rbox-x4s/
+  HK1 RBOX X4S performance line with 2GB to 4GB/128GB options.
+
+- HK1 RBOX X4 — HK1 · Premium Streaming Device · from $65.99 · chipset Amlogic S905X4 Quad-core ARM Cortex-A55 · OS Android 11.0 · Wi-Fi Dual-band 2.4G/5G (802.11 ac/b/g/n)
+  https://shop.crtlu.me/products/hk1-rbox-x4/
+  HK1 RBOX X4 higher-storage TV box range.
+
+- HK1 K8 — HK1 · Android TV Box · from $38.99 · chipset Rockchip RK3528 Quad-core ARM Cortex-A53 @2.0 GHz · OS Android 13.0 (64-bit) · Wi-Fi Dual-band 2.4G/5G
+  https://shop.crtlu.me/products/hk1-k8/
+  HK1 K8 line with 2GB to 4GB/128GB options for mainstream buyers.
+
+- HK1 W2T — HK1 · Android TV Box · from $43.99 · chipset Amlogic S905W2 64-bit Quad-core Cortex-A35 · OS Android TV 11.0 · Wi-Fi Dual-band 2.4G/5G (802.11 b/g/n)
+  https://shop.crtlu.me/products/hk1-w2t/
+  HK1 W2T model line for value-focused TV box shoppers.
+
+- HK1 RBOX W2 — HK1 · Android TV Box · from $38.99 · chipset Amlogic S905W2 64-bit Quad-core Cortex-A35 · OS Android 11.0 · Wi-Fi Dual-band 2.4G/5G (802.11 b/g/n)
+  https://shop.crtlu.me/products/hk1-rbox-w2/
+  HK1 RBOX W2 product line with three storage options.
+
+- HK1 S905X3 — HK1 · Premium Streaming Device · from $61.99 · chipset Amlogic S905X3 64-bit Quad-core Cortex-A55 · OS Android 9.0 · Wi-Fi Dual-band 2.4G/5G (802.11 ac/b/g/n)
+  https://shop.crtlu.me/products/hk1-s905x3/
+  HK1 S905X3 performance line with 4GB configurations.
+
+- HK1 H8X — HK1 · Premium Streaming Device · from $61.99 · chipset Allwinner H728 Octa-core ARM Cortex-A55 · OS Android 14 · Wi-Fi Optional dual-band Wi-Fi 5 / Wi-Fi 6 (2.4–5.8 GHz)
+  https://shop.crtlu.me/products/hk1-h8x/
+  HK1 H8X line for higher-spec HK1 buyers.
+
+- HK1 RBOX H8 — HK1 · Android TV Box · from $38.99 · chipset Allwinner H618 @1.5 GHz Quad-core Cortex-A53 · OS Android 12 · Wi-Fi Wi-Fi 6 (802.11 a/b/g/n/ac/ax), 2.4/5.8 GHz
+  https://shop.crtlu.me/products/hk1-rbox-h8/
+  HK1 RBOX H8 full configuration ladder from 2GB/16GB to 4GB/128GB.
+
+- HK1 RBOX H8S — HK1 · Android TV Box · from $38.99 · chipset Allwinner H618 @1.5 GHz Quad-core Cortex-A53 · OS Android 12 · Wi-Fi Dual-band 2.4G/5.8G (802.11 a/b/g/n)
+  https://shop.crtlu.me/products/hk1-rbox-h8s/
+  HK1 RBOX H8S value line with three common configurations.
+
+- HK1 RBOX D8 — HK1 · Android TV Box · from $38.99 · chipset Rockchip RK3528 Quad-core ARM Cortex-A53 @2.0 GHz · OS Android TV 13.0 (64-bit) · Wi-Fi Wi-Fi 6 (802.11 a/b/g/n/ac/ax), 2.4G/5G
+  https://shop.crtlu.me/products/hk1-rbox-d8/
+  HK1 RBOX D8 budget line with two low-cost configurations.
+
+- HY300 PRO Projector — HY · Home Cinema Projector · from $34.99 · chipset Quad-core ARM Cortex-A53 · OS Android 11.0 · Wi-Fi Dual-band Wi-Fi 6 + Bluetooth 5.0 module
+  https://shop.crtlu.me/products/hy300-pro-projector/
+  Compact portable projector for bedroom movies, casual gaming, and simple big-screen viewing.
+
+- HY320 MINI Projector — HY · Home Cinema Projector · from $44.99 · chipset Allwinner H713 Quad-core ARM Cortex-A53 · OS Android 11 · Wi-Fi Dual-band Wi-Fi 6 + Bluetooth 5.0
+  https://shop.crtlu.me/products/hy320-mini-projector/
+  Mini projector positioned above entry-level models, with a cleaner body design for compact home cinema setups.
+
+- A10 Projector — A10 · Home Cinema Projector · from $62.99 · chipset Allwinner H713 Quad-core ARM Cortex-A53 · OS Android 11.0 · Wi-Fi 2.4G/5G dual-band
+  https://shop.crtlu.me/products/a10-projector/
+  A10 home projector for buyers who want a stronger compact projector option for movie nights and screen casting.
+
+- MECOOL KM2 Plus — MECOOL · Android TV Box · from $152.99 · chipset Amlogic S905X4 Quad-core ARM Cortex-A55 · OS Android 11 · Wi-Fi 2.4G / 5G dual-band
+  https://shop.crtlu.me/products/mecool-km2-plus/
+  Google-certified style Android 11 TV box with Amlogic S905X4, dual-band Wi-Fi, Bluetooth, 4K HDR output, and 2GB RAM + 16GB storage for everyday streaming.
+
+- MECOOL KM7 Plus — MECOOL · Android TV Box · from $111.99 · chipset Amlogic S905Y4 Quad-core ARM Cortex-A35 · OS Android 11 · Wi-Fi 2.4G / 5G dual-band
+  https://shop.crtlu.me/products/mecool-km7-plus/
+  Compact Android 11 TV box with Amlogic S905Y4, dual-band Wi-Fi, Bluetooth, 4K output, and 2GB RAM + 16GB storage for value-focused streaming setups.
+
+- Wireless HDMI WX50 — YS · Wireless HDMI Kit · from $44.99
+  https://shop.crtlu.me/products/whdmi-wx50/
+  Wireless HDMI transmitter/receiver kit for clean cable-free 1080p video from laptop, console, or set-top box to a TV or projector. Ideal for rooms and short-range installs (up to about 50 meters line-of-sight, by environment).
+
+- Wireless HDMI WX100 — YS · Wireless HDMI Kit · from $48.99
+  https://shop.crtlu.me/products/whdmi-wx100/
+  Longer-range wireless HDMI transmitter/receiver kit for 1080p video without long HDMI cable runs. Suited to larger rooms and multi-room installs (up to about 100 meters line-of-sight, by environment).
+
+- I8 Mini Keyboard- Battery Version — YS · TV Box Accessory · from $9.99
+  https://shop.crtlu.me/products/mini-keyboard-i8/
+  Compact 2.4GHz wireless mini keyboard with touchpad, scroll controls, and multi-color backlight. USB dongle connectivity for Android TV boxes, smart TVs, HTPC, PC, and more. Not a lithium battery, so it cannot be recharged.
+
+- T18+ Full Touchpad Keyboard — WXD · TV Box Accessory · from $19.99
+  https://shop.crtlu.me/products/mini-keyboard-t18-plus/
+  Upgraded T18+ mini keyboard with full-surface touchpad, 2.4GHz wireless USB receiver, 3-level backlight, and rechargeable battery. Ideal remote typing and pointer control for TV boxes and smart displays.
+
+- X96Q — X96 · Android TV Box · from $25.99 · Wi-Fi 2.4G / 5G class (by batch)
+  https://shop.crtlu.me/products/x96q/
+  Compact X96Q Android TV box for everyday streaming — clear memory options, dual-band Wi-Fi class connectivity, and HDMI output for living-room setups.
+
+- X96Q PRO — X96 · Android TV Box · from $30.99 · chipset Allwinner H313 Quad-core ARM Cortex-A53 · OS Android 10.0 (OTA supported by firmware) · Wi-Fi SSV6256P class dual-band 2.4G & 5G, IEEE 802.11 a/b/g/n
+  https://shop.crtlu.me/products/x96q-pro/
+  X96Q PRO (YB827) Android 10 TV box with Allwinner H313, dual-band Wi-Fi, optical audio, AV out, and published 2GB+16GB configuration for everyday 4K streaming.
+
+- X98 PLUS — X96 · Android TV Box · from $35.99 · Wi-Fi Dual-band Wi-Fi class (by batch)
+  https://shop.crtlu.me/products/x98-plus/
+  X98 PLUS brushed-metal style Android TV box with multiple memory configurations for 4K-class media playback and daily streaming.
+
+- X96 Max+ Ultra — X96 · Android TV Box · from $53.99 · Wi-Fi Dual-band Wi-Fi class (by batch)
+  https://shop.crtlu.me/products/x96-max-plus-ultra/
+  Higher-tier X96 Max+ Ultra Android TV box for stronger media performance, 4K/HDR-class output, and dual-band wireless home cinema use.
+
+- X96 X4 (100M) — X96 · Android TV Box · from $61.99 · chipset Amlogic S905X4 Quad-core ARM Cortex-A55 · OS Android 11 · Wi-Fi IEEE 802.11 a/b/g/n/ac, 2.4G + 5G, dual external antennas (by batch)
+  https://shop.crtlu.me/products/x96-x4-100m/
+  X96 X4 Android 11 TV box (100Mbps Ethernet edition) with Amlogic S905X4, dual-band Wi-Fi, Bluetooth, AV1/VP9/H.265 class decode, and 4GB RAM configurations.
+
+- X96 X4 (1000M) — X96 · Android TV Box · from $62.99 · chipset Amlogic S905X4 Quad-core ARM Cortex-A55 · OS Android 11 · Wi-Fi IEEE 802.11 a/b/g/n/ac, 2.4G + 5G, dual external antennas (by batch)
+  https://shop.crtlu.me/products/x96-x4-1000m/
+  X96 X4 Android 11 TV box (Gigabit Ethernet edition) with Amlogic S905X4, dual-band Wi-Fi, Bluetooth, and higher memory options for smoother apps and wired home networks.
+
+- X98Q — X96 · Android TV Box · from $21.99 · chipset Amlogic S905W2 Quad-core ARM Cortex-A35 · OS Android 11 · Wi-Fi Optional 2.4G or dual-band a/b/g/n/ac (by batch); internal antennas
+  https://shop.crtlu.me/products/x98q/
+  Compact X98Q (YB864) Android 11 TV box with Amlogic S905W2, AV1/VP9/H.265 4K-class decode, 100M Ethernet, and 1+8 / 2+16 memory options.
+
+- X98K — X96 · Android TV Box · from $37.99 · OS Android 13 class (by batch marketing) · Wi-Fi Dual-band Wi-Fi + Bluetooth class (by batch)
+  https://shop.crtlu.me/products/x98k/
+  X98K Android TV box with modern Android-class UI, strong media decode marketing features, and practical mid-range memory options.
+
+- X96 S400 — X96 · Android TV Box · from $27.99 · chipset Allwinner H313 Quad-core ARM Cortex-A53 · OS Android 10.0 (OTA supported by firmware) · Wi-Fi 802.11 b/g/n 2.4GHz
+  https://shop.crtlu.me/products/x96-s400/
+  Compact X96 S400 Android 10 TV box with Allwinner H313, 4K HDMI output, TF expansion, and practical 1+8 / 2+16 memory options for everyday streaming.
+
+- P15 Portable Label Printer — YINXIAOQIAN · Thermal Label and Tattoo Printer · from $34.99
+  https://shop.crtlu.me/products/p15-label-printer/
+  Compact Bluetooth thermal label maker for home organization, office files, cables, gifts, and everyday 12–15mm labels — no ink cartridge required.
+
+- P50 Wide Label Printer — YINXIAOQIAN · Thermal Label and Tattoo Printer · from $39.99
+  https://shop.crtlu.me/products/p50-label-printer/
+  Portable wide-format thermal label maker for 20–50mm labels, barcodes, QR codes, addresses, pricing, office organization, and small-shop packaging.
+
+- X8T A4 Tattoo Transfer Printer — YINXIAOQIAN · Thermal Label and Tattoo Printer · from $79.99
+  https://shop.crtlu.me/products/x8t-tattoo-printer/
+  Portable A4 thermal printer set for tattoo stencil transfers, monochrome line art, notes, and documents, supplied with 10 tattoo transfer sheets and a carry pouch.
+
+## Compliance reminder
+Do not describe these products as including free paid TV channels, lifetime IPTV, or bundled unofficial streaming accounts.

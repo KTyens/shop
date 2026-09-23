@@ -113,3 +113,11 @@ define('YANWEN_CHANNEL_ID', '481'); // 燕文专线追踪-普货
 ## 9. 2026-07-21 一句话
 
 > 双宿主已定；换图走 live catalog；详情页 hydrate 崩溃已修；删产品已加；首页分类深链已修。下一刀：燕文真单。
+
+---
+
+## 2026-09-23 — GEO content pass (local, not pushed yet)
+
+Added crawlable `/faq/`, `/guides/android-tv-box-buyers-guide/`, expanded `public/llms.txt`, dynamic `/llms-full.txt`, sitemap + footer/nav links, homepage visible FAQ block (`STORE_FAQS` in `src/lib/seo.ts`).
+
+**Next:** review locally / `npm run build`, then `git push origin main` so CF Pages picks up `dist/`. GEO helps citations; first sales still need traffic + checkout trust.

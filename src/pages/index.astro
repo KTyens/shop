@@ -10,6 +10,7 @@ import {
   itemListJsonLd,
   organizationJsonLd,
   storeFaqJsonLd,
+  STORE_FAQS,
   websiteJsonLd,
 } from '../lib/seo';
 
@@ -389,6 +390,33 @@ const homeKeywords = [
         </div>
       </div>
     </section>
+
+    <!-- Visible FAQ (GEO + trust) -->
+    <section class="el-compare" id="faq" aria-labelledby="home-faq-title">
+      <div class="home-wrap">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Common questions</div>
+            <h2 id="home-faq-title">Before you buy</h2>
+          </div>
+          <p>
+            Short answers about hardware-only positioning, shipping, and checkout.
+            <a href="/faq/">See all FAQs</a>
+            ·
+            <a href="/guides/android-tv-box-buyers-guide/">Buyer&apos;s guide</a>
+          </p>
+        </div>
+        <div class="el-compare-table" style="display:grid;gap:16px;">
+          {STORE_FAQS.slice(0, 4).map((item) => (
+            <div style="padding:16px 18px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,0.02);">
+              <h3 style="margin:0 0 8px;font-size:1.05rem;">{item.q}</h3>
+              <p style="margin:0;opacity:0.82;">{item.a}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <script>

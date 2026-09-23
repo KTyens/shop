@@ -1,0 +1,173 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+import {
+  absoluteUrl,
+  storeFaqJsonLd,
+  CORE_SEO_KEYWORDS,
+  BRAND_DISCOVERY_KEYWORDS,
+  SAFE_COMMERCE_KEYWORDS,
+} from '../../lib/seo';
+
+const guideFaqs = [
+  {
+    q: 'What is an Android TV box?',
+    a: 'An Android TV box is a compact set-top computer that connects to a TV over HDMI. You install official apps, sign in with your own accounts, and play media your subscriptions allow.',
+  },
+  {
+    q: 'Is a CRTLU Digital TV box the same as an IPTV brand box?',
+    a: 'No. CRTLU Digital sells hardware for official apps and customer-owned subscriptions. We do not include preloaded paid IPTV packages or unauthorized channel services.',
+  },
+  {
+    q: 'Which configuration should beginners buy?',
+    a: 'Start with a clear chipset and Wi-Fi listing on the product page. For everyday apps, prefer at least 4GB RAM when budget allows; 2GB + 16GB is an entry option for lighter use.',
+  },
+];
+
+const articleLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: 'Android TV Box Buyer\'s Guide',
+  description:
+    'How to choose an Android TV box by chipset, memory, Wi-Fi, and HDMI — plus how CRTLU Digital sells legal hardware for official apps.',
+  author: { '@type': 'Organization', name: 'CRTLU Digital', url: 'https://shop.crtlu.me/' },
+  publisher: { '@type': 'Organization', name: 'CRTLU Digital', url: 'https://shop.crtlu.me/' },
+  mainEntityOfPage: absoluteUrl('/guides/android-tv-box-buyers-guide/'),
+  dateModified: '2026-09-23',
+};
+
+const picks = [
+  { id: 'h96max-h313-1024', label: 'Entry', name: 'H96Max H313-1024' },
+  { id: 'h96max-m1-plus', label: 'Balanced', name: 'H96Max M1 Plus' },
+  { id: 'h96max-h618-plus', label: 'Wi-Fi 6 daily', name: 'H96Max H618 Plus' },
+  { id: 'hk1-rbox-x4s', label: 'Performance', name: 'HK1 RBOX X4S' },
+  { id: 'h96-max-v58', label: 'Flagship', name: 'H96 MAX V58' },
+];
+
+const keywords = [
+  'Android TV box buyer guide',
+  'how to choose Android TV box',
+  'Android set-top box specs',
+  'legal streaming hardware',
+  ...CORE_SEO_KEYWORDS.slice(0, 10),
+  ...BRAND_DISCOVERY_KEYWORDS.slice(0, 8),
+  ...SAFE_COMMERCE_KEYWORDS.slice(0, 6),
+];
+---
+
+<Layout
+  title="Android TV Box Buyer’s Guide | CRTLU Digital"
+  description="Learn what an Android TV box is, which specs matter (chipset, RAM, Wi-Fi, HDMI), and how to shop legal hardware for official apps at CRTLU Digital."
+  canonicalPath="/guides/android-tv-box-buyers-guide/"
+  keywords={keywords}
+  jsonLd={[articleLd, storeFaqJsonLd(guideFaqs)]}
+>
+  <Navigation showCart={true} />
+
+  <main class="policy-page" id="main-content">
+    <header class="policy-hero wrap">
+      <div class="eyebrow">Guides</div>
+      <h1>Android TV box buyer&apos;s guide</h1>
+      <p class="lead">
+        A short, practical checklist for choosing a set-top box by hardware specs — not by IPTV promises.
+        Shop published models at <a href="/products/?category=tv-box">TV boxes</a>.
+      </p>
+      <p class="policy-updated">Last updated: September 23, 2026</p>
+    </header>
+
+    <div class="policy-layout wrap">
+      <nav class="policy-nav" aria-label="Guide sections">
+        <strong>On this page</strong>
+        <a href="#what">What it is</a>
+        <a href="#who">Who it is for</a>
+        <a href="#specs">Spec checklist</a>
+        <a href="#legal">Legal hardware positioning</a>
+        <a href="#picks">Starting picks</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+
+      <article class="policy-content">
+        <section id="what" class="policy-section">
+          <h2>What is an Android TV box?</h2>
+          <p>
+            An Android TV box is a small computer designed for your television. It outputs video over HDMI,
+            connects to Wi-Fi or Ethernet, and runs an Android-based system so you can install apps from
+            official stores or sideload only what you are licensed to use.
+          </p>
+          <p>
+            Think of it as hardware: the box does not replace a paid streaming subscription. You bring your own accounts.
+          </p>
+        </section>
+
+        <section id="who" class="policy-section">
+          <h2>Who should buy one?</h2>
+          <ul>
+            <li>Households that want a dedicated device for the living-room TV</li>
+            <li>Travelers or renters who need a compact HDMI stick/box for hotels or temporary setups</li>
+            <li>Buyers comparing chipsets and memory instead of vague “channel pack” marketing</li>
+          </ul>
+        </section>
+
+        <section id="specs" class="policy-section">
+          <h2>Spec checklist before you pay</h2>
+          <ul>
+            <li><strong>Chipset / CPU</strong> — drives decode smoothness and app responsiveness</li>
+            <li><strong>OS version</strong> — listed on each CRTLU product page (for example Android 11 or 14)</li>
+            <li><strong>RAM + storage</strong> — more RAM helps multitasking; more storage holds more apps</li>
+            <li><strong>Wi-Fi / Ethernet</strong> — dual-band or Wi-Fi 6 plus wired LAN when available</li>
+            <li><strong>HDMI</strong> — confirm 4K/HDR expectations match your TV</li>
+            <li><strong>Power plug</strong> — choose UK / EU / US at checkout when a wall adapter is included</li>
+          </ul>
+        </section>
+
+        <section id="legal" class="policy-section">
+          <h2>How this differs from IPTV-branded boxes</h2>
+          <p>
+            Search terms like UBOX, UNBLOCK, or EVPAD often appear when shoppers look for “TV boxes with channels.”
+            CRTLU Digital does <strong>not</strong> sell piracy packages or lifetime unofficial TV services.
+            We sell Android TV / streaming <em>hardware</em> so you can use Netflix, YouTube, and other official apps with accounts you own.
+          </p>
+        </section>
+
+        <section id="picks" class="policy-section">
+          <h2>Starting picks on CRTLU Digital</h2>
+          <p>These published models are common starting points. Always confirm the live price and variants on the product page.</p>
+          <ul>
+            {picks.map((p) => (
+              <li>
+                <strong>{p.label}:</strong>{' '}
+                <a href={`/products/${p.id}/`}>{p.name}</a>
+              </li>
+            ))}
+          </ul>
+          <p>
+            Checkout is Stripe (cards handled by Stripe). Shipping uses tracked Yanwen at a flat USD 12 on eligible destinations.
+            See the <a href="/faq/">FAQ</a> for shipping countries, returns, and warranty.
+          </p>
+        </section>
+
+        <section id="faq" class="policy-section">
+          <h2>Guide FAQ</h2>
+          {guideFaqs.map((item) => (
+            <div style="margin-bottom: 1.25rem;">
+              <h3 style="font-size: 1.05rem; margin-bottom: 0.35rem;">{item.q}</h3>
+              <p>{item.a}</p>
+            </div>
+          ))}
+        </section>
+
+        <section class="policy-contact" aria-labelledby="guide-cta-title">
+          <div>
+            <div class="eyebrow">Next step</div>
+            <h2 id="guide-cta-title">Compare live configurations</h2>
+            <p>Open the catalog filter for TV boxes and match chipset + memory to your TV and network.</p>
+          </div>
+          <a class="primary-button" href="/products/?category=tv-box">Shop TV boxes</a>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
