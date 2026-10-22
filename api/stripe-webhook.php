@@ -4,6 +4,7 @@ require __DIR__ . '/config.php';
 require __DIR__ . '/catalog.php';
 require __DIR__ . '/notifications.php';
 require __DIR__ . '/member-auth.php';
+require_once __DIR__ . '/reviews-lib.php';
 
 function stripe_signature_is_valid(string $payload, string $header, string $secret): bool
 {
@@ -147,8 +148,16 @@ try {
     $orderId = (int)$pdo->lastInsertId();
     $emailItems = [];
     if ($orderId > 0) {
-        $itemStmt = $pdo->prepare(
-            'INSERT INTO order_items (order_id, product_name, quantity, unit_amount, currency)
+        // Variant ids from checkout metadata ("variant:qty,..." in line-item order) → review product ids.
+        $cartVariantIds = array_map(
+            static fn(string $entry): string => trim(explode(':', $entry, 2)[0]),
+            array_filter(explode(',', (string)($metadata['cart'] ?? '')))
+        );
+        $hasItemProductCols = in_array('product_id', crtlu_columns($pdo, 'order_items'), true);
+        $itemStmt = $pdo->prepare($hasItemProductCols
+            ? 'INSERT INTO order_items (order_id, variant_id, product_id, product_name, quantity, unit_amount, currency)
+            VALUES (:order_id, :variant_id, :product_id, :product_name, :quantity, :unit_amount, :currency)'
+            : 'INSERT INTO order_items (order_id, product_name, quantity, unit_amount, currency)
             VALUES (:order_id, :product_name, :quantity, :unit_amount, :currency)'
         );
         foreach (($lineItems['data'] ?? []) as $itemIndex => $item) {
@@ -164,13 +173,20 @@ try {
                 'unit_amount' => (int)($item['amount_subtotal'] ?? 0),
                 'currency' => $price['currency'] ?? ($session['currency'] ?? 'usd'),
             ];
-            $itemStmt->execute([
+            $itemParams = [
                 ':order_id' => $orderId,
                 ':product_name' => $product,
                 ':quantity' => (int)($item['quantity'] ?? 1),
                 ':unit_amount' => (int)($item['amount_subtotal'] ?? 0),
                 ':currency' => $price['currency'] ?? ($session['currency'] ?? 'usd'),
-            ]);
+            ];
+            if ($hasItemProductCols) {
+                $variantId = substr((string)($cartVariantIds[$itemIndex] ?? ''), 0, 120);
+                [$resolvedProductId] = crtlu_review_resolve_item(['variant_id' => $variantId, 'product_name' => $product]);
+                $itemParams[':variant_id'] = $variantId;
+                $itemParams[':product_id'] = $resolvedProductId;
+            }
+            $itemStmt->execute($itemParams);
         }
         if (crtlu_table_exists($pdo, 'coupon_redemptions') && (string)($orderData['coupon_code'] ?? '') !== '') {
             $couponStmt = $pdo->prepare(

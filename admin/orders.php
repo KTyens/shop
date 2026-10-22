@@ -3,6 +3,7 @@
 require __DIR__ . '/auth.php';
 require __DIR__ . '/admin-shell.php';
 require_once __DIR__ . '/../api/yanwen-client.php';
+require_once __DIR__ . '/../api/notifications.php';
 
 crtlu_require_admin();
 
@@ -39,12 +40,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $status = in_array($_POST['status'] ?? '', $allowedStatuses, true) ? $_POST['status'] : 'paid';
+    $prevStmt = $pdo->prepare('SELECT status FROM orders WHERE id = :id');
+    $prevStmt->execute([':id' => $orderId]);
+    $previousStatus = (string)$prevStmt->fetchColumn();
     $stmt = $pdo->prepare('UPDATE orders SET status = :status, yanwen_tracking = :tracking WHERE id = :id');
     $stmt->execute([
         ':status' => $status,
         ':tracking' => trim((string)($_POST['yanwen_tracking'] ?? '')),
         ':id' => $orderId,
     ]);
+    // First transition to "shipped" → customer email with tracking + verified review link.
+    if ($status === 'shipped' && $previousStatus !== 'shipped') {
+        try {
+            crtlu_send_shipped_email($pdo, $orderId);
+        } catch (Throwable $ignored) {
+            // Never block the status update on mail problems; see admin/emails.php for failures.
+        }
+    }
     header('Location: ' . $redirect);
     exit;
 }

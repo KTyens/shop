@@ -31,6 +31,10 @@ define('CRTLU_ORDER_NOTIFY_EMAIL', 'owner@gmail.com');
 // define('CRTLU_SMTP_SECURE', 'tls'); // tls | ssl | none
 // Emergency only: return code in API JSON (never leave on in production)
 define('CRTLU_LOGIN_CODE_DEBUG', '0');
+
+// Verified-buyer reviews (phase 6): HMAC secret for signed review links. >= 32 random chars.
+// Generate: php -r 'echo bin2hex(random_bytes(32)), PHP_EOL;'   Changing it invalidates all sent links.
+define('CRTLU_REVIEW_SECRET', 'replace_with_64_hex_chars');
 define('CRTLU_TELEGRAM_BOT_TOKEN', '');
 define('CRTLU_TELEGRAM_CHAT_ID', '');
 define('CRTLU_DEFAULT_LOCALE', 'en');

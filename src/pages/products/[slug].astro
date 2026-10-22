@@ -5,6 +5,8 @@ import Navigation from '../../components/Navigation.astro';
 import CartDrawer from '../../components/CartDrawer.astro';
 import PlugSelectorStyles from '../../components/PlugSelectorStyles.astro';
 import '../../styles/global.css';
+import ProductReviews from '../../components/ProductReviews.astro';
+import { loadProductReviews } from '../../lib/reviews';
 import { breadcrumbJsonLd, productJsonLd, productKeywords, productPageDescription, productPageTitle } from '../../lib/seo';
 
 // Paths only — product body is re-loaded by slug each request so gallery
@@ -44,7 +46,8 @@ const mediaVersionPayload = mediaVersion;
 const productSeoKeywords = productKeywords(product);
 const productTitle = productPageTitle(product);
 const productDescription = productPageDescription(product);
-const productSchema = productJsonLd(product);
+const productReviews = loadProductReviews(product.id);
+const productSchema = productJsonLd(product, productReviews);
 const productBreadcrumb = breadcrumbJsonLd([
   { name: 'Home', path: '/' },
   { name: 'Products', path: '/products/' },
@@ -157,6 +160,13 @@ const faqSchema = {
       <div>
         <div class="eyebrow" id="eyebrow">{product.brand} / {product.tier.replace('-', ' ')}</div>
         <h1 id="title">{product.name}</h1>
+        {productReviews.count > 0 && (
+          <a class="pdp-rating-summary" href="#reviews" aria-label={`Rated ${productReviews.average} out of 5 from ${productReviews.count} verified reviews`} style="display:inline-flex;align-items:center;gap:8px;margin-top:8px;color:var(--text);text-decoration:none;font-size:14px;">
+            <span aria-hidden="true" style="letter-spacing:2px;">{'★'.repeat(Math.round(productReviews.average || 0))}{'☆'.repeat(5 - Math.round(productReviews.average || 0))}</span>
+            <strong>{productReviews.average?.toFixed(1)}</strong>
+            <span style="color:var(--muted);">({productReviews.count} verified {productReviews.count === 1 ? 'review' : 'reviews'})</span>
+          </a>
+        )}
         <p class="lead" id="description" style="color:#666666;line-height:1.7;font-size:17px;margin:14px 0;">{product.description}</p>
         <div class="price-line" style="margin:22px 0;display:flex;align-items:end;gap:10px;">
           <span class="price" id="price" style="font-size:38px;font-weight:950;">$0.00</span>
@@ -213,6 +223,8 @@ const faqSchema = {
       <h2 style="margin:0 0 18px;font-size:28px;" data-i18n="pdp.images">Product Images</h2>
       <div class="detail-gallery" id="detailGallery" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;"></div>
     </section>
+
+    <ProductReviews productId={product.id} productName={product.name} summary={productReviews} />
 
     <section class="product-faq section" aria-labelledby="product-faq-title">
       <div class="section-heading-row">

@@ -11,6 +11,7 @@ zip -r "$OUT" \
   admin \
   data/catalog.json \
   data/coupons.json \
+  data/reviews.json \
   database \
   .htaccess \
   docs/deployment-guide-zh.md \

@@ -6,7 +6,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "reviews:sync": "node scripts/sync-reviews.mjs",
+    "build:with-reviews": "npm run reviews:sync && astro build"
   },
   "dependencies": {
     "astro": "^7.0.4"

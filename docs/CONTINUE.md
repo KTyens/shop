@@ -19,6 +19,52 @@
 
 ---
 
+## 0.1 真实买家评价系统（分支 `feat/verified-reviews`，2026-10-22，未推送 / 未部署）
+
+**目标：** 只有真实下单用户能评价；默认待审核；产品页静态 HTML 中仅在有已通过评价时输出 `aggregateRating` / `review` JSON-LD（绝不伪造，不导入亚马逊评价，无种子数据）。
+
+### 新增 / 修改文件
+- 后端：`api/reviews-lib.php`（HMAC 令牌、订单商品→产品映射、清洗、限流）、`api/review-submit.php`（GET 校验链接 / POST 提交）、`api/reviews.php`（公开已通过评价 + 平均分 + 数量）、`admin/reviews.php`（审核：通过/拒绝/删除 + 为订单生成评价链接）
+- `api/stripe-webhook.php`：`order_items` 写入 `variant_id` / `product_id`（列存在时才写，未迁移也不报错）
+- `api/notifications.php`：新增 `crtlu_send_shipped_email()`（发货邮件含物流号 + 评价链接）
+- `admin/orders.php`：订单状态**首次**改为 `shipped` 时自动发送上面的发货邮件（每单只发一次）
+- 前台：`src/lib/reviews.ts`、`src/components/ProductReviews.astro`、`src/pages/review.astro`（`/review/?t=…`）、`src/lib/seo.ts`（`reviewJsonLdFields`）、`src/pages/products/[slug].astro`、`src/layouts/Layout.astro`（JSON-LD 转义 `<`，防 `</script>` 注入）
+- 数据：`data/reviews.json`（已通过评价快照，初始为空）、`scripts/sync-reviews.mjs`、`package.json`（`reviews:sync`、`build:with-reviews`）
+- SQL：`database/phase6-reviews-migration.sql`
+
+### Serv00 需要做的（按顺序）
+1. MySQL 执行 `database/phase6-reviews-migration.sql`（给 `order_items` 加 `variant_id`、`product_id`；建 `product_reviews`、`review_rate_limits`）。若提示 Duplicate column 可跳过该句。
+2. `api/config.local.php`（**只在服务器上改，不进 git**）新增：
+   ```php
+   define('CRTLU_REVIEW_SECRET', '<64位hex>'); // php -r 'echo bin2hex(random_bytes(32)), PHP_EOL;'
+   ```
+   ≥32 字符；更换后已发出的评价链接全部失效。未配置时评价接口返回 503，网站其余功能不受影响。
+3. 上传 `api/`、`admin/`、`database/`（`scripts/pack-serv00-backend.sh` 打包，自动排除 `config.local.php`）。保留服务器上已有的 `config.local.php`。
+4. 验证：`https://api.crtlu.me/api/reviews.php` 应返回 `{"products":{}}`；后台顶部出现「评价」。
+
+### 流程
+1. 下单 → webhook 写订单与 `order_items.product_id`（老订单按商品名匹配 catalog 回退）。
+2. 后台订单改为「已发货」→ 自动发「has shipped」邮件，含 `https://shop.crtlu.me/review/?t=<token>`。也可在后台「评价」页输入订单号手动生成链接。
+3. 令牌 = base64url(订单号、order_item ids、产品 ids、过期时间 180 天) + HMAC-SHA256(`CRTLU_REVIEW_SECRET`)。
+4. `/review/` 页面 GET 校验：签名有效 + 未过期 + 订单存在且状态 ∈ paid/processing/shipped/delivered；逐商品显示表单（已评价显示感谢）。
+5. POST：每个订单商品唯一（`uniq_review_order_item`），评分 1–5，标题≤120，正文 10–4000，署名≤60（空=Verified buyer）；去 HTML/控制字符、禁止链接、蜜罐字段；限流：每 IP 每小时 POST 10 次 / GET 60 次，每订单每天 20 次。入库 `status='pending'`。
+6. 后台「评价」页审核通过 → `reviews.php` 公开返回。
+7. 产品页：构建时读 `data/reviews.json` 输出星级/平均分/列表和 JSON-LD；页面加载后客户端再拉 `/api/reviews.php?product=` 实时刷新列表（审核后到下次构建之间也能看到）。零评价显示「No reviews yet」，不输出 aggregateRating。
+
+### 前台发布（CF Pages）
+```bash
+npm run reviews:sync     # 从 https://api.crtlu.me/api/reviews.php 拉已通过评价 → data/reviews.json
+npm run build            # 需 Node ≥ 22.12
+git add data/reviews.json dist && git commit -m "chore: sync approved reviews" && git push origin main
+```
+审核通过新评价后重复以上步骤，JSON-LD 才会更新。`reviews:sync` 失败时保留旧文件并退出非 0。
+
+### 已知 / 待办
+- 未在真实 MySQL 上端到端测过提交流程（本地仅单元测试令牌、清洗、映射、JSON-LD 构建）；上线后用一笔测试单走一遍，测完在后台删除该评价。
+- 订单确认邮件（付款时）未加评价链接——刻意放在发货邮件，用户收到货后再评价。
+
+---
+
 ## 1. 当前状态（相对阻塞）
 
 | 项 | 状态 |

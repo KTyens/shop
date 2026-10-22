@@ -1,0 +1,175 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import '../styles/global.css';
+---
+
+<Layout
+  title="Write a review | CRTLU Digital"
+  description="Verified buyers can review the products from their CRTLU Digital order."
+  canonicalPath="/review/"
+  robots="noindex, nofollow"
+>
+  <Navigation />
+  <main id="main-content" class="review-page">
+    <section class="section review-wrap">
+      <div class="eyebrow">Verified buyer review</div>
+      <h1>Tell us about your order</h1>
+      <p class="review-lead">Honest feedback helps other buyers choose the right device. Reviews are linked to your order and checked by our team before they appear on the product page.</p>
+      <div id="reviewApp" class="review-app" aria-live="polite">
+        <p class="review-muted">Checking your review link…</p>
+      </div>
+    </section>
+  </main>
+
+  <template id="reviewFormTpl">
+    <form class="review-form">
+      <h2 class="review-product"></h2>
+      <p class="review-muted review-item-label"></p>
+      <fieldset class="review-stars-input">
+        <legend>Your rating</legend>
+        <div class="star-row" role="radiogroup" aria-label="Rating">
+          <label><input type="radio" name="rating" value="1" required /><span>★</span><em>1</em></label>
+          <label><input type="radio" name="rating" value="2" /><span>★</span><em>2</em></label>
+          <label><input type="radio" name="rating" value="3" /><span>★</span><em>3</em></label>
+          <label><input type="radio" name="rating" value="4" /><span>★</span><em>4</em></label>
+          <label><input type="radio" name="rating" value="5" /><span>★</span><em>5</em></label>
+        </div>
+      </fieldset>
+      <label class="review-field">Title <span class="review-muted">(optional)</span>
+        <input name="title" maxlength="120" autocomplete="off" />
+      </label>
+      <label class="review-field">Your review
+        <textarea name="body" rows="6" minlength="10" maxlength="4000" required placeholder="What did you use it for? How was setup, picture quality, and performance?"></textarea>
+      </label>
+      <label class="review-field">Display name <span class="review-muted">(optional — shown as “Verified buyer” if empty)</span>
+        <input name="display_name" maxlength="60" autocomplete="nickname" />
+      </label>
+      <label class="review-hp" aria-hidden="true">Website <input name="website" tabindex="-1" autocomplete="off" /></label>
+      <div class="review-actions">
+        <button class="primary-button" type="submit">Submit review</button>
+        <span class="review-status review-muted"></span>
+      </div>
+    </form>
+  </template>
+
+  <style is:global>
+    .review-page .review-wrap { width: min(760px, calc(100% - 32px)); margin: 0 auto; padding: 48px 0 72px; }
+    .review-page h1 { margin: 6px 0 12px; font-size: clamp(30px, 5vw, 44px); line-height: 1.05; }
+    .review-page .review-lead { color: var(--muted); line-height: 1.7; margin: 0 0 24px; }
+    .review-page .review-muted { color: var(--muted); font-size: 14px; }
+    .review-page .review-app { display: grid; gap: 16px; }
+    .review-page .review-form, .review-page .review-done { border: 1px solid var(--line); padding: 22px; background: var(--panel); display: grid; gap: 14px; }
+    .review-page .review-product { margin: 0; font-size: 22px; }
+    .review-page .review-item-label { margin: -8px 0 0; }
+    .review-page fieldset { border: 0; padding: 0; margin: 0; }
+    .review-page legend { font-weight: 600; margin-bottom: 6px; }
+    .review-page .star-row { display: flex; gap: 6px; flex-direction: row-reverse; justify-content: flex-end; }
+    .review-page .star-row label { cursor: pointer; font-size: 30px; line-height: 1; color: var(--line); }
+    .review-page .star-row input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+    .review-page .star-row em { position: absolute; left: -9999px; }
+    .review-page .star-row label:hover, .review-page .star-row label:hover ~ label,
+    .review-page .star-row label:has(input:checked), .review-page .star-row label:has(input:checked) ~ label { color: var(--text); }
+    .review-page .star-row input:focus-visible + span { outline: 2px solid var(--text); outline-offset: 2px; }
+    .review-page .review-field { display: grid; gap: 6px; font-weight: 600; font-size: 14px; }
+    .review-page .review-field input, .review-page .review-field textarea { font: inherit; font-weight: 400; padding: 10px 12px; border: 1px solid var(--line-strong); background: var(--bg); color: var(--text); border-radius: var(--radius); }
+    .review-page .review-hp { position: absolute; left: -9999px; }
+    .review-page .review-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .review-page .review-error { color: var(--danger); }
+  </style>
+
+  <script>
+    (() => {
+      const app = document.getElementById('reviewApp')!;
+      const tpl = document.getElementById('reviewFormTpl') as HTMLTemplateElement;
+      const token = new URLSearchParams(location.search).get('t') || '';
+      const apiUrl = (p: string) => ((window as any).crtluApiUrl ? (window as any).crtluApiUrl(p) : `/api/${p}`);
+      const esc = (s: string) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string));
+      const message = (html: string, error = false) => {
+        app.innerHTML = `<div class="review-done"><p class="${error ? 'review-error' : ''}" style="margin:0;line-height:1.7;">${html}</p><a class="secondary-button" href="/products/" style="justify-self:start;">Browse products</a></div>`;
+      };
+
+      if (!token) {
+        message('This page needs the private review link from your shipping email. Can’t find it? <a href="/contact/">Contact support</a> with your order number.', true);
+        return;
+      }
+
+      const done = (item: any) => {
+        const el = document.createElement('div');
+        el.className = 'review-done';
+        el.innerHTML = `<h2 class="review-product" style="margin:0;">${esc(item.product_name)}</h2><p class="review-muted" style="margin:0;">Thanks — your review was received and will appear after a quick check.</p>`;
+        return el;
+      };
+
+      fetch(apiUrl(`review-submit.php?t=${encodeURIComponent(token)}`), { credentials: 'omit' })
+        .then(async (r) => ({ ok: r.ok, data: await r.json().catch(() => ({})) }))
+        .then(({ ok, data }) => {
+          if (!ok || !data.ok) {
+            message(esc(data.error || 'This review link could not be verified.'), true);
+            return;
+          }
+          const items = data.items || [];
+          if (!items.length) {
+            message('There are no reviewable products in this order.');
+            return;
+          }
+          app.innerHTML = `<p class="review-muted" style="margin:0;">Order #${Number(data.order_id)}</p>`;
+          for (const item of items) {
+            if (item.reviewed) {
+              const el = done(item);
+              el.querySelector('.review-muted')!.textContent = 'You already reviewed this item. Thank you!';
+              app.appendChild(el);
+              continue;
+            }
+            const frag = tpl.content.cloneNode(true) as DocumentFragment;
+            const form = frag.querySelector('form')!;
+            form.querySelector('.review-product')!.textContent = item.product_name;
+            form.querySelector('.review-item-label')!.textContent = item.item_label !== item.product_name ? item.item_label : '';
+            form.querySelectorAll<HTMLInputElement>('input[name="rating"]').forEach((input) => {
+              input.name = `rating-${item.order_item_id}`;
+            });
+            form.addEventListener('submit', async (event) => {
+              event.preventDefault();
+              const fd = new FormData(form);
+              const status = form.querySelector('.review-status')!;
+              const button = form.querySelector('button')!;
+              const rating = Number(fd.get(`rating-${item.order_item_id}`) || 0);
+              if (!rating) {
+                status.textContent = 'Please choose a star rating.';
+                status.classList.add('review-error');
+                return;
+              }
+              button.disabled = true;
+              status.classList.remove('review-error');
+              status.textContent = 'Sending…';
+              try {
+                const res = await fetch(apiUrl('review-submit.php'), {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  credentials: 'omit',
+                  body: JSON.stringify({
+                    t: token,
+                    order_item_id: item.order_item_id,
+                    rating,
+                    title: String(fd.get('title') || ''),
+                    body: String(fd.get('body') || ''),
+                    display_name: String(fd.get('display_name') || ''),
+                    website: String(fd.get('website') || ''),
+                  }),
+                });
+                const payload = await res.json().catch(() => ({}));
+                if (!res.ok || !payload.ok) throw new Error(payload.error || 'Could not submit your review.');
+                form.replaceWith(done(item));
+              } catch (err: any) {
+                button.disabled = false;
+                status.classList.add('review-error');
+                status.textContent = err?.message || 'Could not submit your review.';
+              }
+            });
+            app.appendChild(frag);
+          }
+        })
+        .catch(() => message('Reviews are temporarily unavailable. Please try again later.', true));
+    })();
+  </script>
+</Layout>

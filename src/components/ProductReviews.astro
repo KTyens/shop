@@ -1,0 +1,90 @@
+---
+import type { ProductReviewSummary } from '../lib/reviews';
+
+interface Props {
+  productId: string;
+  productName: string;
+  summary: ProductReviewSummary;
+}
+
+const { productId, productName, summary } = Astro.props;
+const stars = (n: number) => '★'.repeat(Math.round(n)) + '☆'.repeat(5 - Math.round(n));
+---
+
+<section class="section product-reviews" id="reviews" aria-labelledby="reviews-title" data-product-id={productId} data-static-count={summary.count}>
+  <div class="section-heading-row">
+    <div>
+      <div class="eyebrow">Verified buyers only</div>
+      <h2 id="reviews-title">Customer reviews</h2>
+    </div>
+    <div class="reviews-summary" data-reviews-summary>
+      {summary.count > 0 ? (
+        <>
+          <span class="reviews-stars" aria-hidden="true">{stars(summary.average || 0)}</span>
+          <strong>{summary.average?.toFixed(1)} / 5</strong>
+          <span class="reviews-muted">{summary.count} {summary.count === 1 ? 'review' : 'reviews'}</span>
+        </>
+      ) : (
+        <span class="reviews-muted">No reviews yet</span>
+      )}
+    </div>
+  </div>
+
+  <div class="reviews-list" data-reviews-list>
+    {summary.reviews.map((r) => (
+      <article class="review-card">
+        <div class="review-head">
+          <span class="reviews-stars" aria-label={`${r.rating} out of 5 stars`}>{stars(r.rating)}</span>
+          {r.title && <strong>{r.title}</strong>}
+        </div>
+        <p class="review-body">{r.body}</p>
+        <div class="reviews-muted review-meta">{r.display_name} · Verified buyer{r.date ? ` · ${r.date}` : ''}</div>
+      </article>
+    ))}
+  </div>
+  <p class="reviews-muted reviews-note">
+    Reviews for {productName} can only be written through the private link in your shipping email, so every review comes from a real order. Reviews are checked before they appear.
+  </p>
+</section>
+
+<style is:global>
+  .product-reviews { padding: 34px 0; border-top: 1px solid var(--line); }
+  .product-reviews .section-heading-row { align-items: end; }
+  .product-reviews .reviews-summary { display: flex; align-items: center; gap: 10px; font-size: 15px; }
+  .product-reviews .reviews-stars { letter-spacing: 2px; color: var(--text); font-size: 16px; }
+  .product-reviews .reviews-muted { color: var(--muted); font-size: 14px; }
+  .product-reviews .reviews-list { display: grid; gap: 12px; margin-top: 18px; }
+  .product-reviews .review-card { border: 1px solid var(--line); padding: 18px; background: var(--panel); }
+  .product-reviews .review-head { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .product-reviews .review-body { margin: 10px 0; line-height: 1.7; white-space: pre-line; }
+  .product-reviews .review-meta { font-size: 13px; }
+  .product-reviews .reviews-note { margin-top: 16px; font-size: 13px; }
+</style>
+
+<script>
+  // Refresh the list from the live API (approvals between deploys). JSON-LD stays build-time.
+  (() => {
+    const root = document.querySelector<HTMLElement>('.product-reviews');
+    if (!root) return;
+    const id = root.dataset.productId || '';
+    const apiUrl = (p: string) => ((window as any).crtluApiUrl ? (window as any).crtluApiUrl(p) : `/api/${p}`);
+    const esc = (s: string) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string));
+    const stars = (n: number) => '★'.repeat(Math.round(n)) + '☆'.repeat(5 - Math.round(n));
+    fetch(apiUrl(`reviews.php?product=${encodeURIComponent(id)}`), { credentials: 'omit' })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (!data || !Array.isArray(data.reviews) || !data.count) return; // keep static content
+        const summary = root.querySelector('[data-reviews-summary]');
+        const list = root.querySelector('[data-reviews-list]');
+        if (summary) {
+          summary.innerHTML = `<span class="reviews-stars" aria-hidden="true">${stars(data.average)}</span><strong>${Number(data.average).toFixed(1)} / 5</strong><span class="reviews-muted">${data.count} ${data.count === 1 ? 'review' : 'reviews'}</span>`;
+        }
+        if (list) {
+          list.innerHTML = data.reviews
+            .map((r: any) => `<article class="review-card"><div class="review-head"><span class="reviews-stars" aria-label="${Number(r.rating)} out of 5 stars">${stars(Number(r.rating))}</span>${r.title ? `<strong>${esc(r.title)}</strong>` : ''}</div><p class="review-body">${esc(r.body)}</p><div class="reviews-muted review-meta">${esc(r.display_name)} · Verified buyer${r.date ? ' · ' + esc(r.date) : ''}</div></article>`)
+            .join('');
+        }
+      })
+      .catch(() => {});
+  })();
+</script>

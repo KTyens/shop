@@ -1,4 +1,5 @@
 import type { SeriesItem } from './catalog-data';
+import type { ProductReviewSummary } from './reviews';
 
 export const SITE_URL = 'https://shop.crtlu.me';
 export const SITE_NAME = 'CRTLU Digital';
@@ -175,7 +176,32 @@ export function productPageDescription(product: SeriesItem): string {
   ).trim();
 }
 
-export function productJsonLd(product: SeriesItem) {
+/**
+ * aggregateRating + review for Product JSON-LD — ONLY from approved verified-buyer reviews.
+ * Returns {} when there are none, so nothing is ever fabricated.
+ */
+export function reviewJsonLdFields(summary?: ProductReviewSummary | null) {
+  if (!summary || !summary.count || summary.average == null || !summary.reviews.length) return {};
+  return {
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: summary.average.toFixed(2).replace(/\.?0+$/, ''),
+      reviewCount: summary.count,
+      bestRating: 5,
+      worstRating: 1,
+    },
+    review: summary.reviews.slice(0, 10).map((r) => ({
+      '@type': 'Review',
+      reviewRating: { '@type': 'Rating', ratingValue: r.rating, bestRating: 5, worstRating: 1 },
+      author: { '@type': 'Person', name: r.display_name || 'Verified buyer' },
+      ...(r.date ? { datePublished: r.date } : {}),
+      ...(r.title ? { name: r.title } : {}),
+      reviewBody: r.body,
+    })),
+  };
+}
+
+export function productJsonLd(product: SeriesItem, reviews?: ProductReviewSummary | null) {
   const productUrl = absoluteUrl(`/products/${product.id}/`);
   const images = [...new Set([product.image, ...(product.gallery || [])].filter(Boolean).map((p) => absoluteUrl(p!)))];
   const firstVariant = product.variants[0];
@@ -242,6 +268,7 @@ export function productJsonLd(product: SeriesItem) {
     mpn: firstVariant?.sku,
     category: catLabel,
     url: productUrl,
+    ...reviewJsonLdFields(reviews),
     ...(low != null && high != null
       ? {
           offers: {

@@ -507,3 +507,65 @@ function crtlu_send_member_email(PDO $pdo, string $to, string $template, string 
         'queued_id' => $qid,
     ];
 }
+
+/**
+ * "Your order has shipped" email with tracking + verified-buyer review link.
+ * Sent once per order (skips when an order_shipped email was already logged).
+ * Called from admin/orders.php when status changes to shipped.
+ */
+function crtlu_send_shipped_email(PDO $pdo, int $orderId): array
+{
+    require_once __DIR__ . '/reviews-lib.php';
+
+    $order = crtlu_review_order($pdo, $orderId);
+    $to = trim((string)($order['customer_email'] ?? ''));
+    if (!$order || $to === '') {
+        return ['ok' => false, 'error' => 'no customer email'];
+    }
+    if (crtlu_table_exists($pdo, 'email_notifications')) {
+        $check = $pdo->prepare("SELECT COUNT(*) FROM email_notifications WHERE order_id = :o AND template = 'order_shipped' AND status = 'sent'");
+        $check->execute([':o' => $orderId]);
+        if ((int)$check->fetchColumn() > 0) {
+            return ['ok' => true, 'skipped' => true];
+        }
+    }
+
+    $itemsStmt = $pdo->prepare('SELECT product_name, quantity FROM order_items WHERE order_id = :o ORDER BY id ASC');
+    $itemsStmt->execute([':o' => $orderId]);
+    $tracking = trim((string)($order['yanwen_tracking'] ?? ''));
+
+    $subject = 'CRTLU Digital order #' . $orderId . ' has shipped';
+    $lines = ['Good news — your order is on its way.', '', 'Order #' . $orderId];
+    if ($tracking !== '') {
+        $lines[] = 'Yanwen tracking number: ' . $tracking;
+        $lines[] = 'Track it any time: ' . crtlu_base_url() . '/account/';
+    }
+    $lines[] = '';
+    $lines[] = 'Items:';
+    foreach ($itemsStmt->fetchAll() as $item) {
+        array_push($lines, ...crtlu_notification_item_lines($item));
+    }
+    $token = crtlu_review_token_for_order($pdo, $orderId);
+    if ($token !== null) {
+        $lines[] = '';
+        $lines[] = 'Once you have tried your device, we would love an honest review.';
+        $lines[] = 'Only verified buyers can review — this private link is tied to your order:';
+        $lines[] = crtlu_review_link($token);
+    }
+    $lines[] = '';
+    $lines[] = 'Questions? Just reply to this email or contact support@crtlu.me.';
+    $body = implode("\n", $lines);
+
+    $send = crtlu_send_mail($to, $subject, $body);
+    crtlu_queue_email(
+        $pdo,
+        $orderId,
+        $to,
+        'order_shipped',
+        $subject,
+        $body,
+        $send['ok'] ? 'sent' : 'failed',
+        $send['ok'] ? null : (($send['via'] ?? '') . ': ' . ($send['error'] ?? 'send failed'))
+    );
+    return $send;
+}
