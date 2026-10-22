@@ -13,7 +13,7 @@ define('CRTLU_DB_USER', 'your_db_user');
 define('CRTLU_DB_PASS', 'your_db_password');
 
 define('CRTLU_ADMIN_USER', 'admin');
-define('CRTLU_ADMIN_PASS', 'Ydkj.9298');
+define('CRTLU_ADMIN_PASS', 'change-me-strong-password');
 
 // Optional phase-4 customer communication defaults.
 define('CRTLU_MAIL_FROM', 'support@crtlu.me');       // must be a domain you control
