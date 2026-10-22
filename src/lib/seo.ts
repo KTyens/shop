@@ -80,7 +80,7 @@ export const SAFE_COMMERCE_KEYWORDS = [
   'official app ready',
   'official apps only',
   'Stripe checkout',
-  'Yanwen shipping',
+  'tracked international shipping',
   'global shipping TV box',
   'Android 14 TV Box',
   'Android 11 TV Box',
@@ -168,8 +168,8 @@ export function productPageDescription(product: SeriesItem): string {
   const from = prices.length ? `From $${(Math.min(...prices) / 100).toFixed(2)}. ` : '';
   const cat = categorySeoLabel(product.category);
   const fulfillment = product.requires_plug === false
-    ? 'USB Type-C charging, secure Stripe checkout, and Yanwen tracked shipping.'
-    : 'UK/EU/US plug options, secure Stripe checkout, Yanwen tracked shipping, and official apps only — no preloaded paid content.';
+    ? 'USB Type-C charging, secure Stripe checkout, and Tracked international shipping.'
+    : 'UK/EU/US plug options, secure Stripe checkout, Tracked international shipping, and official apps only — no preloaded paid content.';
   return `${product.description} ${from}Shop ${product.name} (${cat}) with ${fulfillment}`.replace(
     /\s+/g,
     ' '
@@ -321,7 +321,7 @@ export function websiteJsonLd() {
     name: SITE_NAME,
     url: SITE_URL,
     description:
-      'Android TV boxes, projectors, thermal label and tattoo printers, wireless HDMI kits, and mini keyboards with Stripe checkout and Yanwen shipping.',
+      'Android TV boxes, projectors, thermal label and tattoo printers, wireless HDMI kits, and mini keyboards with Stripe checkout and tracked international shipping.',
     inLanguage: ['en', 'zh-CN', 'ja', 'zh-TW', 'ar'],
     potentialAction: {
       '@type': 'SearchAction',
@@ -368,7 +368,7 @@ export const STORE_FAQS: Array<{ q: string; a: string }> = [
   },
   {
     q: 'Which countries do you ship to, and what does shipping cost?',
-    a: 'Yanwen tracked shipping is available to major destinations including the US, Canada, UK, EU countries, Australia, and Japan. Shipping is a flat USD 12 per order with an estimated 7–18 business days in transit after processing.',
+    a: 'Tracked international express shipping is available to major destinations including the US, Canada, UK, EU countries, Australia, and Japan. Shipping is a flat USD 12 per order with an estimated 7–18 business days in transit after processing. Final-mile delivery is handled by major international and local carriers such as DHL, UPS, FedEx, or the national postal service, depending on destination.',
   },
   {
     q: 'How do I choose a power plug?',

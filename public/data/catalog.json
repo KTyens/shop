@@ -2021,7 +2021,7 @@
         "USB": "USB 2.0 / USB 3.0 ports",
         "Other Ports": "AV, power, microSD (by package)",
         "Remote": "Bluetooth / IR remote (voice remote by package)",
-        "shipping_baseline": "Yanwen tracked shipping USD 12 per order"
+        "shipping_baseline": "Tracked international shipping USD 12 per order"
       },
       "image": "assets/products/mecool-km2-plus/main.jpg",
       "gallery": [
@@ -2075,7 +2075,7 @@
         "USB": "USB 2.0 ports",
         "Other Ports": "AV, power, microSD (by package)",
         "Remote": "IR / Bluetooth remote (by package)",
-        "shipping_baseline": "Yanwen tracked shipping USD 12 per order"
+        "shipping_baseline": "Tracked international shipping USD 12 per order"
       },
       "image": "assets/products/mecool-km7-plus/main.jpg",
       "gallery": [
@@ -2137,7 +2137,7 @@
         "Interface": "HDMI TX / HDMI RX",
         "Power": "USB / included adapter (by package)",
         "Use Cases": "TV, projector, meeting room, living room cable-free HDMI",
-        "shipping_baseline": "Japan Yanwen baseline RMB 40 in landed cost; customer shipping per store policy",
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 in landed cost; customer shipping per store policy",
         "Package": "Transmitter + receiver set (cables/adapters per package photo)"
       }
     },
@@ -2189,7 +2189,7 @@
         "Interface": "HDMI TX / HDMI RX",
         "Power": "USB / included adapter (by package)",
         "Use Cases": "TV, projector, meeting room, living room cable-free HDMI",
-        "shipping_baseline": "Japan Yanwen baseline RMB 40 in landed cost; customer shipping per store policy",
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 in landed cost; customer shipping per store policy",
         "Package": "Transmitter + receiver set (cables/adapters per package photo)"
       }
     },
@@ -2240,7 +2240,7 @@
         "Compatibility": "Android TV box, smart TV, HTPC, Windows / Linux / Mac PC, selected consoles with USB HID support",
         "Range": "Up to about 10m (environment dependent)",
         "Package": "Keyboard + USB receiver + manual + cable (by package photo)",
-        "shipping_baseline": "Japan Yanwen light-parcel baseline RMB 31 in landed cost; customer shipping per store policy"
+        "shipping_baseline": "Japan tracked-express light-parcel baseline RMB 31 in landed cost; customer shipping per store policy"
       }
     },
     {
@@ -2295,7 +2295,7 @@
         "Compatibility": "Windows, Android, Mac, Linux; TV box, smart TV, HTPC, projector, selected game consoles with USB HID",
         "Range": "Up to about 10m (environment dependent)",
         "Package": "Keyboard + USB receiver + charging cable + manual (by package photo)",
-        "shipping_baseline": "Japan Yanwen baseline RMB 40 in landed cost; customer shipping per store policy",
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 in landed cost; customer shipping per store policy",
         "Supplier": "Shenzhen Wuxiandian Technology (深圳市无限电科技有限公司)"
       }
     },
@@ -2337,7 +2337,7 @@
         "configurations": "1GB RAM + 8GB ROM / 2GB RAM + 16GB ROM",
         "starting_price": "$25.99",
         "brand": "X96",
-        "shipping_baseline": "Japan Yanwen baseline in landed cost (see variant shipping_rmb); customer shipping per store policy"
+        "shipping_baseline": "Japan tracked-express baseline in landed cost (see variant shipping_rmb); customer shipping per store policy"
       },
       "variants": [
         {
@@ -2417,7 +2417,7 @@
         "configurations": "2GB RAM + 16GB ROM",
         "starting_price": "$30.99",
         "brand": "X96",
-        "shipping_baseline": "Japan Yanwen baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
       }
     },
     {
@@ -2456,7 +2456,7 @@
         "configurations": "2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM",
         "starting_price": "$35.99",
         "brand": "X96",
-        "shipping_baseline": "Japan Yanwen baseline in landed cost (see variant shipping_rmb); customer shipping per store policy"
+        "shipping_baseline": "Japan tracked-express baseline in landed cost (see variant shipping_rmb); customer shipping per store policy"
       },
       "variants": [
         {
@@ -2529,7 +2529,7 @@
         "configurations": "4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM",
         "starting_price": "$53.99",
         "brand": "X96",
-        "shipping_baseline": "Japan Yanwen baseline in landed cost (see variant shipping_rmb); customer shipping per store policy"
+        "shipping_baseline": "Japan tracked-express baseline in landed cost (see variant shipping_rmb); customer shipping per store policy"
       },
       "variants": [
         {
@@ -2622,7 +2622,7 @@
         "configurations": "4GB RAM + 32GB ROM · 100M LAN / 4GB RAM + 64GB ROM · 100M LAN",
         "starting_price": "$61.99",
         "brand": "X96",
-        "shipping_baseline": "Japan Yanwen baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
       }
     },
     {
@@ -2694,7 +2694,7 @@
         "configurations": "4GB RAM + 32GB ROM · 1000M LAN / 4GB RAM + 64GB ROM · 1000M LAN",
         "starting_price": "$62.99",
         "brand": "X96",
-        "shipping_baseline": "Japan Yanwen baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
       }
     },
     {
@@ -2763,7 +2763,7 @@
         "configurations": "1GB RAM + 8GB ROM / 2GB RAM + 16GB ROM",
         "starting_price": "$21.99",
         "brand": "X96",
-        "shipping_baseline": "Japan Yanwen baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
       }
     },
     {
@@ -2798,7 +2798,7 @@
         "configurations": "4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM",
         "starting_price": "$37.99",
         "brand": "X96",
-        "shipping_baseline": "Japan Yanwen baseline in landed cost (see variant shipping_rmb); customer shipping per store policy"
+        "shipping_baseline": "Japan tracked-express baseline in landed cost (see variant shipping_rmb); customer shipping per store policy"
       },
       "variants": [
         {
@@ -2888,7 +2888,7 @@
         "configurations": "1GB RAM + 8GB ROM / 2GB RAM + 16GB ROM",
         "starting_price": "$27.99",
         "brand": "X96",
-        "shipping_baseline": "Japan Yanwen baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
       }
     },
     {

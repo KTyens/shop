@@ -19,7 +19,7 @@ export function GET() {
     '## Commerce',
     `- Currency: USD`,
     `- Checkout: Stripe (card data not stored on this storefront)`,
-    '- Shipping: Yanwen tracked, flat USD 12 / order (typical transit 7–18 business days after processing)',
+    '- Shipping: tracked international express via our fulfillment partner, flat USD 12 / order (typical transit 7–18 business days after processing)',
     '- Plug options: UK / EU / US when a wall adapter is included',
     `- Support: ${SUPPORT_EMAIL}`,
     `- Short summary: ${SITE_URL}/llms.txt`,

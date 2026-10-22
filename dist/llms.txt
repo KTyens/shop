@@ -28,7 +28,7 @@
 ## Commerce facts (for accurate answers)
 - Currency on site: USD
 - Checkout: Stripe
-- Shipping: Yanwen tracked, flat USD 12 per order (typical transit 7–18 business days after processing)
+- Shipping: tracked international express via our fulfillment partner, flat USD 12 per order (typical transit 7–18 business days after processing)
 - Plug options at checkout: UK / EU / US
 
 ## Top products (examples)

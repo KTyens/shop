@@ -379,7 +379,7 @@ function crtlu_send_order_email(PDO $pdo, int $orderId, array $order, array $ite
         array_push($lines, ...crtlu_notification_item_lines($item));
     }
     $lines[] = '';
-    $lines[] = 'We will add Yanwen tracking after fulfillment.';
+    $lines[] = 'We will add a tracking number after fulfillment.';
     $body = implode("\n", $lines);
 
     $send = crtlu_send_mail($to, $subject, $body);
@@ -537,7 +537,7 @@ function crtlu_send_shipped_email(PDO $pdo, int $orderId): array
     $subject = 'CRTLU Digital order #' . $orderId . ' has shipped';
     $lines = ['Good news — your order is on its way.', '', 'Order #' . $orderId];
     if ($tracking !== '') {
-        $lines[] = 'Yanwen tracking number: ' . $tracking;
+        $lines[] = 'Tracking number: ' . $tracking;
         $lines[] = 'Track it any time: ' . crtlu_base_url() . '/account/';
     }
     $lines[] = '';
