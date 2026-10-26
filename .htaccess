@@ -1,12 +1,23 @@
+# api.crtlu.me is a backend, not a public website.
 Options -Indexes
 
-RewriteEngine On
+# Site root returns a real 404 (the Serv00 placeholder index.html was removed).
+# NOTE: "Header set X-Robots-Tag" was tested on this host and is not emitted, so it is not used.
+<IfModule mod_alias.c>
+  RedirectMatch 404 ^/$
+</IfModule>
 
-RewriteCond %{HTTPS} !=on
-RewriteCond %{HTTP:X-Forwarded-Proto} !https
-RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# --- Hardening (2026-10-26) ---
+# Non-endpoint directories: PHP reads them from disk; block over HTTP (404).
+# /assets/ (admin-uploaded product images) and /api/, /admin/ stay reachable.
+<IfModule mod_alias.c>
+  RedirectMatch 404 ^/(data|database|public|scripts|docs|vendor|node_modules|dist|src|tests?|backups?|\.git)(/|$)
+</IfModule>
 
-<FilesMatch "^(README\.md|.*\.sql|.*\.example\.php|\.DS_Store)$">
+# Never serve archives, dumps, backups, logs, env/secret-ish files from any directory.
+<FilesMatch "(?i)(\.(zip|tar|tgz|gz|bz2|7z|rar|bak|old|orig|swp|sql|log|sh|md|env|ini)|~)$">
   Require all denied
 </FilesMatch>
-
+<FilesMatch "^\.(env|git|svn|DS_Store)">
+  Require all denied
+</FilesMatch>

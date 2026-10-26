@@ -1,0 +1,2 @@
+# Backend internals: PHP reads these from the filesystem; never serve them over HTTP.
+Require all denied
