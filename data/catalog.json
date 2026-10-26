@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-20",
+  "updated": "2026-10-26",
   "currency": "usd",
   "plug_types": [
     {
@@ -33,25 +33,25 @@
           "id": "h96max-h618-plus-2-16",
           "sku": "CRT-H96-H618P-2G16G",
           "label": "2GB RAM + 16GB ROM",
-          "rmb_price": 170,
-          "price_cents": 4499,
-          "compare_at_cents": 4699
+          "rmb_price": 145,
+          "price_cents": 3999,
+          "compare_at_cents": 4499
         },
         {
           "id": "h96max-h618-plus-4-32",
           "sku": "CRT-H96-H618P-4G32G",
           "label": "4GB RAM + 32GB ROM",
-          "rmb_price": 230,
-          "price_cents": 5799,
-          "compare_at_cents": 6299
+          "rmb_price": 185,
+          "price_cents": 4799,
+          "compare_at_cents": 5199
         },
         {
           "id": "h96max-h618-plus-4-64",
           "sku": "CRT-H96-H618P-4G64G",
           "label": "4GB RAM + 64GB ROM",
-          "rmb_price": 300,
-          "price_cents": 7199,
-          "compare_at_cents": 7599
+          "rmb_price": 260,
+          "price_cents": 6499,
+          "compare_at_cents": 6899
         }
       ],
       "image": "assets/products/h96-h618-plus/main.jpg",
@@ -72,7 +72,7 @@
       ],
       "specs": {
         "configurations": "2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM",
-        "starting_price": "$44.99",
+        "starting_price": "$39.99",
         "brand": "H96",
         "Model": "H96Max H618 Plus",
         "Chipset": "Allwinner H618 Quad-core ARM Cortex-A53",
@@ -104,17 +104,17 @@
           "id": "h96max-m1-plus-2-16",
           "sku": "CRT-H96-M1P-2G16G",
           "label": "2GB RAM + 16GB ROM",
-          "rmb_price": 165,
-          "price_cents": 4299,
+          "rmb_price": 140,
+          "price_cents": 3999,
           "compare_at_cents": 4499
         },
         {
           "id": "h96max-m1-plus-4-32",
           "sku": "CRT-H96-M1P-4G32G",
           "label": "4GB RAM + 32GB ROM",
-          "rmb_price": 220,
-          "price_cents": 5399,
-          "compare_at_cents": 5799
+          "rmb_price": 175,
+          "price_cents": 4699,
+          "compare_at_cents": 4999
         },
         {
           "id": "h96max-m1-plus-4-128",
@@ -144,7 +144,7 @@
       ],
       "specs": {
         "configurations": "2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM / 4GB RAM + 128GB ROM",
-        "starting_price": "$42.99",
+        "starting_price": "$39.99",
         "brand": "H96",
         "Model": "H96Max M1 Plus",
         "Chipset": "Rockchip RK3528 Quad-core ARM Cortex-A53",
@@ -306,17 +306,17 @@
           "id": "h96-max-v58-4-32",
           "sku": "CRT-H96-V58-4G32G",
           "label": "4GB RAM + 32GB ROM",
-          "rmb_price": 1000,
-          "price_cents": 21499,
-          "compare_at_cents": 21899
+          "rmb_price": 950,
+          "price_cents": 20999,
+          "compare_at_cents": 21399
         },
         {
           "id": "h96-max-v58-8-64",
           "sku": "CRT-H96-V58-8G64G",
           "label": "8GB RAM + 64GB ROM",
-          "rmb_price": 1260,
-          "price_cents": 27199,
-          "compare_at_cents": 30299
+          "rmb_price": 1175,
+          "price_cents": 25499,
+          "compare_at_cents": 25899
         }
       ],
       "image": "assets/products/h96-max-v58/main.jpg",
@@ -336,7 +336,7 @@
       "detail_url": "/products/h96-max-v58/",
       "specs": {
         "configurations": "4GB RAM + 32GB ROM / 8GB RAM + 64GB ROM",
-        "starting_price": "$214.99",
+        "starting_price": "$209.99",
         "brand": "H96",
         "Product": "Android TV BOX",
         "Model": "H96 Max V58",
@@ -645,17 +645,17 @@
           "id": "t95z-plus-4-32",
           "sku": "CRT-T95ZP-4G32G",
           "label": "4GB RAM + 32GB ROM",
-          "rmb_price": 210,
-          "price_cents": 5299,
-          "compare_at_cents": 5699
+          "rmb_price": 185,
+          "price_cents": 4799,
+          "compare_at_cents": 5199
         },
         {
           "id": "t95z-plus-4-64",
           "sku": "CRT-T95ZP-4G64G",
           "label": "4GB RAM + 64GB ROM",
-          "rmb_price": 265,
-          "price_cents": 6199,
-          "compare_at_cents": 6599
+          "rmb_price": 205,
+          "price_cents": 5499,
+          "compare_at_cents": 5899
         }
       ],
       "image": "assets/products/t95z-plus/main.jpg",
@@ -775,25 +775,25 @@
           "id": "tanix-w2-2-16",
           "sku": "CRT-TANIX-W2-2G16G",
           "label": "2GB RAM + 16GB ROM",
-          "rmb_price": 110,
-          "price_cents": 3399,
-          "compare_at_cents": 3899
+          "rmb_price": 143,
+          "price_cents": 3999,
+          "compare_at_cents": 4499
         },
         {
           "id": "tanix-w2-4-32",
           "sku": "CRT-TANIX-W2-4G32G",
           "label": "4GB RAM + 32GB ROM",
-          "rmb_price": 125,
-          "price_cents": 3899,
-          "compare_at_cents": 4399
+          "rmb_price": 183,
+          "price_cents": 4799,
+          "compare_at_cents": 5199
         },
         {
           "id": "tanix-w2-4-64",
           "sku": "CRT-TANIX-W2-4G64G",
           "label": "4GB RAM + 64GB ROM",
-          "rmb_price": 140,
-          "price_cents": 3899,
-          "compare_at_cents": 4399
+          "rmb_price": 208,
+          "price_cents": 5499,
+          "compare_at_cents": 5899
         }
       ],
       "image": "assets/products/tanix-w2/main.jpg",
@@ -811,7 +811,7 @@
       "detail_url": "/products/tanix-w2/",
       "specs": {
         "configurations": "2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM",
-        "starting_price": "$33.99",
+        "starting_price": "$39.99",
         "brand": "Tanix",
         "Model": "TANIX W2",
         "Chipset": "Amlogic S905W2 Quad-core ARM Cortex-A35",
@@ -970,17 +970,17 @@
           "id": "tx98-pro-plus-4-32",
           "sku": "CRT-TX98P-4G32G",
           "label": "4GB RAM + 32GB ROM",
-          "rmb_price": 155,
-          "price_cents": 3899,
-          "compare_at_cents": 4399
+          "rmb_price": 185,
+          "price_cents": 4799,
+          "compare_at_cents": 5199
         },
         {
           "id": "tx98-pro-plus-4-64",
           "sku": "CRT-TX98P-4G64G",
           "label": "4GB RAM + 64GB ROM",
-          "rmb_price": 165,
-          "price_cents": 4399,
-          "compare_at_cents": 4899
+          "rmb_price": 225,
+          "price_cents": 5999,
+          "compare_at_cents": 6399
         }
       ],
       "image": "assets/products/tx98-pro-plus/main.jpg",
@@ -1049,9 +1049,9 @@
           "id": "hk1-rbox-k8s-4-64",
           "sku": "CRT-HK1-K8S-4G64G",
           "label": "4GB RAM + 64GB ROM",
-          "rmb_price": 230,
-          "price_cents": 5299,
-          "compare_at_cents": 5699
+          "rmb_price": 205,
+          "price_cents": 5499,
+          "compare_at_cents": 5899
         }
       ],
       "image": "assets/products/hk1-rbox-k8s/main.jpg",
@@ -1128,7 +1128,7 @@
           "id": "hk1-rbox-x4s-4-128",
           "sku": "CRT-HK1-X4S-4G128G",
           "label": "4GB RAM + 128GB ROM",
-          "rmb_price": 350,
+          "rmb_price": 330,
           "price_cents": 7999,
           "compare_at_cents": 8399
         }
@@ -1267,17 +1267,17 @@
           "id": "hk1-k8-4-64",
           "sku": "CRT-HK1-K8-4G64G",
           "label": "4GB RAM + 64GB ROM",
-          "rmb_price": 240,
-          "price_cents": 6199,
-          "compare_at_cents": 6899
+          "rmb_price": 215,
+          "price_cents": 5499,
+          "compare_at_cents": 5899
         },
         {
           "id": "hk1-k8-4-128",
           "sku": "CRT-HK1-K8-4G128G",
           "label": "4GB RAM + 128GB ROM",
-          "rmb_price": 280,
-          "price_cents": 6599,
-          "compare_at_cents": 7099
+          "rmb_price": 255,
+          "price_cents": 6499,
+          "compare_at_cents": 6899
         }
       ],
       "image": "assets/products/hk1-k8/main.jpg",
@@ -1618,17 +1618,17 @@
           "id": "hk1-rbox-h8-4-64",
           "sku": "CRT-HK1-H8-4G64G",
           "label": "4GB RAM + 64GB ROM",
-          "rmb_price": 240,
-          "price_cents": 6199,
-          "compare_at_cents": 6899
+          "rmb_price": 215,
+          "price_cents": 5499,
+          "compare_at_cents": 5899
         },
         {
           "id": "hk1-rbox-h8-4-128",
           "sku": "CRT-HK1-H8-4G128G",
           "label": "4GB RAM + 128GB ROM",
-          "rmb_price": 280,
-          "price_cents": 6599,
-          "compare_at_cents": 7099
+          "rmb_price": 255,
+          "price_cents": 6499,
+          "compare_at_cents": 6899
         }
       ],
       "image": "assets/products/hk1-rbox-h8/main.jpg",
@@ -1695,9 +1695,9 @@
           "id": "hk1-rbox-h8s-4-64",
           "sku": "CRT-HK1-H8S-4G64G",
           "label": "4GB RAM + 64GB ROM",
-          "rmb_price": 230,
-          "price_cents": 5299,
-          "compare_at_cents": 5699
+          "rmb_price": 205,
+          "price_cents": 5499,
+          "compare_at_cents": 5899
         }
       ],
       "image": "assets/products/hk1-rbox-h8s/main.jpg",
@@ -2472,10 +2472,10 @@
           "id": "x98-plus-4-32",
           "sku": "CRT-X98P-4G32G",
           "label": "4GB RAM + 32GB ROM",
-          "rmb_price": 180,
+          "rmb_price": 200,
           "shipping_rmb": 40,
-          "price_cents": 4299,
-          "compare_at_cents": 4699
+          "price_cents": 5199,
+          "compare_at_cents": 5499
         },
         {
           "id": "x98-plus-4-64",
@@ -2727,10 +2727,10 @@
           "id": "x98q-1-8",
           "sku": "CRT-X98Q-1G8G",
           "label": "1GB RAM + 8GB ROM",
-          "rmb_price": 68,
+          "rmb_price": 140,
           "shipping_rmb": 40,
-          "price_cents": 2199,
-          "compare_at_cents": 2699
+          "price_cents": 3999,
+          "compare_at_cents": 4499
         },
         {
           "id": "x98q-2-16",
@@ -2761,7 +2761,7 @@
         "Body": "Plastic, black",
         "Accessories": "User manual, remote, HDMI cable, power adapter, gift box (per packaging list)",
         "configurations": "1GB RAM + 8GB ROM / 2GB RAM + 16GB ROM",
-        "starting_price": "$21.99",
+        "starting_price": "$37.99",
         "brand": "X96",
         "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
       }
@@ -2774,7 +2774,7 @@
       "tier": "main",
       "status": "published",
       "detail_url": "/products/x98k/",
-      "description": "X98K Android TV box with modern Android-class UI, strong media decode marketing features, and practical mid-range memory options.",
+      "description": "X98K Android TV box in two memory configurations: 2GB RAM + 16GB ROM and 4GB RAM + 32GB ROM.",
       "image": "assets/products/x98k/main.jpg",
       "gallery": [
         "assets/products/x98k/main.jpg",
@@ -2790,34 +2790,31 @@
       "specs": {
         "Model": "X98K",
         "Product Type": "Android TV Box",
-        "Memory": "4GB RAM",
-        "Storage": "32GB / 64GB ROM",
-        "OS": "Android 13 class (by batch marketing)",
-        "Video Output": "8K decode / 4K output class (by batch marketing)",
-        "Wi-Fi": "Dual-band Wi-Fi + Bluetooth class (by batch)",
-        "configurations": "4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM",
-        "starting_price": "$37.99",
+        "Memory": "2GB / 4GB RAM",
+        "Storage": "16GB / 32GB ROM",
+        "configurations": "2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM",
+        "starting_price": "$39.99",
         "brand": "X96",
-        "shipping_baseline": "Japan tracked-express baseline in landed cost (see variant shipping_rmb); customer shipping per store policy"
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
       },
       "variants": [
+        {
+          "id": "x98k-2-16",
+          "sku": "CRT-X98K-2G16G",
+          "label": "2GB RAM + 16GB ROM",
+          "rmb_price": 140,
+          "shipping_rmb": 40,
+          "price_cents": 3999,
+          "compare_at_cents": 4499
+        },
         {
           "id": "x98k-4-32",
           "sku": "CRT-X98K-4G32G",
           "label": "4GB RAM + 32GB ROM",
-          "rmb_price": 140,
-          "shipping_rmb": 40,
-          "price_cents": 3799,
-          "compare_at_cents": 4299
-        },
-        {
-          "id": "x98k-4-64",
-          "sku": "CRT-X98K-4G64G",
-          "label": "4GB RAM + 64GB ROM",
           "rmb_price": 205,
           "shipping_rmb": 40,
-          "price_cents": 4699,
-          "compare_at_cents": 5199
+          "price_cents": 5499,
+          "compare_at_cents": 5899
         }
       ]
     },
@@ -3046,6 +3043,1582 @@
         "starting_price": "$79.99",
         "brand": "YINXIAOQIAN",
         "shipping_baseline": "Estimated Japan battery-parcel freight RMB 110 + packaging RMB 5; customer shipping per store policy"
+      }
+    },
+    {
+      "id": "h96max-s905l-ts",
+      "brand": "H96",
+      "name": "H96Max S905L TS",
+      "category": "tv-box",
+      "tier": "compact",
+      "status": "published",
+      "detail_url": "/products/h96max-s905l-ts/",
+      "description": "H96Max S905L TS Android 14 TV stick with Amlogic S905L, available in 2GB RAM + 16GB ROM.",
+      "variants": [
+        {
+          "id": "h96max-s905l-ts-2-16",
+          "sku": "CRT-H96-S905LTS-2G16G",
+          "label": "2GB RAM + 16GB ROM",
+          "rmb_price": 95,
+          "shipping_rmb": 40,
+          "price_cents": 2999,
+          "compare_at_cents": 3499
+        }
+      ],
+      "image": "assets/products/h96max-s905l-ts/main.jpg",
+      "gallery": [
+        "assets/products/h96max-s905l-ts/main.jpg",
+        "assets/products/h96max-s905l-ts/detail-1.jpg",
+        "assets/products/h96max-s905l-ts/detail-2.jpg",
+        "assets/products/h96max-s905l-ts/detail-3.jpg",
+        "assets/products/h96max-s905l-ts/detail-4.jpg",
+        "assets/products/h96max-s905l-ts/detail-5.jpg",
+        "assets/products/h96max-s905l-ts/detail-6.jpg",
+        "assets/products/h96max-s905l-ts/detail-7.jpg"
+      ],
+      "specs": {
+        "Model": "H96Max S905L TS",
+        "Product Type": "Android TV Stick",
+        "Chipset": "Amlogic S905L Quad-core ARM Cortex-A53",
+        "GPU": "Penta-core ARM Mali-450",
+        "OS": "Android 14",
+        "Memory": "2GB RAM",
+        "Storage": "16GB ROM",
+        "configurations": "2GB RAM + 16GB ROM",
+        "starting_price": "$29.99",
+        "brand": "H96",
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
+      }
+    },
+    {
+      "id": "h96-max-m20-stick",
+      "brand": "H96",
+      "name": "H96 MAX M20 TV Stick",
+      "category": "tv-box",
+      "tier": "compact",
+      "status": "published",
+      "detail_url": "/products/h96-max-m20-stick/",
+      "description": "H96 MAX M20 TV Stick Android 14 TV stick with Amlogic S905L3, available in 2GB RAM + 16GB ROM.",
+      "variants": [
+        {
+          "id": "h96-max-m20-stick-2-16",
+          "sku": "CRT-H96-M20-2G16G",
+          "label": "2GB RAM + 16GB ROM",
+          "rmb_price": 93,
+          "shipping_rmb": 40,
+          "price_cents": 2999,
+          "compare_at_cents": 3499
+        }
+      ],
+      "image": "assets/products/h96-max-m20-stick/main.jpg",
+      "gallery": [
+        "assets/products/h96-max-m20-stick/main.jpg",
+        "assets/products/h96-max-m20-stick/detail-1.jpg",
+        "assets/products/h96-max-m20-stick/detail-2.jpg",
+        "assets/products/h96-max-m20-stick/detail-3.jpg",
+        "assets/products/h96-max-m20-stick/detail-4.jpg",
+        "assets/products/h96-max-m20-stick/detail-5.jpg",
+        "assets/products/h96-max-m20-stick/detail-6.jpg",
+        "assets/products/h96-max-m20-stick/detail-7.jpg"
+      ],
+      "specs": {
+        "Model": "H96 MAX M20 TV Stick",
+        "Product Type": "Android TV Stick",
+        "Chipset": "Amlogic S905L3 Quad-core ARM Cortex-A53",
+        "GPU": "Penta-core ARM Mali-450",
+        "OS": "Android 14",
+        "Memory": "2GB RAM",
+        "Storage": "16GB ROM",
+        "configurations": "2GB RAM + 16GB ROM",
+        "starting_price": "$29.99",
+        "brand": "H96",
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
+      }
+    },
+    {
+      "id": "h96-max-m9",
+      "brand": "H96",
+      "name": "H96 MAX M9",
+      "category": "premium",
+      "tier": "flagship",
+      "status": "published",
+      "detail_url": "/products/h96-max-m9/",
+      "description": "H96 MAX M9 Android 14 TV box with Rockchip RK3576, available in 4GB RAM + 32GB ROM / 8GB RAM + 128GB ROM.",
+      "variants": [
+        {
+          "id": "h96-max-m9-4-32",
+          "sku": "CRT-H96-M9-4G32G",
+          "label": "4GB RAM + 32GB ROM",
+          "rmb_price": 470,
+          "shipping_rmb": 40,
+          "price_cents": 11499,
+          "compare_at_cents": 11999
+        },
+        {
+          "id": "h96-max-m9-8-128",
+          "sku": "CRT-H96-M9-8G128G",
+          "label": "8GB RAM + 128GB ROM",
+          "rmb_price": 590,
+          "shipping_rmb": 40,
+          "price_cents": 13999,
+          "compare_at_cents": 14499
+        }
+      ],
+      "image": "assets/products/h96-max-m9/main.jpg",
+      "gallery": [
+        "assets/products/h96-max-m9/main.jpg",
+        "assets/products/h96-max-m9/detail-1.jpg",
+        "assets/products/h96-max-m9/detail-2.jpg",
+        "assets/products/h96-max-m9/detail-3.jpg",
+        "assets/products/h96-max-m9/detail-4.jpg",
+        "assets/products/h96-max-m9/detail-5.jpg",
+        "assets/products/h96-max-m9/detail-6.jpg",
+        "assets/products/h96-max-m9/detail-7.jpg"
+      ],
+      "specs": {
+        "Model": "H96 MAX M9",
+        "Product Type": "Android TV Box",
+        "Chipset": "Rockchip RK3576 Quad ARM Cortex-A72 + Quad ARM Cortex-A53 (8-core)",
+        "GPU": "ARM Mali-G52 MC3",
+        "OS": "Android 14",
+        "Memory": "4GB / 8GB RAM",
+        "Storage": "32GB / 128GB ROM",
+        "NPU": "6 TOPS",
+        "Video Output": "HDMI 2.1, 8K",
+        "Wi-Fi": "Wi-Fi 6",
+        "Ethernet": "1000M (Gigabit) Ethernet",
+        "USB": "USB 3.0 + USB 2.0",
+        "Other Ports": "SPDIF, audio, DC",
+        "Dimensions": "138 × 96 × 24.7 mm",
+        "configurations": "4GB RAM + 32GB ROM / 8GB RAM + 128GB ROM",
+        "starting_price": "$114.99",
+        "brand": "H96",
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
+      }
+    },
+    {
+      "id": "h96-max-m9s",
+      "brand": "H96",
+      "name": "H96 MAX M9S",
+      "category": "premium",
+      "tier": "flagship",
+      "status": "published",
+      "detail_url": "/products/h96-max-m9s/",
+      "description": "H96 MAX M9S Android 14 TV box with Rockchip RK3576, available in 4GB RAM + 32GB ROM / 8GB RAM + 128GB ROM.",
+      "variants": [
+        {
+          "id": "h96-max-m9s-4-32",
+          "sku": "CRT-H96-M9S-4G32G",
+          "label": "4GB RAM + 32GB ROM",
+          "rmb_price": 450,
+          "shipping_rmb": 40,
+          "price_cents": 10999,
+          "compare_at_cents": 11499
+        },
+        {
+          "id": "h96-max-m9s-8-128",
+          "sku": "CRT-H96-M9S-8G128G",
+          "label": "8GB RAM + 128GB ROM",
+          "rmb_price": 580,
+          "shipping_rmb": 40,
+          "price_cents": 13999,
+          "compare_at_cents": 14499
+        }
+      ],
+      "image": "assets/products/h96-max-m9s/main.jpg",
+      "gallery": [
+        "assets/products/h96-max-m9s/main.jpg",
+        "assets/products/h96-max-m9s/detail-1.jpg",
+        "assets/products/h96-max-m9s/detail-2.jpg",
+        "assets/products/h96-max-m9s/detail-3.jpg",
+        "assets/products/h96-max-m9s/detail-4.jpg",
+        "assets/products/h96-max-m9s/detail-5.jpg",
+        "assets/products/h96-max-m9s/detail-6.jpg",
+        "assets/products/h96-max-m9s/detail-7.jpg"
+      ],
+      "specs": {
+        "Model": "H96 MAX M9S",
+        "Product Type": "Android TV Box",
+        "Chipset": "Rockchip RK3576 Quad ARM Cortex-A72 + Quad ARM Cortex-A53 (8-core)",
+        "GPU": "ARM Mali-G52 MC3",
+        "OS": "Android 14",
+        "Memory": "4GB / 8GB RAM",
+        "Storage": "32GB / 128GB ROM",
+        "NPU": "6 TOPS",
+        "Video Output": "HDMI 2.1, 8K",
+        "Wi-Fi": "Wi-Fi 6",
+        "Ethernet": "1000M (Gigabit) Ethernet",
+        "USB": "USB 3.0 + USB 2.0",
+        "Other Ports": "SPDIF, audio, DC",
+        "Dimensions": "138 × 96 × 23.6 mm",
+        "configurations": "4GB RAM + 32GB ROM / 8GB RAM + 128GB ROM",
+        "starting_price": "$109.99",
+        "brand": "H96",
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
+      }
+    },
+    {
+      "id": "h96-max-rk3518-stick",
+      "brand": "H96",
+      "name": "H96 MAX RK3518 TV Stick",
+      "category": "tv-box",
+      "tier": "compact",
+      "status": "published",
+      "detail_url": "/products/h96-max-rk3518-stick/",
+      "description": "H96 MAX RK3518 TV Stick Android 14 TV stick with Rockchip RK3518, available in 2GB RAM + 8GB ROM / 2GB RAM + 16GB ROM.",
+      "variants": [
+        {
+          "id": "h96-max-rk3518-stick-2-8",
+          "sku": "CRT-H96-3518STK-2G8G",
+          "label": "2GB RAM + 8GB ROM",
+          "rmb_price": 95,
+          "shipping_rmb": 40,
+          "price_cents": 2999,
+          "compare_at_cents": 3499
+        },
+        {
+          "id": "h96-max-rk3518-stick-2-16",
+          "sku": "CRT-H96-3518STK-2G16G",
+          "label": "2GB RAM + 16GB ROM",
+          "rmb_price": 100,
+          "shipping_rmb": 40,
+          "price_cents": 3099,
+          "compare_at_cents": 3499
+        }
+      ],
+      "image": "assets/products/h96-max-rk3518-stick/main.jpg",
+      "gallery": [
+        "assets/products/h96-max-rk3518-stick/main.jpg",
+        "assets/products/h96-max-rk3518-stick/detail-1.jpg",
+        "assets/products/h96-max-rk3518-stick/detail-2.jpg",
+        "assets/products/h96-max-rk3518-stick/detail-3.jpg",
+        "assets/products/h96-max-rk3518-stick/detail-4.jpg",
+        "assets/products/h96-max-rk3518-stick/detail-5.jpg",
+        "assets/products/h96-max-rk3518-stick/detail-6.jpg",
+        "assets/products/h96-max-rk3518-stick/detail-7.jpg"
+      ],
+      "specs": {
+        "Model": "H96 MAX RK3518 TV Stick",
+        "Product Type": "Android TV Stick",
+        "Chipset": "Rockchip RK3518 Quad-core ARM Cortex-A53",
+        "GPU": "ARM Mali-450",
+        "OS": "Android 14",
+        "Memory": "2GB RAM",
+        "Storage": "8GB / 16GB ROM",
+        "Dimensions": "77.7 × 30.6 × 13.2 mm",
+        "configurations": "2GB RAM + 8GB ROM / 2GB RAM + 16GB ROM",
+        "starting_price": "$29.99",
+        "brand": "H96",
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
+      }
+    },
+    {
+      "id": "h96max-rk3518b",
+      "brand": "H96",
+      "name": "H96Max RK3518B",
+      "category": "tv-box",
+      "tier": "budget",
+      "status": "published",
+      "detail_url": "/products/h96max-rk3518b/",
+      "description": "H96Max RK3518B Android 14 TV box with Rockchip RK3518, available in 2GB RAM + 8GB ROM / 2GB RAM + 16GB ROM.",
+      "variants": [
+        {
+          "id": "h96max-rk3518b-2-8",
+          "sku": "CRT-H96-3518B-2G8G",
+          "label": "2GB RAM + 8GB ROM",
+          "rmb_price": 100,
+          "shipping_rmb": 40,
+          "price_cents": 3099,
+          "compare_at_cents": 3499
+        },
+        {
+          "id": "h96max-rk3518b-2-16",
+          "sku": "CRT-H96-3518B-2G16G",
+          "label": "2GB RAM + 16GB ROM",
+          "rmb_price": 105,
+          "shipping_rmb": 40,
+          "price_cents": 3199,
+          "compare_at_cents": 3499
+        }
+      ],
+      "image": "assets/products/h96max-rk3518b/main.jpg",
+      "gallery": [
+        "assets/products/h96max-rk3518b/main.jpg",
+        "assets/products/h96max-rk3518b/detail-1.jpg",
+        "assets/products/h96max-rk3518b/detail-2.jpg",
+        "assets/products/h96max-rk3518b/detail-3.jpg",
+        "assets/products/h96max-rk3518b/detail-4.jpg",
+        "assets/products/h96max-rk3518b/detail-5.jpg",
+        "assets/products/h96max-rk3518b/detail-6.jpg",
+        "assets/products/h96max-rk3518b/detail-7.jpg"
+      ],
+      "specs": {
+        "Model": "H96Max RK3518B",
+        "Product Type": "Android TV Box",
+        "Chipset": "Rockchip RK3518 Quad-core ARM Cortex-A53",
+        "GPU": "ARM Mali-450",
+        "OS": "Android 14",
+        "Memory": "2GB RAM",
+        "Storage": "8GB / 16GB ROM",
+        "Ethernet": "10/100M Ethernet",
+        "USB": "USB 3.0 + USB 2.0",
+        "Other Ports": "AV, HDMI, TF card (up to 64GB), DC 5V/2A",
+        "Dimensions": "90 × 90 × 16.5 mm",
+        "configurations": "2GB RAM + 8GB ROM / 2GB RAM + 16GB ROM",
+        "starting_price": "$30.99",
+        "brand": "H96",
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
+      }
+    },
+    {
+      "id": "h96max-rk3518d",
+      "brand": "H96",
+      "name": "H96Max RK3518D",
+      "category": "tv-box",
+      "tier": "compact",
+      "status": "published",
+      "detail_url": "/products/h96max-rk3518d/",
+      "description": "H96Max RK3518D Android 14 TV stick with Rockchip RK3518, available in 2GB RAM + 8GB ROM / 2GB RAM + 16GB ROM.",
+      "variants": [
+        {
+          "id": "h96max-rk3518d-2-8",
+          "sku": "CRT-H96-3518D-2G8G",
+          "label": "2GB RAM + 8GB ROM",
+          "rmb_price": 90,
+          "shipping_rmb": 40,
+          "price_cents": 2999,
+          "compare_at_cents": 3499
+        },
+        {
+          "id": "h96max-rk3518d-2-16",
+          "sku": "CRT-H96-3518D-2G16G",
+          "label": "2GB RAM + 16GB ROM",
+          "rmb_price": 100,
+          "shipping_rmb": 40,
+          "price_cents": 3099,
+          "compare_at_cents": 3499
+        }
+      ],
+      "image": "assets/products/h96max-rk3518d/main.jpg",
+      "gallery": [
+        "assets/products/h96max-rk3518d/main.jpg",
+        "assets/products/h96max-rk3518d/detail-1.jpg",
+        "assets/products/h96max-rk3518d/detail-2.jpg",
+        "assets/products/h96max-rk3518d/detail-3.jpg",
+        "assets/products/h96max-rk3518d/detail-4.jpg",
+        "assets/products/h96max-rk3518d/detail-5.jpg",
+        "assets/products/h96max-rk3518d/detail-6.jpg",
+        "assets/products/h96max-rk3518d/detail-7.jpg"
+      ],
+      "specs": {
+        "Model": "H96Max RK3518D",
+        "Product Type": "Android TV Stick",
+        "Chipset": "Rockchip RK3518 Quad-core ARM Cortex-A53",
+        "GPU": "ARM Mali-450",
+        "OS": "Android 14",
+        "Memory": "2GB RAM",
+        "Storage": "8GB / 16GB ROM",
+        "Dimensions": "77.7 × 30.6 × 13.2 mm",
+        "configurations": "2GB RAM + 8GB ROM / 2GB RAM + 16GB ROM",
+        "starting_price": "$29.99",
+        "brand": "H96",
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
+      }
+    },
+    {
+      "id": "hako-rk3518d2",
+      "brand": "HAKO",
+      "name": "HAKO RK3518D2",
+      "category": "tv-box",
+      "tier": "compact",
+      "status": "published",
+      "detail_url": "/products/hako-rk3518d2/",
+      "description": "HAKO RK3518D2 Android 14 TV stick with Rockchip RK3518, available in 2GB RAM + 8GB ROM / 2GB RAM + 16GB ROM.",
+      "variants": [
+        {
+          "id": "hako-rk3518d2-2-8",
+          "sku": "CRT-HAKO-3518D2-2G8G",
+          "label": "2GB RAM + 8GB ROM",
+          "rmb_price": 90,
+          "shipping_rmb": 40,
+          "price_cents": 2999,
+          "compare_at_cents": 3499
+        },
+        {
+          "id": "hako-rk3518d2-2-16",
+          "sku": "CRT-HAKO-3518D2-2G16G",
+          "label": "2GB RAM + 16GB ROM",
+          "rmb_price": 103,
+          "shipping_rmb": 40,
+          "price_cents": 3199,
+          "compare_at_cents": 3499
+        }
+      ],
+      "image": "assets/products/hako-rk3518d2/main.jpg",
+      "gallery": [
+        "assets/products/hako-rk3518d2/main.jpg",
+        "assets/products/hako-rk3518d2/detail-1.jpg",
+        "assets/products/hako-rk3518d2/detail-2.jpg",
+        "assets/products/hako-rk3518d2/detail-3.jpg",
+        "assets/products/hako-rk3518d2/detail-4.jpg",
+        "assets/products/hako-rk3518d2/detail-5.jpg",
+        "assets/products/hako-rk3518d2/detail-6.jpg",
+        "assets/products/hako-rk3518d2/detail-7.jpg"
+      ],
+      "specs": {
+        "Model": "HAKO RK3518D2",
+        "Product Type": "Android TV Stick",
+        "Chipset": "Rockchip RK3518 Quad-core ARM Cortex-A53",
+        "GPU": "ARM Mali-450",
+        "OS": "Android 14",
+        "Memory": "2GB RAM",
+        "Storage": "8GB / 16GB ROM",
+        "configurations": "2GB RAM + 8GB ROM / 2GB RAM + 16GB ROM",
+        "starting_price": "$29.99",
+        "brand": "HAKO",
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
+      }
+    },
+    {
+      "id": "hako-rk3539y",
+      "brand": "HAKO",
+      "name": "HAKO RK3539Y",
+      "category": "tv-box",
+      "tier": "budget",
+      "status": "published",
+      "detail_url": "/products/hako-rk3539y/",
+      "description": "HAKO RK3539Y Android 14 TV box with Rockchip RK3539, available in 2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM.",
+      "variants": [
+        {
+          "id": "hako-rk3539y-2-16",
+          "sku": "CRT-HAKO-3539Y-2G16G",
+          "label": "2GB RAM + 16GB ROM",
+          "rmb_price": 140,
+          "shipping_rmb": 40,
+          "price_cents": 3999,
+          "compare_at_cents": 4499
+        },
+        {
+          "id": "hako-rk3539y-4-32",
+          "sku": "CRT-HAKO-3539Y-4G32G",
+          "label": "4GB RAM + 32GB ROM",
+          "rmb_price": 195,
+          "shipping_rmb": 40,
+          "price_cents": 5099,
+          "compare_at_cents": 5499
+        }
+      ],
+      "image": "assets/products/hako-rk3539y/main.jpg",
+      "gallery": [
+        "assets/products/hako-rk3539y/main.jpg",
+        "assets/products/hako-rk3539y/detail-1.jpg",
+        "assets/products/hako-rk3539y/detail-2.jpg",
+        "assets/products/hako-rk3539y/detail-3.jpg",
+        "assets/products/hako-rk3539y/detail-4.jpg",
+        "assets/products/hako-rk3539y/detail-5.jpg",
+        "assets/products/hako-rk3539y/detail-6.jpg",
+        "assets/products/hako-rk3539y/detail-7.jpg"
+      ],
+      "specs": {
+        "Model": "HAKO RK3539Y",
+        "Product Type": "Android TV Box",
+        "Chipset": "Rockchip RK3539 Quad-core 64-bit ARM Cortex-A55 @ 1920 MHz",
+        "GPU": "ARM Mali-G310",
+        "OS": "Android 14",
+        "Memory": "2GB / 4GB RAM",
+        "Storage": "16GB / 32GB ROM",
+        "USB": "2 × USB",
+        "Other Ports": "SPDIF, LAN, DC",
+        "Dimensions": "106.4 × 104.4 × 22.9 mm",
+        "configurations": "2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM",
+        "starting_price": "$39.99",
+        "brand": "HAKO",
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
+      }
+    },
+    {
+      "id": "r69-plus",
+      "brand": "R69",
+      "name": "R69 Plus",
+      "category": "tv-box",
+      "tier": "best-value",
+      "status": "published",
+      "detail_url": "/products/r69-plus/",
+      "description": "R69 Plus Android 14 TV box with Allwinner H728, available in 2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM.",
+      "variants": [
+        {
+          "id": "r69-plus-2-16",
+          "sku": "CRT-R69-PLUS-2G16G",
+          "label": "2GB RAM + 16GB ROM",
+          "rmb_price": 190,
+          "shipping_rmb": 40,
+          "price_cents": 4999,
+          "compare_at_cents": 5499
+        },
+        {
+          "id": "r69-plus-4-32",
+          "sku": "CRT-R69-PLUS-4G32G",
+          "label": "4GB RAM + 32GB ROM",
+          "rmb_price": 230,
+          "shipping_rmb": 40,
+          "price_cents": 5999,
+          "compare_at_cents": 6499
+        },
+        {
+          "id": "r69-plus-4-64",
+          "sku": "CRT-R69-PLUS-4G64G",
+          "label": "4GB RAM + 64GB ROM",
+          "rmb_price": 250,
+          "shipping_rmb": 40,
+          "price_cents": 6499,
+          "compare_at_cents": 6999
+        }
+      ],
+      "image": "assets/products/r69-plus/main.jpg",
+      "gallery": [
+        "assets/products/r69-plus/main.jpg",
+        "assets/products/r69-plus/detail-1.jpg",
+        "assets/products/r69-plus/detail-2.jpg",
+        "assets/products/r69-plus/detail-3.jpg",
+        "assets/products/r69-plus/detail-4.jpg",
+        "assets/products/r69-plus/detail-5.jpg",
+        "assets/products/r69-plus/detail-6.jpg",
+        "assets/products/r69-plus/detail-7.jpg"
+      ],
+      "specs": {
+        "Model": "R69 Plus",
+        "Product Type": "Android TV Box",
+        "Chipset": "Allwinner H728 Octa-core ARM Cortex-A55",
+        "OS": "Android 14",
+        "Memory": "2GB / 4GB RAM",
+        "Storage": "16GB / 32GB / 64GB ROM",
+        "Wi-Fi": "Wi-Fi 6",
+        "Ethernet": "1000M (Gigabit) Ethernet",
+        "configurations": "2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM",
+        "starting_price": "$49.99",
+        "brand": "R69",
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
+      }
+    },
+    {
+      "id": "r69-pro",
+      "brand": "R69",
+      "name": "R69 PRO",
+      "category": "tv-box",
+      "tier": "best-value",
+      "status": "published",
+      "detail_url": "/products/r69-pro/",
+      "description": "R69 PRO Android 14 TV box with Allwinner H728, available in 2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM.",
+      "variants": [
+        {
+          "id": "r69-pro-2-16",
+          "sku": "CRT-R69-PRO-2G16G",
+          "label": "2GB RAM + 16GB ROM",
+          "rmb_price": 185,
+          "shipping_rmb": 40,
+          "price_cents": 4999,
+          "compare_at_cents": 5499
+        },
+        {
+          "id": "r69-pro-4-32",
+          "sku": "CRT-R69-PRO-4G32G",
+          "label": "4GB RAM + 32GB ROM",
+          "rmb_price": 225,
+          "shipping_rmb": 40,
+          "price_cents": 5999,
+          "compare_at_cents": 6499
+        },
+        {
+          "id": "r69-pro-4-64",
+          "sku": "CRT-R69-PRO-4G64G",
+          "label": "4GB RAM + 64GB ROM",
+          "rmb_price": 245,
+          "shipping_rmb": 40,
+          "price_cents": 6199,
+          "compare_at_cents": 6499
+        }
+      ],
+      "image": "assets/products/r69-pro/main.jpg",
+      "gallery": [
+        "assets/products/r69-pro/main.jpg",
+        "assets/products/r69-pro/detail-1.jpg",
+        "assets/products/r69-pro/detail-2.jpg",
+        "assets/products/r69-pro/detail-3.jpg",
+        "assets/products/r69-pro/detail-4.jpg",
+        "assets/products/r69-pro/detail-5.jpg",
+        "assets/products/r69-pro/detail-6.jpg",
+        "assets/products/r69-pro/detail-7.jpg"
+      ],
+      "specs": {
+        "Model": "R69 PRO",
+        "Product Type": "Android TV Box",
+        "Chipset": "Allwinner H728 Octa-core ARM Cortex-A55",
+        "GPU": "ARM Mali-G57 MC1",
+        "OS": "Android 14",
+        "Memory": "2GB / 4GB RAM",
+        "Storage": "16GB / 32GB / 64GB ROM",
+        "Wi-Fi": "Wi-Fi 6",
+        "Bluetooth": "Bluetooth 5.0+",
+        "Ethernet": "1000M (Gigabit) Ethernet",
+        "Dimensions": "105 × 105 × 20 mm",
+        "configurations": "2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM",
+        "starting_price": "$49.99",
+        "brand": "R69",
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
+      }
+    },
+    {
+      "id": "r69-max",
+      "brand": "R69",
+      "name": "R69 MAX",
+      "category": "tv-box",
+      "tier": "best-value",
+      "status": "published",
+      "detail_url": "/products/r69-max/",
+      "description": "R69 MAX Android 14 TV box with Rockchip RK3528, 4GB RAM + 32GB ROM, available with an IR remote or a Bluetooth voice remote.",
+      "variants": [
+        {
+          "id": "r69-max-4-32-ir",
+          "sku": "CRT-R69-MAX-4G32G-IR",
+          "label": "4GB RAM + 32GB ROM (IR remote)",
+          "rmb_price": 175,
+          "shipping_rmb": 40,
+          "price_cents": 4699,
+          "compare_at_cents": 4999
+        },
+        {
+          "id": "r69-max-4-32-btv",
+          "sku": "CRT-R69-MAX-4G32G-BTV",
+          "label": "4GB RAM + 32GB ROM (Bluetooth voice remote)",
+          "rmb_price": 195,
+          "shipping_rmb": 40,
+          "price_cents": 5099,
+          "compare_at_cents": 5499
+        }
+      ],
+      "image": "assets/products/r69-max/main.jpg",
+      "gallery": [
+        "assets/products/r69-max/main.jpg",
+        "assets/products/r69-max/detail-1.jpg",
+        "assets/products/r69-max/detail-2.jpg",
+        "assets/products/r69-max/detail-3.jpg",
+        "assets/products/r69-max/detail-4.jpg",
+        "assets/products/r69-max/detail-5.jpg",
+        "assets/products/r69-max/detail-6.jpg",
+        "assets/products/r69-max/detail-7.jpg"
+      ],
+      "specs": {
+        "Model": "R69 MAX",
+        "Product Type": "Android TV Box",
+        "Chipset": "Rockchip RK3528 Quad-core ARM Cortex-A53",
+        "GPU": "ARM Mali-450",
+        "OS": "Android 14",
+        "Memory": "4GB RAM",
+        "Storage": "32GB ROM",
+        "configurations": "4GB RAM + 32GB ROM (IR remote) / 4GB RAM + 32GB ROM (Bluetooth voice remote)",
+        "starting_price": "$46.99",
+        "brand": "R69",
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
+      }
+    },
+    {
+      "id": "r69-rk3518",
+      "brand": "R69",
+      "name": "R69 (RK3518)",
+      "category": "tv-box",
+      "tier": "budget",
+      "status": "published",
+      "detail_url": "/products/r69-rk3518/",
+      "description": "R69 (RK3518) Android 14 TV box with Rockchip RK3518, available in 2GB RAM + 8GB ROM / 2GB RAM + 16GB ROM / 2GB RAM + 32GB ROM.",
+      "variants": [
+        {
+          "id": "r69-rk3518-2-8",
+          "sku": "CRT-R69-3518-2G8G",
+          "label": "2GB RAM + 8GB ROM",
+          "rmb_price": 98,
+          "shipping_rmb": 40,
+          "price_cents": 3099,
+          "compare_at_cents": 3499
+        },
+        {
+          "id": "r69-rk3518-2-16",
+          "sku": "CRT-R69-3518-2G16G",
+          "label": "2GB RAM + 16GB ROM",
+          "rmb_price": 110,
+          "shipping_rmb": 40,
+          "price_cents": 3299,
+          "compare_at_cents": 3799
+        },
+        {
+          "id": "r69-rk3518-2-32",
+          "sku": "CRT-R69-3518-2G32G",
+          "label": "2GB RAM + 32GB ROM",
+          "rmb_price": 160,
+          "shipping_rmb": 40,
+          "price_cents": 4399,
+          "compare_at_cents": 4799
+        }
+      ],
+      "image": "assets/products/r69-rk3518/main.jpg",
+      "gallery": [
+        "assets/products/r69-rk3518/main.jpg",
+        "assets/products/r69-rk3518/detail-1.jpg",
+        "assets/products/r69-rk3518/detail-2.jpg",
+        "assets/products/r69-rk3518/detail-3.jpg",
+        "assets/products/r69-rk3518/detail-4.jpg",
+        "assets/products/r69-rk3518/detail-5.jpg",
+        "assets/products/r69-rk3518/detail-6.jpg",
+        "assets/products/r69-rk3518/detail-7.jpg"
+      ],
+      "specs": {
+        "Model": "R69 (RK3518)",
+        "Product Type": "Android TV Box",
+        "Chipset": "Rockchip RK3518 Quad-core ARM Cortex-A53",
+        "GPU": "ARM Mali-450",
+        "OS": "Android 14",
+        "Memory": "2GB RAM",
+        "Storage": "8GB / 16GB / 32GB ROM",
+        "configurations": "2GB RAM + 8GB ROM / 2GB RAM + 16GB ROM / 2GB RAM + 32GB ROM",
+        "starting_price": "$30.99",
+        "brand": "R69",
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
+      }
+    },
+    {
+      "id": "tvr3-plus",
+      "brand": "TVR3",
+      "name": "TVR3+",
+      "category": "tv-box",
+      "tier": "compact",
+      "status": "published",
+      "detail_url": "/products/tvr3-plus/",
+      "description": "TVR3+ Android 14 TV stick with Rockchip RK3518, available in 2GB RAM + 16GB ROM.",
+      "variants": [
+        {
+          "id": "tvr3-plus-2-16",
+          "sku": "CRT-TVR3P-2G16G",
+          "label": "2GB RAM + 16GB ROM",
+          "rmb_price": 100,
+          "shipping_rmb": 40,
+          "price_cents": 3099,
+          "compare_at_cents": 3499
+        }
+      ],
+      "image": "assets/products/tvr3-plus/main.jpg",
+      "gallery": [
+        "assets/products/tvr3-plus/main.jpg",
+        "assets/products/tvr3-plus/detail-1.jpg",
+        "assets/products/tvr3-plus/detail-2.jpg",
+        "assets/products/tvr3-plus/detail-3.jpg",
+        "assets/products/tvr3-plus/detail-4.jpg",
+        "assets/products/tvr3-plus/detail-5.jpg",
+        "assets/products/tvr3-plus/detail-6.jpg",
+        "assets/products/tvr3-plus/detail-7.jpg"
+      ],
+      "specs": {
+        "Model": "TVR3+",
+        "Product Type": "Android TV Stick",
+        "Chipset": "Rockchip RK3518 Quad-core ARM Cortex-A53",
+        "GPU": "ARM Mali-450",
+        "OS": "Android 14",
+        "Memory": "2GB RAM",
+        "Storage": "16GB ROM",
+        "configurations": "2GB RAM + 16GB ROM",
+        "starting_price": "$30.99",
+        "brand": "TVR3",
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
+      }
+    },
+    {
+      "id": "tanix-tx5-plus",
+      "brand": "Tanix",
+      "name": "Tanix TX5 Plus",
+      "category": "tv-box",
+      "tier": "best-value",
+      "status": "published",
+      "detail_url": "/products/tanix-tx5-plus/",
+      "description": "Tanix TX5 Plus Android 14 TV box with Amlogic S905X5M, available in 2GB RAM + 16GB ROM.",
+      "variants": [
+        {
+          "id": "tanix-tx5-plus-2-16",
+          "sku": "CRT-TANIX-TX5PLUS-2G16G",
+          "label": "2GB RAM + 16GB ROM",
+          "rmb_price": 230,
+          "shipping_rmb": 40,
+          "price_cents": 5999,
+          "compare_at_cents": 6499
+        }
+      ],
+      "image": "assets/products/tanix-tx5-plus/main.jpg",
+      "gallery": [
+        "assets/products/tanix-tx5-plus/main.jpg",
+        "assets/products/tanix-tx5-plus/detail-1.jpg",
+        "assets/products/tanix-tx5-plus/detail-2.jpg",
+        "assets/products/tanix-tx5-plus/detail-3.jpg",
+        "assets/products/tanix-tx5-plus/detail-4.jpg"
+      ],
+      "specs": {
+        "Model": "Tanix TX5 Plus",
+        "Product Type": "Android TV Box",
+        "Chipset": "Amlogic S905X5M Quad-core ARM Cortex-A55",
+        "GPU": "ARM G310 V2",
+        "OS": "Android 14",
+        "Memory": "2GB RAM",
+        "Storage": "16GB ROM",
+        "Wi-Fi": "Wi-Fi 5",
+        "Bluetooth": "Bluetooth 5.0",
+        "Video Output": "HDMI, 4K@60fps, HDR10+",
+        "Other Ports": "AV, HDMI, Ethernet, DC, TF card, 2 × USB (one USB 3.0)",
+        "configurations": "2GB RAM + 16GB ROM",
+        "starting_price": "$59.99",
+        "brand": "Tanix",
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
+      }
+    },
+    {
+      "id": "x96q-pro-plus",
+      "brand": "X96",
+      "name": "X96Q PRO+",
+      "category": "tv-box",
+      "tier": "best-value",
+      "status": "published",
+      "detail_url": "/products/x96q-pro-plus/",
+      "description": "X96Q PRO+ Android 14 TV box with Allwinner H728, available in 2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM.",
+      "variants": [
+        {
+          "id": "x96q-pro-plus-2-16",
+          "sku": "CRT-X96QPP-2G16G",
+          "label": "2GB RAM + 16GB ROM",
+          "rmb_price": 220,
+          "shipping_rmb": 40,
+          "price_cents": 5599,
+          "compare_at_cents": 5999
+        },
+        {
+          "id": "x96q-pro-plus-4-32",
+          "sku": "CRT-X96QPP-4G32G",
+          "label": "4GB RAM + 32GB ROM",
+          "rmb_price": 270,
+          "shipping_rmb": 40,
+          "price_cents": 6999,
+          "compare_at_cents": 7499
+        },
+        {
+          "id": "x96q-pro-plus-4-64",
+          "sku": "CRT-X96QPP-4G64G",
+          "label": "4GB RAM + 64GB ROM",
+          "rmb_price": 315,
+          "shipping_rmb": 40,
+          "price_cents": 7999,
+          "compare_at_cents": 8499
+        }
+      ],
+      "image": "assets/products/x96q-pro-plus/main.jpg",
+      "gallery": [
+        "assets/products/x96q-pro-plus/main.jpg",
+        "assets/products/x96q-pro-plus/detail-1.jpg",
+        "assets/products/x96q-pro-plus/detail-2.jpg",
+        "assets/products/x96q-pro-plus/detail-3.jpg",
+        "assets/products/x96q-pro-plus/detail-4.jpg",
+        "assets/products/x96q-pro-plus/detail-5.jpg",
+        "assets/products/x96q-pro-plus/detail-6.jpg",
+        "assets/products/x96q-pro-plus/detail-7.jpg"
+      ],
+      "specs": {
+        "Model": "X96Q PRO+",
+        "Product Type": "Android TV Box",
+        "Chipset": "Allwinner H728 Octa-core ARM Cortex-A55",
+        "GPU": "ARM Mali-G57 MC1",
+        "OS": "Android 14",
+        "Memory": "2GB / 4GB RAM",
+        "Storage": "16GB / 32GB / 64GB ROM",
+        "Wi-Fi": "Wi-Fi 6",
+        "Ethernet": "1000M (Gigabit) Ethernet",
+        "configurations": "2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM",
+        "starting_price": "$55.99",
+        "brand": "X96",
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
+      }
+    },
+    {
+      "id": "x96q-m200",
+      "brand": "X96",
+      "name": "X96Q M200",
+      "category": "tv-box",
+      "tier": "best-value",
+      "status": "published",
+      "detail_url": "/products/x96q-m200/",
+      "description": "X96Q M200 Android 14 TV box with Amlogic S905X5M, available in 2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM.",
+      "variants": [
+        {
+          "id": "x96q-m200-2-16",
+          "sku": "CRT-X96Q-M200-2G16G",
+          "label": "2GB RAM + 16GB ROM",
+          "rmb_price": 235,
+          "shipping_rmb": 40,
+          "price_cents": 5999,
+          "compare_at_cents": 6499
+        },
+        {
+          "id": "x96q-m200-4-32",
+          "sku": "CRT-X96Q-M200-4G32G",
+          "label": "4GB RAM + 32GB ROM",
+          "rmb_price": 310,
+          "shipping_rmb": 40,
+          "price_cents": 7499,
+          "compare_at_cents": 7999
+        },
+        {
+          "id": "x96q-m200-4-64",
+          "sku": "CRT-X96Q-M200-4G64G",
+          "label": "4GB RAM + 64GB ROM",
+          "rmb_price": 355,
+          "shipping_rmb": 40,
+          "price_cents": 8999,
+          "compare_at_cents": 9499
+        }
+      ],
+      "image": "assets/products/x96q-m200/main.jpg",
+      "gallery": [
+        "assets/products/x96q-m200/main.jpg",
+        "assets/products/x96q-m200/detail-1.jpg",
+        "assets/products/x96q-m200/detail-2.jpg",
+        "assets/products/x96q-m200/detail-3.jpg",
+        "assets/products/x96q-m200/detail-4.jpg",
+        "assets/products/x96q-m200/detail-5.jpg",
+        "assets/products/x96q-m200/detail-6.jpg",
+        "assets/products/x96q-m200/detail-7.jpg"
+      ],
+      "specs": {
+        "Model": "X96Q M200",
+        "Product Type": "Android TV Box",
+        "Chipset": "Amlogic S905X5M Quad-core ARM Cortex-A55",
+        "OS": "Android 14",
+        "Memory": "2GB / 4GB RAM",
+        "Storage": "16GB / 32GB / 64GB ROM",
+        "Wi-Fi": "Wi-Fi 6",
+        "Ethernet": "1000M (Gigabit) Ethernet",
+        "configurations": "2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM",
+        "starting_price": "$59.99",
+        "brand": "X96",
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
+      }
+    },
+    {
+      "id": "x96q-rk3518",
+      "brand": "X96",
+      "name": "X96Q RK3518",
+      "category": "tv-box",
+      "tier": "budget",
+      "status": "published",
+      "detail_url": "/products/x96q-rk3518/",
+      "description": "X96Q RK3518 Android 14 TV box with Rockchip RK3518, available in 2GB RAM + 16GB ROM.",
+      "variants": [
+        {
+          "id": "x96q-rk3518-2-16",
+          "sku": "CRT-X96Q-3518-2G16G",
+          "label": "2GB RAM + 16GB ROM",
+          "rmb_price": 113,
+          "shipping_rmb": 40,
+          "price_cents": 3399,
+          "compare_at_cents": 3799
+        }
+      ],
+      "image": "assets/products/x96q-rk3518/main.jpg",
+      "gallery": [
+        "assets/products/x96q-rk3518/main.jpg",
+        "assets/products/x96q-rk3518/detail-1.jpg",
+        "assets/products/x96q-rk3518/detail-2.jpg",
+        "assets/products/x96q-rk3518/detail-3.jpg",
+        "assets/products/x96q-rk3518/detail-4.jpg",
+        "assets/products/x96q-rk3518/detail-5.jpg",
+        "assets/products/x96q-rk3518/detail-6.jpg",
+        "assets/products/x96q-rk3518/detail-7.jpg"
+      ],
+      "specs": {
+        "Model": "X96Q RK3518",
+        "Product Type": "Android TV Box",
+        "Chipset": "Rockchip RK3518 Quad-core ARM Cortex-A53",
+        "GPU": "ARM Mali-450",
+        "OS": "Android 14",
+        "Memory": "2GB RAM",
+        "Storage": "16GB ROM",
+        "configurations": "2GB RAM + 16GB ROM",
+        "starting_price": "$33.99",
+        "brand": "X96",
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
+      }
+    },
+    {
+      "id": "x98k-pro",
+      "brand": "X96",
+      "name": "X98K PRO",
+      "category": "tv-box",
+      "tier": "performance",
+      "status": "published",
+      "detail_url": "/products/x98k-pro/",
+      "description": "X98K PRO Android 14 TV box with Rockchip RK3566, available in 4GB RAM + 32GB ROM.",
+      "variants": [
+        {
+          "id": "x98k-pro-4-32",
+          "sku": "CRT-X98KP-4G32G",
+          "label": "4GB RAM + 32GB ROM",
+          "rmb_price": 310,
+          "shipping_rmb": 40,
+          "price_cents": 7499,
+          "compare_at_cents": 7999
+        }
+      ],
+      "image": "assets/products/x98k-pro/main.jpg",
+      "gallery": [
+        "assets/products/x98k-pro/main.jpg",
+        "assets/products/x98k-pro/detail-1.jpg",
+        "assets/products/x98k-pro/detail-2.jpg",
+        "assets/products/x98k-pro/detail-3.jpg",
+        "assets/products/x98k-pro/detail-4.jpg",
+        "assets/products/x98k-pro/detail-5.jpg",
+        "assets/products/x98k-pro/detail-6.jpg",
+        "assets/products/x98k-pro/detail-7.jpg"
+      ],
+      "specs": {
+        "Model": "X98K PRO",
+        "Product Type": "Android TV Box",
+        "Chipset": "Rockchip RK3566 Quad-core ARM Cortex-A55",
+        "GPU": "ARM Mali-G52 1-Core-2EE",
+        "OS": "Android 11",
+        "Memory": "4GB RAM",
+        "Storage": "32GB ROM",
+        "Ethernet": "1000M (Gigabit) Ethernet",
+        "configurations": "4GB RAM + 32GB ROM",
+        "starting_price": "$74.99",
+        "brand": "X96",
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
+      }
+    },
+    {
+      "id": "x96q-rk3539",
+      "brand": "X96",
+      "name": "X96Q RK3539",
+      "category": "tv-box",
+      "tier": "budget",
+      "status": "published",
+      "detail_url": "/products/x96q-rk3539/",
+      "description": "X96Q RK3539 Android 14 TV box with Rockchip RK3539, available in 1.5GB RAM + 8GB ROM / 2GB RAM + 16GB ROM.",
+      "variants": [
+        {
+          "id": "x96q-rk3539-1p5-8",
+          "sku": "CRT-X96Q-3539-1P5G8G",
+          "label": "1.5GB RAM + 8GB ROM",
+          "rmb_price": 130,
+          "shipping_rmb": 40,
+          "price_cents": 3699,
+          "compare_at_cents": 3999
+        },
+        {
+          "id": "x96q-rk3539-2-16",
+          "sku": "CRT-X96Q-3539-2G16G",
+          "label": "2GB RAM + 16GB ROM",
+          "rmb_price": 135,
+          "shipping_rmb": 40,
+          "price_cents": 3999,
+          "compare_at_cents": 4499
+        }
+      ],
+      "image": "assets/products/x96q-rk3539/main.jpg",
+      "gallery": [
+        "assets/products/x96q-rk3539/main.jpg",
+        "assets/products/x96q-rk3539/detail-1.jpg",
+        "assets/products/x96q-rk3539/detail-2.jpg",
+        "assets/products/x96q-rk3539/detail-3.jpg",
+        "assets/products/x96q-rk3539/detail-4.jpg",
+        "assets/products/x96q-rk3539/detail-5.jpg",
+        "assets/products/x96q-rk3539/detail-6.jpg",
+        "assets/products/x96q-rk3539/detail-7.jpg"
+      ],
+      "specs": {
+        "Model": "X96Q RK3539",
+        "Product Type": "Android TV Box",
+        "Chipset": "Rockchip RK3539 Quad-core ARM Cortex-A55",
+        "GPU": "ARM Mali-G310",
+        "OS": "Android 14",
+        "Memory": "1.5GB / 2GB RAM",
+        "Storage": "8GB / 16GB ROM",
+        "configurations": "1.5GB RAM + 8GB ROM / 2GB RAM + 16GB ROM",
+        "starting_price": "$36.99",
+        "brand": "X96",
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
+      }
+    },
+    {
+      "id": "hs86-t1",
+      "brand": "HS86",
+      "name": "HS86 T1",
+      "category": "tv-box",
+      "tier": "compact",
+      "status": "published",
+      "detail_url": "/products/hs86-t1/",
+      "description": "HS86 T1 Android 14 TV stick with Rockchip RK3518, available in 2GB RAM + 16GB ROM.",
+      "variants": [
+        {
+          "id": "hs86-t1-2-16",
+          "sku": "CRT-HS86-T1-2G16G",
+          "label": "2GB RAM + 16GB ROM",
+          "rmb_price": 110,
+          "shipping_rmb": 40,
+          "price_cents": 3299,
+          "compare_at_cents": 3799
+        }
+      ],
+      "image": "assets/products/hs86-t1/main.jpg",
+      "gallery": [
+        "assets/products/hs86-t1/main.jpg",
+        "assets/products/hs86-t1/detail-1.jpg",
+        "assets/products/hs86-t1/detail-2.jpg",
+        "assets/products/hs86-t1/detail-3.jpg",
+        "assets/products/hs86-t1/detail-4.jpg",
+        "assets/products/hs86-t1/detail-5.jpg",
+        "assets/products/hs86-t1/detail-6.jpg",
+        "assets/products/hs86-t1/detail-7.jpg"
+      ],
+      "specs": {
+        "Model": "HS86 T1",
+        "Product Type": "Android TV Stick",
+        "Chipset": "Rockchip RK3518",
+        "OS": "Android 14",
+        "Memory": "2GB RAM",
+        "Storage": "16GB ROM",
+        "Wi-Fi": "Wi-Fi 6",
+        "Bluetooth": "Bluetooth 5.4",
+        "USB": "USB 2.0",
+        "Other Ports": "Type-C power input, IR extender port",
+        "Dimensions": "100 × 33 × 14 mm",
+        "configurations": "2GB RAM + 16GB ROM",
+        "starting_price": "$32.99",
+        "brand": "HS86",
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
+      }
+    },
+    {
+      "id": "hs86-t2",
+      "brand": "HS86",
+      "name": "HS86 T2",
+      "category": "tv-box",
+      "tier": "compact",
+      "status": "published",
+      "detail_url": "/products/hs86-t2/",
+      "description": "HS86 T2 Android 14 TV stick with Rockchip RK3518, available in 2GB RAM + 16GB ROM.",
+      "variants": [
+        {
+          "id": "hs86-t2-2-16",
+          "sku": "CRT-HS86-T2-2G16G",
+          "label": "2GB RAM + 16GB ROM",
+          "rmb_price": 120,
+          "shipping_rmb": 40,
+          "price_cents": 3499,
+          "compare_at_cents": 3799
+        }
+      ],
+      "image": "assets/products/hs86-t2/main.jpg",
+      "gallery": [
+        "assets/products/hs86-t2/main.jpg",
+        "assets/products/hs86-t2/detail-1.jpg",
+        "assets/products/hs86-t2/detail-2.jpg",
+        "assets/products/hs86-t2/detail-3.jpg",
+        "assets/products/hs86-t2/detail-4.jpg",
+        "assets/products/hs86-t2/detail-5.jpg",
+        "assets/products/hs86-t2/detail-6.jpg"
+      ],
+      "specs": {
+        "Model": "HS86 T2",
+        "Product Type": "Android TV Stick",
+        "Chipset": "Rockchip RK3518",
+        "OS": "Android 14",
+        "Memory": "2GB RAM",
+        "Storage": "16GB ROM",
+        "Wi-Fi": "Wi-Fi 6",
+        "Bluetooth": "Bluetooth 5.4",
+        "configurations": "2GB RAM + 16GB ROM",
+        "starting_price": "$34.99",
+        "brand": "HS86",
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
+      }
+    },
+    {
+      "id": "hs86-mini-14",
+      "brand": "HS86",
+      "name": "HS86 MINI 14",
+      "category": "tv-box",
+      "tier": "budget",
+      "status": "published",
+      "detail_url": "/products/hs86-mini-14/",
+      "description": "HS86 MINI 14 Android 14 TV box with Rockchip RK3518, available in 2GB RAM + 16GB ROM.",
+      "variants": [
+        {
+          "id": "hs86-mini-14-2-16",
+          "sku": "CRT-HS86-MINI14-2G16G",
+          "label": "2GB RAM + 16GB ROM",
+          "rmb_price": 113,
+          "shipping_rmb": 40,
+          "price_cents": 3399,
+          "compare_at_cents": 3799
+        }
+      ],
+      "image": "assets/products/hs86-mini-14/main.jpg",
+      "gallery": [
+        "assets/products/hs86-mini-14/main.jpg",
+        "assets/products/hs86-mini-14/detail-1.jpg",
+        "assets/products/hs86-mini-14/detail-2.jpg",
+        "assets/products/hs86-mini-14/detail-3.jpg",
+        "assets/products/hs86-mini-14/detail-4.jpg",
+        "assets/products/hs86-mini-14/detail-5.jpg",
+        "assets/products/hs86-mini-14/detail-6.jpg",
+        "assets/products/hs86-mini-14/detail-7.jpg"
+      ],
+      "specs": {
+        "Model": "HS86 MINI 14",
+        "Product Type": "Android TV Box",
+        "Chipset": "Rockchip RK3518",
+        "OS": "Android 14",
+        "Memory": "2GB RAM",
+        "Storage": "16GB ROM",
+        "Wi-Fi": "Wi-Fi 6",
+        "Bluetooth": "Bluetooth 5.4",
+        "Ethernet": "10/100M Ethernet",
+        "Video Output": "4K",
+        "configurations": "2GB RAM + 16GB ROM",
+        "starting_price": "$33.99",
+        "brand": "HS86",
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
+      }
+    },
+    {
+      "id": "hs86-pro-14",
+      "brand": "HS86",
+      "name": "HS86 PRO 14",
+      "category": "tv-box",
+      "tier": "budget",
+      "status": "published",
+      "detail_url": "/products/hs86-pro-14/",
+      "description": "HS86 PRO 14 Android 14 TV box with Rockchip RK3518, available in 2GB RAM + 16GB ROM.",
+      "variants": [
+        {
+          "id": "hs86-pro-14-2-16",
+          "sku": "CRT-HS86-PRO14-2G16G",
+          "label": "2GB RAM + 16GB ROM",
+          "rmb_price": 118,
+          "shipping_rmb": 40,
+          "price_cents": 3499,
+          "compare_at_cents": 3799
+        }
+      ],
+      "image": "assets/products/hs86-pro-14/main.jpg",
+      "gallery": [
+        "assets/products/hs86-pro-14/main.jpg",
+        "assets/products/hs86-pro-14/detail-1.jpg",
+        "assets/products/hs86-pro-14/detail-2.jpg",
+        "assets/products/hs86-pro-14/detail-3.jpg",
+        "assets/products/hs86-pro-14/detail-4.jpg",
+        "assets/products/hs86-pro-14/detail-5.jpg",
+        "assets/products/hs86-pro-14/detail-6.jpg",
+        "assets/products/hs86-pro-14/detail-7.jpg"
+      ],
+      "specs": {
+        "Model": "HS86 PRO 14",
+        "Product Type": "Android TV Box",
+        "Chipset": "Rockchip RK3518",
+        "OS": "Android 14",
+        "Memory": "2GB RAM",
+        "Storage": "16GB ROM",
+        "Wi-Fi": "Wi-Fi 6",
+        "Bluetooth": "Bluetooth 5.4",
+        "Ethernet": "10/100M Ethernet",
+        "Video Output": "4K",
+        "configurations": "2GB RAM + 16GB ROM",
+        "starting_price": "$34.99",
+        "brand": "HS86",
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
+      }
+    },
+    {
+      "id": "hs86-mini-13",
+      "brand": "HS86",
+      "name": "HS86 MINI 13",
+      "category": "tv-box",
+      "tier": "budget",
+      "status": "published",
+      "detail_url": "/products/hs86-mini-13/",
+      "description": "HS86 MINI 13 Android 14 TV box with Rockchip RK3518, available in 2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM.",
+      "variants": [
+        {
+          "id": "hs86-mini-13-2-16",
+          "sku": "CRT-HS86-MINI13-2G16G",
+          "label": "2GB RAM + 16GB ROM",
+          "rmb_price": 130,
+          "shipping_rmb": 40,
+          "price_cents": 3699,
+          "compare_at_cents": 3999
+        },
+        {
+          "id": "hs86-mini-13-4-32",
+          "sku": "CRT-HS86-MINI13-4G32G",
+          "label": "4GB RAM + 32GB ROM",
+          "rmb_price": 180,
+          "shipping_rmb": 40,
+          "price_cents": 4999,
+          "compare_at_cents": 5499
+        }
+      ],
+      "image": "assets/products/hs86-mini-13/main.jpg",
+      "gallery": [
+        "assets/products/hs86-mini-13/main.jpg",
+        "assets/products/hs86-mini-13/detail-1.jpg",
+        "assets/products/hs86-mini-13/detail-2.jpg",
+        "assets/products/hs86-mini-13/detail-3.jpg",
+        "assets/products/hs86-mini-13/detail-4.jpg",
+        "assets/products/hs86-mini-13/detail-5.jpg",
+        "assets/products/hs86-mini-13/detail-6.jpg",
+        "assets/products/hs86-mini-13/detail-7.jpg"
+      ],
+      "specs": {
+        "Model": "HS86 MINI 13",
+        "Product Type": "Android TV Box",
+        "Chipset": "Rockchip RK3518",
+        "OS": "Android 14",
+        "Memory": "2GB / 4GB RAM",
+        "Storage": "16GB / 32GB ROM",
+        "Wi-Fi": "Wi-Fi 6",
+        "Bluetooth": "Bluetooth 5.4",
+        "Ethernet": "10/100M Ethernet",
+        "Video Output": "4K",
+        "configurations": "2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM",
+        "starting_price": "$36.99",
+        "brand": "HS86",
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
+      }
+    },
+    {
+      "id": "hs86-pro-13",
+      "brand": "HS86",
+      "name": "HS86 PRO 13",
+      "category": "tv-box",
+      "tier": "budget",
+      "status": "published",
+      "detail_url": "/products/hs86-pro-13/",
+      "description": "HS86 PRO 13 Android 14 TV box with Rockchip RK3528, available in 2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM.",
+      "variants": [
+        {
+          "id": "hs86-pro-13-2-16",
+          "sku": "CRT-HS86-PRO13-2G16G",
+          "label": "2GB RAM + 16GB ROM",
+          "rmb_price": 130,
+          "shipping_rmb": 40,
+          "price_cents": 3699,
+          "compare_at_cents": 3999
+        },
+        {
+          "id": "hs86-pro-13-4-32",
+          "sku": "CRT-HS86-PRO13-4G32G",
+          "label": "4GB RAM + 32GB ROM",
+          "rmb_price": 185,
+          "shipping_rmb": 40,
+          "price_cents": 4999,
+          "compare_at_cents": 5499
+        }
+      ],
+      "image": "assets/products/hs86-pro-13/main.jpg",
+      "gallery": [
+        "assets/products/hs86-pro-13/main.jpg",
+        "assets/products/hs86-pro-13/detail-1.jpg",
+        "assets/products/hs86-pro-13/detail-2.jpg",
+        "assets/products/hs86-pro-13/detail-3.jpg",
+        "assets/products/hs86-pro-13/detail-4.jpg",
+        "assets/products/hs86-pro-13/detail-5.jpg",
+        "assets/products/hs86-pro-13/detail-6.jpg",
+        "assets/products/hs86-pro-13/detail-7.jpg"
+      ],
+      "specs": {
+        "Model": "HS86 PRO 13",
+        "Product Type": "Android TV Box",
+        "Chipset": "Rockchip RK3528",
+        "OS": "Android 14",
+        "Memory": "2GB / 4GB RAM",
+        "Storage": "16GB / 32GB ROM",
+        "Wi-Fi": "Wi-Fi 6",
+        "Bluetooth": "Bluetooth 5.4",
+        "Ethernet": "10/100M Ethernet",
+        "Video Output": "4K",
+        "configurations": "2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM",
+        "starting_price": "$36.99",
+        "brand": "HS86",
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
+      }
+    },
+    {
+      "id": "hs89-pro-15",
+      "brand": "HS89",
+      "name": "HS89 PRO 15",
+      "category": "tv-box",
+      "tier": "budget",
+      "status": "published",
+      "detail_url": "/products/hs89-pro-15/",
+      "description": "HS89 PRO 15 Android 14 TV box with Rockchip RK3539, available in 2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM.",
+      "variants": [
+        {
+          "id": "hs89-pro-15-2-16",
+          "sku": "CRT-HS89-PRO15-2G16G",
+          "label": "2GB RAM + 16GB ROM",
+          "rmb_price": 140,
+          "shipping_rmb": 40,
+          "price_cents": 3999,
+          "compare_at_cents": 4499
+        },
+        {
+          "id": "hs89-pro-15-4-32",
+          "sku": "CRT-HS89-PRO15-4G32G",
+          "label": "4GB RAM + 32GB ROM",
+          "rmb_price": 195,
+          "shipping_rmb": 40,
+          "price_cents": 5099,
+          "compare_at_cents": 5499
+        }
+      ],
+      "image": "assets/products/hs89-pro-15/main.jpg",
+      "gallery": [
+        "assets/products/hs89-pro-15/main.jpg",
+        "assets/products/hs89-pro-15/detail-1.jpg",
+        "assets/products/hs89-pro-15/detail-2.jpg",
+        "assets/products/hs89-pro-15/detail-3.jpg",
+        "assets/products/hs89-pro-15/detail-4.jpg",
+        "assets/products/hs89-pro-15/detail-5.jpg",
+        "assets/products/hs89-pro-15/detail-6.jpg",
+        "assets/products/hs89-pro-15/detail-7.jpg"
+      ],
+      "specs": {
+        "Model": "HS89 PRO 15",
+        "Product Type": "Android TV Box",
+        "Chipset": "Rockchip RK3539 Quad-core ARM Cortex-A55",
+        "OS": "Android 14",
+        "Memory": "2GB / 4GB RAM",
+        "Storage": "16GB / 32GB ROM",
+        "Wi-Fi": "Wi-Fi 6",
+        "Bluetooth": "Bluetooth 5.4",
+        "Ethernet": "10/100M Ethernet",
+        "Video Output": "4K",
+        "configurations": "2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM",
+        "starting_price": "$39.99",
+        "brand": "HS89",
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
+      }
+    },
+    {
+      "id": "hs89-mini-15",
+      "brand": "HS89",
+      "name": "HS89 MINI 15",
+      "category": "tv-box",
+      "tier": "budget",
+      "status": "published",
+      "detail_url": "/products/hs89-mini-15/",
+      "description": "HS89 MINI 15 Android 14 TV box with Rockchip RK3539, available in 2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM.",
+      "variants": [
+        {
+          "id": "hs89-mini-15-2-16",
+          "sku": "CRT-HS89-MINI15-2G16G",
+          "label": "2GB RAM + 16GB ROM",
+          "rmb_price": 140,
+          "shipping_rmb": 40,
+          "price_cents": 3999,
+          "compare_at_cents": 4499
+        },
+        {
+          "id": "hs89-mini-15-4-32",
+          "sku": "CRT-HS89-MINI15-4G32G",
+          "label": "4GB RAM + 32GB ROM",
+          "rmb_price": 195,
+          "shipping_rmb": 40,
+          "price_cents": 5099,
+          "compare_at_cents": 5499
+        }
+      ],
+      "image": "assets/products/hs89-mini-15/main.jpg",
+      "gallery": [
+        "assets/products/hs89-mini-15/main.jpg",
+        "assets/products/hs89-mini-15/detail-1.jpg",
+        "assets/products/hs89-mini-15/detail-2.jpg",
+        "assets/products/hs89-mini-15/detail-3.jpg",
+        "assets/products/hs89-mini-15/detail-4.jpg",
+        "assets/products/hs89-mini-15/detail-5.jpg",
+        "assets/products/hs89-mini-15/detail-6.jpg",
+        "assets/products/hs89-mini-15/detail-7.jpg"
+      ],
+      "specs": {
+        "Model": "HS89 MINI 15",
+        "Product Type": "Android TV Box",
+        "Chipset": "Rockchip RK3539 Quad-core ARM Cortex-A55",
+        "OS": "Android 14",
+        "Memory": "2GB / 4GB RAM",
+        "Storage": "16GB / 32GB ROM",
+        "Wi-Fi": "Wi-Fi 6",
+        "Bluetooth": "Bluetooth 5.4",
+        "Ethernet": "10/100M Ethernet",
+        "Video Output": "4K",
+        "configurations": "2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM",
+        "starting_price": "$39.99",
+        "brand": "HS89",
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
+      }
+    },
+    {
+      "id": "hs89-t15",
+      "brand": "HS89",
+      "name": "HS89 T15",
+      "category": "tv-box",
+      "tier": "compact",
+      "status": "published",
+      "detail_url": "/products/hs89-t15/",
+      "description": "HS89 T15 Android 14 TV stick with Rockchip RK3539, available in 2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM.",
+      "variants": [
+        {
+          "id": "hs89-t15-2-16",
+          "sku": "CRT-HS89-T15-2G16G",
+          "label": "2GB RAM + 16GB ROM",
+          "rmb_price": 140,
+          "shipping_rmb": 40,
+          "price_cents": 3999,
+          "compare_at_cents": 4499
+        },
+        {
+          "id": "hs89-t15-4-32",
+          "sku": "CRT-HS89-T15-4G32G",
+          "label": "4GB RAM + 32GB ROM",
+          "rmb_price": 195,
+          "shipping_rmb": 40,
+          "price_cents": 5099,
+          "compare_at_cents": 5499
+        }
+      ],
+      "image": "assets/products/hs89-t15/main.jpg",
+      "gallery": [
+        "assets/products/hs89-t15/main.jpg",
+        "assets/products/hs89-t15/detail-1.jpg",
+        "assets/products/hs89-t15/detail-2.jpg",
+        "assets/products/hs89-t15/detail-3.jpg",
+        "assets/products/hs89-t15/detail-4.jpg",
+        "assets/products/hs89-t15/detail-5.jpg",
+        "assets/products/hs89-t15/detail-6.jpg",
+        "assets/products/hs89-t15/detail-7.jpg"
+      ],
+      "specs": {
+        "Model": "HS89 T15",
+        "Product Type": "Android TV Stick",
+        "Chipset": "Rockchip RK3539 Quad-core ARM Cortex-A55",
+        "OS": "Android 14",
+        "Memory": "2GB / 4GB RAM",
+        "Storage": "16GB / 32GB ROM",
+        "Wi-Fi": "Wi-Fi 6",
+        "configurations": "2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM",
+        "starting_price": "$39.99",
+        "brand": "HS89",
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
       }
     }
   ],
