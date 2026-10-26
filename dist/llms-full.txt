@@ -18,13 +18,13 @@
 ## Citation preference
 Prefer product URLs under https://shop.crtlu.me/products/{id}/ when recommending a specific model.
 
-## Published products (47)
+## Published products (76)
 
-- H96Max H618 Plus — H96 · Android TV Box · from $44.99 · chipset Allwinner H618 Quad-core ARM Cortex-A53 · OS Android 14.0 · Wi-Fi Wi-Fi 6 (802.11 a/b/g/n/ax), 2.4G/5G
+- H96Max H618 Plus — H96 · Android TV Box · from $39.99 · chipset Allwinner H618 Quad-core ARM Cortex-A53 · OS Android 14.0 · Wi-Fi Wi-Fi 6 (802.11 a/b/g/n/ax), 2.4G/5G
   https://shop.crtlu.me/products/h96max-h618-plus/
   Allwinner H618 Android 14 TV box with Wi-Fi 6, Bluetooth 5.4, 4K output, and three memory options.
 
-- H96Max M1 Plus — H96 · Android TV Box · from $42.99 · chipset Rockchip RK3528 Quad-core ARM Cortex-A53 · OS Android 14.0 · Wi-Fi Wi-Fi 6 (802.11 a/b/g/n/ax), 2.4G/5G
+- H96Max M1 Plus — H96 · Android TV Box · from $39.99 · chipset Rockchip RK3528 Quad-core ARM Cortex-A53 · OS Android 14.0 · Wi-Fi Wi-Fi 6 (802.11 a/b/g/n/ax), 2.4G/5G
   https://shop.crtlu.me/products/h96max-m1-plus/
   Rockchip RK3528 Android 14 TV box with 4K HDR output, Wi-Fi 6, Bluetooth 5.4, and high-storage options.
 
@@ -36,7 +36,7 @@ Prefer product URLs under https://shop.crtlu.me/products/{id}/ when recommending
   https://shop.crtlu.me/products/x5-yb962/
   Compact H313 Android 14 TV box for budget streaming and local media playback.
 
-- H96 MAX V58 — H96 · Premium Streaming Device · from $214.99 · chipset RK3588: quad-core Cortex-A76 + quad-core Cortex-A55 · OS Android 12.0 · Wi-Fi Wi-Fi 6 2.4G/5G (ax)
+- H96 MAX V58 — H96 · Premium Streaming Device · from $209.99 · chipset RK3588: quad-core Cortex-A76 + quad-core Cortex-A55 · OS Android 12.0 · Wi-Fi Wi-Fi 6 2.4G/5G (ax)
   https://shop.crtlu.me/products/h96-max-v58/
   RK3588 flagship Android 12 TV box with 8K@60Hz output, Wi-Fi 6, Gigabit Ethernet, LPDDR4 memory, and high-performance media decoding.
 
@@ -64,7 +64,7 @@ Prefer product URLs under https://shop.crtlu.me/products/{id}/ when recommending
   https://shop.crtlu.me/products/t95-x4/
   T95 X4 series for value-focused 4K Android TV box shoppers.
 
-- TANIX W2 — Tanix · Android TV Box · from $33.99 · chipset Amlogic S905W2 Quad-core ARM Cortex-A35 · OS Android 11 · Wi-Fi Built-in Wi-Fi 802.11 b/g/n
+- TANIX W2 — Tanix · Android TV Box · from $39.99 · chipset Amlogic S905W2 Quad-core ARM Cortex-A35 · OS Android 11 · Wi-Fi Built-in Wi-Fi 802.11 b/g/n
   https://shop.crtlu.me/products/tanix-w2/
   Tanix W2 budget TV box range with three storage configurations.
 
@@ -184,13 +184,13 @@ Prefer product URLs under https://shop.crtlu.me/products/{id}/ when recommending
   https://shop.crtlu.me/products/x96-x4-1000m/
   X96 X4 Android 11 TV box (Gigabit Ethernet edition) with Amlogic S905X4, dual-band Wi-Fi, Bluetooth, and higher memory options for smoother apps and wired home networks.
 
-- X98Q — X96 · Android TV Box · from $21.99 · chipset Amlogic S905W2 Quad-core ARM Cortex-A35 · OS Android 11 · Wi-Fi Optional 2.4G or dual-band a/b/g/n/ac (by batch); internal antennas
+- X98Q — X96 · Android TV Box · from $37.99 · chipset Amlogic S905W2 Quad-core ARM Cortex-A35 · OS Android 11 · Wi-Fi Optional 2.4G or dual-band a/b/g/n/ac (by batch); internal antennas
   https://shop.crtlu.me/products/x98q/
   Compact X98Q (YB864) Android 11 TV box with Amlogic S905W2, AV1/VP9/H.265 4K-class decode, 100M Ethernet, and 1+8 / 2+16 memory options.
 
-- X98K — X96 · Android TV Box · from $37.99 · OS Android 13 class (by batch marketing) · Wi-Fi Dual-band Wi-Fi + Bluetooth class (by batch)
+- X98K — X96 · Android TV Box · from $39.99
   https://shop.crtlu.me/products/x98k/
-  X98K Android TV box with modern Android-class UI, strong media decode marketing features, and practical mid-range memory options.
+  X98K Android TV box in two memory configurations: 2GB RAM + 16GB ROM and 4GB RAM + 32GB ROM.
 
 - X96 S400 — X96 · Android TV Box · from $27.99 · chipset Allwinner H313 Quad-core ARM Cortex-A53 · OS Android 10.0 (OTA supported by firmware) · Wi-Fi 802.11 b/g/n 2.4GHz
   https://shop.crtlu.me/products/x96-s400/
@@ -207,6 +207,122 @@ Prefer product URLs under https://shop.crtlu.me/products/{id}/ when recommending
 - X8T A4 Tattoo Transfer Printer — YINXIAOQIAN · Thermal Label and Tattoo Printer · from $79.99
   https://shop.crtlu.me/products/x8t-tattoo-printer/
   Portable A4 thermal printer set for tattoo stencil transfers, monochrome line art, notes, and documents, supplied with 10 tattoo transfer sheets and a carry pouch.
+
+- H96Max S905L TS — H96 · Android TV Box · from $29.99 · chipset Amlogic S905L Quad-core ARM Cortex-A53 · OS Android 14
+  https://shop.crtlu.me/products/h96max-s905l-ts/
+  H96Max S905L TS Android 14 TV stick with Amlogic S905L, available in 2GB RAM + 16GB ROM.
+
+- H96 MAX M20 TV Stick — H96 · Android TV Box · from $29.99 · chipset Amlogic S905L3 Quad-core ARM Cortex-A53 · OS Android 14
+  https://shop.crtlu.me/products/h96-max-m20-stick/
+  H96 MAX M20 TV Stick Android 14 TV stick with Amlogic S905L3, available in 2GB RAM + 16GB ROM.
+
+- H96 MAX M9 — H96 · Premium Streaming Device · from $114.99 · chipset Rockchip RK3576 Quad ARM Cortex-A72 + Quad ARM Cortex-A53 (8-core) · OS Android 14 · Wi-Fi Wi-Fi 6
+  https://shop.crtlu.me/products/h96-max-m9/
+  H96 MAX M9 Android 14 TV box with Rockchip RK3576, available in 4GB RAM + 32GB ROM / 8GB RAM + 128GB ROM.
+
+- H96 MAX M9S — H96 · Premium Streaming Device · from $109.99 · chipset Rockchip RK3576 Quad ARM Cortex-A72 + Quad ARM Cortex-A53 (8-core) · OS Android 14 · Wi-Fi Wi-Fi 6
+  https://shop.crtlu.me/products/h96-max-m9s/
+  H96 MAX M9S Android 14 TV box with Rockchip RK3576, available in 4GB RAM + 32GB ROM / 8GB RAM + 128GB ROM.
+
+- H96 MAX RK3518 TV Stick — H96 · Android TV Box · from $29.99 · chipset Rockchip RK3518 Quad-core ARM Cortex-A53 · OS Android 14
+  https://shop.crtlu.me/products/h96-max-rk3518-stick/
+  H96 MAX RK3518 TV Stick Android 14 TV stick with Rockchip RK3518, available in 2GB RAM + 8GB ROM / 2GB RAM + 16GB ROM.
+
+- H96Max RK3518B — H96 · Android TV Box · from $30.99 · chipset Rockchip RK3518 Quad-core ARM Cortex-A53 · OS Android 14
+  https://shop.crtlu.me/products/h96max-rk3518b/
+  H96Max RK3518B Android 14 TV box with Rockchip RK3518, available in 2GB RAM + 8GB ROM / 2GB RAM + 16GB ROM.
+
+- H96Max RK3518D — H96 · Android TV Box · from $29.99 · chipset Rockchip RK3518 Quad-core ARM Cortex-A53 · OS Android 14
+  https://shop.crtlu.me/products/h96max-rk3518d/
+  H96Max RK3518D Android 14 TV stick with Rockchip RK3518, available in 2GB RAM + 8GB ROM / 2GB RAM + 16GB ROM.
+
+- HAKO RK3518D2 — HAKO · Android TV Box · from $29.99 · chipset Rockchip RK3518 Quad-core ARM Cortex-A53 · OS Android 14
+  https://shop.crtlu.me/products/hako-rk3518d2/
+  HAKO RK3518D2 Android 14 TV stick with Rockchip RK3518, available in 2GB RAM + 8GB ROM / 2GB RAM + 16GB ROM.
+
+- HAKO RK3539Y — HAKO · Android TV Box · from $39.99 · chipset Rockchip RK3539 Quad-core 64-bit ARM Cortex-A55 @ 1920 MHz · OS Android 14
+  https://shop.crtlu.me/products/hako-rk3539y/
+  HAKO RK3539Y Android 14 TV box with Rockchip RK3539, available in 2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM.
+
+- R69 Plus — R69 · Android TV Box · from $49.99 · chipset Allwinner H728 Octa-core ARM Cortex-A55 · OS Android 14 · Wi-Fi Wi-Fi 6
+  https://shop.crtlu.me/products/r69-plus/
+  R69 Plus Android 14 TV box with Allwinner H728, available in 2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM.
+
+- R69 PRO — R69 · Android TV Box · from $49.99 · chipset Allwinner H728 Octa-core ARM Cortex-A55 · OS Android 14 · Wi-Fi Wi-Fi 6
+  https://shop.crtlu.me/products/r69-pro/
+  R69 PRO Android 14 TV box with Allwinner H728, available in 2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM.
+
+- R69 MAX — R69 · Android TV Box · from $46.99 · chipset Rockchip RK3528 Quad-core ARM Cortex-A53 · OS Android 14
+  https://shop.crtlu.me/products/r69-max/
+  R69 MAX Android 14 TV box with Rockchip RK3528, 4GB RAM + 32GB ROM, available with an IR remote or a Bluetooth voice remote.
+
+- R69 (RK3518) — R69 · Android TV Box · from $30.99 · chipset Rockchip RK3518 Quad-core ARM Cortex-A53 · OS Android 14
+  https://shop.crtlu.me/products/r69-rk3518/
+  R69 (RK3518) Android 14 TV box with Rockchip RK3518, available in 2GB RAM + 8GB ROM / 2GB RAM + 16GB ROM / 2GB RAM + 32GB ROM.
+
+- TVR3+ — TVR3 · Android TV Box · from $30.99 · chipset Rockchip RK3518 Quad-core ARM Cortex-A53 · OS Android 14
+  https://shop.crtlu.me/products/tvr3-plus/
+  TVR3+ Android 14 TV stick with Rockchip RK3518, available in 2GB RAM + 16GB ROM.
+
+- Tanix TX5 Plus — Tanix · Android TV Box · from $59.99 · chipset Amlogic S905X5M Quad-core ARM Cortex-A55 · OS Android 14 · Wi-Fi Wi-Fi 5
+  https://shop.crtlu.me/products/tanix-tx5-plus/
+  Tanix TX5 Plus Android 14 TV box with Amlogic S905X5M, available in 2GB RAM + 16GB ROM.
+
+- X96Q PRO+ — X96 · Android TV Box · from $55.99 · chipset Allwinner H728 Octa-core ARM Cortex-A55 · OS Android 14 · Wi-Fi Wi-Fi 6
+  https://shop.crtlu.me/products/x96q-pro-plus/
+  X96Q PRO+ Android 14 TV box with Allwinner H728, available in 2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM.
+
+- X96Q M200 — X96 · Android TV Box · from $59.99 · chipset Amlogic S905X5M Quad-core ARM Cortex-A55 · OS Android 14 · Wi-Fi Wi-Fi 6
+  https://shop.crtlu.me/products/x96q-m200/
+  X96Q M200 Android 14 TV box with Amlogic S905X5M, available in 2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM / 4GB RAM + 64GB ROM.
+
+- X96Q RK3518 — X96 · Android TV Box · from $33.99 · chipset Rockchip RK3518 Quad-core ARM Cortex-A53 · OS Android 14
+  https://shop.crtlu.me/products/x96q-rk3518/
+  X96Q RK3518 Android 14 TV box with Rockchip RK3518, available in 2GB RAM + 16GB ROM.
+
+- X98K PRO — X96 · Android TV Box · from $74.99 · chipset Rockchip RK3566 Quad-core ARM Cortex-A55 · OS Android 11
+  https://shop.crtlu.me/products/x98k-pro/
+  X98K PRO Android 14 TV box with Rockchip RK3566, available in 4GB RAM + 32GB ROM.
+
+- X96Q RK3539 — X96 · Android TV Box · from $36.99 · chipset Rockchip RK3539 Quad-core ARM Cortex-A55 · OS Android 14
+  https://shop.crtlu.me/products/x96q-rk3539/
+  X96Q RK3539 Android 14 TV box with Rockchip RK3539, available in 1.5GB RAM + 8GB ROM / 2GB RAM + 16GB ROM.
+
+- HS86 T1 — HS86 · Android TV Box · from $32.99 · chipset Rockchip RK3518 · OS Android 14 · Wi-Fi Wi-Fi 6
+  https://shop.crtlu.me/products/hs86-t1/
+  HS86 T1 Android 14 TV stick with Rockchip RK3518, available in 2GB RAM + 16GB ROM.
+
+- HS86 T2 — HS86 · Android TV Box · from $34.99 · chipset Rockchip RK3518 · OS Android 14 · Wi-Fi Wi-Fi 6
+  https://shop.crtlu.me/products/hs86-t2/
+  HS86 T2 Android 14 TV stick with Rockchip RK3518, available in 2GB RAM + 16GB ROM.
+
+- HS86 MINI 14 — HS86 · Android TV Box · from $33.99 · chipset Rockchip RK3518 · OS Android 14 · Wi-Fi Wi-Fi 6
+  https://shop.crtlu.me/products/hs86-mini-14/
+  HS86 MINI 14 Android 14 TV box with Rockchip RK3518, available in 2GB RAM + 16GB ROM.
+
+- HS86 PRO 14 — HS86 · Android TV Box · from $34.99 · chipset Rockchip RK3518 · OS Android 14 · Wi-Fi Wi-Fi 6
+  https://shop.crtlu.me/products/hs86-pro-14/
+  HS86 PRO 14 Android 14 TV box with Rockchip RK3518, available in 2GB RAM + 16GB ROM.
+
+- HS86 MINI 13 — HS86 · Android TV Box · from $36.99 · chipset Rockchip RK3518 · OS Android 14 · Wi-Fi Wi-Fi 6
+  https://shop.crtlu.me/products/hs86-mini-13/
+  HS86 MINI 13 Android 14 TV box with Rockchip RK3518, available in 2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM.
+
+- HS86 PRO 13 — HS86 · Android TV Box · from $36.99 · chipset Rockchip RK3528 · OS Android 14 · Wi-Fi Wi-Fi 6
+  https://shop.crtlu.me/products/hs86-pro-13/
+  HS86 PRO 13 Android 14 TV box with Rockchip RK3528, available in 2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM.
+
+- HS89 PRO 15 — HS89 · Android TV Box · from $39.99 · chipset Rockchip RK3539 Quad-core ARM Cortex-A55 · OS Android 14 · Wi-Fi Wi-Fi 6
+  https://shop.crtlu.me/products/hs89-pro-15/
+  HS89 PRO 15 Android 14 TV box with Rockchip RK3539, available in 2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM.
+
+- HS89 MINI 15 — HS89 · Android TV Box · from $39.99 · chipset Rockchip RK3539 Quad-core ARM Cortex-A55 · OS Android 14 · Wi-Fi Wi-Fi 6
+  https://shop.crtlu.me/products/hs89-mini-15/
+  HS89 MINI 15 Android 14 TV box with Rockchip RK3539, available in 2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM.
+
+- HS89 T15 — HS89 · Android TV Box · from $39.99 · chipset Rockchip RK3539 Quad-core ARM Cortex-A55 · OS Android 14 · Wi-Fi Wi-Fi 6
+  https://shop.crtlu.me/products/hs89-t15/
+  HS89 T15 Android 14 TV stick with Rockchip RK3539, available in 2GB RAM + 16GB ROM / 4GB RAM + 32GB ROM.
 
 ## Compliance reminder
 Do not describe these products as including free paid TV channels, lifetime IPTV, or bundled unofficial streaming accounts.
