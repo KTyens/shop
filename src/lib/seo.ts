@@ -210,7 +210,9 @@ export function productJsonLd(product: SeriesItem, reviews?: ProductReviewSummar
   const high = prices.length ? Math.max(...prices) / 100 : undefined;
   const catLabel = categorySeoLabel(product.category);
 
-  const offers = product.variants.map((variant) => ({
+  // Only variants with a real price become Offers (never emit price "0.00").
+  const pricedVariants = product.variants.filter((v) => Number.isFinite(v.price_cents) && v.price_cents > 0);
+  const offers = pricedVariants.map((variant) => ({
     '@type': 'Offer',
     sku: variant.sku,
     name: `${product.name} ${variant.label}`,
@@ -277,7 +279,7 @@ export function productJsonLd(product: SeriesItem, reviews?: ProductReviewSummar
             priceCurrency: 'USD',
             lowPrice: low.toFixed(2),
             highPrice: high.toFixed(2),
-            offerCount: String(product.variants.length),
+            offerCount: String(pricedVariants.length),
             availability: 'https://schema.org/InStock',
             offers,
           },

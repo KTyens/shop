@@ -53,6 +53,19 @@ const productBreadcrumb = breadcrumbJsonLd([
   { name: 'Products', path: '/products/' },
   { name: product.name, path: `/products/${product.id}/` },
 ]);
+// Server-render the price block so first paint / no-JS / crawlers never see a
+// placeholder "$0.00". Default configuration = lowest-priced variant (first on
+// ties), identical to what the client script preselects.
+const usd = (cents: number) => '$' + (cents / 100).toFixed(2);
+const hasValidPrice = (v: any) => Number.isFinite(v?.price_cents) && v.price_cents > 0;
+const defaultVariant = (product.variants || []).filter(hasValidPrice).reduce(
+  (best: any, v: any) => (!best || v.price_cents < best.price_cents ? v : best),
+  null,
+);
+const priceText = defaultVariant ? usd(defaultVariant.price_cents) : 'Select a configuration';
+const compareText = defaultVariant?.compare_at_cents && defaultVariant.compare_at_cents !== defaultVariant.price_cents
+  ? usd(defaultVariant.compare_at_cents)
+  : '';
 const isProjector = product.category === 'projector';
 const isPrinter = product.category === 'printer';
 const buyerFit = isProjector
@@ -169,13 +182,17 @@ const faqSchema = {
         )}
         <p class="lead" id="description" style="color:#666666;line-height:1.7;font-size:17px;margin:14px 0;">{product.description}</p>
         <div class="price-line" style="margin:22px 0;display:flex;align-items:end;gap:10px;">
-          <span class="price" id="price" style="font-size:38px;font-weight:950;">$0.00</span>
-          <span class="compare" id="compare" style="color:var(--muted);text-decoration:line-through;"></span>
+          <span class="price" id="price" style="font-size:38px;font-weight:950;">{priceText}</span>
+          <span class="compare" id="compare" style="color:var(--muted);text-decoration:line-through;">{compareText}</span>
         </div>
-        <div class="variants" id="variants" style="display:grid;gap:10px;margin:22px 0;"></div>
+        <div class="variants" id="variants" style="display:grid;gap:10px;margin:22px 0;">
+          {product.variants.map((v) => (
+            <button class={`variant-row ${defaultVariant && v.id === defaultVariant.id ? 'active' : ''}`} type="button" data-variant={v.id}><span><strong>{v.label}</strong><span>{v.sku}</span></span><strong>{hasValidPrice(v) ? usd(v.price_cents) : 'Unavailable'}</strong></button>
+          ))}
+        </div>
         <div class="plug-section" id="plugSection" style="display:grid;gap:10px;margin:22px 0;"></div>
         <div class="actions" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;">
-          <button class="primary-button" type="button" id="addSelected" data-i18n="pdp.addToCart">Add to Cart</button>
+          <button class="primary-button" type="button" id="addSelected" data-i18n="pdp.addToCart" disabled={!defaultVariant}>Add to Cart</button>
           <a class="secondary-button" href="/products/" data-i18n="pdp.allProducts">All Products</a>
         </div>
         <div class="buy-trust">
@@ -582,6 +599,12 @@ const faqSchema = {
     }
     function saveCart() { localStorage.setItem(cartKey, JSON.stringify(cart)); }
     function money(cents) { return '$' + (cents / 100).toFixed(2); }
+    function hasPrice(v) { return Boolean(v) && Number.isFinite(v.price_cents) && v.price_cents > 0; }
+    // Never render "$0.00" / "$NaN" for a product price: fall back to a prompt.
+    function priceOrPrompt(v) { return hasPrice(v) ? money(v.price_cents) : 'Select a configuration'; }
+    function cheapestVariant(list) {
+      return (list || []).filter(hasPrice).reduce((best, v) => (!best || v.price_cents < best.price_cents ? v : best), null);
+    }
     function apiUrl(path) { return window.crtluApiUrl ? window.crtluApiUrl(path) : path; }
 
     function publicAssetPath(value) {
@@ -610,15 +633,17 @@ const faqSchema = {
     }
 
     function renderProduct() {
-      const selected = product.variants.find((v) => v.id === selectedId) || product.variants[0];
+      const selected = product.variants.find((v) => v.id === selectedId) || cheapestVariant(product.variants) || product.variants[0];
       selectedId = selected.id;
+      const addBtn = document.getElementById('addSelected');
+      if (addBtn) addBtn.disabled = !hasPrice(selected);
       const gallery = buildGallery();
       // Drop currentImage if it no longer exists in gallery (stale path)
       if (currentImage && !gallery.includes(currentImage)) currentImage = '';
       currentImage = currentImage || gallery[0] || '';
 
-      document.getElementById('price').textContent = money(selected.price_cents);
-      document.getElementById('compare').textContent = (selected.compare_at_cents && selected.compare_at_cents !== selected.price_cents) ? money(selected.compare_at_cents) : '';
+      document.getElementById('price').textContent = priceOrPrompt(selected);
+      document.getElementById('compare').textContent = (hasPrice(selected) && selected.compare_at_cents && selected.compare_at_cents !== selected.price_cents) ? money(selected.compare_at_cents) : '';
 
       const titleEl = document.getElementById('title');
       if (titleEl && product.name) titleEl.textContent = product.name;
@@ -636,7 +661,7 @@ const faqSchema = {
 
       // Variants
       document.getElementById('variants').innerHTML = product.variants.map((v) =>
-        `<button class="variant-row ${v.id === selected.id ? 'active' : ''}" type="button" data-variant="${v.id}"><span><strong>${v.label}</strong><span>${v.sku}</span></span><strong>${money(v.price_cents)}</strong></button>`
+        `<button class="variant-row ${v.id === selected.id ? 'active' : ''}" type="button" data-variant="${v.id}"><span><strong>${v.label}</strong><span>${v.sku}</span></span><strong>${hasPrice(v) ? money(v.price_cents) : 'Unavailable'}</strong></button>`
       ).join('');
 
       // Plug type selector
@@ -670,8 +695,8 @@ const faqSchema = {
         Tier: product.tier.replace('-', ' '),
         Configurations: product.variants.map((v) => v.label).join(' / '),
         SKU: selected.sku,
-        'Launch Price': money(selected.price_cents),
-        'Standard Price': money(selected.compare_at_cents || selected.price_cents),
+        'Launch Price': hasPrice(selected) ? money(selected.price_cents) : '',
+        'Standard Price': hasPrice(selected) ? money(selected.compare_at_cents || selected.price_cents) : '',
       };
       const hiddenCatalogKeys = new Set([
         'brand',
@@ -796,6 +821,7 @@ const faqSchema = {
     }
 
     function addToCart(id) {
+      if (!hasPrice(variantById(id))) return; // never add a variant without a valid price
       if (requiresPlug && !selectedPlug) {
         const section = document.getElementById('plugSection');
         if (section) {
@@ -918,8 +944,13 @@ const faqSchema = {
 
     // ---- Init ----
     function init() {
-      selectedId = product.variants[0].id;
+      selectedId = (cheapestVariant(product.variants) || product.variants[0]).id;
       selectedPlug = '';
+      // SSR disables Add to Cart only when no variant has a valid price; keep the
+      // button state in sync with the default variant right away (do not wait for
+      // the live-catalog fetch).
+      const addBtnInit = document.getElementById('addSelected');
+      if (addBtnInit) addBtnInit.disabled = !hasPrice(product.variants.find((v) => v.id === selectedId));
       currentImage = '';
 
       // Live catalog first so admin image/price edits win over SSR HTML.
