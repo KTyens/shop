@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-26",
+  "updated": "2026-10-27",
   "currency": "usd",
   "plug_types": [
     {
@@ -3074,7 +3074,8 @@
         "assets/products/h96max-s905l-ts/detail-4.jpg",
         "assets/products/h96max-s905l-ts/detail-5.jpg",
         "assets/products/h96max-s905l-ts/detail-6.jpg",
-        "assets/products/h96max-s905l-ts/detail-7.jpg"
+        "assets/products/h96max-s905l-ts/detail-7.jpg",
+        "assets/products/h96max-s905l-ts/detail-8.jpg"
       ],
       "specs": {
         "Model": "H96Max S905L TS",
@@ -3119,7 +3120,11 @@
         "assets/products/h96-max-m20-stick/detail-4.jpg",
         "assets/products/h96-max-m20-stick/detail-5.jpg",
         "assets/products/h96-max-m20-stick/detail-6.jpg",
-        "assets/products/h96-max-m20-stick/detail-7.jpg"
+        "assets/products/h96-max-m20-stick/detail-7.jpg",
+        "assets/products/h96-max-m20-stick/detail-8.jpg",
+        "assets/products/h96-max-m20-stick/detail-9.jpg",
+        "assets/products/h96-max-m20-stick/detail-10.jpg",
+        "assets/products/h96-max-m20-stick/detail-11.jpg"
       ],
       "specs": {
         "Model": "H96 MAX M20 TV Stick",
@@ -3173,7 +3178,15 @@
         "assets/products/h96-max-m9/detail-4.jpg",
         "assets/products/h96-max-m9/detail-5.jpg",
         "assets/products/h96-max-m9/detail-6.jpg",
-        "assets/products/h96-max-m9/detail-7.jpg"
+        "assets/products/h96-max-m9/detail-7.jpg",
+        "assets/products/h96-max-m9/detail-8.jpg",
+        "assets/products/h96-max-m9/detail-9.jpg",
+        "assets/products/h96-max-m9/detail-10.jpg",
+        "assets/products/h96-max-m9/detail-11.jpg",
+        "assets/products/h96-max-m9/detail-12.jpg",
+        "assets/products/h96-max-m9/detail-13.jpg",
+        "assets/products/h96-max-m9/detail-14.jpg",
+        "assets/products/h96-max-m9/detail-15.jpg"
       ],
       "specs": {
         "Model": "H96 MAX M9",
@@ -3234,7 +3247,15 @@
         "assets/products/h96-max-m9s/detail-4.jpg",
         "assets/products/h96-max-m9s/detail-5.jpg",
         "assets/products/h96-max-m9s/detail-6.jpg",
-        "assets/products/h96-max-m9s/detail-7.jpg"
+        "assets/products/h96-max-m9s/detail-7.jpg",
+        "assets/products/h96-max-m9s/detail-8.jpg",
+        "assets/products/h96-max-m9s/detail-9.jpg",
+        "assets/products/h96-max-m9s/detail-10.jpg",
+        "assets/products/h96-max-m9s/detail-11.jpg",
+        "assets/products/h96-max-m9s/detail-12.jpg",
+        "assets/products/h96-max-m9s/detail-13.jpg",
+        "assets/products/h96-max-m9s/detail-14.jpg",
+        "assets/products/h96-max-m9s/detail-15.jpg"
       ],
       "specs": {
         "Model": "H96 MAX M9S",
@@ -3295,7 +3316,10 @@
         "assets/products/h96-max-rk3518-stick/detail-4.jpg",
         "assets/products/h96-max-rk3518-stick/detail-5.jpg",
         "assets/products/h96-max-rk3518-stick/detail-6.jpg",
-        "assets/products/h96-max-rk3518-stick/detail-7.jpg"
+        "assets/products/h96-max-rk3518-stick/detail-7.jpg",
+        "assets/products/h96-max-rk3518-stick/detail-8.jpg",
+        "assets/products/h96-max-rk3518-stick/detail-9.jpg",
+        "assets/products/h96-max-rk3518-stick/detail-10.jpg"
       ],
       "specs": {
         "Model": "H96 MAX RK3518 TV Stick",
@@ -3350,7 +3374,12 @@
         "assets/products/h96max-rk3518b/detail-4.jpg",
         "assets/products/h96max-rk3518b/detail-5.jpg",
         "assets/products/h96max-rk3518b/detail-6.jpg",
-        "assets/products/h96max-rk3518b/detail-7.jpg"
+        "assets/products/h96max-rk3518b/detail-7.jpg",
+        "assets/products/h96max-rk3518b/detail-8.jpg",
+        "assets/products/h96max-rk3518b/detail-9.jpg",
+        "assets/products/h96max-rk3518b/detail-10.jpg",
+        "assets/products/h96max-rk3518b/detail-11.jpg",
+        "assets/products/h96max-rk3518b/detail-12.jpg"
       ],
       "specs": {
         "Model": "H96Max RK3518B",
@@ -3408,7 +3437,12 @@
         "assets/products/h96max-rk3518d/detail-4.jpg",
         "assets/products/h96max-rk3518d/detail-5.jpg",
         "assets/products/h96max-rk3518d/detail-6.jpg",
-        "assets/products/h96max-rk3518d/detail-7.jpg"
+        "assets/products/h96max-rk3518d/detail-7.jpg",
+        "assets/products/h96max-rk3518d/detail-8.jpg",
+        "assets/products/h96max-rk3518d/detail-9.jpg",
+        "assets/products/h96max-rk3518d/detail-10.jpg",
+        "assets/products/h96max-rk3518d/detail-11.jpg",
+        "assets/products/h96max-rk3518d/detail-12.jpg"
       ],
       "specs": {
         "Model": "H96Max RK3518D",
@@ -3463,7 +3497,11 @@
         "assets/products/hako-rk3518d2/detail-4.jpg",
         "assets/products/hako-rk3518d2/detail-5.jpg",
         "assets/products/hako-rk3518d2/detail-6.jpg",
-        "assets/products/hako-rk3518d2/detail-7.jpg"
+        "assets/products/hako-rk3518d2/detail-7.jpg",
+        "assets/products/hako-rk3518d2/detail-8.jpg",
+        "assets/products/hako-rk3518d2/detail-9.jpg",
+        "assets/products/hako-rk3518d2/detail-10.jpg",
+        "assets/products/hako-rk3518d2/detail-11.jpg"
       ],
       "specs": {
         "Model": "HAKO RK3518D2",
@@ -3517,7 +3555,9 @@
         "assets/products/hako-rk3539y/detail-4.jpg",
         "assets/products/hako-rk3539y/detail-5.jpg",
         "assets/products/hako-rk3539y/detail-6.jpg",
-        "assets/products/hako-rk3539y/detail-7.jpg"
+        "assets/products/hako-rk3539y/detail-7.jpg",
+        "assets/products/hako-rk3539y/detail-8.jpg",
+        "assets/products/hako-rk3539y/detail-9.jpg"
       ],
       "specs": {
         "Model": "HAKO RK3539Y",
@@ -3583,7 +3623,16 @@
         "assets/products/r69-plus/detail-4.jpg",
         "assets/products/r69-plus/detail-5.jpg",
         "assets/products/r69-plus/detail-6.jpg",
-        "assets/products/r69-plus/detail-7.jpg"
+        "assets/products/r69-plus/detail-7.jpg",
+        "assets/products/r69-plus/detail-8.jpg",
+        "assets/products/r69-plus/detail-9.jpg",
+        "assets/products/r69-plus/detail-10.jpg",
+        "assets/products/r69-plus/detail-11.jpg",
+        "assets/products/r69-plus/detail-12.jpg",
+        "assets/products/r69-plus/detail-13.jpg",
+        "assets/products/r69-plus/detail-14.jpg",
+        "assets/products/r69-plus/detail-15.jpg",
+        "assets/products/r69-plus/detail-16.jpg"
       ],
       "specs": {
         "Model": "R69 Plus",
@@ -3647,7 +3696,15 @@
         "assets/products/r69-pro/detail-4.jpg",
         "assets/products/r69-pro/detail-5.jpg",
         "assets/products/r69-pro/detail-6.jpg",
-        "assets/products/r69-pro/detail-7.jpg"
+        "assets/products/r69-pro/detail-7.jpg",
+        "assets/products/r69-pro/detail-8.jpg",
+        "assets/products/r69-pro/detail-9.jpg",
+        "assets/products/r69-pro/detail-10.jpg",
+        "assets/products/r69-pro/detail-11.jpg",
+        "assets/products/r69-pro/detail-12.jpg",
+        "assets/products/r69-pro/detail-13.jpg",
+        "assets/products/r69-pro/detail-14.jpg",
+        "assets/products/r69-pro/detail-15.jpg"
       ],
       "specs": {
         "Model": "R69 PRO",
@@ -3705,7 +3762,12 @@
         "assets/products/r69-max/detail-4.jpg",
         "assets/products/r69-max/detail-5.jpg",
         "assets/products/r69-max/detail-6.jpg",
-        "assets/products/r69-max/detail-7.jpg"
+        "assets/products/r69-max/detail-7.jpg",
+        "assets/products/r69-max/detail-8.jpg",
+        "assets/products/r69-max/detail-9.jpg",
+        "assets/products/r69-max/detail-10.jpg",
+        "assets/products/r69-max/detail-11.jpg",
+        "assets/products/r69-max/detail-12.jpg"
       ],
       "specs": {
         "Model": "R69 MAX",
@@ -3768,7 +3830,15 @@
         "assets/products/r69-rk3518/detail-4.jpg",
         "assets/products/r69-rk3518/detail-5.jpg",
         "assets/products/r69-rk3518/detail-6.jpg",
-        "assets/products/r69-rk3518/detail-7.jpg"
+        "assets/products/r69-rk3518/detail-7.jpg",
+        "assets/products/r69-rk3518/detail-8.jpg",
+        "assets/products/r69-rk3518/detail-9.jpg",
+        "assets/products/r69-rk3518/detail-10.jpg",
+        "assets/products/r69-rk3518/detail-11.jpg",
+        "assets/products/r69-rk3518/detail-12.jpg",
+        "assets/products/r69-rk3518/detail-13.jpg",
+        "assets/products/r69-rk3518/detail-14.jpg",
+        "assets/products/r69-rk3518/detail-15.jpg"
       ],
       "specs": {
         "Model": "R69 (RK3518)",
@@ -3813,7 +3883,10 @@
         "assets/products/tvr3-plus/detail-4.jpg",
         "assets/products/tvr3-plus/detail-5.jpg",
         "assets/products/tvr3-plus/detail-6.jpg",
-        "assets/products/tvr3-plus/detail-7.jpg"
+        "assets/products/tvr3-plus/detail-7.jpg",
+        "assets/products/tvr3-plus/detail-8.jpg",
+        "assets/products/tvr3-plus/detail-9.jpg",
+        "assets/products/tvr3-plus/detail-10.jpg"
       ],
       "specs": {
         "Model": "TVR3+",
@@ -3855,7 +3928,8 @@
         "assets/products/tanix-tx5-plus/detail-1.jpg",
         "assets/products/tanix-tx5-plus/detail-2.jpg",
         "assets/products/tanix-tx5-plus/detail-3.jpg",
-        "assets/products/tanix-tx5-plus/detail-4.jpg"
+        "assets/products/tanix-tx5-plus/detail-4.jpg",
+        "assets/products/tanix-tx5-plus/detail-5.jpg"
       ],
       "specs": {
         "Model": "Tanix TX5 Plus",
@@ -3922,7 +3996,13 @@
         "assets/products/x96q-pro-plus/detail-4.jpg",
         "assets/products/x96q-pro-plus/detail-5.jpg",
         "assets/products/x96q-pro-plus/detail-6.jpg",
-        "assets/products/x96q-pro-plus/detail-7.jpg"
+        "assets/products/x96q-pro-plus/detail-7.jpg",
+        "assets/products/x96q-pro-plus/detail-8.jpg",
+        "assets/products/x96q-pro-plus/detail-9.jpg",
+        "assets/products/x96q-pro-plus/detail-10.jpg",
+        "assets/products/x96q-pro-plus/detail-11.jpg",
+        "assets/products/x96q-pro-plus/detail-12.jpg",
+        "assets/products/x96q-pro-plus/detail-13.jpg"
       ],
       "specs": {
         "Model": "X96Q PRO+",
@@ -3987,7 +4067,14 @@
         "assets/products/x96q-m200/detail-4.jpg",
         "assets/products/x96q-m200/detail-5.jpg",
         "assets/products/x96q-m200/detail-6.jpg",
-        "assets/products/x96q-m200/detail-7.jpg"
+        "assets/products/x96q-m200/detail-7.jpg",
+        "assets/products/x96q-m200/detail-8.jpg",
+        "assets/products/x96q-m200/detail-9.jpg",
+        "assets/products/x96q-m200/detail-10.jpg",
+        "assets/products/x96q-m200/detail-11.jpg",
+        "assets/products/x96q-m200/detail-12.jpg",
+        "assets/products/x96q-m200/detail-13.jpg",
+        "assets/products/x96q-m200/detail-14.jpg"
       ],
       "specs": {
         "Model": "X96Q M200",
@@ -4033,7 +4120,10 @@
         "assets/products/x96q-rk3518/detail-4.jpg",
         "assets/products/x96q-rk3518/detail-5.jpg",
         "assets/products/x96q-rk3518/detail-6.jpg",
-        "assets/products/x96q-rk3518/detail-7.jpg"
+        "assets/products/x96q-rk3518/detail-7.jpg",
+        "assets/products/x96q-rk3518/detail-8.jpg",
+        "assets/products/x96q-rk3518/detail-9.jpg",
+        "assets/products/x96q-rk3518/detail-10.jpg"
       ],
       "specs": {
         "Model": "X96Q RK3518",
@@ -4078,7 +4168,17 @@
         "assets/products/x98k-pro/detail-4.jpg",
         "assets/products/x98k-pro/detail-5.jpg",
         "assets/products/x98k-pro/detail-6.jpg",
-        "assets/products/x98k-pro/detail-7.jpg"
+        "assets/products/x98k-pro/detail-7.jpg",
+        "assets/products/x98k-pro/detail-8.jpg",
+        "assets/products/x98k-pro/detail-9.jpg",
+        "assets/products/x98k-pro/detail-10.jpg",
+        "assets/products/x98k-pro/detail-11.jpg",
+        "assets/products/x98k-pro/detail-12.jpg",
+        "assets/products/x98k-pro/detail-13.jpg",
+        "assets/products/x98k-pro/detail-14.jpg",
+        "assets/products/x98k-pro/detail-15.jpg",
+        "assets/products/x98k-pro/detail-16.jpg",
+        "assets/products/x98k-pro/detail-17.jpg"
       ],
       "specs": {
         "Model": "X98K PRO",
@@ -4133,7 +4233,12 @@
         "assets/products/x96q-rk3539/detail-4.jpg",
         "assets/products/x96q-rk3539/detail-5.jpg",
         "assets/products/x96q-rk3539/detail-6.jpg",
-        "assets/products/x96q-rk3539/detail-7.jpg"
+        "assets/products/x96q-rk3539/detail-7.jpg",
+        "assets/products/x96q-rk3539/detail-8.jpg",
+        "assets/products/x96q-rk3539/detail-9.jpg",
+        "assets/products/x96q-rk3539/detail-10.jpg",
+        "assets/products/x96q-rk3539/detail-11.jpg",
+        "assets/products/x96q-rk3539/detail-12.jpg"
       ],
       "specs": {
         "Model": "X96Q RK3539",
@@ -4178,7 +4283,12 @@
         "assets/products/hs86-t1/detail-4.jpg",
         "assets/products/hs86-t1/detail-5.jpg",
         "assets/products/hs86-t1/detail-6.jpg",
-        "assets/products/hs86-t1/detail-7.jpg"
+        "assets/products/hs86-t1/detail-7.jpg",
+        "assets/products/hs86-t1/detail-8.jpg",
+        "assets/products/hs86-t1/detail-9.jpg",
+        "assets/products/hs86-t1/detail-10.jpg",
+        "assets/products/hs86-t1/detail-11.jpg",
+        "assets/products/hs86-t1/detail-12.jpg"
       ],
       "specs": {
         "Model": "HS86 T1",
@@ -4272,7 +4382,11 @@
         "assets/products/hs86-mini-14/detail-4.jpg",
         "assets/products/hs86-mini-14/detail-5.jpg",
         "assets/products/hs86-mini-14/detail-6.jpg",
-        "assets/products/hs86-mini-14/detail-7.jpg"
+        "assets/products/hs86-mini-14/detail-7.jpg",
+        "assets/products/hs86-mini-14/detail-8.jpg",
+        "assets/products/hs86-mini-14/detail-9.jpg",
+        "assets/products/hs86-mini-14/detail-10.jpg",
+        "assets/products/hs86-mini-14/detail-11.jpg"
       ],
       "specs": {
         "Model": "HS86 MINI 14",
@@ -4320,7 +4434,12 @@
         "assets/products/hs86-pro-14/detail-4.jpg",
         "assets/products/hs86-pro-14/detail-5.jpg",
         "assets/products/hs86-pro-14/detail-6.jpg",
-        "assets/products/hs86-pro-14/detail-7.jpg"
+        "assets/products/hs86-pro-14/detail-7.jpg",
+        "assets/products/hs86-pro-14/detail-8.jpg",
+        "assets/products/hs86-pro-14/detail-9.jpg",
+        "assets/products/hs86-pro-14/detail-10.jpg",
+        "assets/products/hs86-pro-14/detail-11.jpg",
+        "assets/products/hs86-pro-14/detail-12.jpg"
       ],
       "specs": {
         "Model": "HS86 PRO 14",
@@ -4377,7 +4496,9 @@
         "assets/products/hs86-mini-13/detail-4.jpg",
         "assets/products/hs86-mini-13/detail-5.jpg",
         "assets/products/hs86-mini-13/detail-6.jpg",
-        "assets/products/hs86-mini-13/detail-7.jpg"
+        "assets/products/hs86-mini-13/detail-7.jpg",
+        "assets/products/hs86-mini-13/detail-8.jpg",
+        "assets/products/hs86-mini-13/detail-9.jpg"
       ],
       "specs": {
         "Model": "HS86 MINI 13",
@@ -4434,7 +4555,10 @@
         "assets/products/hs86-pro-13/detail-4.jpg",
         "assets/products/hs86-pro-13/detail-5.jpg",
         "assets/products/hs86-pro-13/detail-6.jpg",
-        "assets/products/hs86-pro-13/detail-7.jpg"
+        "assets/products/hs86-pro-13/detail-7.jpg",
+        "assets/products/hs86-pro-13/detail-8.jpg",
+        "assets/products/hs86-pro-13/detail-9.jpg",
+        "assets/products/hs86-pro-13/detail-10.jpg"
       ],
       "specs": {
         "Model": "HS86 PRO 13",
@@ -4491,7 +4615,12 @@
         "assets/products/hs89-pro-15/detail-4.jpg",
         "assets/products/hs89-pro-15/detail-5.jpg",
         "assets/products/hs89-pro-15/detail-6.jpg",
-        "assets/products/hs89-pro-15/detail-7.jpg"
+        "assets/products/hs89-pro-15/detail-7.jpg",
+        "assets/products/hs89-pro-15/detail-8.jpg",
+        "assets/products/hs89-pro-15/detail-9.jpg",
+        "assets/products/hs89-pro-15/detail-10.jpg",
+        "assets/products/hs89-pro-15/detail-11.jpg",
+        "assets/products/hs89-pro-15/detail-12.jpg"
       ],
       "specs": {
         "Model": "HS89 PRO 15",
@@ -4548,7 +4677,13 @@
         "assets/products/hs89-mini-15/detail-4.jpg",
         "assets/products/hs89-mini-15/detail-5.jpg",
         "assets/products/hs89-mini-15/detail-6.jpg",
-        "assets/products/hs89-mini-15/detail-7.jpg"
+        "assets/products/hs89-mini-15/detail-7.jpg",
+        "assets/products/hs89-mini-15/detail-8.jpg",
+        "assets/products/hs89-mini-15/detail-9.jpg",
+        "assets/products/hs89-mini-15/detail-10.jpg",
+        "assets/products/hs89-mini-15/detail-11.jpg",
+        "assets/products/hs89-mini-15/detail-12.jpg",
+        "assets/products/hs89-mini-15/detail-13.jpg"
       ],
       "specs": {
         "Model": "HS89 MINI 15",

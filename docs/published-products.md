@@ -1,6 +1,6 @@
 # Published Product Matrix
 
-Last updated: 2026-10-26
+Last updated: 2026-10-27
 
 Auto-generated from `data/catalog.json` (source of truth). Do not hand-edit prices here — change catalog then run:
 

@@ -365,6 +365,8 @@ shop/assets/products/<product-id>/
    shop/assets/products/<product-id>/
    ```
 
+   Follow the "Gallery Mix Rule" in `shop/docs/product-media-guidelines.md`: 4-6 clean product shots first, then >= ~6 compliant content images (scenes, specs, ports, package contents, performance), cap 18. Never publish a gallery made only of angle shots; mirror files to `shop/public/assets/products/<product-id>/`.
+
 5. Add one `series` entry to `shop/data/catalog.json`.
 6. Add all sellable configurations to `series.variants`.
 7. Add specs to `series.specs`.
