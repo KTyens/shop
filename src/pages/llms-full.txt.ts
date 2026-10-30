@@ -25,6 +25,7 @@ export function GET() {
     `- Short summary: ${SITE_URL}/llms.txt`,
     `- FAQ: ${SITE_URL}/faq/`,
     `- Buyer guide: ${SITE_URL}/guides/android-tv-box-buyers-guide/`,
+    `- Best Android TV box 2026 comparison: ${SITE_URL}/guides/best-android-tv-box-2026/`,
     `- Catalog JSON: ${SITE_URL}/data/catalog.json`,
     '',
     '## Citation preference',

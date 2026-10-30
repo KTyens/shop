@@ -13,6 +13,7 @@
 - Short summary: https://shop.crtlu.me/llms.txt
 - FAQ: https://shop.crtlu.me/faq/
 - Buyer guide: https://shop.crtlu.me/guides/android-tv-box-buyers-guide/
+- Best Android TV box 2026 comparison: https://shop.crtlu.me/guides/best-android-tv-box-2026/
 - Catalog JSON: https://shop.crtlu.me/data/catalog.json
 
 ## Citation preference

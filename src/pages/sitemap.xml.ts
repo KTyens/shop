@@ -6,6 +6,7 @@ const STATIC_ROUTES = [
   { path: '/products/', priority: '0.9', changefreq: 'weekly' },
   { path: '/faq/', priority: '0.7', changefreq: 'monthly' },
   { path: '/guides/android-tv-box-buyers-guide/', priority: '0.65', changefreq: 'monthly' },
+  { path: '/guides/best-android-tv-box-2026/', priority: '0.65', changefreq: 'monthly' },
   { path: '/contact/', priority: '0.4', changefreq: 'monthly' },
   { path: '/shipping/', priority: '0.4', changefreq: 'monthly' },
   { path: '/returns/', priority: '0.4', changefreq: 'monthly' },

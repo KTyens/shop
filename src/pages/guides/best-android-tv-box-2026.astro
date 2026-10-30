@@ -1,0 +1,256 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+import { loadSeriesById } from '../../lib/catalog-data';
+import { absoluteUrl, storeFaqJsonLd, CORE_SEO_KEYWORDS, SAFE_COMMERCE_KEYWORDS } from '../../lib/seo';
+
+const PICK_DEFS = [
+  {
+    id: 'x96q-m200',
+    label: 'Best overall value',
+    bestFor: 'Everyday 4K streaming box with Wi-Fi 6 and wired Gigabit',
+    why: 'A current Amlogic S905X5M platform on Android 14, with Wi-Fi 6 and Gigabit Ethernet listed in the specs. Configurations run from 2GB + 16GB up to 4GB + 64GB, so you can pick the 4GB versions for a living-room daily driver.',
+    buyIf: 'you want one modern, balanced box for the main TV and prefer a wired connection when it is available.',
+  },
+  {
+    id: 'h96-max-m9',
+    label: 'Premium / most powerful',
+    bestFor: 'Heavy multitasking, big local media libraries, NAS playback',
+    why: 'The Rockchip RK3576 is an 8-core chip (4 × Cortex-A72 + 4 × Cortex-A53) with a Mali-G52 MC3 GPU and a 6 TOPS NPU. The 8GB + 128GB configuration gives the most headroom in this list, and the specs list HDMI 2.1, Wi-Fi 6, Gigabit Ethernet and USB 3.0.',
+    buyIf: 'you play large local files, keep many apps installed, or simply want the most headroom. The near-identical H96 MAX M9S is an alternative.',
+  },
+  {
+    id: 'tanix-tx5-plus',
+    label: 'Compact modern Amlogic',
+    bestFor: 'A second TV or bedroom with HDR10+ content',
+    why: 'Same S905X5M generation as the X96Q M200, on Android 14, with 4K@60fps and HDR10+ output listed. It ships as 2GB + 16GB with Wi-Fi 5 and Bluetooth 5.0 and has one USB 3.0 port.',
+    buyIf: 'you want a newer Amlogic chip and HDR10+ support for lighter, single-app use.',
+  },
+  {
+    id: 'r69-plus',
+    label: 'Budget box with Wi-Fi 6 + Gigabit',
+    bestFor: 'Tight budgets that still want a modern network setup',
+    why: 'An Allwinner H728 octa-core box on Android 14 with Wi-Fi 6 and Gigabit Ethernet in the specs. The 4GB versions are the sensible choice for a main TV; 2GB + 16GB suits light use.',
+    buyIf: 'price matters most but you still want Wi-Fi 6 and a Gigabit port.',
+  },
+  {
+    id: 'tanix-tx5',
+    label: 'Budget Amlogic box',
+    bestFor: 'Simple streaming on an older TV, local playback via AV/SPDIF',
+    why: 'Amlogic S905Y5 on Android 14 with 4K decoding (AV1/VP9/AVS2 up to 4K@60fps listed), dual-band Wi-Fi 5, Ethernet, AV and SPDIF coaxial outputs. Configurations up to 4GB + 64GB.',
+    buyIf: 'you want a low-cost, well-understood Amlogic box with legacy audio/video outputs.',
+  },
+  {
+    id: 'hs89-t15',
+    label: 'Budget stick',
+    bestFor: 'Hotels, travel, or a TV with no shelf space',
+    why: 'An HDMI stick with a Rockchip RK3539 on Android 14 and Wi-Fi 6, offered in 2GB + 16GB and 4GB + 32GB. There is no Ethernet port, so place your router within good Wi-Fi range.',
+    buyIf: 'you want something that hides behind the TV and plugs straight into HDMI.',
+  },
+];
+
+function fromPrice(variants: Array<{ price_cents?: number }> = []) {
+  const prices = variants.map((v) => v.price_cents || 0).filter((n) => n > 0);
+  return prices.length ? `$${(Math.min(...prices) / 100).toFixed(2)}` : null;
+}
+const pick = (specs: Record<string, any>, ...keys: string[]) => {
+  for (const k of keys) if (specs?.[k]) return String(specs[k]);
+  return 'Not listed';
+};
+
+const picks = PICK_DEFS.map((def) => {
+  const item = loadSeriesById(def.id);
+  if (!item) throw new Error(`best-android-tv-box-2026: missing catalog product ${def.id}`);
+  const s = (item.specs || {}) as Record<string, any>;
+  return {
+    ...def,
+    name: item.name,
+    href: `/products/${item.id}/`,
+    price: fromPrice(item.variants as any),
+    chipset: pick(s, 'Chipset'),
+    memory: pick(s, 'configurations'),
+    os: pick(s, 'OS'),
+    wifi: pick(s, 'Wi-Fi'),
+    ethernet: s.Ethernet ? String(s.Ethernet) : /ethernet/i.test(String(s['Other Ports'] || '')) ? 'Ethernet port (speed not listed)' : 'Not listed',
+    video: pick(s, 'Video Output'),
+  };
+});
+
+const guideFaqs = [
+  {
+    q: 'Do I need an 8K Android TV box in 2026?',
+    a: 'For most people, no. Very little 8K content is available, so buy for smooth 4K playback today. Treat 8K output as a bonus, not the deciding spec.',
+  },
+  {
+    q: 'How much RAM should an Android TV box have?',
+    a: 'For a main living-room TV with several apps installed, choose 4GB where the model offers it. 2GB configurations are fine for lighter, single-app use such as a bedroom or travel TV.',
+  },
+  {
+    q: 'Does Gigabit Ethernet matter?',
+    a: 'For online streaming a stable 100Mbps port is usually enough. Gigabit helps when you play large local files from a NAS or home server. Check the Ethernet line on each product page.',
+  },
+  {
+    q: 'Will streaming apps play in 4K on these boxes?',
+    a: 'Maximum streaming resolution is decided by each app and by the device’s DRM certification, not only by the box hardware. We do not promise a specific resolution for any third-party app.',
+  },
+  {
+    q: 'Do these boxes include channels or subscriptions?',
+    a: 'No. CRTLU Digital sells hardware only. You install official apps and sign in with accounts you own. We do not sell content or channel services.',
+  },
+  {
+    q: 'How does shipping work?',
+    a: 'Orders ship as tracked international express at a flat USD 12 per order. Paid orders are normally handed to the carrier within 1–3 business days, and the checkout estimate is 7–18 business days after dispatch (an estimate, not a guarantee). Final-mile delivery is by DHL, UPS, FedEx or the national postal service depending on destination. See the shipping policy for details.',
+  },
+];
+
+const articleLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: 'Best Android TV Box 2026: Top Picks Compared',
+  description:
+    'Six Android TV boxes and sticks for different buyers in 2026, compared by chipset, RAM, Android version, Wi-Fi and Ethernet — with specs taken from the CRTLU Digital catalog.',
+  author: { '@type': 'Organization', name: 'CRTLU Digital', url: 'https://shop.crtlu.me/' },
+  publisher: { '@type': 'Organization', name: 'CRTLU Digital', url: 'https://shop.crtlu.me/' },
+  mainEntityOfPage: absoluteUrl('/guides/best-android-tv-box-2026/'),
+  datePublished: '2026-10-30',
+  dateModified: '2026-10-30',
+};
+
+const keywords = [
+  'best android tv box 2026',
+  'best android tv box',
+  'android tv box comparison',
+  'S905X5M tv box',
+  'RK3576 tv box',
+  'wifi 6 android tv box',
+  ...CORE_SEO_KEYWORDS.slice(0, 8),
+  ...SAFE_COMMERCE_KEYWORDS.slice(0, 4),
+];
+---
+
+<Layout
+  title="Best Android TV Box 2026: Top Picks Compared | CRTLU Digital"
+  description="The best Android TV box in 2026 for each type of buyer: value, power, compact, budget box and stick. Compare chipset, RAM, Android version, Wi-Fi and Ethernet."
+  canonicalPath="/guides/best-android-tv-box-2026/"
+  keywords={keywords}
+  jsonLd={[articleLd, storeFaqJsonLd(guideFaqs)]}
+>
+  <Navigation showCart={true} />
+
+  <main class="policy-page" id="main-content">
+    <header class="policy-hero wrap">
+      <div class="eyebrow">Guides</div>
+      <h1>Best Android TV box 2026: top picks compared</h1>
+      <p class="lead">
+        Spec sheets all say “8K, Wi-Fi 6, fast chip”. This guide picks one model per type of buyer and compares the specs
+        that actually decide daily use. New to TV boxes? Start with the
+        <a href="/guides/android-tv-box-buyers-guide/">Android TV box buyer’s guide</a>.
+      </p>
+      <p class="policy-updated">Last updated: October 30, 2026</p>
+    </header>
+
+    <div class="policy-layout wrap">
+      <nav class="policy-nav" aria-label="Guide sections">
+        <strong>On this page</strong>
+        <a href="#how">How we picked</a>
+        <a href="#compare">Quick comparison</a>
+        <a href="#picks">The picks</a>
+        <a href="#avoid">What to avoid</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+
+      <article class="policy-content">
+        <section id="how" class="policy-section">
+          <h2>How we picked</h2>
+          <ul>
+            <li><strong>Chipset first, brand second.</strong> Newer platforms (such as Amlogic S905X5M / S905Y5, Rockchip RK3576 / RK3539, Allwinner H728) run current Android versions well. Older budget chips are fine for light use only.</li>
+            <li><strong>RAM decides how smooth it feels.</strong> 4GB is the comfortable choice for a main TV with many apps. 2GB suits a bedroom or travel TV.</li>
+            <li><strong>Network matters more than marketing.</strong> Wi-Fi 6 helps in crowded networks, but a strong 5GHz Wi-Fi 5 signal beats a weak Wi-Fi 6 one. Gigabit Ethernet mainly helps with large local files.</li>
+            <li><strong>Android version.</strong> Every pick below runs Android 14 according to its product specs.</li>
+            <li><strong>Specs come from our catalog.</strong> Every value in the table is read from the live product data when this page is built. Always confirm variants and current price on the product page.</li>
+          </ul>
+        </section>
+
+        <section id="compare" class="policy-section">
+          <h2>Quick comparison</h2>
+          <div class="guide-table-wrap">
+            <table class="guide-table">
+              <thead>
+                <tr><th>Model</th><th>Best for</th><th>Chipset</th><th>RAM + storage</th><th>OS</th><th>Wi-Fi</th><th>Ethernet</th><th>From</th></tr>
+              </thead>
+              <tbody>
+                {picks.map((p) => (
+                  <tr>
+                    <td><a href={p.href}>{p.name}</a></td>
+                    <td>{p.label}</td>
+                    <td>{p.chipset}</td>
+                    <td>{p.memory}</td>
+                    <td>{p.os}</td>
+                    <td>{p.wifi}</td>
+                    <td>{p.ethernet}</td>
+                    <td>{p.price ?? 'See page'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="picks" class="policy-section">
+          <h2>The picks</h2>
+          {picks.map((p, i) => (
+            <div class="guide-pick">
+              <h3>{i + 1}. {p.label}: <a href={p.href}>{p.name}</a></h3>
+              <p><em>Best for:</em> {p.bestFor}</p>
+              <p>{p.why}</p>
+              {p.video !== 'Not listed' && <p><strong>Video output (as listed):</strong> {p.video}</p>}
+              <p><strong>Buy it if:</strong> {p.buyIf}</p>
+            </div>
+          ))}
+        </section>
+
+        <section id="avoid" class="policy-section">
+          <h2>What to avoid in 2026</h2>
+          <ul>
+            <li><strong>“8K” boxes with very little RAM.</strong> The output resolution does not matter if the home screen stutters.</li>
+            <li><strong>Old Android versions with no updates.</strong> Apps drop support for old Android releases over time.</li>
+            <li><strong>Listings that sell “free channels” or content access.</strong> Buy hardware from sellers who list real specs and a clear warranty and returns policy.</li>
+            <li><strong>100Mbps Ethernet sold as “high-speed”.</strong> It is adequate for streaming, but it is not fast for large local files.</li>
+          </ul>
+        </section>
+
+        <section id="faq" class="policy-section">
+          <h2>FAQ</h2>
+          {guideFaqs.map((item) => (
+            <div style="margin-bottom: 1.25rem;">
+              <h3 style="font-size: 1.05rem; margin-bottom: 0.35rem;">{item.q}</h3>
+              <p>{item.a}</p>
+            </div>
+          ))}
+          <p>Read the full <a href="/shipping/">shipping policy</a>, the <a href="/faq/">store FAQ</a>, or the <a href="/guides/android-tv-box-buyers-guide/">buyer’s guide</a>.</p>
+        </section>
+
+        <section class="policy-contact" aria-labelledby="guide-cta-title">
+          <div>
+            <div class="eyebrow">Next step</div>
+            <h2 id="guide-cta-title">Compare live configurations</h2>
+            <p>Open the TV box catalog and match chipset and memory to your TV and network.</p>
+          </div>
+          <a class="primary-button" href="/products/?category=tv-box">Shop TV boxes</a>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .guide-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .guide-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; min-width: 760px; }
+  .guide-table th, .guide-table td { border-bottom: 1px solid rgba(127,127,127,0.25); padding: 0.55rem 0.5rem; text-align: left; vertical-align: top; }
+  .guide-table th { font-weight: 600; white-space: nowrap; }
+  .guide-pick { margin-bottom: 1.5rem; }
+  .guide-pick h3 { font-size: 1.1rem; margin-bottom: 0.4rem; }
+</style>
