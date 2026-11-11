@@ -34,8 +34,8 @@ Image base folder on the owner's Mac (read-only source, never modify):
 
 - **Q1 plus** (`T95系列/Q1 plus`): matched to the supplier sheet row "Q1" (RK3518, Android 14, 2GB+8GB ¥90 / 2GB+16GB ¥100). Its images show RK3518, Android 14 and "2G+8GB / 2G+16GB", and the colour box is printed "Q1". Published 2026-11-11 as `q1-plus` (MORTAL Q1 Plus).
 
-## Quoted but intentionally not published
+- **TOX3** (`tox3 tox5  Q5   Z8PRO  P7/TOX3`): quote found in the sheet as "T0X3" (row 283, S905X4, Android 11, 4GB+32GB ¥365). The owner approved it and it was published 2026-11-11 as `tox3`. Most `TOX3图片` photos show the **TOX3 Lite** logo, so they are not used in the TOX3 gallery.
 
-- **TOX3** (`tox3 tox5  Q5   Z8PRO  P7/TOX3`): the supplier sheet does have a quote, spelled "T0X3" with a zero (row 283, Amlogic S905X4, 4GB+32GB ¥365). It was missed in the 2026-11-11 folder audit, so it is NOT out of stock. It is waiting for the owner to decide whether to list it.
+## Quoted but intentionally not published
 
 - **X88 PRO T1** (sheet row 244, RK3518, Android 14, 2GB+16GB ¥110): no own image folder; same cost and platform as the published **HS86 T1** (`hs86-t1`, ¥110), most likely the same device under another name. Not duplicated. Publish only if the owner supplies distinct X88 PRO T1 images.

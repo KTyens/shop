@@ -4,8 +4,8 @@ Generated: 2026-11-11 from `data/catalog.json`
 
 ## Summary
 
-- Series: **88**
-- Variants: **183**
+- Series: **89**
+- Variants: **184**
 - Specs auto-synced this run: **0** field updates
 
 ## Rules checked

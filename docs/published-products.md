@@ -100,6 +100,7 @@ python3 scripts/regenerate-published-products.py
 | MORTAL Q2 Ultra TV Stick | MORTAL | compact | tv-box | 2GB RAM + 16GB ROM | 1 | $30.99 |
 | MORTAL X5S | MORTAL | budget | tv-box | 2GB RAM + 16GB ROM | 1 | $35.99 |
 | H96Max H313 TV Stick | H96 | compact | tv-box | 2GB RAM + 8GB ROM<br>2GB RAM + 16GB ROM | 2 | $31.99 |
+| TOX3 | TOX | best-value | tv-box | 4GB RAM + 32GB ROM | 1 | $89.99 |
 
 ## Published Variants
 
@@ -288,6 +289,7 @@ python3 scripts/regenerate-published-products.py
 | MORTAL X5S | CRT-MORTAL-X5S-2G16G | 2GB RAM + 16GB ROM | 125 | $35.99 | $39.99 | x5s-2-16 |
 | H96Max H313 TV Stick | CRT-H96-H313-STICK-2G8G | 2GB RAM + 8GB ROM | 105 | $31.99 | $34.99 | h96max-h313-stick-2-8 |
 | H96Max H313 TV Stick | CRT-H96-H313-STICK-2G16G | 2GB RAM + 16GB ROM | 110 | $32.99 | $37.99 | h96max-h313-stick-2-16 |
+| TOX3 | CRT-TOX3-4G32G | 4GB RAM + 32GB ROM | 365 | $89.99 | $94.99 | tox3-4-32 |
 
 ## Notes
 
