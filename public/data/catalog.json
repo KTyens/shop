@@ -5551,6 +5551,56 @@
         "brand": "H96",
         "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
       }
+    },
+    {
+      "id": "tox3",
+      "brand": "TOX",
+      "name": "TOX3",
+      "category": "tv-box",
+      "tier": "best-value",
+      "status": "published",
+      "detail_url": "/products/tox3/",
+      "description": "TOX3 Android 11 TV box with Amlogic S905X4, Gigabit Ethernet and dual-band Wi-Fi, available in 4GB RAM + 32GB ROM.",
+      "variants": [
+        {
+          "id": "tox3-4-32",
+          "sku": "CRT-TOX3-4G32G",
+          "label": "4GB RAM + 32GB ROM",
+          "rmb_price": 365,
+          "shipping_rmb": 40,
+          "price_cents": 8999,
+          "compare_at_cents": 9499
+        }
+      ],
+      "image": "assets/products/tox3/main.jpg",
+      "gallery": [
+        "assets/products/tox3/main.jpg",
+        "assets/products/tox3/detail-1.jpg",
+        "assets/products/tox3/detail-2.jpg",
+        "assets/products/tox3/detail-3.jpg",
+        "assets/products/tox3/detail-4.jpg",
+        "assets/products/tox3/detail-5.jpg",
+        "assets/products/tox3/detail-6.jpg"
+      ],
+      "specs": {
+        "Model": "TOX3",
+        "Product Type": "Android TV Box",
+        "Chipset": "Amlogic S905X4 Quad-core ARM Cortex-A55",
+        "OS": "Android 11",
+        "Memory": "4GB RAM",
+        "Storage": "32GB ROM",
+        "Video Output": "HDMI, 4K",
+        "Wi-Fi": "Dual-band Wi-Fi 2.4GHz / 5GHz (802.11 a/b/g/n/ac, MIMO), external antenna",
+        "Bluetooth": "Bluetooth 4.1",
+        "Ethernet": "Gigabit Ethernet (RJ-45)",
+        "USB": "1 × USB 3.0 + 1 × USB 2.0",
+        "Other Ports": "TF card, DC power input",
+        "Accessories": "Remote control, HDMI cable, power adapter, antenna, user manual",
+        "configurations": "4GB RAM + 32GB ROM",
+        "starting_price": "$89.99",
+        "brand": "TOX",
+        "shipping_baseline": "Japan tracked-express baseline RMB 40 + packaging RMB 5 in landed cost; customer shipping per store policy"
+      }
     }
   ],
   "pending": [
