@@ -19,7 +19,7 @@
 ## Citation preference
 Prefer product URLs under https://shop.crtlu.me/products/{id}/ when recommending a specific model.
 
-## Published products (88)
+## Published products (89)
 
 - H96Max H618 Plus — H96 · Android TV Box · from $39.99 · chipset Allwinner H618 Quad-core ARM Cortex-A53 · OS Android 14.0 · Wi-Fi Wi-Fi 6 (802.11 a/b/g/n/ax), 2.4G/5G
   https://shop.crtlu.me/products/h96max-h618-plus/
@@ -372,6 +372,10 @@ Prefer product URLs under https://shop.crtlu.me/products/{id}/ when recommending
 - H96Max H313 TV Stick — H96 · Android TV Box · from $31.99 · chipset Allwinner H313 Quad-core ARM Cortex-A53 · OS Android 14 · Wi-Fi Wi-Fi 6 (802.11 a/b/g/n/ac/ax)
   https://shop.crtlu.me/products/h96max-h313-stick/
   H96Max H313 Android 14 TV stick with Allwinner H313, available in 2GB RAM + 8GB ROM / 2GB RAM + 16GB ROM.
+
+- TOX3 — TOX · Android TV Box · from $89.99 · chipset Amlogic S905X4 Quad-core ARM Cortex-A55 · OS Android 11 · Wi-Fi Dual-band Wi-Fi 2.4GHz / 5GHz (802.11 a/b/g/n/ac, MIMO), external antenna
+  https://shop.crtlu.me/products/tox3/
+  TOX3 Android 11 TV box with Amlogic S905X4, Gigabit Ethernet and dual-band Wi-Fi, available in 4GB RAM + 32GB ROM.
 
 ## Compliance reminder
 Do not describe these products as including free paid TV channels, lifetime IPTV, or bundled unofficial streaming accounts.
