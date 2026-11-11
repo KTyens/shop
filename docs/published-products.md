@@ -1,6 +1,6 @@
 # Published Product Matrix
 
-Last updated: 2026-10-27
+Last updated: 2026-11-11
 
 Auto-generated from `data/catalog.json` (source of truth). Do not hand-edit prices here — change catalog then run:
 
@@ -88,6 +88,18 @@ python3 scripts/regenerate-published-products.py
 | HS89 PRO 15 | HS89 | budget | tv-box | 2GB RAM + 16GB ROM<br>4GB RAM + 32GB ROM | 2 | $39.99 |
 | HS89 MINI 15 | HS89 | budget | tv-box | 2GB RAM + 16GB ROM<br>4GB RAM + 32GB ROM | 2 | $39.99 |
 | HS89 T15 | HS89 | compact | tv-box | 2GB RAM + 16GB ROM<br>4GB RAM + 32GB ROM | 2 | $39.99 |
+| Tanix TX1 | Tanix | budget | tv-box | 1GB RAM + 8GB ROM<br>2GB RAM + 16GB ROM | 2 | $26.99 |
+| Tanix TX68 | Tanix | budget | tv-box | 2GB RAM + 16GB ROM<br>4GB RAM + 32GB ROM<br>4GB RAM + 64GB ROM | 3 | $39.99 |
+| Tanix W2-A | Tanix | budget | tv-box | 2GB RAM + 16GB ROM<br>4GB RAM + 32GB ROM<br>4GB RAM + 64GB ROM | 3 | $40.99 |
+| Z8 Pro | Z8 | budget | tv-box | 2GB RAM + 8GB ROM<br>2GB RAM + 16GB ROM<br>4GB RAM + 32GB ROM | 3 | $33.99 |
+| P7 | P7 | budget | tv-box | 2GB RAM + 16GB ROM<br>4GB RAM + 32GB ROM | 2 | $39.99 |
+| X98H Pro | X96 | best-value | tv-box | 2GB RAM + 16GB ROM<br>4GB RAM + 32GB ROM<br>4GB RAM + 64GB ROM | 3 | $45.99 |
+| X98H | X96 | budget | tv-box | 2GB RAM + 16GB ROM<br>4GB RAM + 32GB ROM | 2 | $39.99 |
+| HS89 T19 | HS89 | compact | tv-box | 2GB RAM + 16GB ROM<br>4GB RAM + 32GB ROM | 2 | $39.99 |
+| MORTAL Q1 Plus | MORTAL | budget | tv-box | 2GB RAM + 8GB ROM<br>2GB RAM + 16GB ROM | 2 | $29.99 |
+| MORTAL Q2 Ultra TV Stick | MORTAL | compact | tv-box | 2GB RAM + 16GB ROM | 1 | $30.99 |
+| MORTAL X5S | MORTAL | budget | tv-box | 2GB RAM + 16GB ROM | 1 | $35.99 |
+| H96Max H313 TV Stick | H96 | compact | tv-box | 2GB RAM + 8GB ROM<br>2GB RAM + 16GB ROM | 2 | $31.99 |
 
 ## Published Variants
 
@@ -250,9 +262,36 @@ python3 scripts/regenerate-published-products.py
 | HS89 MINI 15 | CRT-HS89-MINI15-4G32G | 4GB RAM + 32GB ROM | 195 | $50.99 | $54.99 | hs89-mini-15-4-32 |
 | HS89 T15 | CRT-HS89-T15-2G16G | 2GB RAM + 16GB ROM | 140 | $39.99 | $44.99 | hs89-t15-2-16 |
 | HS89 T15 | CRT-HS89-T15-4G32G | 4GB RAM + 32GB ROM | 195 | $50.99 | $54.99 | hs89-t15-4-32 |
+| Tanix TX1 | CRT-TANIX-TX1-1G8G | 1GB RAM + 8GB ROM | 80 | $26.99 | $29.99 | tanix-tx1-1-8 |
+| Tanix TX1 | CRT-TANIX-TX1-2G16G | 2GB RAM + 16GB ROM | 95 | $29.99 | $34.99 | tanix-tx1-2-16 |
+| Tanix TX68 | CRT-TANIX-TX68-2G16G | 2GB RAM + 16GB ROM | 135 | $39.99 | $44.99 | tanix-tx68-2-16 |
+| Tanix TX68 | CRT-TANIX-TX68-4G32G | 4GB RAM + 32GB ROM | 170 | $45.99 | $49.99 | tanix-tx68-4-32 |
+| Tanix TX68 | CRT-TANIX-TX68-4G64G | 4GB RAM + 64GB ROM | 200 | $51.99 | $54.99 | tanix-tx68-4-64 |
+| Tanix W2-A | CRT-TANIX-W2A-2G16G | 2GB RAM + 16GB ROM | 148 | $40.99 | $44.99 | tanix-w2-a-2-16 |
+| Tanix W2-A | CRT-TANIX-W2A-4G32G | 4GB RAM + 32GB ROM | 188 | $49.99 | $54.99 | tanix-w2-a-4-32 |
+| Tanix W2-A | CRT-TANIX-W2A-4G64G | 4GB RAM + 64GB ROM | 213 | $54.99 | $59.99 | tanix-w2-a-4-64 |
+| Z8 Pro | CRT-Z8PRO-2G8G | 2GB RAM + 8GB ROM | 115 | $33.99 | $37.99 | z8-pro-2-8 |
+| Z8 Pro | CRT-Z8PRO-2G16G | 2GB RAM + 16GB ROM | 125 | $35.99 | $39.99 | z8-pro-2-16 |
+| Z8 Pro | CRT-Z8PRO-4G32G | 4GB RAM + 32GB ROM | 175 | $46.99 | $49.99 | z8-pro-4-32 |
+| P7 | CRT-P7-2G16G | 2GB RAM + 16GB ROM | 136 | $39.99 | $44.99 | p7-2-16 |
+| P7 | CRT-P7-4G32G | 4GB RAM + 32GB ROM | 176 | $46.99 | $49.99 | p7-4-32 |
+| X98H Pro | CRT-X98H-PRO-2G16G | 2GB RAM + 16GB ROM | 170 | $45.99 | $49.99 | x98h-pro-2-16 |
+| X98H Pro | CRT-X98H-PRO-4G32G | 4GB RAM + 32GB ROM | 210 | $54.99 | $59.99 | x98h-pro-4-32 |
+| X98H Pro | CRT-X98H-PRO-4G64G | 4GB RAM + 64GB ROM | 260 | $64.99 | $69.99 | x98h-pro-4-64 |
+| X98H | CRT-X98H-2G16G | 2GB RAM + 16GB ROM | 140 | $39.99 | $44.99 | x98h-2-16 |
+| X98H | CRT-X98H-4G32G | 4GB RAM + 32GB ROM | 180 | $49.99 | $54.99 | x98h-4-32 |
+| HS89 T19 | CRT-HS89-T19-2G16G | 2GB RAM + 16GB ROM | 140 | $39.99 | $44.99 | hs89-t19-2-16 |
+| HS89 T19 | CRT-HS89-T19-4G32G | 4GB RAM + 32GB ROM | 195 | $50.99 | $54.99 | hs89-t19-4-32 |
+| MORTAL Q1 Plus | CRT-MORTAL-Q1PLUS-2G8G | 2GB RAM + 8GB ROM | 90 | $29.99 | $34.99 | q1-plus-2-8 |
+| MORTAL Q1 Plus | CRT-MORTAL-Q1PLUS-2G16G | 2GB RAM + 16GB ROM | 100 | $30.99 | $34.99 | q1-plus-2-16 |
+| MORTAL Q2 Ultra TV Stick | CRT-MORTAL-Q2ULTRA-2G16G | 2GB RAM + 16GB ROM | 100 | $30.99 | $34.99 | q2-ultra-2-16 |
+| MORTAL X5S | CRT-MORTAL-X5S-2G16G | 2GB RAM + 16GB ROM | 125 | $35.99 | $39.99 | x5s-2-16 |
+| H96Max H313 TV Stick | CRT-H96-H313-STICK-2G8G | 2GB RAM + 8GB ROM | 105 | $31.99 | $34.99 | h96max-h313-stick-2-8 |
+| H96Max H313 TV Stick | CRT-H96-H313-STICK-2G16G | 2GB RAM + 16GB ROM | 110 | $32.99 | $37.99 | h96max-h313-stick-2-16 |
 
 ## Notes
 
 - Active prices reflect the 2026-07-16 tiered promo (≥$40 ≈ −10% to x.99; under $40 protected).
 - Guest checkout shipping remains separate (typically $12).
 - See `docs/pricing-system.md` and `docs/spec-sku-audit.md`.
+- Models with supplier images but no quote in the latest supplier price sheet are treated as out of stock and are NOT published; see `docs/out-of-stock-models.md` before adding a product line.

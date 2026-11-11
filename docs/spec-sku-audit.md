@@ -1,11 +1,11 @@
 # Spec / SKU audit
 
-Generated: 2026-10-27 from `data/catalog.json`
+Generated: 2026-11-11 from `data/catalog.json`
 
 ## Summary
 
-- Series: **76**
-- Variants: **157**
+- Series: **88**
+- Variants: **183**
 - Specs auto-synced this run: **0** field updates
 
 ## Rules checked

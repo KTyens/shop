@@ -116,6 +116,7 @@ for s in series_list:
 lines += ['', '## Notes', '',
     '- Active prices reflect the 2026-07-16 tiered promo (≥$40 ≈ −10% to x.99; under $40 protected).',
     '- Guest checkout shipping remains separate (typically $12).',
-    '- See `docs/pricing-system.md` and `docs/spec-sku-audit.md`.', '']
+    '- See `docs/pricing-system.md` and `docs/spec-sku-audit.md`.',
+    '- Models with supplier images but no quote in the latest supplier price sheet are treated as out of stock and are NOT published; see `docs/out-of-stock-models.md` before adding a product line.', '']
 (ROOT / 'docs/published-products.md').write_text('\n'.join(lines), encoding='utf-8')
 print(f'OK series={len(series_list)} changed={len(changed)}')

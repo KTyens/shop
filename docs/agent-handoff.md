@@ -356,7 +356,7 @@ shop/assets/products/<product-id>/
 
 ## Adding A Product Line
 
-1. Review `shop/docs/published-products.md` to avoid duplicates.
+1. Review `shop/docs/published-products.md` to avoid duplicates, and `shop/docs/out-of-stock-models.md` (models without a supplier quote are out of stock and stay unpublished).
 2. Confirm cost with the user or source sheet.
 3. Price using `shop/docs/pricing-system.md`.
 4. Create or update product images under:
@@ -365,7 +365,7 @@ shop/assets/products/<product-id>/
    shop/assets/products/<product-id>/
    ```
 
-   Follow the "Gallery Mix Rule" in `shop/docs/product-media-guidelines.md`: 4-6 clean product shots first, then >= ~6 compliant content images (scenes, specs, ports, package contents, performance), cap 18. Never publish a gallery made only of angle shots; mirror files to `shop/public/assets/products/<product-id>/`.
+   Follow the "Gallery Mix Rule" in `shop/docs/product-media-guidelines.md`: exactly 2 clean product shots first, then all remaining images are content images (scenes, specs, ports, package contents, performance; trademark/app-logo images allowed), cap ~18. Never publish a gallery made only of angle shots; mirror files to `shop/public/assets/products/<product-id>/`.
 
 5. Add one `series` entry to `shop/data/catalog.json`.
 6. Add all sellable configurations to `series.variants`.
